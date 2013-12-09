@@ -251,8 +251,8 @@ class WPML_OptionsManager {
 				       	__('Log', 'wpml'), 
 				        __('Log', 'wpml'), 
 				        'administrator',  
-				        get_class($this) . '_log', 
-				         array(&$this, 'SettingsSubMenuLog') );
+		        		get_class($this) . '_log', 
+						array(&$this, 'SettingsSubMenuLog') );
     }
 
     public function registerSettings() {
