@@ -21,12 +21,12 @@ class Email_Logging_ListTable extends WP_List_Table {
 		$columns = array(
 			 	'cb'        => '<input type="checkbox" />',
 				'mail_id'		=> __( 'ID', 'wml'),
+				'timestamp'		=> __( 'Time', 'wml'),
 				'to'			=> __( 'To', 'wml'),
 				'subject'		=> __( 'Subject', 'wml'),
 				'message'		=> __( 'Message', 'wml'),
 				'headers'		=> __( 'Headers', 'wml'),
 				'attachments'	=> __( 'Attachments', 'wml'),
-				'timestamp'		=> __( 'Time', 'wml'),
 				'plugin_version'=> __( 'Plugin Version', 'wml')
 		);
 		return $columns;
@@ -38,7 +38,9 @@ class Email_Logging_ListTable extends WP_List_Table {
 		$tableName = 'wp_no3x_wpml_plugin_mail_logging';
 		
 		$columns = $this->get_columns();
-		$hidden = array( 'plugin_version' );
+		$hidden = array( 
+				//'plugin_version' 
+		);
 		$sortable = $this->get_sortable_columns();
 		$this->_column_headers = array($columns, $hidden, $sortable);
 		
@@ -67,12 +69,12 @@ class Email_Logging_ListTable extends WP_List_Table {
 	function column_default( $item, $column_name ) {
 		switch( $column_name ) {
 			case 'mail_id':
+			case 'timestamp':
 			case 'to':
 			case 'subject':
 			case 'message':
 			case 'headers':
 			case 'attachments':
-			case 'timestamp':
 			case 'plugin_version':
 				return $item[ $column_name ];
 			default:
@@ -111,12 +113,12 @@ class Email_Logging_ListTable extends WP_List_Table {
 	function get_sortable_columns() {
 		$sortable_columns = array(
 				'mail_id'  => array('mail_id', true),
+				'timestamp' => array('timestamp',false),
 				'to' => array('to',false),
 				'subject' => array('subject',false),
 				'message' => array('message',false),
 				'headers' => array('headers',false),
 				'attachments' => array('attachments',false),
-				'timestamp' => array('timestamp',false),
 				'plugin_version' => array('plugin_version',false)
 		);
 		return $sortable_columns;

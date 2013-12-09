@@ -13,8 +13,8 @@ class WPML_Plugin extends WPML_LifeCycle {
         //  http://plugin.michael-simpson.com/?page_id=31
         return array(
             //'_version' => array('Installed Version'), // Leave this one commented-out. Uncomment to test upgrades.
-            'ATextInput' => array(__('Enter in some text', 'my-awesome-plugin')),
-            'Donated' => array(__('I have donated to this plugin', 'my-awesome-plugin'), 'false', 'true'),
+            //'ATextInput' => array(__('Enter in some text', 'my-awesome-plugin')),
+            'DeleteOnDeactivation' => array(__('Delete all data on deactivation? (emails and settings)', 'my-awesome-plugin'), 'false', 'true'),
             'CanSeeSubmitData' => array(__('Can See Submission data', 'my-awesome-plugin'),
                                         'Administrator', 'Editor', 'Author', 'Contributor', 'Subscriber', 'Anyone')
         );
@@ -58,12 +58,12 @@ class WPML_Plugin extends WPML_LifeCycle {
 		$tableName = $this->prefixTableName('mail_logging');
 		$wpdb->query("CREATE TABLE IF NOT EXISTS `$tableName` (
 				`mail_id` INT NOT NULL AUTO_INCREMENT,
+				`timestamp` TIMESTAMP NOT NULL,
 				`to` VARCHAR(200) NOT NULL DEFAULT '0',
 				`subject` VARCHAR(200) NOT NULL DEFAULT '0',
 				`message` TEXT NULL,
 				`headers` TEXT NULL,
 				`attachments` TINYINT(1) NOT NULL DEFAULT '0',
-				`timestamp` TIMESTAMP NOT NULL,
 				`plugin_version` VARCHAR(200) NOT NULL DEFAULT '0',
 				PRIMARY KEY (`mail_id`) 
             );");	
@@ -168,11 +168,11 @@ class WPML_Plugin extends WPML_LifeCycle {
     	
     	$wpdb->insert($this->prefixTableName("mail_logging"), array(
     		'to' => $to,
+    		'timestamp' => current_time('mysql'),
     		'subject' => $subject,
     		'message' => $message,
     		'headers' => $headers,
     		'attachments' => $hasAttachment,
-    		'timestamp' => current_time('mysql'),
     		'plugin_version' => $this->getVersion()
     	));
     	
