@@ -243,9 +243,16 @@ class WPML_OptionsManager {
                       get_class($this),
                       array(&$this, 'settingsPage')
         /*,plugins_url('/images/icon.png', __FILE__)*/); // if you call 'plugins_url; be sure to "require_once" it
-
+		
         //call register settings function
         add_action('admin_init', array(&$this, 'registerSettings'));
+        
+        add_submenu_page(get_class($this), 
+				       	__('Log', 'wpml'), 
+				        __('Log', 'wpml'), 
+				        'administrator',  
+				        get_class($this) . '_log', 
+				         array(&$this, 'SettingsSubMenuLog') );
     }
 
     public function registerSettings() {
@@ -255,6 +262,35 @@ class WPML_OptionsManager {
             register_setting($settingsGroup, $aOptionMeta);
         }
     }
+    
+    public function SettingsSubMenuLog() {
+    	if (!current_user_can('manage_options')) {
+    		wp_die(__('You do not have sufficient permissions to access this page.', 'wpml'));
+    	}
+    	
+    	
+    	if (!class_exists( 'Email_Log_List_Table' ) ) {
+    		require_once dirname( __FILE__ ) . '/inc/class-email-logging-list-table.php';
+    	}
+    	
+    	?>
+    	 <div class="wrap">
+            <h2><?php _e('Log', 'wpml'); ?></h2>
+				<?php
+				$emailLoggingListTable = new Email_Logging_ListTable();
+				$emailLoggingListTable->prepare_items();
+				?>
+				<form id="email-list" method="get">
+					<input type="hidden" name="page" value="<?php echo $_REQUEST['page'] ?>" />
+					<?php
+					$emailLoggingListTable->display();
+					?>
+				</form>
+				
+            
+		</div> 
+    	<?php
+    }	
 
     /**
      * Creates HTML for the Administration page to set options for this plugin.

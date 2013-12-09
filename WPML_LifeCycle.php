@@ -67,6 +67,8 @@ class WPML_LifeCycle extends WPML_InstallIndicator {
      * @return void
      */
     public function deactivate() {
+    	//TOOD: ask for deletion method 
+    	$this->uninstall();
     }
 
     /**

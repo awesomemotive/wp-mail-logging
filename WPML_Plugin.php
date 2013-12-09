@@ -53,11 +53,22 @@ class WPML_Plugin extends WPML_LifeCycle {
      * @return void
      */
     protected function installDatabaseTables() {
-        //        global $wpdb;
-        //        $tableName = $this->prefixTableName('mytable');
-        //        $wpdb->query("CREATE TABLE IF NOT EXISTS `$tableName` (
-        //            `id` INTEGER NOT NULL");
+		error_log("database created");
+		global $wpdb;
+		$tableName = $this->prefixTableName('mail_logging');
+		$wpdb->query("CREATE TABLE IF NOT EXISTS `$tableName` (
+				`mail_id` INT NOT NULL AUTO_INCREMENT,
+				`to` VARCHAR(200) NOT NULL DEFAULT '0',
+				`subject` VARCHAR(200) NOT NULL DEFAULT '0',
+				`message` TEXT NULL,
+				`headers` TEXT NULL,
+				`attachments` TINYINT(1) NOT NULL DEFAULT '0',
+				`timestamp` TIMESTAMP NOT NULL,
+				`plugin_version` VARCHAR(200) NOT NULL DEFAULT '0',
+				PRIMARY KEY (`mail_id`) 
+            );");	
     }
+    
 
     /**
      * See: http://plugin.michael-simpson.com/?page_id=101
@@ -65,9 +76,9 @@ class WPML_Plugin extends WPML_LifeCycle {
      * @return void
      */
     protected function unInstallDatabaseTables() {
-        //        global $wpdb;
-        //        $tableName = $this->prefixTableName('mytable');
-        //        $wpdb->query("DROP TABLE IF EXISTS `$tableName`");
+		global $wpdb;
+		$tableName = $this->prefixTableName('mail_logging');
+		$wpdb->query("DROP TABLE IF EXISTS `$tableName`");
     }
 
 
@@ -77,10 +88,26 @@ class WPML_Plugin extends WPML_LifeCycle {
      * @return void
      */
     public function upgrade() {
+//     	global $wpdb;
+//     	$upgradeOk = true;
+//     	$savedVersion = $this->getVersionSaved();
+    	
+//     	if ($this->isVersionLessThan($savedVersion, '1.0')) {
+//     		if ($this->isVersionLessThan($savedVersion, '0.2')) {
+//     			$tableName = $this->prefixTableName('mail_logging');
+//     			$wpdb->query("ALTER TABLE `$tableName` ADD COLUMN ( `plugin_version` VARCHAR(200) NOT NULL DEFAULT '0')");
+//     		}
+//     	}
+    
+//     	// Post-upgrade, set the current version in the options
+//     	$codeVersion = $this->getVersion();
+//     	if ($upgradeOk && $savedVersion != $codeVersion) {
+//     		$this->saveInstalledVersion();
+//     	}
     }
 
     public function addActionsAndFilters() {
-
+		
         // Add options administration page
         // http://plugin.michael-simpson.com/?page_id=47
         add_action('admin_menu', array(&$this, 'createSettingsMenu'));
@@ -95,8 +122,9 @@ class WPML_Plugin extends WPML_LifeCycle {
 
         // Add Actions & Filters
         // http://plugin.michael-simpson.com/?page_id=37
-
-
+		
+         add_filter( 'wp_mail', array(&$this, 'log_email' ) );
+			
         // Adding scripts & styles to all pages
         // Examples:
         //        wp_enqueue_script('jquery');
@@ -110,8 +138,49 @@ class WPML_Plugin extends WPML_LifeCycle {
 
         // Register AJAX hooks
         // http://plugin.michael-simpson.com/?page_id=41
-
+        
+         add_action( 'init', array(&$this, 'sendTestMail') );
     }
-
+    
+   
+    public function sendTestMail() {
+    	$message = "Test Mail\n";
+    	wp_mail( "noex_home@yahoo.de", "Test Mail", $message );
+    }
+    
+    public function log_email( $mail ) {
+    	global $wpdb;
+    	/*
+    	[to] => noex_home@yahoo.de
+	    [subject] => Test Mail
+	    [message] => Test Mail
+	
+	    [headers] => 
+	    [attachments] => Array
+	        (
+	        )
+	    */
+    	$to = $mail["to"];
+    	$subject = $mail["subject"];
+    	$message = $mail["message"];
+    	$headers = is_array($mail["headers"]) ? implode("\n", $mail['headers']) : $mail['headers'];
+    	$hasAttachment = (count ($mail['attachments']) > 0) ? "true" : "false";
+    	
+    	$wpdb->insert($this->prefixTableName("mail_logging"), array(
+    		'to' => $to,
+    		'subject' => $subject,
+    		'message' => $message,
+    		'headers' => $headers,
+    		'attachments' => $hasAttachment,
+    		'timestamp' => current_time('mysql'),
+    		'plugin_version' => $this->getVersion()
+    	));
+    	
+    	error_log( sprintf("to: %s, subject: %s, message: %s, headers: %s, hasAttachment: %s", $to, $subject, $message, $headers, $hasAttachment));
+    	
+    	error_log( print_r( $mail, true) );
+    	
+    	return $mail;
+    }
 
 }
