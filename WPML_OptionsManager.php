@@ -237,22 +237,24 @@ class WPML_OptionsManager {
     public function createSettingsMenu() {
         $pluginName = $this->getPluginDisplayName();
         //create new top-level menu
-        add_menu_page($pluginName . ' Plugin Settings',
-                      $pluginName,
+        add_menu_page(__('WP Mail Log', 'wpml'), 
+			          __('WP Mail Log', 'wpml'), 
                       'administrator',
-                      get_class($this),
-                      array(&$this, 'settingsPage')
+                      get_class($this) . '_log',
+                      array(&$this, 'LogMenu')
         /*,plugins_url('/images/icon.png', __FILE__)*/); // if you call 'plugins_url; be sure to "require_once" it
-		
+                      
         //call register settings function
         add_action('admin_init', array(&$this, 'registerSettings'));
         
-        add_submenu_page(get_class($this), 
-				       	__('Log', 'wpml'), 
-				        __('Log', 'wpml'), 
+        add_submenu_page(get_class($this) . '_log', 
+				       	__('Settings', 'wpml'), 
+				        __('Settings', 'wpml'), 
 				        'administrator',  
-		        		get_class($this) . '_log', 
-						array(&$this, 'SettingsSubMenuLog') );
+		        		get_class($this) . '_settings', 
+						array(&$this, 'LogSubMenuSettings') );
+        
+        add_action( "contextual_help", array( &$this, 'create_settings_panel' ), 10, 3 );
     }
 
     public function registerSettings() {
@@ -263,7 +265,87 @@ class WPML_OptionsManager {
         }
     }
     
-    public function SettingsSubMenuLog() {
+    /**
+     * Add settings Panel
+     */
+    function create_settings_panel($contextual_help, $screen_id, $screen) {
+    	
+    	global $hook_suffix;
+    	
+    	// Just add if we are at the plugin page
+    	if( strpos($hook_suffix, get_class($this) . '_log' ) == false )
+    		return $contextual_help;
+    	
+    	// The add_help_tab function for screen was introduced in WordPress 3.3.
+    	if ( ! method_exists( $screen, 'add_help_tab' ) )
+    		return $contextual_help;
+    	
+    	
+    	// List screen properties
+    	$variables = '<ul style="width:50%;float:left;"> <strong>Screen variables </strong>'
+    			. sprintf( '<li> Screen id : %s</li>', $screen_id )
+    			. sprintf( '<li> Screen base : %s</li>', $screen->base )
+    			. sprintf( '<li>Parent base : %s</li>', $screen->parent_base )
+    			. sprintf( '<li> Parent file : %s</li>', $screen->parent_file )
+    			. sprintf( '<li> Hook suffix : %s</li>', $hook_suffix )
+    			. '</ul>';
+    	
+    	// Append global $hook_suffix to the hook stems
+    	$hooks = array(
+    			"load-$hook_suffix",
+    			"admin_print_styles-$hook_suffix",
+    			"admin_print_scripts-$hook_suffix",
+    			"admin_head-$hook_suffix",
+    			"admin_footer-$hook_suffix"
+    	);
+    	
+    	// If add_meta_boxes or add_meta_boxes_{screen_id} is used, list these too
+    	if ( did_action( 'add_meta_boxes_' . $screen_id ) )
+    		$hooks[] = 'add_meta_boxes_' . $screen_id;
+    	
+    	if ( did_action( 'add_meta_boxes' ) )
+    		$hooks[] = 'add_meta_boxes';
+    	
+    	// Get List HTML for the hooks
+    	$hooks = '<ul style="width:50%;float:left;"> <strong>Hooks </strong> <li>';
+    			
+    	
+    	// Combine $variables list with $hooks list.
+    	$help_content = $variables . $hooks;
+    	
+    	/**
+    	 * Content specified inline
+    	*/
+    	$screen->add_help_tab(
+    			array(
+    					'title'    => __('About Plugin', 'wpml'),
+    					'id'       => 'about_tab',
+    					'content'  => '<p>' . __( "{$this->getPluginDisplayName()}, logs each email sent by WordPress.", 'wpml') . '</p>' . $help_content,
+    					'callback' => false
+    			)
+    	);
+    
+    	// Add help sidebar
+    	$screen->set_help_sidebar(
+    			'<p><strong>' . __('More information', 'wpml') . '</strong></p>' .
+    			'<p><a href = "http://wordpress.org/extend/plugins/wp-mail-logging/">' . __('Plugin Homepage/support', 'wpml') . '</a></p>' .
+    			'<p><a href = "http://no3x.de/">' . __("Plugin author's blog", 'wpml') . '</a></p>'
+    	);
+    
+    	// Add screen options
+    	$screen->add_option(
+    			'per_page',
+    			array(
+    					'label' => __('Entries per page', 'wpml'),
+    					'default' => 25,
+    					'option' => 'per_page'
+    			)
+    	);
+    	
+    	return $contextual_help;
+    }
+    
+    public function LogMenu() {
     	if (!current_user_can('manage_options')) {
     		wp_die(__('You do not have sufficient permissions to access this page.', 'wpml'));
     	}
@@ -275,7 +357,7 @@ class WPML_OptionsManager {
     	
     	?>
     	 <div class="wrap">
-            <h2><?php _e('Log', 'wpml'); ?></h2>
+            <h2><?php echo $this->getPluginDisplayName(); echo ' '; _e('Log', 'wpml'); ?></h2>
 				<?php
 				$emailLoggingListTable = new Email_Logging_ListTable();
 				$emailLoggingListTable->prepare_items();
@@ -297,7 +379,7 @@ class WPML_OptionsManager {
      * Override this method to create a customized page.
      * @return void
      */
-    public function settingsPage() {
+    public function LogSubMenuSettings() {
         if (!current_user_can('manage_options')) {
             wp_die(__('You do not have sufficient permissions to access this page.', 'wpml'));
         }
