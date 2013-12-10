@@ -145,7 +145,17 @@ class WPML_Plugin extends WPML_LifeCycle {
    
     public function sendTestMail() {
     	$message = "Test Mail\n";
-    	wp_mail( "noex_home@yahoo.de", "Test Mail", $message );
+    	
+    	$headers[] = 'From: Me Myself <noex_home@yahoo.de>';
+    	$headers[] = 'Cc: John Q Codex <noex_home@yahoo.de>';
+    	$headers[] = 'Cc: noex_home@yahoo.de'; // note you can just use a simple email address
+    	
+    	$multiple_to_recipients = array(
+    			'noex_home@yahoo.de',
+    			'noex_home@yahoo.de'
+    	);
+    	
+    	wp_mail( $multiple_to_recipients, "Test Mail", $message, $headers );
     }
     
     public function log_email( $mail ) {
@@ -160,11 +170,11 @@ class WPML_Plugin extends WPML_LifeCycle {
 	        (
 	        )
 	    */
-    	$to = $mail["to"];
+    	$to = is_array($mail["to"]) ? implode(",\n", $mail['to']) : $mail['to'];
     	$subject = $mail["subject"];
     	$message = $mail["message"];
-    	$headers = is_array($mail["headers"]) ? implode("\n", $mail['headers']) : $mail['headers'];
-    	$hasAttachment = (count ($mail['attachments']) > 0) ? "true" : "false";
+    	$headers = is_array($mail["headers"]) ? implode(",\n", $mail['headers']) : $mail['headers'];
+    	$hasAttachments = (count ($mail['attachments']) > 0) ? "true" : "false";
     	
     	$wpdb->insert($this->prefixTableName("mail_logging"), array(
     		'to' => $to,
@@ -172,11 +182,11 @@ class WPML_Plugin extends WPML_LifeCycle {
     		'subject' => $subject,
     		'message' => $message,
     		'headers' => $headers,
-    		'attachments' => $hasAttachment,
+    		'attachments' => $hasAttachments,
     		'plugin_version' => $this->getVersion()
     	));
     	
-    	error_log( sprintf("to: %s, subject: %s, message: %s, headers: %s, hasAttachment: %s", $to, $subject, $message, $headers, $hasAttachment));
+    	error_log( sprintf("to: %s, subject: %s, message: %s, headers: %s, hasAttachments: %s", $to, $subject, $message, $headers, $hasAttachments));
     	
     	error_log( print_r( $mail, true) );
     	
