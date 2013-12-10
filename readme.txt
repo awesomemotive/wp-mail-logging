@@ -1,5 +1,5 @@
 === WP Mail Logging ===
-Contributors: Christian Z&ouml;ller http://www.no3x.de/
+Contributors: No3x
 Donate link:
 Tags:
 License: GPLv3
