@@ -29,7 +29,8 @@ class Email_Logging_ListTable extends WP_List_Table {
 				'attachments'	=> __( 'Attachments', 'wml'),
 				'plugin_version'=> __( 'Plugin Version', 'wml')
 		);
-		return $columns;
+		
+		return apply_filters( WPML_Plugin::HOOK_LOGGING_COLUMNS, $columns );
 	}
 	
 	function prepare_items() {
@@ -78,7 +79,8 @@ class Email_Logging_ListTable extends WP_List_Table {
 			case 'plugin_version':
 				return $item[ $column_name ];
 			default:
-				return print_r( $item, true ) ; //Show the whole array for troubleshooting purposes
+				// if we don't know this coulmn maybe a hook does
+				return apply_filters( WPML_Plugin::HOOK_LOGGING_COLUMNS_RENDER, $item, $column_name );
 		}
 	}
 	

@@ -5,6 +5,9 @@ include_once('WPML_LifeCycle.php');
 
 class WPML_Plugin extends WPML_LifeCycle {
 
+	const HOOK_LOGGING_COLUMNS = 'wpml_hook_mail_columns';
+	const HOOK_LOGGING_COLUMNS_RENDER = 'wpml_hook_mail_columns_render';
+	
     /**
      * See: http://plugin.michael-simpson.com/?page_id=31
      * @return array of option meta data.
@@ -138,11 +141,9 @@ class WPML_Plugin extends WPML_LifeCycle {
 
         // Register AJAX hooks
         // http://plugin.michael-simpson.com/?page_id=41
-        
          add_action( 'init', array(&$this, 'sendTestMail') );
     }
-    
-   
+
     public function sendTestMail() {
     	$message = "Test Mail\n";
     	
@@ -158,7 +159,8 @@ class WPML_Plugin extends WPML_LifeCycle {
     	wp_mail( $multiple_to_recipients, "Test Mail", $message, $headers );
     }
     
-    public function log_email( $mail ) {
+    public function log_email( $mailOriginal ) {
+    	$mail = $mailOriginal;
     	global $wpdb;
     	/*
     	[to] => noex_home@yahoo.de
@@ -189,8 +191,7 @@ class WPML_Plugin extends WPML_LifeCycle {
     	error_log( sprintf("to: %s, subject: %s, message: %s, headers: %s, hasAttachments: %s", $to, $subject, $message, $headers, $hasAttachments));
     	
     	error_log( print_r( $mail, true) );
-    	
-    	return $mail;
+    	return $mailOriginal;
     }
 
 }
