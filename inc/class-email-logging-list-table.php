@@ -30,7 +30,18 @@ class Email_Logging_ListTable extends WP_List_Table {
 				'plugin_version'=> __( 'Plugin Version', 'wml')
 		);
 		
-		return apply_filters( WPML_Plugin::HOOK_LOGGING_COLUMNS, $columns );
+		$columns = apply_filters( WPML_Plugin::HOOK_LOGGING_COLUMNS, $columns );
+		
+		$special = array('_title', 'comment', 'media', 'name', 'title', 'username', 'blogname');
+		
+		foreach ( $special as $key ) {
+			if( array_key_exists( $key, $columns ) ) {
+				echo "You should avoid $key as keyname since it is treated by WordPress specially: Your table would still work, but you won't be able to show/hide the columns.";
+				break;
+			}
+		}
+		
+		return $columns;
 	}
 	
 	function prepare_items() {
