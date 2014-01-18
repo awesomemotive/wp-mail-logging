@@ -58,7 +58,7 @@ class WPML_Plugin extends WPML_LifeCycle {
     protected function installDatabaseTables() {
 		error_log("database created");
 		global $wpdb;
-		$tableName = $this->prefixTableName('mail_logging');
+		$tableName = $wpdb->prefix . "mail_logging";
 		$wpdb->query("CREATE TABLE IF NOT EXISTS `$tableName` (
 				`mail_id` INT NOT NULL AUTO_INCREMENT,
 				`timestamp` TIMESTAMP NOT NULL,
@@ -141,7 +141,7 @@ class WPML_Plugin extends WPML_LifeCycle {
 
         // Register AJAX hooks
         // http://plugin.michael-simpson.com/?page_id=41
-         add_action( 'init', array(&$this, 'sendTestMail') );
+        // add_action( 'init', array(&$this, 'sendTestMail') );
     }
 
     public function sendTestMail() {
@@ -178,7 +178,8 @@ class WPML_Plugin extends WPML_LifeCycle {
     	$headers = is_array($mail["headers"]) ? implode(",\n", $mail['headers']) : $mail['headers'];
     	$hasAttachments = (count ($mail['attachments']) > 0) ? "true" : "false";
     	
-    	$wpdb->insert($this->prefixTableName("mail_logging"), array(
+    	$tableName = $wpdb->prefix . "mail_logging";
+    	$wpdb->insert($tableName, array(
     		'to' => $to,
     		'timestamp' => current_time('mysql'),
     		'subject' => $subject,

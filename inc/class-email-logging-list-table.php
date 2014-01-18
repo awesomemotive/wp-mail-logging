@@ -47,11 +47,11 @@ class Email_Logging_ListTable extends WP_List_Table {
 	function prepare_items() {
 		global $wpdb;
 		//TODO prefix from AL
-		$tableName = 'wp_no3x_wpml_plugin_mail_logging';
+		$tableName = $wpdb->prefix . "mail_logging";
 		
 		$columns = $this->get_columns();
 		$hidden = array( 
-				//'plugin_version' 
+				'plugin_version' 
 		);
 		$sortable = $this->get_sortable_columns();
 		$this->_column_headers = array($columns, $hidden, $sortable);
@@ -106,11 +106,12 @@ class Email_Logging_ListTable extends WP_List_Table {
 		global $wpdb;
 		$name = $this->_args['singular'];
 		
+		//TODO prefix from AL
+		$tableName = $wpdb->prefix . "mail_logging";
+		
 		//Detect when a bulk action is being triggered...
 		if( 'delete' == $this->current_action() ) {
 			foreach($_REQUEST[$name] as $item_id) {
-				//TODO prefix from AL
-				$tableName = 'wp_no3x_wpml_plugin_mail_logging';
 				$wpdb->query("DELETE FROM `$tableName` WHERE mail_id = $item_id");
 			}
 		}
