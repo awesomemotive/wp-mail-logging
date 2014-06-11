@@ -16,9 +16,9 @@ class WPML_Plugin extends WPML_LifeCycle {
         //  http://plugin.michael-simpson.com/?page_id=31
         return array(
             //'_version' => array('Installed Version'), // Leave this one commented-out. Uncomment to test upgrades.
-            //'ATextInput' => array(__('Enter in some text', 'my-awesome-plugin')),
-            'DeleteOnDeactivation' => array(__('Delete all data on deactivation? (emails and settings)', 'my-awesome-plugin'), 'false', 'true'),
-            'CanSeeSubmitData' => array(__('Can See Submission data', 'my-awesome-plugin'),
+            //'ATextInput' => array(__('Enter in some text', 'wml')),
+            'DeleteOnDeactivation' => array(__('Delete all data on deactivation? (emails and settings)', 'wml'), 'false', 'true'),
+            'CanSeeSubmitData' => array(__('Can See Submission data', 'wml'),
                                         'Administrator', 'Editor', 'Author', 'Contributor', 'Subscriber', 'Anyone')
         );
     }
@@ -56,9 +56,8 @@ class WPML_Plugin extends WPML_LifeCycle {
      * @return void
      */
     protected function installDatabaseTables() {
-		error_log("database created");
 		global $wpdb;
-		$tableName = $wpdb->prefix . "mail_logging";
+		$tableName = _get_tablename('mails');
 		$wpdb->query("CREATE TABLE IF NOT EXISTS `$tableName` (
 				`mail_id` INT NOT NULL AUTO_INCREMENT,
 				`timestamp` TIMESTAMP NOT NULL,
@@ -80,7 +79,7 @@ class WPML_Plugin extends WPML_LifeCycle {
      */
     protected function unInstallDatabaseTables() {
 		global $wpdb;
-		$tableName = $this->prefixTableName('mail_logging');
+		$tableName = _get_tablename('mails');
 		$wpdb->query("DROP TABLE IF EXISTS `$tableName`");
     }
 
@@ -141,6 +140,7 @@ class WPML_Plugin extends WPML_LifeCycle {
 
         // Register AJAX hooks
         // http://plugin.michael-simpson.com/?page_id=41
+
         // add_action( 'init', array(&$this, 'sendTestMail') );
     }
 
@@ -178,7 +178,7 @@ class WPML_Plugin extends WPML_LifeCycle {
     	$headers = is_array($mail["headers"]) ? implode(",\n", $mail['headers']) : $mail['headers'];
     	$hasAttachments = (count ($mail['attachments']) > 0) ? "true" : "false";
     	
-    	$tableName = $wpdb->prefix . "mail_logging";
+    	$tableName = _get_tablename('mails');
     	$wpdb->insert($tableName, array(
     		'to' => $to,
     		'timestamp' => current_time('mysql'),

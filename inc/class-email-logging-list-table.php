@@ -46,8 +46,7 @@ class Email_Logging_ListTable extends WP_List_Table {
 	
 	function prepare_items() {
 		global $wpdb;
-		//TODO prefix from AL
-		$tableName = $wpdb->prefix . "mail_logging";
+		$tableName = _get_tablename('mails');
 		
 		$columns = $this->get_columns();
 		$hidden = array( 
@@ -65,8 +64,8 @@ class Email_Logging_ListTable extends WP_List_Table {
 		//TODO: make option for default order
 		$orderby_default = "mail_id";
 		$order_default = "desc";
-		$orderby = ( ! empty( $_GET['orderby'] ) ) ? $_GET['orderby'] : $orderby_default;
-		$order = ( ! empty($_GET['order'] ) ) ? $_GET['order'] : $order_default;
+		$orderby = ( !empty( $_GET['orderby'] ) ) ? $_GET['orderby'] : $orderby_default;
+		$order = ( !empty($_GET['order'] ) ) ? $_GET['order'] : $order_default;
 		
 		$found_data = $wpdb->get_results("SELECT * FROM `$tableName` ORDER BY $orderby $order LIMIT $limit", ARRAY_A);
 		
@@ -80,6 +79,13 @@ class Email_Logging_ListTable extends WP_List_Table {
 	}
 	
 	
+	/**
+	 * Renders the cell. 
+	 * Note: We can easily add filter for all columns if you want to / need to manipulate the content. (currently only additional column manipulation is supported)
+	 * @param array $item
+	 * @param string $column_name
+	 * @return string The cell content
+	 */
 	function column_default( $item, $column_name ) {
 		switch( $column_name ) {
 			case 'mail_id':
@@ -107,9 +113,7 @@ class Email_Logging_ListTable extends WP_List_Table {
 	function process_bulk_action() {
 		global $wpdb;
 		$name = $this->_args['singular'];
-		
-		//TODO prefix from AL
-		$tableName = $wpdb->prefix . "mail_logging";
+		$tableName = _get_tablename('mails');
 		
 		//Detect when a bulk action is being triggered...
 		if( 'delete' == $this->current_action() ) {
