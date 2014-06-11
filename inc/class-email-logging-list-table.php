@@ -36,7 +36,7 @@ class Email_Logging_ListTable extends WP_List_Table {
 		
 		foreach ( $special as $key ) {
 			if( array_key_exists( $key, $columns ) ) {
-				echo "You should avoid $key as keyname since it is treated by WordPress specially: Your table would still work, but you won't be able to show/hide the columns.";
+				echo "You should avoid $key as keyname since it is treated by WordPress specially: Your table would still work, but you won't be able to show/hide the columns. You can prefix your columns!";
 				break;
 			}
 		}
@@ -92,8 +92,8 @@ class Email_Logging_ListTable extends WP_List_Table {
 			case 'plugin_version':
 				return $item[ $column_name ];
 			default:
-				// if we don't know this column maybe a hook does
-				return apply_filters( WPML_Plugin::HOOK_LOGGING_COLUMNS_RENDER, $item, $column_name );
+				// if we don't know this column maybe a hook does - if no hook extracted data (string) out of the array we can avoid the output of 'Array()' (array)
+				return (is_array( $res = apply_filters( WPML_Plugin::HOOK_LOGGING_COLUMNS_RENDER, $item, $column_name ) ) ) ? "" : $res;
 		}
 	}
 	

@@ -21,7 +21,7 @@ class WPML_API_Example {
 	/**
 	 * Is called when List Table is gathering columns.
 	 *  
-	 * @param array $columns Array of download columns
+	 * @param array $columns Array of columns
 	 * @return array $columns Updated array of columns
 	 */
 	public function add_column( $columns ) {
