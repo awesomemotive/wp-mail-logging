@@ -62,17 +62,19 @@ class Email_Logging_ListTable extends WP_List_Table {
 		$current_page = $this->get_pagenum();
 		$total_items = $wpdb->get_var("SELECT COUNT(*) FROM  `$tableName`");
 		$limit = $per_page*$current_page;
-		$orderby = ( ! empty( $_GET['orderby'] ) ) ? $_GET['orderby'] : 'mail_id';
-		$order = ( ! empty($_GET['order'] ) ) ? $_GET['order'] : 'asc';
+		//TODO: make option for default order
+		$orderby_default = "mail_id";
+		$order_default = "desc";
+		$orderby = ( ! empty( $_GET['orderby'] ) ) ? $_GET['orderby'] : $orderby_default;
+		$order = ( ! empty($_GET['order'] ) ) ? $_GET['order'] : $order_default;
 		
 		$found_data = $wpdb->get_results("SELECT * FROM `$tableName` ORDER BY $orderby $order LIMIT $limit", ARRAY_A);
 		
-		// only ncessary because we have sample data
 		$dataset = array_slice( $found_data,( ( $current_page-1 )* $per_page ), $per_page );
 		
 		$this->set_pagination_args( array(
-				'total_items' => $total_items,                  //WE have to calculate the total number of items
-				'per_page'    => $per_page                     //WE have to determine how many items to show on a page
+				'total_items' => $total_items, //WE have to calculate the total number of items
+				'per_page'    => $per_page //WE have to determine how many items to show on a page
 		) );
 		$this->items = $dataset;
 	}
@@ -126,14 +128,15 @@ class Email_Logging_ListTable extends WP_List_Table {
 	
 	function get_sortable_columns() {
 		$sortable_columns = array(
-				'mail_id'  => array('mail_id', true),
-				'timestamp' => array('timestamp',false),
-				'to' => array('to',false),
-				'subject' => array('subject',false),
-				'message' => array('message',false),
-				'headers' => array('headers',false),
-				'attachments' => array('attachments',false),
-				'plugin_version' => array('plugin_version',false)
+				// column_name => array( 'display_name', true[asc] | false[desc] )
+				'mail_id'  => array('mail_id', false),
+				'timestamp' => array('timestamp', true),
+				'to' => array('to', true),
+				'subject' => array('subject', true),
+				'message' => array('message', true),
+				'headers' => array('headers', true),
+				'attachments' => array('attachments', true),
+				'plugin_version' => array('plugin_version', true)
 		);
 		return $sortable_columns;
 	}

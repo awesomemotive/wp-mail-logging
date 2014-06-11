@@ -3,6 +3,7 @@
 /**
  * @author No3x
  * The Plugin provides mechanisms to extend the displayed data.
+ * This class is not an API class. It is just an example.
  */
 class WPML_API_Example {
 	
@@ -11,7 +12,7 @@ class WPML_API_Example {
 	
 	function __construct() {
 		
-		// In this example we are going to add a column 'test' in add_column. If the column is rendered		
+		// In this example we are going to add a column 'test' in add_column.
 		add_filter( WPML_Plugin::HOOK_LOGGING_COLUMNS, array(&$this, 'add_column' ) );
 		add_filter( WPML_Plugin::HOOK_LOGGING_COLUMNS_RENDER, array(&$this, 'render_column' ), 10, 2 );
 		
