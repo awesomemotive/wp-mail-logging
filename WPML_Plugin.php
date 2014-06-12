@@ -141,29 +141,13 @@ class WPML_Plugin extends WPML_LifeCycle {
         // Register AJAX hooks
         // http://plugin.michael-simpson.com/?page_id=41
 
-        // add_action( 'init', array(&$this, 'sendTestMail') );
     }
 
-    public function sendTestMail() {
-    	$message = "Test Mail\n";
-    	
-    	$headers[] = 'From: Me Myself <noex_home@yahoo.de>';
-    	$headers[] = 'Cc: John Q Codex <noex_home@yahoo.de>';
-    	$headers[] = 'Cc: noex_home@yahoo.de'; // note you can just use a simple email address
-    	
-    	$multiple_to_recipients = array(
-    			'noex_home@yahoo.de',
-    			'noex_home@yahoo.de'
-    	);
-    	
-    	wp_mail( $multiple_to_recipients, "Test Mail", $message, $headers );
-    }
-    
     public function log_email( $mailOriginal ) {
     	$mail = $mailOriginal;
     	global $wpdb;
     	/*
-    	[to] => noex_home@yahoo.de
+    	[to] => to@example.com
 	    [subject] => Test Mail
 	    [message] => Test Mail
 	
@@ -189,10 +173,6 @@ class WPML_Plugin extends WPML_LifeCycle {
     		'plugin_version' => $this->getVersion()
     	));
     	
-    	error_log( sprintf("to: %s, subject: %s, message: %s, headers: %s, hasAttachments: %s", $to, $subject, $message, $headers, $hasAttachments));
-    	
-    	error_log( print_r( $mail, true) );
     	return $mailOriginal;
     }
-
 }

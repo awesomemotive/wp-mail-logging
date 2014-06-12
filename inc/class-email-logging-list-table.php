@@ -7,27 +7,29 @@ if(!class_exists('WP_List_Table')){
 class Email_Logging_ListTable extends WP_List_Table {
 	
 	function __construct(){
-		
 		global $status, $page, $hook_suffix;
+		
 		parent::__construct( array(
 			'singular' 	=> __( 'Email', 'wml' ),//singular name of the listed records
 			'plural' 	=> __( 'Emails', 'wml' ),//plural name of the listed records
 			'ajax' 		=> false				//does this table support ajax?
 		) );
-		
 	}	
 	
+	/* (non-PHPdoc)
+	 * @see WP_List_Table::get_columns()
+	 */
 	function get_columns(){
 		$columns = array(
-			 	'cb'        => '<input type="checkbox" />',
-				'mail_id'		=> __( 'ID', 'wml'),
-				'timestamp'		=> __( 'Time', 'wml'),
-				'to'			=> __( 'To', 'wml'),
-				'subject'		=> __( 'Subject', 'wml'),
-				'message'		=> __( 'Message', 'wml'),
-				'headers'		=> __( 'Headers', 'wml'),
-				'attachments'	=> __( 'Attachments', 'wml'),
-				'plugin_version'=> __( 'Plugin Version', 'wml')
+		 	'cb'        => '<input type="checkbox" />',
+			'mail_id'		=> __( 'ID', 'wml'),
+			'timestamp'		=> __( 'Time', 'wml'),
+			'to'			=> __( 'To', 'wml'),
+			'subject'		=> __( 'Subject', 'wml'),
+			'message'		=> __( 'Message', 'wml'),
+			'headers'		=> __( 'Headers', 'wml'),
+			'attachments'	=> __( 'Attachments', 'wml'),
+			'plugin_version'=> __( 'Plugin Version', 'wml')
 		);
 		
 		$columns = apply_filters( WPML_Plugin::HOOK_LOGGING_COLUMNS, $columns );
@@ -44,14 +46,27 @@ class Email_Logging_ListTable extends WP_List_Table {
 		return $columns;
 	}
 	
+	/**
+	 * Define which columns are hidden
+	 *
+	 * @return Array
+	 */
+	function get_hidden_columns() {
+		return array( 
+			'plugin_version', 
+			'mail_id' 
+		);
+	}
+	
+	/* (non-PHPdoc)
+	 * @see WP_List_Table::get_columns()
+	 */
 	function prepare_items() {
 		global $wpdb;
 		$tableName = _get_tablename('mails');
 		
 		$columns = $this->get_columns();
-		$hidden = array( 
-				'plugin_version' 
-		);
+		$hidden = $this->get_hidden_columns($screen);
 		$sortable = $this->get_sortable_columns();
 		$this->_column_headers = array($columns, $hidden, $sortable);
 		
@@ -72,8 +87,8 @@ class Email_Logging_ListTable extends WP_List_Table {
 		$dataset = array_slice( $found_data,( ( $current_page-1 )* $per_page ), $per_page );
 		
 		$this->set_pagination_args( array(
-				'total_items' => $total_items, //WE have to calculate the total number of items
-				'per_page'    => $per_page //WE have to determine how many items to show on a page
+			'total_items' => $total_items, //WE have to calculate the total number of items
+			'per_page'    => $per_page //WE have to determine how many items to show on a page
 		) );
 		$this->items = $dataset;
 	}
@@ -103,9 +118,12 @@ class Email_Logging_ListTable extends WP_List_Table {
 		}
 	}
 	
+	/* (non-PHPdoc)
+	 * @see WP_List_Table::get_bulk_actions()
+	 */
 	function get_bulk_actions() {
 		$actions = array(
-				'delete'    => 'Delete'
+			'delete'    => 'Delete'
 		);
 		return $actions;
 	}
@@ -123,28 +141,42 @@ class Email_Logging_ListTable extends WP_List_Table {
 		}
 	}
 	
+	
+	/**
+	 * Render the cb column
+	 * @param object $item The current item
+	 * @return string the rendered cb cell content
+	 */
 	function column_cb($item) {
 		$name = $this->_args['singular'];
 		return sprintf(
-				'<input type="checkbox" name="%1$s[]" value="%2$s" />', $name, $item['mail_id']
+			'<input type="checkbox" name="%1$s[]" value="%2$s" />', $name, $item['mail_id']
 		);
 	}
 	
+	/**
+	 * Define the sortable columns
+	 *
+	 * @return Array
+	 */
 	function get_sortable_columns() {
 		$sortable_columns = array(
-				// column_name => array( 'display_name', true[asc] | false[desc] )
-				'mail_id'  => array('mail_id', false),
-				'timestamp' => array('timestamp', true),
-				'to' => array('to', true),
-				'subject' => array('subject', true),
-				'message' => array('message', true),
-				'headers' => array('headers', true),
-				'attachments' => array('attachments', true),
-				'plugin_version' => array('plugin_version', true)
+			// column_name => array( 'display_name', true[asc] | false[desc] )
+			'mail_id'  => array('mail_id', false),
+			'timestamp' => array('timestamp', true),
+			'to' => array('to', true),
+			'subject' => array('subject', true),
+			'message' => array('message', true),
+			'headers' => array('headers', true),
+			'attachments' => array('attachments', true),
+			'plugin_version' => array('plugin_version', true)
 		);
 		return $sortable_columns;
 	}
 	
+	/* (non-PHPdoc)
+	 * @see WP_List_Table::no_items()
+	 */
 	function no_items() {
 		_e( 'No ' . $this->_args['singular'] . ' logged yet.' );
 		return;
