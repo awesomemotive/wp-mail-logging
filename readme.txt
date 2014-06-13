@@ -15,15 +15,18 @@ Logs each email sent by WordPress.
 Logs each email sent by WordPress.
 
 == Installation ==
+Just install and activate wp-mail-logging. The plugin will do the work for you! You can list all logged mails on the plugin site.
 
 
 == Frequently Asked Questions ==
 
 
 == Screenshots ==
+1. The List
+2. The Settings
 
 
 == Changelog ==
 
-= 0.1 =
+= 1.0 =
 - Initial Revision
