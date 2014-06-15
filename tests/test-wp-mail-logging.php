@@ -1,6 +1,6 @@
 <?php
 
-require_once( '../../wp-mail-logging.php' );
+require_once( '../wp-mail-logging.php' );
 
 class WPML_Plugin_Test extends WP_UnitTestCase {
 	
