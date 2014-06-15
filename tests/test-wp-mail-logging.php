@@ -1,5 +1,7 @@
 <?php
 
+require_once( '../WPML_Plugin.php' );
+
 class WPML_Plugin_Test extends WP_UnitTestCase {
 	
 	private $plugin;
