@@ -1,5 +1,7 @@
 <?php
 
+require_once( '../../wp-mail-logging.php' );
+
 class WPML_Plugin_Test extends WP_UnitTestCase {
 	
 	private $plugin;
@@ -16,7 +18,7 @@ class WPML_Plugin_Test extends WP_UnitTestCase {
 		
 		$PluginDisplayName = $this->plugin->PluginDisplayName();
 		$this->assertEquals('WP Mail Logging', $PluginDisplayName);
-
+		
 	}
 }
 
