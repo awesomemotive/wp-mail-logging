@@ -1,12 +1,21 @@
 <?php
 
-if(!class_exists('WP_List_Table')){
-	require_once( ABSPATH . WPINC . '/class-wp-list-table.php' );
+if( !class_exists( 'WP_List_Table') ) {
+	require_once( plugin_dir_path( __FILE__ ) . 'class-wp-list-table.php' );
 }
 
+/**
+ * @author No3x
+ * @since 1.0
+ * Renders the mails in a table list.
+ */
 class Email_Logging_ListTable extends WP_List_Table {
 	
-	function __construct(){
+	/**
+	 * Initializes the List Table
+	 * @since 1.0
+	 */
+	function __construct() {
 		global $status, $page, $hook_suffix;
 		
 		parent::__construct( array(
@@ -16,10 +25,12 @@ class Email_Logging_ListTable extends WP_List_Table {
 		) );
 	}	
 	
-	/* (non-PHPdoc)
+	/** 
+	 * Defines the available columns.
+	 * @since 1.0
 	 * @see WP_List_Table::get_columns()
 	 */
-	function get_columns(){
+	function get_columns() {
 		$columns = array(
 		 	'cb'        => '<input type="checkbox" />',
 			'mail_id'		=> __( 'ID', 'wml'),
@@ -34,11 +45,11 @@ class Email_Logging_ListTable extends WP_List_Table {
 		
 		$columns = apply_filters( WPML_Plugin::HOOK_LOGGING_COLUMNS, $columns );
 		
-		$special = array('_title', 'comment', 'media', 'name', 'title', 'username', 'blogname');
+		$reserved = array('_title', 'comment', 'media', 'name', 'title', 'username', 'blogname');
 		
-		foreach ( $special as $key ) {
-			if( array_key_exists( $key, $columns ) ) {
-				echo "You should avoid $key as keyname since it is treated by WordPress specially: Your table would still work, but you won't be able to show/hide the columns. You can prefix your columns!";
+		foreach ( $reserved as $reserved_key ) {
+			if( array_key_exists( $reserved_key, $columns ) ) {
+				echo "You should avoid $reserved_key as keyname since it is treated by WordPress specially: Your table would still work, but you won't be able to show/hide the columns. You can prefix your columns!";
 				break;
 			}
 		}
@@ -48,7 +59,7 @@ class Email_Logging_ListTable extends WP_List_Table {
 	
 	/**
 	 * Define which columns are hidden
-	 *
+	 * @since 1.0
 	 * @return Array
 	 */
 	function get_hidden_columns() {
@@ -58,8 +69,11 @@ class Email_Logging_ListTable extends WP_List_Table {
 		);
 	}
 	
-	/* (non-PHPdoc)
-	 * @see WP_List_Table::get_columns()
+
+	/**
+	 * Prepares the items for rendering
+	 * @since 1.0
+	 * @see WP_List_Table::prepare_items()
 	 */
 	function prepare_items() {
 		global $wpdb;
@@ -97,6 +111,7 @@ class Email_Logging_ListTable extends WP_List_Table {
 	/**
 	 * Renders the cell. 
 	 * Note: We can easily add filter for all columns if you want to / need to manipulate the content. (currently only additional column manipulation is supported)
+	 * @since 1.0
 	 * @param array $item
 	 * @param string $column_name
 	 * @return string The cell content
@@ -118,7 +133,9 @@ class Email_Logging_ListTable extends WP_List_Table {
 		}
 	}
 	
-	/* (non-PHPdoc)
+	/**
+	 * Defines available bulk actions.
+	 * @since 1.0
 	 * @see WP_List_Table::get_bulk_actions()
 	 */
 	function get_bulk_actions() {
@@ -144,6 +161,7 @@ class Email_Logging_ListTable extends WP_List_Table {
 	
 	/**
 	 * Render the cb column
+	 * @since 1.0
 	 * @param object $item The current item
 	 * @return string the rendered cb cell content
 	 */
@@ -174,8 +192,10 @@ class Email_Logging_ListTable extends WP_List_Table {
 		return $sortable_columns;
 	}
 	
-	/* (non-PHPdoc)
-	 * @see WP_List_Table::no_items()
+	/** 
+	 * Is displayed if no item is available to render
+	 * @since 1.0
+ 	 * @see WP_List_Table::no_items()
 	 */
 	function no_items() {
 		_e( 'No ' . $this->_args['singular'] . ' logged yet.' );
