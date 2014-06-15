@@ -2,8 +2,11 @@
 
 class WPML_Plugin_Test extends WP_UnitTestCase {
 	
+	private $plugin;
+	
 	function setUp() {
 		parent::setUp();
+		$this->plugin = $GLOBALS['WPML_Plugin'];
 	}
 	
 	function testSample() {
