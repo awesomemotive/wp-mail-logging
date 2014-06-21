@@ -19,10 +19,6 @@
     If not, see http://www.gnu.org/licenses/gpl-3.0.html
 */
 
-if (!class_exists( 'Email_Log_List_Table' ) ) {
-	require_once 'WPML_Email_Log_List.php';
-}
-
 class WPML_OptionsManager {
 
     public function getOptionNamePrefix() {
@@ -334,6 +330,10 @@ class WPML_OptionsManager {
     public function LogMenu() {
     	if (!current_user_can('manage_options')) {
     		wp_die(__('You do not have sufficient permissions to access this page.', 'wpml'));
+    	}
+    	
+    	if (!class_exists( 'Email_Log_List_Table' ) ) {
+    		require_once ( plugin_dir_path( __FILE__ ) . 'WPML_Email_Log_List.php' );
     	}
     	
     	?>
