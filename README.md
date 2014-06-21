@@ -20,6 +20,8 @@ There are various ways you can contribute:
 
 This will download the latest developer copy of wp-mail-logging.
 
+Please read [Contributing](https://github.com/No3x/wp-mail-logging/CONTRIBUTING.md) if you plan to contribute.
+
 ### As Assistant ###
 1. Raise an [Issue](https://github.com/No3x/wp-mail-logging/issues?state=open)
 3. Translate wp-mail-logging into different languages

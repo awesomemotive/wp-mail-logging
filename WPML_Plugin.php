@@ -8,6 +8,12 @@ class WPML_Plugin extends WPML_LifeCycle {
 	const HOOK_LOGGING_COLUMNS = 'wpml_hook_mail_columns';
 	const HOOK_LOGGING_COLUMNS_RENDER = 'wpml_hook_mail_columns_render';
 	
+
+	public static function getTablename( $name ) {
+		global $wpdb;
+		return $wpdb->prefix . 'wpml_' . $name;
+	}
+	
     /**
      * See: http://plugin.michael-simpson.com/?page_id=31
      * @return array of option meta data.
@@ -57,7 +63,7 @@ class WPML_Plugin extends WPML_LifeCycle {
      */
     protected function installDatabaseTables() {
 		global $wpdb;
-		$tableName = _get_tablename('mails');
+		$tableName = WPML_Plugin::getTablename('mails');
 		$wpdb->query("CREATE TABLE IF NOT EXISTS `$tableName` (
 				`mail_id` INT NOT NULL AUTO_INCREMENT,
 				`timestamp` TIMESTAMP NOT NULL,
@@ -79,7 +85,7 @@ class WPML_Plugin extends WPML_LifeCycle {
      */
     protected function unInstallDatabaseTables() {
 		global $wpdb;
-		$tableName = _get_tablename('mails');
+		$tableName = WPML_Plugin::getTablename('mails');
 		$wpdb->query("DROP TABLE IF EXISTS `$tableName`");
     }
 
@@ -162,7 +168,7 @@ class WPML_Plugin extends WPML_LifeCycle {
     	$headers = is_array($mail["headers"]) ? implode(",\n", $mail['headers']) : $mail['headers'];
     	$hasAttachments = (count ($mail['attachments']) > 0) ? "true" : "false";
     	
-    	$tableName = _get_tablename('mails');
+    	$tableName = WPML_Plugin::getTablename('mails');
     	$wpdb->insert($tableName, array(
     		'to' => $to,
     		'timestamp' => current_time('mysql'),

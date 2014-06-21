@@ -56,8 +56,3 @@ function WPML_init($file) {
     // Register the Plugin Deactivation Hook
     register_deactivation_hook($file, array(&$aPlugin, 'deactivate'));
 }
-
-function _get_tablename( $name ) {
-	global $wpdb;
-	return $wpdb->prefix . 'wpml_' . $name;
-}

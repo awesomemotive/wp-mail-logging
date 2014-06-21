@@ -19,6 +19,10 @@
     If not, see http://www.gnu.org/licenses/gpl-3.0.html
 */
 
+if (!class_exists( 'Email_Log_List_Table' ) ) {
+	require_once 'WPML_Email_Log_List.php';
+}
+
 class WPML_OptionsManager {
 
     public function getOptionNamePrefix() {
@@ -282,36 +286,18 @@ class WPML_OptionsManager {
     	
     	
     	// List screen properties
-    	$variables = '<ul style="width:50%;float:left;"> <strong>Screen variables </strong>'
-    			. sprintf( '<li> Screen id : %s</li>', $screen_id )
-    			. sprintf( '<li> Screen base : %s</li>', $screen->base )
-    			. sprintf( '<li>Parent base : %s</li>', $screen->parent_base )
-    			. sprintf( '<li> Parent file : %s</li>', $screen->parent_file )
-    			. sprintf( '<li> Hook suffix : %s</li>', $hook_suffix )
-    			. '</ul>';
+    	$left = '<div style="width:50%;float:left;">' 
+    			. '<h4>About this plugin</h4>'
+    			. '<p>This plugin is open source.</p>'
+    			. '</div>';
     	
-    	// Append global $hook_suffix to the hook stems
-    	$hooks = array(
-    			"load-$hook_suffix",
-    			"admin_print_styles-$hook_suffix",
-    			"admin_print_scripts-$hook_suffix",
-    			"admin_head-$hook_suffix",
-    			"admin_footer-$hook_suffix"
-    	);
     	
-    	// If add_meta_boxes or add_meta_boxes_{screen_id} is used, list these too
-    	if ( did_action( 'add_meta_boxes_' . $screen_id ) )
-    		$hooks[] = 'add_meta_boxes_' . $screen_id;
+    	$right = '<div style="width:50%;float:right;">'
+    			. '<h4>Donate</h4>' 
+    			. '<p>If you like the plugin please consider to make a donation. More information are provided on my <a href="http://no3x.de/web/donate">website</a>.</p>'
+    			. '</div>';
     	
-    	if ( did_action( 'add_meta_boxes' ) )
-    		$hooks[] = 'add_meta_boxes';
-    	
-    	// Get List HTML for the hooks
-    	$hooks = '<ul style="width:50%;float:left;"> <strong>Hooks </strong> <li>';
-    			
-    	
-    	// Combine $variables list with $hooks list.
-    	$help_content = $variables . $hooks;
+    	$help_content = $left . $right;
     	
     	/**
     	 * Content specified inline
@@ -331,7 +317,7 @@ class WPML_OptionsManager {
     			'<p><a href = "http://wordpress.org/extend/plugins/wp-mail-logging/">' . __('Plugin Homepage/support', 'wpml') . '</a></p>' .
     			'<p><a href = "http://no3x.de/">' . __("Plugin author's blog", 'wpml') . '</a></p>'
     	);
-    
+    	
     	// Add screen options
     	$screen->add_option(
     			'per_page',
@@ -348,11 +334,6 @@ class WPML_OptionsManager {
     public function LogMenu() {
     	if (!current_user_can('manage_options')) {
     		wp_die(__('You do not have sufficient permissions to access this page.', 'wpml'));
-    	}
-    	
-    	
-    	if (!class_exists( 'Email_Log_List_Table' ) ) {
-    		require_once dirname( __FILE__ ) . '/inc/class-email-logging-list-table.php';
     	}
     	
     	?>

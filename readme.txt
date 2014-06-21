@@ -18,6 +18,7 @@ Features of the plugin include:
 
 * Zero-configuration - just install and enjoy
 * Complete list of sent mails
+* Developer: Filters are provided to extend the columns. *
 
 **Follow this plugin on [GitHub](https://github.com/No3x/wp-mail-logging)**
 
@@ -38,6 +39,9 @@ Just install and activate wp-mail-logging. The plugin will do the work for you! 
 
 
 == Changelog ==
+= 1.2 =
+- Improved help
+
 = 1.1 =
 - Modified readme. 
 

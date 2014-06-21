@@ -1,7 +1,7 @@
 <?php
 
 if( !class_exists( 'WP_List_Table') ) {
-	require_once( plugin_dir_path( __FILE__ ) . 'class-wp-list-table.php' );
+	require_once( plugin_dir_path( __FILE__ ) . 'inc/class-wp-list-table.php' );
 }
 
 /**
@@ -25,6 +25,16 @@ class Email_Logging_ListTable extends WP_List_Table {
 		) );
 	}	
 	
+	/**
+	 * Is displayed if no item is available to render
+	 * @since 1.0
+	 * @see WP_List_Table::no_items()
+	 */
+	function no_items() {
+		_e( 'No ' . $this->_args['singular'] . ' logged yet.' );
+		return;
+	}
+	
 	/** 
 	 * Defines the available columns.
 	 * @since 1.0
@@ -43,10 +53,12 @@ class Email_Logging_ListTable extends WP_List_Table {
 			'plugin_version'=> __( 'Plugin Version', 'wml')
 		);
 		
+		// give a plugin the change to edit the columns 
 		$columns = apply_filters( WPML_Plugin::HOOK_LOGGING_COLUMNS, $columns );
 		
 		$reserved = array('_title', 'comment', 'media', 'name', 'title', 'username', 'blogname');
 		
+		// show message for reserved column names
 		foreach ( $reserved as $reserved_key ) {
 			if( array_key_exists( $reserved_key, $columns ) ) {
 				echo "You should avoid $reserved_key as keyname since it is treated by WordPress specially: Your table would still work, but you won't be able to show/hide the columns. You can prefix your columns!";
@@ -69,7 +81,6 @@ class Email_Logging_ListTable extends WP_List_Table {
 		);
 	}
 	
-
 	/**
 	 * Prepares the items for rendering
 	 * @since 1.0
@@ -77,7 +88,7 @@ class Email_Logging_ListTable extends WP_List_Table {
 	 */
 	function prepare_items() {
 		global $wpdb;
-		$tableName = _get_tablename('mails');
+		$tableName = WPML_Plugin::getTablename('mails');
 		
 		$columns = $this->get_columns();
 		$hidden = $this->get_hidden_columns($screen);
@@ -98,15 +109,15 @@ class Email_Logging_ListTable extends WP_List_Table {
 		
 		$found_data = $wpdb->get_results("SELECT * FROM `$tableName` ORDER BY $orderby $order LIMIT $limit", ARRAY_A);
 		
-		$dataset = array_slice( $found_data,( ( $current_page-1 )* $per_page ), $per_page );
+		$dataset = array_slice( $found_data,( ( $current_page-1 ) * $per_page ), $per_page );
 		
 		$this->set_pagination_args( array(
 			'total_items' => $total_items, //WE have to calculate the total number of items
 			'per_page'    => $per_page //WE have to determine how many items to show on a page
 		) );
+		
 		$this->items = $dataset;
 	}
-	
 	
 	/**
 	 * Renders the cell. 
@@ -148,7 +159,7 @@ class Email_Logging_ListTable extends WP_List_Table {
 	function process_bulk_action() {
 		global $wpdb;
 		$name = $this->_args['singular'];
-		$tableName = _get_tablename('mails');
+		$tableName = WPML_Plugin::getTablename('mails');
 		
 		//Detect when a bulk action is being triggered...
 		if( 'delete' == $this->current_action() ) {
@@ -157,7 +168,6 @@ class Email_Logging_ListTable extends WP_List_Table {
 			}
 		}
 	}
-	
 	
 	/**
 	 * Render the cb column
@@ -174,11 +184,11 @@ class Email_Logging_ListTable extends WP_List_Table {
 	
 	/**
 	 * Define the sortable columns
-	 *
+	 * @since 1.0
 	 * @return Array
 	 */
 	function get_sortable_columns() {
-		$sortable_columns = array(
+		return array(
 			// column_name => array( 'display_name', true[asc] | false[desc] )
 			'mail_id'  => array('mail_id', false),
 			'timestamp' => array('timestamp', true),
@@ -189,17 +199,6 @@ class Email_Logging_ListTable extends WP_List_Table {
 			'attachments' => array('attachments', true),
 			'plugin_version' => array('plugin_version', true)
 		);
-		return $sortable_columns;
-	}
-	
-	/** 
-	 * Is displayed if no item is available to render
-	 * @since 1.0
- 	 * @see WP_List_Table::no_items()
-	 */
-	function no_items() {
-		_e( 'No ' . $this->_args['singular'] . ' logged yet.' );
-		return;
 	}
 }
 
