@@ -21,6 +21,7 @@ Please insure to be conform with the development guidelines.
 * Fork the repository on GitHub
 * Make the changes to your forked repository
   * Ensure you stick to the [WordPress Coding Standards](http://codex.wordpress.org/WordPress_Coding_Standards)
+  * Always leave the code cleaner than you found it. (The Boy Scouts Rule)
 * When committing, reference your issue (if present) and include a note about the fix
 * If possible, and if applicable, please also add/update unit tests for your changes
 * Push the changes to your fork and submit a pull request to the 'master' branch of the wp-mail-logging repository
