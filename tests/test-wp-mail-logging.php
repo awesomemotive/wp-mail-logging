@@ -29,9 +29,4 @@ class WPML_Plugin_Test extends WP_UnitTestCase {
 		$this->assertEquals( $wpdb->prefix . 'wpml_testTable', $prefixed );
 	}
 	
-	function test_mail_log() {
-		$this->plugin
-	}
-	
 }
-
