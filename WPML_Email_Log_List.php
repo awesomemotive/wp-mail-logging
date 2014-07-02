@@ -42,10 +42,10 @@ class Email_Logging_ListTable extends WP_List_Table {
 	 */
 	function get_columns() {
 		$columns = array(
-		 	'cb'        => '<input type="checkbox" />',
+		 	'cb'			=> '<input type="checkbox" />',
 			'mail_id'		=> __( 'ID', 'wml'),
 			'timestamp'		=> __( 'Time', 'wml'),
-			'to'			=> __( 'To', 'wml'),
+			'receiver'		=> __( 'Receiver', 'wml'),
 			'subject'		=> __( 'Subject', 'wml'),
 			'message'		=> __( 'Message', 'wml'),
 			'headers'		=> __( 'Headers', 'wml'),
@@ -91,7 +91,7 @@ class Email_Logging_ListTable extends WP_List_Table {
 		$tableName = WPML_Plugin::getTablename('mails');
 		
 		$columns = $this->get_columns();
-		$hidden = $this->get_hidden_columns($screen);
+		$hidden = $this->get_hidden_columns();
 		$sortable = $this->get_sortable_columns();
 		$this->_column_headers = array($columns, $hidden, $sortable);
 		
@@ -131,7 +131,7 @@ class Email_Logging_ListTable extends WP_List_Table {
 		switch( $column_name ) {
 			case 'mail_id':
 			case 'timestamp':
-			case 'to':
+			case 'receiver':
 			case 'subject':
 			case 'message':
 			case 'headers':
@@ -192,7 +192,7 @@ class Email_Logging_ListTable extends WP_List_Table {
 			// column_name => array( 'display_name', true[asc] | false[desc] )
 			'mail_id'  => array('mail_id', false),
 			'timestamp' => array('timestamp', true),
-			'to' => array('to', true),
+			'receiver' => array('receiver', true),
 			'subject' => array('subject', true),
 			'message' => array('message', true),
 			'headers' => array('headers', true),
