@@ -67,7 +67,7 @@ class WPML_Plugin extends WPML_LifeCycle {
 		$wpdb->query("CREATE TABLE IF NOT EXISTS `$tableName` (
 				`mail_id` INT NOT NULL AUTO_INCREMENT,
 				`timestamp` TIMESTAMP NOT NULL,
-				`to` VARCHAR(200) NOT NULL DEFAULT '0',
+				`receiver` VARCHAR(200) NOT NULL DEFAULT '0',
 				`subject` VARCHAR(200) NOT NULL DEFAULT '0',
 				`message` TEXT NULL,
 				`headers` TEXT NULL,
@@ -148,8 +148,19 @@ class WPML_Plugin extends WPML_LifeCycle {
         // http://plugin.michael-simpson.com/?page_id=41
 
     }
+	
+    public function extractFields( $mail ) {
 
+    	$receiver = is_array($mail["receiver"]) ? implode(",\n", $mail['receiver']) : $mail['receiver'];
+    	$subject = $mail["subject"];
+    	$message = $mail["message"];
+    	$headers = is_array($mail["headers"]) ? implode(",\n", $mail['headers']) : $mail['headers'];
+    	$hasAttachments = (count ($mail['attachments']) > 0) ? "true" : "false";
+    	
+    }
+    
     public function log_email( $mailOriginal ) {
+    	// make copy to avoid any changes on the original mail
     	$mail = $mailOriginal;
     	global $wpdb;
     	/*
@@ -162,15 +173,14 @@ class WPML_Plugin extends WPML_LifeCycle {
 	        (
 	        )
 	    */
-    	$to = is_array($mail["to"]) ? implode(",\n", $mail['to']) : $mail['to'];
-    	$subject = $mail["subject"];
-    	$message = $mail["message"];
-    	$headers = is_array($mail["headers"]) ? implode(",\n", $mail['headers']) : $mail['headers'];
-    	$hasAttachments = (count ($mail['attachments']) > 0) ? "true" : "false";
+    	
+    	$fields = $this->extractFields( $mail );
+    	
+    	
     	
     	$tableName = WPML_Plugin::getTablename('mails');
     	$wpdb->insert($tableName, array(
-    		'to' => $to,
+    		'receiver' => $receiver,
     		'timestamp' => current_time('mysql'),
     		'subject' => $subject,
     		'message' => $message,
