@@ -4,7 +4,7 @@ Community made patches, localisations, bug reports and contributions are always 
 
 When contributing please ensure you follow the guidelines below.
 
-## Environment (eclipse PDT remommended)
+## Environment (eclipse PDT recommended)
 
 Please insure to be conform with the development guidelines.
 * use tabs and not spaces. The tab indent size should be 4 for all wp-mail-logging code.
