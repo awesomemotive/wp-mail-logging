@@ -18,19 +18,20 @@ Please insure to be conform with the development guidelines.
 
 ## Making Changes
 
-* Fork the repository on GitHub
-* Make the changes to your forked repository
-  * Ensure you stick to the [WordPress Coding Standards](http://codex.wordpress.org/WordPress_Coding_Standards)
+* Fork the repository on GitHub.
+* Create a new branch like 'feature1'.
+* Make the changes to your branch.
+  * Ensure you stick to the [WordPress Coding Standards](http://codex.wordpress.org/WordPress_Coding_Standards).
   * Always leave the code cleaner than you found it. (The Boy Scouts Rule)
-* When committing, reference your issue (if present) and include a note about the fix
-* If possible, and if applicable, please also add/update unit tests for your changes
-* Push the changes to your fork and submit a pull request to the 'master' branch of the wp-mail-logging repository
+* Reference your issue (if present) and include a note about the fix in the commit message.
+* If possible, and if applicable, please also add/update unit tests for your changes.
+* Finally submit a pull request to the 'master' branch of the wp-mail-logging repository.
 
 ## Code Documentation
 
 * We ensure that every wp-mail-logging function is documented well and follows the standards set by phpDoc.
 * Please make sure that every function is documented so that when we update our API Documentation things don't go awry!
-	* If you're adding/editing a function in a class, make sure to add `@access {private|public|protected}`
+	* If you're adding/editing a function in a class, make sure to add `@access {private|public|protected}`.
 
 At this point you're waiting on us to merge your pull request. We'll review all pull requests, and make suggestions and changes if necessary.
 
