@@ -43,7 +43,7 @@ class WPML_LifeCycle extends WPML_InstallIndicator {
 
     public function uninstall() {
         $this->otherUninstall();
-        if( get_option( $this->prefix('DeleteOnDeactivation') , false) == true ) {
+        if( get_option( $this->prefix('DeleteOnDeactivation'), false) == 'true' ) {
         	//TOOD: is multi site?
         	$this->unInstallDatabaseTables();
         	$this->deleteSavedOptions();
