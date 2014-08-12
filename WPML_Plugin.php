@@ -96,22 +96,23 @@ class WPML_Plugin extends WPML_LifeCycle {
      * @return void
      */
     public function upgrade() {
-//     	global $wpdb;
-//     	$upgradeOk = true;
-//     	$savedVersion = $this->getVersionSaved();
+    	global $wpdb;
+    	$upgradeOk = true;
+    	$savedVersion = $this->getVersionSaved();
     	
-//     	if ($this->isVersionLessThan($savedVersion, '1.0')) {
-//     		if ($this->isVersionLessThan($savedVersion, '0.2')) {
-//     			$tableName = $this->prefixTableName('mail_logging');
-//     			$wpdb->query("ALTER TABLE `$tableName` ADD COLUMN ( `plugin_version` VARCHAR(200) NOT NULL DEFAULT '0')");
-//     		}
-//     	}
+    	if ($this->isVersionLessThan($savedVersion, '2.0')) {
+    		if ($this->isVersionLessThan($savedVersion, '1.2')) {
+    			$tableName = $this->prefixTableName('mail_logging');
+    			$wpdb->query("ALTER TABLE `$tableName` ADD COLUMN ( `plugin_version` VARCHAR(200) NOT NULL DEFAULT '0')");
+    			$wpdb->query("ALTER TABLE `$tableName` CHANGE `to` `receiver` VARCHAR(200)");
+    		}
+    	}
     
-//     	// Post-upgrade, set the current version in the options
-//     	$codeVersion = $this->getVersion();
-//     	if ($upgradeOk && $savedVersion != $codeVersion) {
-//     		$this->saveInstalledVersion();
-//     	}
+    	// Post-upgrade, set the current version in the options
+    	$codeVersion = $this->getVersion();
+    	if ($upgradeOk && $savedVersion != $codeVersion) {
+    		$this->saveInstalledVersion();
+    	}
     }
 
     public function addActionsAndFilters() {
