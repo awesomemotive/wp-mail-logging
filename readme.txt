@@ -14,6 +14,8 @@ Logs each email sent by WordPress.
 
 Logs each email sent by WordPress. This can be useful if you don't want to lose such mail contents. It can also be useful for debugging purposes while development.
 
+[youtube http://www.youtube.com/watch?v=zU858JxhczA]
+
 Features of the plugin include:
 
 * Zero-configuration - just install and enjoy
