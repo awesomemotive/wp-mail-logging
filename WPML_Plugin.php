@@ -148,43 +148,38 @@ class WPML_Plugin extends WPML_LifeCycle {
         // http://plugin.michael-simpson.com/?page_id=41
 
     }
-    public function extractFields( $mail ) {
-
-    	$receiver = is_array($mail["receiver"]) ? implode(",\n", $mail['receiver']) : $mail['receiver'];
-    	$subject = $mail["subject"];
-    	$message = $mail["message"];
-    	$headers = is_array($mail["headers"]) ? implode(",\n", $mail['headers']) : $mail['headers'];
-    	$hasAttachments = (count ($mail['attachments']) > 0) ? "true" : "false";
-    	
+    
+    private function extractReceiver( $receiver ) {
+    	return is_array( $receiver ) ? implode( ',\n', $receiver ) : $receiver;
+    }
+    
+    private function extractHeader( $headers ) {
+    	return is_array( $headers ) ? implode( ',\n', $headers ) : $headers;
+    }
+    
+    private function extractHasAttachments( $attachments ) {
+    	return ( count ( $attachments ) > 0 ) ? 'true' : 'false';
+    }
+    
+    private function extractFields( $mail ) {
+    	return array(
+    		'receiver'			=> $this->extractReceiver( $mail['to'] ),
+    		'subject'			=> $mail['subject'],
+    		'message'			=> $mail['message'],
+    		'headers'			=> $this->extractHeader( $mail['headers'] ),
+    		'attachments'	=> $this->extractHasAttachments( $mail['attachments'] )
+    	);
     }
     
     public function log_email( $mailOriginal ) {
     	// make copy to avoid any changes on the original mail
     	$mail = $mailOriginal;
     	global $wpdb;
-    	/*
-    	[to] => to@example.com
-	    [subject] => Test Mail
-	    [message] => Test Mail
-	
-	    [headers] => 
-	    [attachments] => Array
-	        (
-	        )
-	    */
     	
     	$fields = $this->extractFields( $mail );
     	
     	$tableName = WPML_Plugin::getTablename('mails');
-    	$wpdb->insert($tableName, array(
-    		'receiver' => $receiver,
-    		'timestamp' => current_time('mysql'),
-    		'subject' => $subject,
-    		'message' => $message,
-    		'headers' => $headers,
-    		'attachments' => $hasAttachments,
-    		'plugin_version' => $this->getVersion()
-    	));
+    	$wpdb->insert($tableName, $fields);
     	
     	return $mailOriginal;
     }
