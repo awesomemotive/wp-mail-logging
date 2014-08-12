@@ -42,6 +42,7 @@ Just install and activate wp-mail-logging. The plugin will do the work for you! 
 
 == Changelog ==
 = 1.2, August 12, 2014  =
+- Fixed deletion of mails regardless of options (on update to 1.2 your mails will be deleted hopefully this happens for the last time)
 - Improved help & stability
 - Added video
 
