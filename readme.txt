@@ -1,5 +1,5 @@
 === WP Mail Logging ===
-Contributors: No3x
+Contributors: No3x, tripflex
 Donate link: http://no3x.de/web/donate
 Tags: mail, email, log, logging, list, store, collect, view
 License: GPLv3
