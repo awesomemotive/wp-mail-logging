@@ -150,7 +150,7 @@ class Email_Logging_ListTable extends WP_List_Table {
 
 		$escaped_message = htmlentities( $item[ 'message' ] );
 
-		$message = "<a class=\"button button-secondary\" href=\"#\" data-message=\"{$escaped_message}\">View</a>";
+		$message = "<a class=\"wp-mail-logging-view-message button button-secondary\" href=\"#\" data-message=\"{$escaped_message}\">View</a>";
 
 		return $message;
 	}
