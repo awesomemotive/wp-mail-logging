@@ -235,14 +235,21 @@ class WPML_OptionsManager {
      * @return void
      */
     public function createSettingsMenu() {
+
+	    global $wp_version;
+
+	    $pluginIcon = '';
+	    if ( $wp_version >= 3.8 ) $pluginIcon = 'dashicons-email-alt';
+
         $pluginName = $this->getPluginDisplayName();
         //create new top-level menu
         add_menu_page(__('WP Mail Log', 'wpml'), 
 			          __('WP Mail Log', 'wpml'), 
                       'administrator',
                       get_class($this) . '_log',
-                      array(&$this, 'LogMenu')
-        /*,plugins_url('/images/icon.png', __FILE__)*/); // if you call 'plugins_url; be sure to "require_once" it
+                      array(&$this, 'LogMenu'),
+	                  $pluginIcon
+        );
                       
         //call register settings function
         add_action('admin_init', array(&$this, 'registerSettings'));
