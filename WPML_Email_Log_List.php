@@ -143,7 +143,18 @@ class Email_Logging_ListTable extends WP_List_Table {
 				return (is_array( $res = apply_filters( WPML_Plugin::HOOK_LOGGING_COLUMNS_RENDER, $item, $column_name ) ) ) ? "" : $res;
 		}
 	}
-	
+
+	function column_message( $item ){
+
+		if( empty( $item[ 'message' ] ) ) return;
+
+		$escaped_message = htmlentities( $item[ 'message' ] );
+
+		$message = "<a class=\"button button-secondary\" href=\"#\" data-message=\"{$escaped_message}\">View</a>";
+
+		return $message;
+	}
+
 	/**
 	 * Defines available bulk actions.
 	 * @since 1.0
