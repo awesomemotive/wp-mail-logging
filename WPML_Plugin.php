@@ -99,10 +99,10 @@ class WPML_Plugin extends WPML_LifeCycle {
     	global $wpdb;
     	$upgradeOk = true;
     	$savedVersion = $this->getVersionSaved();
+    	$tableName = $this->getTablename('mails');
     	
     	if ($this->isVersionLessThan($savedVersion, '2.0')) {
     		if ($this->isVersionLessThan($savedVersion, '1.2')) {
-    			$tableName = $this->prefixTableName('mail_logging');
     			$wpdb->query("ALTER TABLE `$tableName` ADD COLUMN ( `plugin_version` VARCHAR(200) NOT NULL DEFAULT '0')");
     			$wpdb->query("ALTER TABLE `$tableName` CHANGE `to` `receiver` VARCHAR(200)");
     		}
@@ -168,7 +168,8 @@ class WPML_Plugin extends WPML_LifeCycle {
     		'subject'			=> $mail['subject'],
     		'message'			=> $mail['message'],
     		'headers'			=> $this->extractHeader( $mail['headers'] ),
-    		'attachments'	=> $this->extractHasAttachments( $mail['attachments'] )
+    		'attachments'		=> $this->extractHasAttachments( $mail['attachments'] ),
+    		'plugin_version'	=> $this->getVersionSaved()
     	);
     }
     
