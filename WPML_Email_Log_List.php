@@ -145,6 +145,21 @@ class Email_Logging_ListTable extends WP_List_Table {
 	}
 	
 	/**
+	 * Renders the message column.
+	 * @since 1.3
+	 *
+	 * @param object $item The current item
+	 * @return void|string
+	 */
+	function column_message( $item ){
+		if( empty( $item['message'] ) ) return;
+		$escaped_message = htmlentities( $item['message'] );
+		$message = "<a class=\"wp-mail-logging-view-message button button-secondary\" href=\"#\" data-message=\"{$escaped_message}\">View</a>";
+
+		return $message;
+	}
+
+	/**
 	 * Defines available bulk actions.
 	 * @since 1.0
 	 * @see WP_List_Table::get_bulk_actions()

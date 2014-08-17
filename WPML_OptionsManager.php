@@ -235,15 +235,26 @@ class WPML_OptionsManager {
      * @return void
      */
     public function createSettingsMenu() {
+
+	    global $wp_version;
+	    global $wp_logging_list_page;
+
+	    $pluginIcon = '';
+	    if ( $wp_version >= 3.8 ) $pluginIcon = 'dashicons-email-alt';
+
         $pluginName = $this->getPluginDisplayName();
         //create new top-level menu
-        add_menu_page(__('WP Mail Log', 'wpml'), 
-			          __('WP Mail Log', 'wpml'), 
-                      'administrator',
-                      get_class($this) . '_log',
-                      array(&$this, 'LogMenu')
-        /*,plugins_url('/images/icon.png', __FILE__)*/); // if you call 'plugins_url; be sure to "require_once" it
-                      
+        $wp_logging_list_page = add_menu_page(__('WP Mail Log', 'wpml'),
+									          __('WP Mail Log', 'wpml'),
+						                      'administrator',
+						                      get_class($this) . '_log',
+						                      array(&$this, 'LogMenu'),
+							                  $pluginIcon
+						        );
+
+	    // Add Action to load assets when page is loaded
+	    add_action( 'load-' . $wp_logging_list_page, array( $this, 'load_assets' ) );
+
         //call register settings function
         add_action('admin_init', array(&$this, 'registerSettings'));
         
@@ -256,6 +267,20 @@ class WPML_OptionsManager {
         
         add_action( "contextual_help", array( &$this, 'create_settings_panel' ), 10, 3 );
     }
+
+	public function load_assets() {
+
+		global $wp_logging_list_page;
+		$screen = get_current_screen();
+
+		if ( $screen->id != $wp_logging_list_page )
+			return;
+
+		// Enqueue Styles and Scripts if we're on the list page
+		wp_enqueue_script( 'wp-logging-modal-js', untrailingslashit( plugin_dir_url( __FILE__ ) ) . '/js/modal.js', array( 'jquery' ), '1.0.0', TRUE );
+		wp_enqueue_style( 'wp-logging-modal-css', untrailingslashit( plugin_dir_url( __FILE__ ) ) . '/css/modal.css', array(), '1.0.0' );
+
+	}
 
     public function registerSettings() {
         $settingsGroup = get_class($this) . '-settings-group';
@@ -328,6 +353,9 @@ class WPML_OptionsManager {
     }
     
     public function LogMenu() {
+
+	    global $wp_version;
+
     	if (!current_user_can('manage_options')) {
     		wp_die(__('You do not have sufficient permissions to access this page.', 'wpml'));
     	}
@@ -335,7 +363,7 @@ class WPML_OptionsManager {
     	if (!class_exists( 'Email_Log_List_Table' ) ) {
     		require_once ( plugin_dir_path( __FILE__ ) . 'WPML_Email_Log_List.php' );
     	}
-    	
+
     	?>
     	 <div class="wrap">
             <h2><?php echo $this->getPluginDisplayName(); echo ' '; _e('Log', 'wpml'); ?></h2>
@@ -343,6 +371,38 @@ class WPML_OptionsManager {
 				$emailLoggingListTable = new Email_Logging_ListTable();
 				$emailLoggingListTable->prepare_items();
 				?>
+
+				<div id="wp-mail-logging-modal-wrap">
+					<div id="wp-mail-logging-modal-backdrop"></div>
+					<div id="wp-mail-logging-modal-content-wrap">
+						<div id="wp-mail-logging-modal-content">
+							<div id="wp-mail-logging-modal-content-header">
+								<a id="wp-mail-logging-modal-content-header-close" class="wp-mail-logging-modal-close" href="#" title="Close">
+									<?php if ( $wp_version >= 3.8 ): ?>
+										<div class="dashicons dashicons-no"></div>
+									<?php else: ?>
+										<span class="wp-mail-logging-modal-content-header-compat-close">X</span>
+									<?php endif; ?>
+								</a>
+								<?php if ( $wp_version >= 3.8 ): ?>
+									<div id="wp-mail-logging-modal-content-header-icon" class="dashicons dashicons-email-alt"></div>
+								<?php endif; ?>
+								<div id="wp-mail-logging-modal-content-header-title">
+									<?php _e( 'Message', 'wpml' ); ?>
+								</div>
+							</div>
+							<div id="wp-mail-logging-modal-content-body">
+								<div id="wp-mail-logging-modal-content-body-content">
+
+								</div>
+							</div>
+							<div id="wp-mail-logging-modal-content-footer">
+								<a class="wp-mail-logging-modal-close button button-primary" href="#"><?php _e( 'Close', 'wpml' ); ?></a>
+							</div>
+						</div>
+					</div>
+				</div>
+
 				<form id="email-list" method="get">
 					<input type="hidden" name="page" value="<?php echo $_REQUEST['page'] ?>" />
 					<?php
