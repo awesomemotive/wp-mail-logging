@@ -147,16 +147,30 @@ class Email_Logging_ListTable extends WP_List_Table {
 	/**
 	 * Renders the message column.
 	 * @since 1.3
-	 *
 	 * @param object $item The current item
 	 * @return void|string
 	 */
-	function column_message( $item ){
+	function column_message( $item ) {
 		if( empty( $item['message'] ) ) return;
-		$escaped_message = htmlentities( $item['message'] );
-		$message = "<a class=\"wp-mail-logging-view-message button button-secondary\" href=\"#\" data-message=\"{$escaped_message}\">View</a>";
-
+		$message = "<a class=\"wp-mail-logging-view-message button button-secondary\" href=\"#\" data-message=\"" . $this->render_mail( $item )  . "\">View</a>";
 		return $message;
+	}
+	
+	/**
+	 * Renders all components of the mail.
+	 * @since 1.3
+	 * @param object $item The current item
+	 * @return string The mail as html
+	 */
+	function render_mail( $item ) {
+		$mailAppend = '';
+		foreach ( $item as $key => $value ) {
+			if( key_exists( $key, $this->get_columns() ) && !in_array($key, $this->get_hidden_columns() ) ) {
+				$display = $this->get_columns();
+				$mailAppend .= "<span class=\"title\">{$display[$key]}: </span>{$value}";
+			}
+		}
+		return htmlentities( $mailAppend );
 	}
 
 	/**
