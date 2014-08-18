@@ -103,11 +103,17 @@ class WPML_Plugin extends WPML_LifeCycle {
     	
     	if ($this->isVersionLessThan($savedVersion, '2.0')) {
     		if ($this->isVersionLessThan($savedVersion, '1.2')) {
-    			$wpdb->query("ALTER TABLE `$tableName` ADD COLUMN ( `plugin_version` VARCHAR(200) NOT NULL DEFAULT '0')");
     			$wpdb->query("ALTER TABLE `$tableName` CHANGE `to` `receiver` VARCHAR(200)");
     		}
     	}
-    
+    	
+    	if( !empty( $wpdb->last_error ) ) {
+    		$upgradeOk = false;
+    		if( is_admin() ) {
+    			echo "There was at least one error while upgrading the database schema. Please report the following error: {$wpdb->last_error}";
+    		}
+    	}
+    	
     	// Post-upgrade, set the current version in the options
     	$codeVersion = $this->getVersion();
     	if ($upgradeOk && $savedVersion != $codeVersion) {
