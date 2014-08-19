@@ -28,26 +28,7 @@ class WPML_Plugin_Test extends WP_UnitTestCase {
 		// Assert
 		$this->assertEquals( $wpdb->prefix . 'wpml_testTable', $prefixed );
 	}
-	
-	/*function test_extractReceiver() {
-		$single_receiver = 'email@example.com';
-		$multiple_receiver = array(
-				'email@example.com',
-				'email2@example.com'
-		);
-		
-		$single_receiver_list = $this->plugin->extractReceiver( $single_receiver );
-		$multiple_receiver_list = $this->plugin->extractReceiver( $multiple_receiver );
-		
-		$single_receiver_list_expected = $single_receiver;
-		$this->assertEqualSets( $single_receiver_list_expected, $single_receiver_list );
-		
-		$multiple_receiver_list = $multiple_receiver;
-		$this->assertEqualSets( $multiple_receiver_list_expected, $multiple_receiver_list );
-		
-	}*/
-	
-	
+
 	function test_log_email() {
 		global $wpdb;
 		
@@ -71,7 +52,12 @@ class WPML_Plugin_Test extends WP_UnitTestCase {
 		$this->assertEquals( 1, $count);
 		
 		$row = $rows[0];
-		$this->assertEquals( $subject,  $row->subject);
-		$this->assertEquals( $message,  $row->message);
+		$this->assertEquals( $subject,  $row->subject );
+		$this->assertEquals( $message,  $row->message );
+		
+		$this->assertTrue( strpos( $row->receiver, $to[0] ) !== false );
+		$this->assertTrue( strpos( $row->receiver, $to[1] ) !== false );
 	}
+	
+	
 }
