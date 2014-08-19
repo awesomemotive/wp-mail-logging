@@ -157,6 +157,44 @@ class Email_Logging_ListTable extends WP_List_Table {
 	}
 	
 	/**
+	 * Find appropriate fa icon from file path
+	 * @since 1.3
+	 * @param string $attachment_path
+	 * @return string
+	 */
+	function generate_attachment_icon( $attachment_path ) {
+		$supported = array( 'archive', 'audio', 'code', 'excel', 'image', 'movie', 'pdf', 'photo', 'picture', 'powerpoint', 'sound', 'video', 'word', 'zip'  );
+		$mime = mime_content_type( $attachment_path );
+		$type = explode('/', $mime);
+		if( in_array( $type[0], $supported) ) {
+			$icon = $type[0];
+		} else {
+			$icon = 'file';
+		}	
+		return '<i class="fa fa-file-' . $icon . '-o"></i>';
+	}
+	
+	/**
+	 * Renders the attachment column.
+	 * @since 1.3
+	 * @param object $item The current item
+	 */
+	function column_attachments( $item ) {
+		$attachments = explode( ',\n', $item['attachments'] );
+		$attachments = is_array( $attachments ) ? $attachments : array( $attachments );
+		$uploads = wp_upload_dir();
+		$baseurl = $uploads['baseurl'];
+		$basename = basename( $uploads['baseurl'] );
+		foreach ( $attachments as $attachment ) {
+			if( file_exists( $attachment ) ) { 
+				$needle = '/'.$basename.'/';
+				$append_url = substr($attachment, strrpos($attachment, $needle ) + strlen($needle) );
+				echo '<a href="' . $baseurl . '/' . $append_url . '">' .$this->generate_attachment_icon( $attachment ) . '</a>';
+			}
+		}
+	}
+	
+	/**
 	 * Renders all components of the mail.
 	 * @since 1.3
 	 * @param object $item The current item

@@ -164,8 +164,8 @@ class WPML_Plugin extends WPML_LifeCycle {
     	return is_array( $headers ) ? implode( ',\n', $headers ) : $headers;
     }
     
-    private function extractHasAttachments( $attachments ) {
-    	return ( count ( $attachments ) > 0 ) ? 'true' : 'false';
+    private function extractAttachments( $attachments ) {
+    	return is_array( $attachments ) ? implode( ',\n', $attachments ) : $attachments;
     }
     
     private function extractFields( $mail ) {
@@ -174,7 +174,7 @@ class WPML_Plugin extends WPML_LifeCycle {
     		'subject'			=> $mail['subject'],
     		'message'			=> $mail['message'],
     		'headers'			=> $this->extractHeader( $mail['headers'] ),
-    		'attachments'		=> $this->extractHasAttachments( $mail['attachments'] ),
+    		'attachments'		=> $this->extractAttachments( $mail['attachments'] ),
     		'plugin_version'	=> $this->getVersionSaved()
     	);
     }
