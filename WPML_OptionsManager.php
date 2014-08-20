@@ -265,7 +265,7 @@ class WPML_OptionsManager {
 		        		get_class($this) . '_settings', 
 						array(&$this, 'LogSubMenuSettings') );
         
-        add_action( "contextual_help", array( &$this, 'create_settings_panel' ), 10, 3 );
+        add_action( 'contextual_help', array( &$this, 'create_settings_panel' ), 10, 3 );
     }
 
 	public function load_assets() {
@@ -352,7 +352,16 @@ class WPML_OptionsManager {
     	return $contextual_help;
     }
     
-    public function LogMenu() {
+	/**
+	* Save Screen option
+	* @since 1.3
+	*/
+	function save_screen_options( $status, $option, $value ) {
+		if ( 'per_page' == $option ) return $value;
+		return $status;
+	}
+	
+	public function LogMenu() {
 
 	    global $wp_version;
 

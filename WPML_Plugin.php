@@ -139,7 +139,8 @@ class WPML_Plugin extends WPML_LifeCycle {
         // http://plugin.michael-simpson.com/?page_id=37
 		
          add_filter( 'wp_mail', array(&$this, 'log_email' ) );
-			
+         add_filter( 'set-screen-option', array( &$this, 'save_screen_options' ), 10, 3);
+
         // Adding scripts & styles to all pages
         // Examples:
         //        wp_enqueue_script('jquery');
