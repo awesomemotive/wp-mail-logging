@@ -156,22 +156,76 @@ class Email_Logging_ListTable extends WP_List_Table {
 		return $message;
 	}
 	
+	function determine_fa_icon( $path ) {
+		$supported = array(
+				'archive' => array (
+						'application/zip',
+						'application/x-rar-compressed',
+						'application/x-rar',
+						'application/x-gzip',
+						'application/x-msdownload',
+						'application/x-msdownload',
+						'application/vnd.ms-cab-compressed'
+				),
+				'audio',
+				'code' => array(
+						'text/x-c',
+						'text/x-c++'
+				),
+				'excel' => array( 'application/vnd.ms-excel'
+				),
+				'image', 'text', 'movie', 'pdf', 'photo', 'picture',
+				'powerpoint' => array( 
+						'application/vnd.ms-powerpoint'
+				), 'sound', 'video', 'word' => array( 
+						'application/msword'
+				), 'zip'  
+		);
+		
+		$mime = mime_content_type( $path );
+		$mime_parts = explode('/', $mime);
+		$attribute = $mime_parts[0];
+		$type = $mime_parts[1];
+		
+		$fa_icon = false;
+		if( ($key = $this->recursive_array_search( $mime, $supported ) ) !== FALSE ) {
+			// search for specific mime first
+			$fa_icon = $key;
+		} elseif( in_array( $attribute, $supported) ) {
+			// generic file icons
+			$fa_icon = $attribute;
+		}
+		return $fa_icon;
+	}
+	
 	/**
 	 * Find appropriate fa icon from file path
 	 * @since 1.3
 	 * @param string $attachment_path
 	 * @return string
 	 */
-	function generate_attachment_icon( $attachment_path ) {
-		$supported = array( 'archive', 'audio', 'code', 'excel', 'image', 'movie', 'pdf', 'photo', 'picture', 'powerpoint', 'sound', 'video', 'word', 'zip'  );
-		$mime = mime_content_type( $attachment_path );
-		$type = explode('/', $mime);
-		if( in_array( $type[0], $supported) ) {
-			$icon = $type[0];
+	function generate_attachment_icon( $path ) {
+		$fa_icon = $this->determine_fa_icon( $path );
+		if( $fa_icon === FALSE ) {
+			return '<i class="fa fa-file-o"></i>';
 		} else {
-			$icon = 'file';
-		}	
-		return '<i class="fa fa-file-' . $icon . '-o"></i>';
+			return '<i class="fa fa-file-' . $fa_icon . '-o"></i>';
+		}
+	}
+	
+	/**
+	 * Multilevel array_search
+	 * @since 1.3
+	 * @see array_search()
+	 */
+	function recursive_array_search( $needle, $haystack ) {
+		foreach( $haystack as $key => $value ) {
+			$current_key = $key;
+			if($needle === $value OR ( is_array($value) && $this->recursive_array_search( $needle, $value ) !== false ) ) {
+				return $current_key;
+			}
+		}
+		return false;
 	}
 	
 	/**
@@ -180,18 +234,24 @@ class Email_Logging_ListTable extends WP_List_Table {
 	 * @param object $item The current item
 	 */
 	function column_attachments( $item ) {
+		$attachment_append = '';
 		$attachments = explode( ',\n', $item['attachments'] );
 		$attachments = is_array( $attachments ) ? $attachments : array( $attachments );
-		$uploads = wp_upload_dir();
-		$baseurl = $uploads['baseurl'];
-		$basename = basename( $uploads['baseurl'] );
-		foreach ( $attachments as $attachment ) {
-			if( file_exists( $attachment ) ) { 
-				$needle = '/'.$basename.'/';
-				$append_url = substr($attachment, strrpos($attachment, $needle ) + strlen($needle) );
-				echo '<a href="' . $baseurl . '/' . $append_url . '">' .$this->generate_attachment_icon( $attachment ) . '</a> ';
+		
+		foreach ( $attachments as $attachment ) { 
+			$filename = basename( $attachment );
+			$attachment_path = WP_CONTENT_DIR . $attachment;
+			$attachment_url = WP_CONTENT_URL . $attachment;
+			
+			if( file_exists( $attachment_path ) ) { 
+				$attachment_append .= '<a href="' . $attachment_url . '" title="' . $filename . '">' .$this->generate_attachment_icon( $attachment_path ) . '</a> ';
+			} else {
+				$message = sprintf( __('File %s is not present', 'wpml'), $filename);
+				$attachment_append .= '<i class="fa fa-times" title="' . $message . '"></i>';
 			}
 		}
+		
+		return $attachment_append;
 	}
 	
 	/**
