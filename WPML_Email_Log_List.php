@@ -106,10 +106,9 @@ class Email_Logging_ListTable extends WP_List_Table {
 		$order_default = "desc";
 		$orderby = ( !empty( $_GET['orderby'] ) ) ? $_GET['orderby'] : $orderby_default;
 		$order = ( !empty($_GET['order'] ) ) ? $_GET['order'] : $order_default;
+		$offset = ( $current_page-1 ) * $per_page;
 		
-		$found_data = $wpdb->get_results("SELECT * FROM `$tableName` ORDER BY $orderby $order LIMIT $limit", ARRAY_A);
-		
-		$dataset = array_slice( $found_data,( ( $current_page-1 ) * $per_page ), $per_page );
+		$dataset = $wpdb->get_results("SELECT * FROM `$tableName` ORDER BY $orderby $order LIMIT $limit OFFSET $offset", ARRAY_A);
 		
 		$this->set_pagination_args( array(
 			'total_items' => $total_items, //WE have to calculate the total number of items
