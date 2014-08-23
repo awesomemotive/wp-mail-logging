@@ -265,7 +265,13 @@ class Email_Logging_ListTable extends WP_List_Table {
 		foreach ( $item as $key => $value ) {
 			if( key_exists( $key, $this->get_columns() ) && !in_array($key, $this->get_hidden_columns() ) ) {
 				$display = $this->get_columns();
-				$mailAppend .= "<span class=\"title\">{$display[$key]}: </span>{$value}";
+				$column_name = $key;
+				$mailAppend .= "<span class=\"title\">{$display[$key]}: </span>";
+				if ( $column_name != 'message' && method_exists( $this, 'column_' . $column_name ) ) {
+					$mailAppend .= call_user_func( array( $this, 'column_' . $column_name ), $item );
+				} else {
+					$mailAppend .= $this->column_default( $item, $column_name );
+				}
 			}
 		}
 		return htmlentities( $mailAppend );
