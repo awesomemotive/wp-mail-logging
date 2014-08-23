@@ -189,7 +189,7 @@ class Email_Logging_ListTable extends WP_List_Table {
 			if( file_exists( $attachment ) ) { 
 				$needle = '/'.$basename.'/';
 				$append_url = substr($attachment, strrpos($attachment, $needle ) + strlen($needle) );
-				echo '<a href="' . $baseurl . '/' . $append_url . '">' .$this->generate_attachment_icon( $attachment ) . '</a>';
+				echo '<a href="' . $baseurl . '/' . $append_url . '">' .$this->generate_attachment_icon( $attachment ) . '</a> ';
 			}
 		}
 	}
