@@ -125,7 +125,7 @@ class WPML_Plugin extends WPML_LifeCycle {
 		
         // Add options administration page
         // http://plugin.michael-simpson.com/?page_id=47
-        add_action('admin_menu', array(&$this, 'createSettingsMenu'));
+        add_action( 'admin_menu', array(&$this, 'createSettingsMenu') );
 
         // Example adding a script & style just for the options administration page
         // http://plugin.michael-simpson.com/?page_id=47
@@ -165,8 +165,16 @@ class WPML_Plugin extends WPML_LifeCycle {
     	return is_array( $headers ) ? implode( ',\n', $headers ) : $headers;
     }
     
-    private function extractHasAttachments( $attachments ) {
-    	return ( count ( $attachments ) > 0 ) ? 'true' : 'false';
+    private function extractAttachments( $attachments ) {
+    	$attachment_urls = array();
+    	$uploads = wp_upload_dir();
+    	$basename = basename( $uploads['baseurl'] );
+    	$needle = '/'.$basename.'/';
+    	foreach ( $attachments as $attachment ) {
+    		$append_url = substr($attachment, strrpos($attachment, $needle ) );
+    		$attachment_urls[] = $append_url;
+    	}
+    	return implode( ',\n', $attachment_urls );
     }
     
     private function extractFields( $mail ) {
@@ -175,7 +183,7 @@ class WPML_Plugin extends WPML_LifeCycle {
     		'subject'			=> $mail['subject'],
     		'message'			=> $mail['message'],
     		'headers'			=> $this->extractHeader( $mail['headers'] ),
-    		'attachments'		=> $this->extractHasAttachments( $mail['attachments'] ),
+    		'attachments'		=> $this->extractAttachments( $mail['attachments'] ),
     		'plugin_version'	=> $this->getVersionSaved()
     	);
     }

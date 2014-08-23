@@ -106,10 +106,9 @@ class Email_Logging_ListTable extends WP_List_Table {
 		$order_default = "desc";
 		$orderby = ( !empty( $_GET['orderby'] ) ) ? $_GET['orderby'] : $orderby_default;
 		$order = ( !empty($_GET['order'] ) ) ? $_GET['order'] : $order_default;
+		$offset = ( $current_page-1 ) * $per_page;
 		
-		$found_data = $wpdb->get_results("SELECT * FROM `$tableName` ORDER BY $orderby $order LIMIT $limit", ARRAY_A);
-		
-		$dataset = array_slice( $found_data,( ( $current_page-1 ) * $per_page ), $per_page );
+		$dataset = $wpdb->get_results("SELECT * FROM `$tableName` ORDER BY $orderby $order LIMIT $limit OFFSET $offset", ARRAY_A);
 		
 		$this->set_pagination_args( array(
 			'total_items' => $total_items, //WE have to calculate the total number of items
@@ -156,6 +155,104 @@ class Email_Logging_ListTable extends WP_List_Table {
 		return $message;
 	}
 	
+	function determine_fa_icon( $path ) {
+		$supported = array(
+				'archive' => array (
+						'application/zip',
+						'application/x-rar-compressed',
+						'application/x-rar',
+						'application/x-gzip',
+						'application/x-msdownload',
+						'application/x-msdownload',
+						'application/vnd.ms-cab-compressed'
+				),
+				'audio',
+				'code' => array(
+						'text/x-c',
+						'text/x-c++'
+				),
+				'excel' => array( 'application/vnd.ms-excel'
+				),
+				'image', 'text', 'movie', 'pdf', 'photo', 'picture',
+				'powerpoint' => array( 
+						'application/vnd.ms-powerpoint'
+				), 'sound', 'video', 'word' => array( 
+						'application/msword'
+				), 'zip'  
+		);
+		
+		$mime = mime_content_type( $path );
+		$mime_parts = explode('/', $mime);
+		$attribute = $mime_parts[0];
+		$type = $mime_parts[1];
+		
+		$fa_icon = false;
+		if( ($key = $this->recursive_array_search( $mime, $supported ) ) !== FALSE ) {
+			// search for specific mime first
+			$fa_icon = $key;
+		} elseif( in_array( $attribute, $supported) ) {
+			// generic file icons
+			$fa_icon = $attribute;
+		}
+		return $fa_icon;
+	}
+	
+	/**
+	 * Find appropriate fa icon from file path
+	 * @since 1.3
+	 * @param string $attachment_path
+	 * @return string
+	 */
+	function generate_attachment_icon( $path ) {
+		$fa_icon = $this->determine_fa_icon( $path );
+		if( $fa_icon === FALSE ) {
+			return '<i class="fa fa-file-o"></i>';
+		} else {
+			return '<i class="fa fa-file-' . $fa_icon . '-o"></i>';
+		}
+	}
+	
+	/**
+	 * Multilevel array_search
+	 * @since 1.3
+	 * @see array_search()
+	 */
+	function recursive_array_search( $needle, $haystack ) {
+		foreach( $haystack as $key => $value ) {
+			$current_key = $key;
+			if($needle === $value OR ( is_array($value) && $this->recursive_array_search( $needle, $value ) !== false ) ) {
+				return $current_key;
+			}
+		}
+		return false;
+	}
+	
+	/**
+	 * Renders the attachment column.
+	 * @since 1.3
+	 * @param object $item The current item
+	 */
+	function column_attachments( $item ) {
+		$attachment_append = '';
+		$attachments = explode( ',\n', $item['attachments'] );
+		$attachments = is_array( $attachments ) ? $attachments : array( $attachments );
+		
+		foreach ( $attachments as $attachment ) { 
+			$filename = basename( $attachment );
+			$attachment_path = WP_CONTENT_DIR . $attachment;
+			$attachment_url = WP_CONTENT_URL . $attachment;
+			
+			if( file_exists( $attachment_path ) ) { 
+				$attachment_append .= '<a href="' . $attachment_url . '" title="' . $filename . '">' .$this->generate_attachment_icon( $attachment_path ) . '</a> ';
+			} else {
+				$message = sprintf( __('Attachment %s is not present', 'wpml'), $filename);
+				$attachment_append .= '<i class="fa fa-times" title="' . $message . '"></i>';
+			}
+		}
+		
+		return $attachment_append;
+	}
+	
 	/**
 	 * Renders all components of the mail.
 	 * @since 1.3
@@ -167,7 +264,13 @@ class Email_Logging_ListTable extends WP_List_Table {
 		foreach ( $item as $key => $value ) {
 			if( key_exists( $key, $this->get_columns() ) && !in_array($key, $this->get_hidden_columns() ) ) {
 				$display = $this->get_columns();
-				$mailAppend .= "<span class=\"title\">{$display[$key]}: </span>{$value}";
+				$column_name = $key;
+				$mailAppend .= "<span class=\"title\">{$display[$key]}: </span>";
+				if ( $column_name != 'message' && method_exists( $this, 'column_' . $column_name ) ) {
+					$mailAppend .= call_user_func( array( $this, 'column_' . $column_name ), $item );
+				} else {
+					$mailAppend .= $this->column_default( $item, $column_name );
+				}
 			}
 		}
 		return htmlentities( $mailAppend );
