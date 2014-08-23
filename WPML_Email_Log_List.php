@@ -245,7 +245,7 @@ class Email_Logging_ListTable extends WP_List_Table {
 			if( file_exists( $attachment_path ) ) { 
 				$attachment_append .= '<a href="' . $attachment_url . '" title="' . $filename . '">' .$this->generate_attachment_icon( $attachment_path ) . '</a> ';
 			} else {
-				$message = sprintf( __('File %s is not present', 'wpml'), $filename);
+				$message = sprintf( __('Attachment %s is not present', 'wpml'), $filename);
 				$attachment_append .= '<i class="fa fa-times" title="' . $message . '"></i>';
 			}
 		}
