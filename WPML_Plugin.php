@@ -71,7 +71,7 @@ class WPML_Plugin extends WPML_LifeCycle {
 				`subject` VARCHAR(200) NOT NULL DEFAULT '0',
 				`message` TEXT NULL,
 				`headers` TEXT NULL,
-				`attachments` TINYINT(1) NOT NULL DEFAULT '0',
+				`attachments` VARCHAR(800) NOT NULL DEFAULT '0',
 				`plugin_version` VARCHAR(200) NOT NULL DEFAULT '0',
 				PRIMARY KEY (`mail_id`) 
             );");	
@@ -104,6 +104,9 @@ class WPML_Plugin extends WPML_LifeCycle {
     	if ($this->isVersionLessThan($savedVersion, '2.0')) {
     		if ($this->isVersionLessThan($savedVersion, '1.2')) {
     			$wpdb->query("ALTER TABLE `$tableName` CHANGE `to` `receiver` VARCHAR(200)");
+    		}
+    		if ($this->isVersionLessThan($savedVersion, '1.3')) {
+    			$wpdb->query("ALTER TABLE `$tableName` CHANGE `attachments` `attachments` VARCHAR(800)");
     		}
     	}
     	
