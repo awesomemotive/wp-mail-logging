@@ -1,13 +1,13 @@
 <?php
 
-if( !class_exists( 'WP_List_Table') ) {
+if( !class_exists( 'WP_List_Table' ) ) {
 	require_once( plugin_dir_path( __FILE__ ) . 'inc/class-wp-list-table.php' );
 }
 
 /**
+ * Renders the mails in a table list.
  * @author No3x
  * @since 1.0
- * Renders the mails in a table list.
  */
 class Email_Logging_ListTable extends WP_List_Table {
 	
@@ -43,20 +43,20 @@ class Email_Logging_ListTable extends WP_List_Table {
 	function get_columns() {
 		$columns = array(
 		 	'cb'			=> '<input type="checkbox" />',
-			'mail_id'		=> __( 'ID', 'wml'),
-			'timestamp'		=> __( 'Time', 'wml'),
-			'receiver'		=> __( 'Receiver', 'wml'),
-			'subject'		=> __( 'Subject', 'wml'),
-			'message'		=> __( 'Message', 'wml'),
-			'headers'		=> __( 'Headers', 'wml'),
-			'attachments'	=> __( 'Attachments', 'wml'),
-			'plugin_version'=> __( 'Plugin Version', 'wml')
+			'mail_id'		=> __( 'ID', 'wml' ),
+			'timestamp'		=> __( 'Time', 'wml' ),
+			'receiver'		=> __( 'Receiver', 'wml' ),
+			'subject'		=> __( 'Subject', 'wml' ),
+			'message'		=> __( 'Message', 'wml' ),
+			'headers'		=> __( 'Headers', 'wml' ),
+			'attachments'	=> __( 'Attachments', 'wml' ),
+			'plugin_version'=> __( 'Plugin Version', 'wml' )
 		);
 		
 		// give a plugin the change to edit the columns 
 		$columns = apply_filters( WPML_Plugin::HOOK_LOGGING_COLUMNS, $columns );
 		
-		$reserved = array('_title', 'comment', 'media', 'name', 'title', 'username', 'blogname');
+		$reserved = array( '_title', 'comment', 'media', 'name', 'title', 'username', 'blogname' );
 		
 		// show message for reserved column names
 		foreach ( $reserved as $reserved_key ) {
@@ -88,7 +88,7 @@ class Email_Logging_ListTable extends WP_List_Table {
 	 */
 	function prepare_items() {
 		global $wpdb;
-		$tableName = WPML_Plugin::getTablename('mails');
+		$tableName = WPML_Plugin::getTablename( 'mails' );
 		
 		$columns = $this->get_columns();
 		$hidden = $this->get_hidden_columns();
@@ -99,7 +99,7 @@ class Email_Logging_ListTable extends WP_List_Table {
 		
 		$per_page = $this->get_items_per_page( 'per_page', 25 );
 		$current_page = $this->get_pagenum();
-		$total_items = $wpdb->get_var("SELECT COUNT(*) FROM  `$tableName`");
+		$total_items = $wpdb->get_var( "SELECT COUNT(*) FROM `$tableName`" );
 		$limit = $per_page*$current_page;
 		//TODO: make option for default order
 		$orderby_default = "mail_id";
@@ -108,11 +108,11 @@ class Email_Logging_ListTable extends WP_List_Table {
 		$order = ( !empty($_GET['order'] ) ) ? $_GET['order'] : $order_default;
 		$offset = ( $current_page-1 ) * $per_page;
 		
-		$dataset = $wpdb->get_results("SELECT * FROM `$tableName` ORDER BY $orderby $order LIMIT $limit OFFSET $offset", ARRAY_A);
+		$dataset = $wpdb->get_results( "SELECT * FROM `$tableName` ORDER BY $orderby $order LIMIT $limit OFFSET $offset", ARRAY_A);
 		
 		$this->set_pagination_args( array(
-			'total_items' => $total_items, //WE have to calculate the total number of items
-			'per_page'    => $per_page //WE have to determine how many items to show on a page
+			'total_items' => $total_items, // the total number of items
+			'per_page'    => $per_page // number of items per page
 		) );
 		
 		$this->items = $dataset;
@@ -155,6 +155,12 @@ class Email_Logging_ListTable extends WP_List_Table {
 		return $message;
 	}
 	
+	/**
+	 * Determines appropirate fa icon for a file
+	 * @sine 1.3
+	 * @param string $path
+	 * @return Ambigous <boolean, string> Returns the most suitable icon or false if not possible.
+	 */
 	function determine_fa_icon( $path ) {
 		$supported = array(
 				'archive' => array (
@@ -182,7 +188,7 @@ class Email_Logging_ListTable extends WP_List_Table {
 		);
 		
 		$mime = mime_content_type( $path );
-		$mime_parts = explode('/', $mime);
+		$mime_parts = explode( '/', $mime );
 		$attribute = $mime_parts[0];
 		$type = $mime_parts[1];
 		
@@ -190,11 +196,16 @@ class Email_Logging_ListTable extends WP_List_Table {
 		if( ($key = $this->recursive_array_search( $mime, $supported ) ) !== FALSE ) {
 			// search for specific mime first
 			$fa_icon = $key;
-		} elseif( in_array( $attribute, $supported) ) {
+		} elseif( in_array( $attribute, $supported ) ) {
 			// generic file icons
 			$fa_icon = $attribute;
 		}
-		return $fa_icon;
+		
+		if( $fa_icon === FALSE ) {
+			return '<i class="fa fa-file-o"></i>';
+		} else {
+			return '<i class="fa fa-file-' . $fa_icon . '-o"></i>';
+		}
 	}
 	
 	/**
@@ -204,12 +215,7 @@ class Email_Logging_ListTable extends WP_List_Table {
 	 * @return string
 	 */
 	function generate_attachment_icon( $path ) {
-		$fa_icon = $this->determine_fa_icon( $path );
-		if( $fa_icon === FALSE ) {
-			return '<i class="fa fa-file-o"></i>';
-		} else {
-			return '<i class="fa fa-file-' . $fa_icon . '-o"></i>';
-		}
+		return $this->determine_fa_icon( $path );
 	}
 	
 	/**
@@ -245,11 +251,10 @@ class Email_Logging_ListTable extends WP_List_Table {
 			if( file_exists( $attachment_path ) ) { 
 				$attachment_append .= '<a href="' . $attachment_url . '" title="' . $filename . '">' .$this->generate_attachment_icon( $attachment_path ) . '</a> ';
 			} else {
-				$message = sprintf( __('Attachment %s is not present', 'wpml'), $filename);
+				$message = sprintf( __( 'Attachment %s is not present', 'wpml' ), $filename);
 				$attachment_append .= '<i class="fa fa-times" title="' . $message . '"></i>';
 			}
 		}
-		
 		return $attachment_append;
 	}
 	
@@ -291,12 +296,12 @@ class Email_Logging_ListTable extends WP_List_Table {
 	function process_bulk_action() {
 		global $wpdb;
 		$name = $this->_args['singular'];
-		$tableName = WPML_Plugin::getTablename('mails');
+		$tableName = WPML_Plugin::getTablename( 'mails' );
 		
 		//Detect when a bulk action is being triggered...
 		if( 'delete' == $this->current_action() ) {
 			foreach($_REQUEST[$name] as $item_id) {
-				$wpdb->query("DELETE FROM `$tableName` WHERE mail_id = $item_id");
+				$wpdb->query( "DELETE FROM `$tableName` WHERE mail_id = $item_id" );
 			}
 		}
 	}
@@ -322,14 +327,14 @@ class Email_Logging_ListTable extends WP_List_Table {
 	function get_sortable_columns() {
 		return array(
 			// column_name => array( 'display_name', true[asc] | false[desc] )
-			'mail_id'  => array('mail_id', false),
-			'timestamp' => array('timestamp', true),
-			'receiver' => array('receiver', true),
-			'subject' => array('subject', true),
-			'message' => array('message', true),
-			'headers' => array('headers', true),
-			'attachments' => array('attachments', true),
-			'plugin_version' => array('plugin_version', true)
+			'mail_id'  		=> array( 'mail_id', false ),
+			'timestamp' 	=> array( 'timestamp', true ),
+			'receiver' 		=> array( 'receiver', true ),
+			'subject' 		=> array( 'subject', true ),
+			'message' 		=> array( 'message', true ),
+			'headers' 		=> array( 'headers', true ),
+			'attachments' 	=> array( 'attachments', true ),
+			'plugin_version'=> array( 'plugin_version', true )
 		);
 	}
 }
