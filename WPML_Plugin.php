@@ -103,10 +103,10 @@ class WPML_Plugin extends WPML_LifeCycle {
     	
     	if ($this->isVersionLessThan($savedVersion, '2.0')) {
     		if ($this->isVersionLessThan($savedVersion, '1.2')) {
-    			$wpdb->query("ALTER TABLE `$tableName` CHANGE `to` `receiver` VARCHAR(200)");
+    			$wpdb->query("ALTER TABLE `$tableName` CHANGE COLUMN `to` `receiver` VARCHAR(200)");
     		}
     		if ($this->isVersionLessThan($savedVersion, '1.3')) {
-    			$wpdb->query("ALTER TABLE `$tableName` CHANGE `attachments` `attachments` VARCHAR(800)");
+    			$wpdb->query("ALTER TABLE `$tableName` MODIFY COLUMN `attachments` VARCHAR(800) NOT NULL DEFAULT '0'");
     		}
     	}
     	
