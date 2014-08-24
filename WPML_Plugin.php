@@ -141,7 +141,7 @@ class WPML_Plugin extends WPML_LifeCycle {
         // Add Actions & Filters
         // http://plugin.michael-simpson.com/?page_id=37
 		
-         add_filter( 'wp_mail', array(&$this, 'log_email' ) );
+         add_filter( 'wp_mail', array( &$this, 'log_email' ) );
          add_filter( 'set-screen-option', array( &$this, 'save_screen_options' ), 10, 3);
 
         // Adding scripts & styles to all pages
@@ -169,12 +169,13 @@ class WPML_Plugin extends WPML_LifeCycle {
     }
     
     private function extractAttachments( $attachments ) {
+    	$attachments = is_array( $attachments ) ? $attachments : array( $attachments );
     	$attachment_urls = array();
     	$uploads = wp_upload_dir();
     	$basename = basename( $uploads['baseurl'] );
-    	$needle = '/'.$basename.'/';
-    	foreach ( $attachments as $attachment ) {
-    		$append_url = substr($attachment, strrpos($attachment, $needle ) );
+    	$basename_needle = '/'.$basename.'/';
+    	foreach( $attachments as $attachment ) {
+    		$append_url = substr( $attachment, strrpos( $attachment, $basename_needle ) );
     		$attachment_urls[] = $append_url;
     	}
     	return implode( ',\n', $attachment_urls );

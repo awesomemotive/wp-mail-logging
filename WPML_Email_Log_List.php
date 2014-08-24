@@ -242,17 +242,19 @@ class Email_Logging_ListTable extends WP_List_Table {
 		$attachment_append = '';
 		$attachments = explode( ',\n', $item['attachments'] );
 		$attachments = is_array( $attachments ) ? $attachments : array( $attachments );
-		
 		foreach ( $attachments as $attachment ) { 
-			$filename = basename( $attachment );
-			$attachment_path = WP_CONTENT_DIR . $attachment;
-			$attachment_url = WP_CONTENT_URL . $attachment;
-			
-			if( file_exists( $attachment_path ) ) { 
-				$attachment_append .= '<a href="' . $attachment_url . '" title="' . $filename . '">' .$this->generate_attachment_icon( $attachment_path ) . '</a> ';
-			} else {
-				$message = sprintf( __( 'Attachment %s is not present', 'wpml' ), $filename);
-				$attachment_append .= '<i class="fa fa-times" title="' . $message . '"></i>';
+			// attachment can be an empty string ''
+			if( !empty( $attachment ) ) {
+				$filename = basename( $attachment );
+				$attachment_path = WP_CONTENT_DIR . $attachment;
+				$attachment_url = WP_CONTENT_URL . $attachment;
+				
+				if( is_file( $attachment_path ) ) { 
+					$attachment_append .= '<a href="' . $attachment_url . '" title="' . $filename . '">' .$this->generate_attachment_icon( $attachment_path ) . '</a> ';
+				} else {
+					$message = sprintf( __( 'Attachment %s is not present', 'wpml' ), $filename);
+					$attachment_append .= '<i class="fa fa-times" title="' . $message . '"></i>';
+				}
 			}
 		}
 		return $attachment_append;
