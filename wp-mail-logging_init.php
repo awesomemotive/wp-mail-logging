@@ -22,6 +22,7 @@
 function WPML_init($file) {
 	
     require_once('WPML_Plugin.php');
+    require_once('WPML_Helper.php');
     $aPlugin = new WPML_Plugin();
     
     // For Testing make plugin available global
