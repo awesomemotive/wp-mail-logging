@@ -136,7 +136,7 @@ class Email_Logging_ListTable extends WP_List_Table {
 			case 'headers':
 			case 'attachments':
 			case 'plugin_version':
-				return $item[ $column_name ];
+				return esc_html( $item[ $column_name ] );
 			default:
 				// if we don't know this column maybe a hook does - if no hook extracted data (string) out of the array we can avoid the output of 'Array()' (array)
 				return (is_array( $res = apply_filters( WPML_Plugin::HOOK_LOGGING_COLUMNS_RENDER, $item, $column_name ) ) ) ? "" : $res;
