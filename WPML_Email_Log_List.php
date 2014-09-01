@@ -131,7 +131,6 @@ class Email_Logging_ListTable extends WP_List_Table {
 			case 'mail_id':
 			case 'timestamp':
 			case 'receiver':
-				debug( $item );
 			case 'subject':
 			case 'message':
 			case 'headers':
