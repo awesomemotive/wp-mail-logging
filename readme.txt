@@ -37,7 +37,8 @@ Just install and activate wp-mail-logging. The plugin will do the work for you! 
 
 == Screenshots ==
 1. The List
-2. The Settings
+2. The Detail View
+3. The Settings
 
 
 == Changelog ==
