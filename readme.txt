@@ -6,7 +6,7 @@ License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 Requires at least: 3.0
 Tested up to: 4.0
-Stable tag: 1.3.1
+Stable tag: 1.3.2
 
 Logs each email sent by WordPress.
 
@@ -42,6 +42,9 @@ Just install and activate wp-mail-logging. The plugin will do the work for you! 
 
 
 == Changelog ==
+= 1.3.2, September 21, 2014  =
+- Fixed HTML mails broken in previous version.
+
 = 1.3.1, September 12, 2014  =
 - Fixed angle brackets notation support (e.g. John Doe <john.doe@example.org>).
 
