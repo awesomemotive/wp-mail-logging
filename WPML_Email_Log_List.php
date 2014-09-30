@@ -100,7 +100,7 @@ class Email_Logging_ListTable extends WP_List_Table {
 		$per_page = $this->get_items_per_page( 'per_page', 25 );
 		$current_page = $this->get_pagenum();
 		$total_items = $wpdb->get_var( "SELECT COUNT(*) FROM `$tableName`" );
-		$limit = $per_page*$current_page;
+		
 		//TODO: make option for default order
 		$orderby_default = "mail_id";
 		$order_default = "desc";
@@ -108,7 +108,7 @@ class Email_Logging_ListTable extends WP_List_Table {
 		$order = ( !empty($_GET['order'] ) ) ? $_GET['order'] : $order_default;
 		$offset = ( $current_page-1 ) * $per_page;
 		
-		$dataset = $wpdb->get_results( "SELECT * FROM `$tableName` ORDER BY $orderby $order LIMIT $limit OFFSET $offset", ARRAY_A);
+		$dataset = $wpdb->get_results( "SELECT * FROM `$tableName` ORDER BY $orderby $order LIMIT $per_page OFFSET $offset", ARRAY_A);
 		
 		$this->set_pagination_args( array(
 			'total_items' => $total_items, // the total number of items
