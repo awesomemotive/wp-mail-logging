@@ -473,8 +473,7 @@ class WPML_OptionsManager {
                 ?>
                 </tbody></table>
                 <p class="submit">
-                    <input type="submit" class="button-primary"
-                           value="<?php _e('Save Changes', 'wpml') ?>"/>
+                    <input type="submit" class="button-primary" value="<?php _e('Save Changes', 'wpml') ?>"/>
                 </p>
             </form>
         </div>
@@ -495,10 +494,9 @@ class WPML_OptionsManager {
             ?>
             <p><select name="<?php echo $aOptionKey ?>" id="<?php echo $aOptionKey ?>">
             <?php
-                            foreach ($choices as $aChoice) {
-                $selected = ($aChoice == $savedOptionValue) ? 'selected' : '';
+            foreach ($choices as $aChoice) {
                 ?>
-                    <option value="<?php echo $aChoice ?>" <?php echo $selected ?>><?php echo $this->getOptionValueI18nString($aChoice) ?></option>
+                    <option value="<?php echo $aChoice ?>" <?php selected($aChoice, $savedOptionValue); ?>><?php echo $this->getOptionValueI18nString($aChoice) ?></option>
                 <?php
             }
             ?>
