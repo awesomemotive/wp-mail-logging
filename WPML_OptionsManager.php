@@ -20,7 +20,49 @@
 */
 
 class WPML_OptionsManager {
+	
+	/**
+	 * Instance of settings API wrapper.
+	 *
+	 * @var array
+	 * @since 1.4
+	 */
+	private $settings;
+	
+	/**
+	 * Initilizes settings API wrapper.
+	 * @since 1.4
+	 */
+	public function initSettings() {
+		$this->settings = new WeDevs_Settings_API();
+		
+		$this->settings->set_sections( $this->getSettingsSections() );
+		$this->settings->set_fields( $this->getSettingsFields() );
 
+		//initialize settings
+		$this->settings->admin_init();
+	}
+	
+	/**
+     * Migrate the options in old format to new settings handling.
+     * @param array $field the field to migrate and add to the settings
+     * @return array the migrated field
+     * @since 1.4
+     */
+    public function migrate_options( $field ) {
+    	if( isset($field['name'] ) && !empty($field['name']) ) {
+    		$optionName = $field['name'];
+    		$option = $this->getOption( $optionName );
+    		if( $option !== false && in_array($option, $field['options']) ) {
+    			$field['default'] = $option;
+    		}
+    	}
+    	
+    	return $field;
+    }
+        
+	
+	
     public function getOptionNamePrefix() {
         return get_class($this) . '_';
     }
@@ -452,6 +494,11 @@ class WPML_OptionsManager {
         <div class="wrap">
 
             <h2><?php echo $this->getPluginDisplayName(); echo ' '; _e('Settings', 'wpml'); ?></h2>
+            
+            <?php
+             $this->settings->show_navigation();
+        	 $this->settings->show_forms();
+        	 ?>
 
             <form method="post" action="">
             <?php settings_fields($settingsGroup); ?>
