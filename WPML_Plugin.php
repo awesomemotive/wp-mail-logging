@@ -14,89 +14,6 @@ class WPML_Plugin extends WPML_LifeCycle {
 		return $wpdb->prefix . 'wpml_' . $name;
 	}
 	
-    protected function getSettingsSections() {
-    	$sections = array(
-    			array(
-    					'id' => 'wpml_basic',
-    					'title' => __( 'Basic Settings', 'wpml' )
-    			)
-    	);
-    	return $sections;
-    }
-    
-    /**
-     * Returns all the settings fields
-     *
-     * @return array settings fields
-     */
-    protected function getSettingsFields() {
-    	$settings_fields = array(
-    			'wpml_basic' => array(
-    					array(
-    							'name' => 'DeleteOnDeactivation',
-    							'label' => __('Delete all data on deactivation? (emails and settings)', 'wml'),
-    							'desc' => __( 'Irreversible', 'wpml' ),
-    							'type' => 'select',
-    							'default' => 'false',
-    							'options' => array(
-    									'true' => 'true',
-    									'false' => 'false'
-    							)
-    					),
-    					array(
-    							'name' => 'CanSeeSubmitData',
-    							'label' => __('Can See Submission data', 'wpml' ),
-    							'type' => 'select',
-    							'default' => 'Administrator',
-    							'options' => array(
-    									'Administrator' => 'Administrator',
-    									'Editor' => 'Editor',
-    									'Author' => 'Author',
-    									'Contributor' => 'Contributor',
-    									'Subscriber' => 'Subscriber',
-    									'Anyone' => 'Anyone',
-    							)
-    					),
-    					array(
-    							'name' => 'LogRotation',
-    							'label' => __('Cleanup old mails', 'wpml' ),
-    							'type' => 'select',
-    							'default' => 'no',
-    							'options' => array(
-    									'yes' => 'Yes',
-    									'no' => 'No'
-    							)
-    					),
-    					array(
-    							'name' => 'LogRotation_interval_d',
-    							'label' => __( 'Cleanup Interval', 'wpml' ),
-    							'desc' => __( 'The period in days', 'wedevs' ),
-    							'default' => '30',
-    							'type' => 'text',
-    							'sanitize_callback' => 'intval'
-    					)
-    			)
-    	);
-    
-    	return $settings_fields;
-    }
-
-//    protected function getOptionValueI18nString($optionValue) {
-//        $i18nValue = parent::getOptionValueI18nString($optionValue);
-//        return $i18nValue;
-//    }
-
-    protected function initOptions() {
-        $options = $this->getOptionMetaData();
-        if (!empty($options)) {
-            foreach ($options as $key => $arr) {
-                if (is_array($arr) && count($arr > 1)) {
-                    $this->addOption($key, $arr[1]);
-                }
-            }
-        }
-    }
-
     public function getPluginDisplayName() {
         return 'WP Mail Logging';
     }
@@ -180,7 +97,7 @@ class WPML_Plugin extends WPML_LifeCycle {
 		
         // Add options administration page
         // http://plugin.michael-simpson.com/?page_id=47
-        add_action( 'admin_init', array(&$this, 'initSettings') );
+    	add_action( 'admin_init', array(&$this, 'initSettings') );
         add_action( 'admin_menu', array(&$this, 'createSettingsMenu') );
 
         // Example adding a script & style just for the options administration page
@@ -196,8 +113,6 @@ class WPML_Plugin extends WPML_LifeCycle {
 		
          add_filter( 'wp_mail', array( &$this, 'log_email' ) );
          add_filter( 'set-screen-option', array( &$this, 'save_screen_options' ), 10, 3);
-         add_filter( 'settings_filter_DeleteOnDeactivation', array( $this, 'migrate_options' ) );
-         add_filter( 'settings_filter_CanSeeSubmitData', array( $this, 'migrate_options' ) );
 
         // Adding scripts & styles to all pages
         // Examples:

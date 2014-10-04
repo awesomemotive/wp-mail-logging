@@ -34,34 +34,26 @@ class WPML_OptionsManager {
 	 * @since 1.4
 	 */
 	public function initSettings() {
-		$this->settings = new WeDevs_Settings_API();
-		
-		$this->settings->set_sections( $this->getSettingsSections() );
-		$this->settings->set_fields( $this->getSettingsFields() );
-
-		//initialize settings
-		$this->settings->admin_init();
+		global $reduxConfig;
+		var_dump( $this->getSetting('delete-on-deactivation', false) );
 	}
 	
 	/**
-     * Migrate the options in old format to new settings handling.
-     * @param array $field the field to migrate and add to the settings
-     * @return array the migrated field
-     * @since 1.4
-     */
-    public function migrate_options( $field ) {
-    	if( isset($field['name'] ) && !empty($field['name']) ) {
-    		$optionName = $field['name'];
-    		$option = $this->getOption( $optionName );
-    		if( $option !== false && in_array($option, $field['options']) ) {
-    			$field['default'] = $option;
-    		}
-    	}
-    	
-    	return $field;
-    }
-        
-	
+	 * This is used to retrive a settings value
+	 * Important: This implementation understands bool for $default. (unlikely in comparision to all other settings implementation)
+	 * @param string $settingName The option name to return
+	 * @param mixed $default (null) The value to return if option not set.
+	 * @return Ambigous <string, mixed> the options value or $default if not found.
+	 */
+	public function getSetting($settingName, $default = null) {
+		global $reduxConfig;
+		
+		$retVal = $reduxConfig->ReduxFramework->get($settingName, $default);
+		if (!$retVal && $default != null) {
+			$retVal = $default;
+		}
+		return $retVal;
+	}
 	
     public function getOptionNamePrefix() {
         return get_class($this) . '_';
@@ -284,12 +276,12 @@ class WPML_OptionsManager {
 	    $pluginIcon = '';
 	    if ( $wp_version >= 3.8 ) $pluginIcon = 'dashicons-email-alt';
 
-        $pluginName = $this->getPluginDisplayName();
+        $pluginNameSlug = strtolower( get_class($this) );
         //create new top-level menu
         $wp_logging_list_page = add_menu_page(__('WP Mail Log', 'wpml'),
 									          __('WP Mail Log', 'wpml'),
 						                      'administrator',
-						                      get_class($this) . '_log',
+						                      $pluginNameSlug . '_log', 
 						                      array(&$this, 'LogMenu'),
 							                  $pluginIcon
 						        );
@@ -300,11 +292,11 @@ class WPML_OptionsManager {
         //call register settings function
         add_action('admin_init', array(&$this, 'registerSettings'));
         
-        add_submenu_page(get_class($this) . '_log', 
+        add_submenu_page($pluginNameSlug . '_log', 
 				       	__('Settings', 'wpml'), 
 				        __('Settings', 'wpml'), 
 				        'administrator',  
-		        		get_class($this) . '_settings', 
+		        		$pluginNameSlug . '_settings', 
 						array(&$this, 'LogSubMenuSettings') );
         
         add_action( 'contextual_help', array( &$this, 'create_settings_panel' ), 10, 3 );
@@ -494,11 +486,6 @@ class WPML_OptionsManager {
         <div class="wrap">
 
             <h2><?php echo $this->getPluginDisplayName(); echo ' '; _e('Settings', 'wpml'); ?></h2>
-            
-            <?php
-             $this->settings->show_navigation();
-        	 $this->settings->show_forms();
-        	 ?>
 
             <form method="post" action="">
             <?php settings_fields($settingsGroup); ?>
