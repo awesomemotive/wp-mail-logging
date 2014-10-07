@@ -31,7 +31,7 @@ class Email_Logging_ListTable extends WP_List_Table {
 	 * @see WP_List_Table::no_items()
 	 */
 	function no_items() {
-		_e( 'No ' . $this->_args['singular'] . ' logged yet.' );
+		_e( 'No ' . $this->_args['singular'] . ' found.' );
 		return;
 	}
 	
@@ -84,9 +84,10 @@ class Email_Logging_ListTable extends WP_List_Table {
 	/**
 	 * Prepares the items for rendering
 	 * @since 1.0
+	 * @param string you want to search for
 	 * @see WP_List_Table::prepare_items()
 	 */
-	function prepare_items() {
+	function prepare_items( $search = false ) {
 		global $wpdb;
 		$tableName = WPML_Plugin::getTablename( 'mails' );
 		
@@ -99,16 +100,27 @@ class Email_Logging_ListTable extends WP_List_Table {
 		
 		$per_page = $this->get_items_per_page( 'per_page', 25 );
 		$current_page = $this->get_pagenum();
-		$total_items = $wpdb->get_var( "SELECT COUNT(*) FROM `$tableName`" );
+		$total_items = $wpdb->get_var( "SELECT COUNT(*) FROM `$tableName`;" );
 		
-		//TODO: make option for default order
 		$orderby_default = "mail_id";
 		$order_default = "desc";
 		$orderby = ( !empty( $_GET['orderby'] ) ) ? $_GET['orderby'] : $orderby_default;
 		$order = ( !empty($_GET['order'] ) ) ? $_GET['order'] : $order_default;
 		$offset = ( $current_page-1 ) * $per_page;
 		
-		$dataset = $wpdb->get_results( "SELECT * FROM `$tableName` ORDER BY $orderby $order LIMIT $per_page OFFSET $offset", ARRAY_A);
+		$search_query = '';
+		if( $search ) {
+			$search = esc_sql( sanitize_text_field( $search ) );
+			$search_query = sprintf( "
+				WHERE 
+				(`receiver` LIKE '%%%1\$s%%') OR  
+				(`subject` LIKE '%%%1\$s%%') OR 
+				(`message` LIKE '%%%1\$s%%') OR 
+				(`headers` LIKE '%%%1\$s%%') OR 
+				(`attachments` LIKE '%%%1\$s%%')", $search );
+		}
+		
+		$dataset = $wpdb->get_results( "SELECT * FROM `$tableName` $search_query ORDER BY $orderby $order LIMIT $per_page OFFSET $offset;", ARRAY_A);
 		
 		$this->set_pagination_args( array(
 			'total_items' => $total_items, // the total number of items
