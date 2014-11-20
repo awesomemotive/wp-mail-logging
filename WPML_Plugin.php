@@ -97,8 +97,7 @@ class WPML_Plugin extends WPML_LifeCycle {
 		
         // Add options administration page
         // http://plugin.michael-simpson.com/?page_id=47
-    	add_action( 'admin_init', array(&$this, 'initSettings') );
-        add_action( 'admin_menu', array(&$this, 'createSettingsMenu') );
+        add_action( 'admin_menu', array(&$this, 'createSettingsMenu'), 9 );
 
         // Example adding a script & style just for the options administration page
         // http://plugin.michael-simpson.com/?page_id=47

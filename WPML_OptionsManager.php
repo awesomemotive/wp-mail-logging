@@ -20,36 +20,21 @@
 */
 
 class WPML_OptionsManager {
-	
 	/**
-	 * Instance of settings API wrapper.
-	 *
-	 * @var array
-	 * @since 1.4
-	 */
-	private $settings;
-	
-	/**
-	 * Initilizes settings API wrapper.
-	 * @since 1.4
-	 */
-	public function initSettings() {
-		global $reduxConfig;
-		var_dump( $this->getSetting('delete-on-deactivation', false) );
-	}
-	
-	/**
-	 * This is used to retrive a settings value
+	 * Is used to retrive a settings value
 	 * Important: This implementation understands bool for $default. (unlikely in comparision to all other settings implementation)
+	 * @since 1.4
 	 * @param string $settingName The option name to return
 	 * @param mixed $default (null) The value to return if option not set.
 	 * @return Ambigous <string, mixed> the options value or $default if not found.
 	 */
 	public function getSetting($settingName, $default = null) {
-		global $reduxConfig;
-		
-		$retVal = $reduxConfig->ReduxFramework->get($settingName, $default);
-		if (!$retVal && $default != null) {
+		global $wpml_settings;
+
+		if( key_exists($settingName, $wpml_settings)) {
+			$retVal = $wpml_settings[$settingName];
+		}
+		if (!isset($retVal) && $default !== null) {
 			$retVal = $default;
 		}
 		return $retVal;
@@ -289,19 +274,37 @@ class WPML_OptionsManager {
 	    // Add Action to load assets when page is loaded
 	    add_action( 'load-' . $wp_logging_list_page, array( $this, 'load_assets' ) );
 
-        //call register settings function
-        add_action('admin_init', array(&$this, 'registerSettings'));
-        
-        add_submenu_page($pluginNameSlug . '_log', 
-				       	__('Settings', 'wpml'), 
-				        __('Settings', 'wpml'), 
-				        'administrator',  
-		        		$pluginNameSlug . '_settings', 
-						array(&$this, 'LogSubMenuSettings') );
-        
-        add_action( 'contextual_help', array( &$this, 'create_settings_panel' ), 10, 3 );
+	    add_submenu_page($pluginNameSlug . '_log',
+	    				       	__('About', 'wpml'),
+	    				        __('About', 'wpml'),
+	    				        'administrator',
+	    		        		$pluginNameSlug . '_about',
+	    						array(&$this, 'LogSubMenuAbout') );
+
+    	add_action( 'contextual_help', array( &$this, 'create_settings_panel' ), 10, 3 );
     }
 
+	public function LogSubMenuAbout() {
+		 ?>
+		 <div class="wrap">
+            <h2><?php echo $this->getPluginDisplayName(); echo ' '; _e('About', 'wpml'); ?></h2>
+			<h3>Why use?</h3>
+			<p>Sometimes you may ask yourself if a mail was actually sent by WordPress - with
+			<strong>With <?php echo $this->getPluginDisplayName(); ?>, you can:</strong></p>
+			<ul>
+				<li>View a complete list of sent mails.</li>
+				<li>Search for mails.</li>
+				<li>Count on regular updates, enhancements, and troubleshooting.</li>
+				<li>Developer: Boost your development performance by keeping track of sent mails from your WordPress site.</li>
+				<li>Developer: Use Filters that are provided to extend the columns.</li>
+			</ul>
+			<h3>Donate</h3>
+			<p>Please consider to make a donation if you like the plugin. I spent a lot of time for support, enhancements and updates in general.</p>
+			<a title="Donate" href="http://no3x.de/web/donate">Donate</a>
+			</div>
+			<?php 
+	}
+	
 	public function load_assets() {
 
 		global $wp_logging_list_page;
@@ -317,14 +320,6 @@ class WPML_OptionsManager {
 
 	}
 
-    public function registerSettings() {
-        $settingsGroup = get_class($this) . '-settings-group';
-        $optionMetaData = $this->getOptionMetaData();
-        foreach ($optionMetaData as $aOptionKey => $aOptionMeta) {
-            register_setting($settingsGroup, $aOptionMeta);
-        }
-    }
-    
     /**
      * Add settings Panel
      */
@@ -397,10 +392,9 @@ class WPML_OptionsManager {
 	}
 	
 	public function LogMenu() {
-
 	    global $wp_version;
 
-    	if (!current_user_can('manage_options')) {
+    	if ( !$this->isUserRoleEqualOrBetterThan( $this->getSetting( 'can-see-submission-data', 'Administrator' ) ) ) {
     		wp_die(__('You do not have sufficient permissions to access this page.', 'wpml'));
     	}
     	
@@ -411,141 +405,51 @@ class WPML_OptionsManager {
     	?>
     	 <div class="wrap">
             <h2><?php echo $this->getPluginDisplayName(); echo ' '; _e('Log', 'wpml'); ?></h2>
-				<?php
-				$emailLoggingListTable = new Email_Logging_ListTable();
-				$emailLoggingListTable->prepare_items();
-				?>
+			<?php
+			$emailLoggingListTable = new Email_Logging_ListTable();
+			$emailLoggingListTable->prepare_items();
+			?>
 
-				<div id="wp-mail-logging-modal-wrap">
-					<div id="wp-mail-logging-modal-backdrop"></div>
-					<div id="wp-mail-logging-modal-content-wrap">
-						<div id="wp-mail-logging-modal-content">
-							<div id="wp-mail-logging-modal-content-header">
-								<a id="wp-mail-logging-modal-content-header-close" class="wp-mail-logging-modal-close" href="#" title="Close">
-									<?php if ( $wp_version >= 3.8 ): ?>
-										<div class="dashicons dashicons-no"></div>
-									<?php else: ?>
-										<span class="wp-mail-logging-modal-content-header-compat-close">X</span>
-									<?php endif; ?>
-								</a>
+			<div id="wp-mail-logging-modal-wrap">
+				<div id="wp-mail-logging-modal-backdrop"></div>
+				<div id="wp-mail-logging-modal-content-wrap">
+					<div id="wp-mail-logging-modal-content">
+						<div id="wp-mail-logging-modal-content-header">
+							<a id="wp-mail-logging-modal-content-header-close" class="wp-mail-logging-modal-close" href="#" title="Close">
 								<?php if ( $wp_version >= 3.8 ): ?>
-									<div id="wp-mail-logging-modal-content-header-icon" class="dashicons dashicons-email-alt"></div>
+									<div class="dashicons dashicons-no"></div>
+								<?php else: ?>
+									<span class="wp-mail-logging-modal-content-header-compat-close">X</span>
 								<?php endif; ?>
-								<div id="wp-mail-logging-modal-content-header-title">
-									<?php _e( 'Message', 'wpml' ); ?>
-								</div>
+							</a>
+							<?php if ( $wp_version >= 3.8 ): ?>
+								<div id="wp-mail-logging-modal-content-header-icon" class="dashicons dashicons-email-alt"></div>
+							<?php endif; ?>
+							<div id="wp-mail-logging-modal-content-header-title">
+								<?php _e( 'Message', 'wpml' ); ?>
 							</div>
-							<div id="wp-mail-logging-modal-content-body">
-								<div id="wp-mail-logging-modal-content-body-content">
+						</div>
+						<div id="wp-mail-logging-modal-content-body">
+							<div id="wp-mail-logging-modal-content-body-content">
 
-								</div>
 							</div>
-							<div id="wp-mail-logging-modal-content-footer">
-								<a class="wp-mail-logging-modal-close button button-primary" href="#"><?php _e( 'Close', 'wpml' ); ?></a>
-							</div>
+						</div>
+						<div id="wp-mail-logging-modal-content-footer">
+							<a class="wp-mail-logging-modal-close button button-primary" href="#"><?php _e( 'Close', 'wpml' ); ?></a>
 						</div>
 					</div>
 				</div>
+			</div>
 
-				<form id="email-list" method="get">
-					<input type="hidden" name="page" value="<?php echo $_REQUEST['page'] ?>" />
-					<?php
-					$emailLoggingListTable->display();
-					?>
-				</form>
-				
-            
+			<form id="email-list" method="get">
+				<input type="hidden" name="page" value="<?php echo $_REQUEST['page'] ?>" />
+				<?php
+				$emailLoggingListTable->display();
+				?>
+			</form>
 		</div> 
     	<?php
     }	
-
-    /**
-     * Creates HTML for the Administration page to set options for this plugin.
-     * Override this method to create a customized page.
-     * @return void
-     */
-    public function LogSubMenuSettings() {
-        if (!current_user_can('manage_options')) {
-            wp_die(__('You do not have sufficient permissions to access this page.', 'wpml'));
-        }
-
-        $optionMetaData = $this->getOptionMetaData();
-
-        // Save Posted Options
-        if ($optionMetaData != null) {
-            foreach ($optionMetaData as $aOptionKey => $aOptionMeta) {
-                if (isset($_POST[$aOptionKey])) {
-                    $this->updateOption($aOptionKey, $_POST[$aOptionKey]);
-                }
-            }
-        }
-
-        // HTML for the page
-        $settingsGroup = get_class($this) . '-settings-group';
-        ?>
-        <div class="wrap">
-
-            <h2><?php echo $this->getPluginDisplayName(); echo ' '; _e('Settings', 'wpml'); ?></h2>
-
-            <form method="post" action="">
-            <?php settings_fields($settingsGroup); ?>
-                <table class="form-table"><tbody>
-                <?php
-                if ($optionMetaData != null) {
-                    foreach ($optionMetaData as $aOptionKey => $aOptionMeta) {
-                        $displayText = is_array($aOptionMeta) ? $aOptionMeta[0] : $aOptionMeta;
-                        ?>
-                            <tr valign="top">
-                                <th scope="row"><p><label for="<?php echo $aOptionKey ?>"><?php echo $displayText ?></label></p></th>
-                                <td>
-                                <?php $this->createFormControl($aOptionKey, $aOptionMeta, $this->getOption($aOptionKey)); ?>
-                                </td>
-                            </tr>
-                        <?php
-                    }
-                }
-                ?>
-                </tbody></table>
-                <p class="submit">
-                    <input type="submit" class="button-primary" value="<?php _e('Save Changes', 'wpml') ?>"/>
-                </p>
-            </form>
-        </div>
-        <?php
-
-    }
-
-    /**
-     * Helper-function outputs the correct form element (input tag, select tag) for the given item
-     * @param  $aOptionKey string name of the option (un-prefixed)
-     * @param  $aOptionMeta mixed meta-data for $aOptionKey (either a string display-name or an array(display-name, option1, option2, ...)
-     * @param  $savedOptionValue string current value for $aOptionKey
-     * @return void
-     */
-    protected function createFormControl($aOptionKey, $aOptionMeta, $savedOptionValue) {
-        if (is_array($aOptionMeta) && count($aOptionMeta) >= 2) { // Drop-down list
-            $choices = array_slice($aOptionMeta, 1);
-            ?>
-            <p><select name="<?php echo $aOptionKey ?>" id="<?php echo $aOptionKey ?>">
-            <?php
-            foreach ($choices as $aChoice) {
-                ?>
-                    <option value="<?php echo $aChoice ?>" <?php selected($aChoice, $savedOptionValue); ?>><?php echo $this->getOptionValueI18nString($aChoice) ?></option>
-                <?php
-            }
-            ?>
-            </select></p>
-            <?php
-
-        }
-        else { // Simple input field
-            ?>
-            <p><input type="text" name="<?php echo $aOptionKey ?>" id="<?php echo $aOptionKey ?>"
-                      value="<?php echo esc_attr($savedOptionValue) ?>" size="50"/></p>
-            <?php
-
-        }
-    }
 
     /**
      * Override this method and follow its format.

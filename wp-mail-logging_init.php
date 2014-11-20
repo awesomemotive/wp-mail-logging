@@ -21,8 +21,8 @@
 
 function WPML_init($file) {
 	
-    require_once(plugin_dir_path( __FILE__ ) . 'inc/redux/admin-init.php');
     require_once('WPML_Plugin.php');
+    require_once(plugin_dir_path( __FILE__ ) . 'inc/redux/admin-init.php');
     
     $aPlugin = new WPML_Plugin();
     

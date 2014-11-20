@@ -256,7 +256,8 @@ if (!class_exists('admin_folder_Redux_Framework_config')) {
            				'type'      => 'select',
            				'data'      => 'roles',
            				'title'     => __('Can See Submission data', 'wpml'), 
-           				'subtitle'  => __('Select the minimum role.', 'wpml')
+           				'subtitle'  => __('Select the minimum role.', 'wpml'),
+                			
                 	),
                 	array(
                 			'id'        => 'section-log-rotation-start',
@@ -288,7 +289,7 @@ if (!class_exists('admin_folder_Redux_Framework_config')) {
                 			'display_value' => 'text'
                 	),
                 	array(
-                			'id'        => 'log-rotation-limit-time',
+                			'id'        => 'log-rotation-delete-time',
                 			'type'      => 'switch',
                 			'title'     => __('Cleanup by Time', 'wpml' ),
                 			'subtitle'  => __('Setup a automated cleanup routine!', 'wpml'),
@@ -299,7 +300,7 @@ if (!class_exists('admin_folder_Redux_Framework_config')) {
                 	array(
                 			'id'            => 'log-rotation-delete-time-days',
                 			'type'          => 'slider',
-                			'required'  => array('log-rotation-limit-time', '=', '1'),
+                			'required'  	=> array('log-rotation-delete-time', '=', '1'),
                 			'title'         => __('Time', 'wpml' ),
                 			'subtitle'      => __('When should mails are deleted?', 'wpml'),
                 			'desc'      	=> __('Delete mails older than days...', 'wpml'),
@@ -354,7 +355,7 @@ if (!class_exists('admin_folder_Redux_Framework_config')) {
                 'update_notice' => true,
                 'admin_bar' => true,
                 'menu_type' => 'submenu',
-                'menu_title' => 'Sample Options',
+                'menu_title' => 'Settings',
                 'allow_sub_menu' => true,
 				'page_parent' => 'wpml_plugin_log',
                 'customizer' => true,
