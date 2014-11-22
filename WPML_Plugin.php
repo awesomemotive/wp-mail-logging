@@ -14,37 +14,6 @@ class WPML_Plugin extends WPML_LifeCycle {
 		return $wpdb->prefix . 'wpml_' . $name;
 	}
 	
-    /**
-     * See: http://plugin.michael-simpson.com/?page_id=31
-     * @return array of option meta data.
-     */
-    public function getOptionMetaData() {
-        //  http://plugin.michael-simpson.com/?page_id=31
-        return array(
-            //'_version' => array('Installed Version'), // Leave this one commented-out. Uncomment to test upgrades.
-            //'ATextInput' => array(__('Enter in some text', 'wml')),
-            'DeleteOnDeactivation' => array(__('Delete all data on deactivation? (emails and settings)', 'wml'), 'false', 'true'),
-            'CanSeeSubmitData' => array(__('Can See Submission data', 'wml'),
-                                        'Administrator', 'Editor', 'Author', 'Contributor', 'Subscriber', 'Anyone')
-        );
-    }
-
-//    protected function getOptionValueI18nString($optionValue) {
-//        $i18nValue = parent::getOptionValueI18nString($optionValue);
-//        return $i18nValue;
-//    }
-
-    protected function initOptions() {
-        $options = $this->getOptionMetaData();
-        if (!empty($options)) {
-            foreach ($options as $key => $arr) {
-                if (is_array($arr) && count($arr > 1)) {
-                    $this->addOption($key, $arr[1]);
-                }
-            }
-        }
-    }
-
     public function getPluginDisplayName() {
         return 'WP Mail Logging';
     }
@@ -128,7 +97,7 @@ class WPML_Plugin extends WPML_LifeCycle {
 		
         // Add options administration page
         // http://plugin.michael-simpson.com/?page_id=47
-        add_action( 'admin_menu', array(&$this, 'createSettingsMenu') );
+        add_action( 'admin_menu', array(&$this, 'createSettingsMenu'), 9 );
 
         // Example adding a script & style just for the options administration page
         // http://plugin.michael-simpson.com/?page_id=47

@@ -315,8 +315,8 @@ class Email_Logging_ListTable extends WP_List_Table {
 		
 		//Detect when a bulk action is being triggered...
 		if( 'delete' == $this->current_action() ) {
-			foreach($_REQUEST[$name] as $item_id) {
-				$wpdb->query( "DELETE FROM `$tableName` WHERE mail_id = $item_id" );
+			foreach( $_REQUEST[$name] as $item_id) {
+				$wpdb->query( $wpdb->prepare("DELETE FROM `$tableName` WHERE `mail_id` = %d", $item_id) );
 			}
 		}
 	}
