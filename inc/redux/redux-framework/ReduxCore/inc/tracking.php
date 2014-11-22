@@ -39,11 +39,10 @@
 
                 return self::$instance;
             }
-// end get_instance;
+            // end get_instance;
 
             /**
              * Class constructor
-             *
              */
 
             function __construct() {
@@ -68,12 +67,12 @@
                 }
 
                 if ( isset( $_GET['redux_framework_disable_tracking'] ) && ! empty( $_GET['redux_framework_disable_tracking'] ) ) {
-                    $this->options['allow_tracking'] = false;
+                    $this->options['allow_tracking'] = 'no';
                     update_option( 'redux-framework-tracking', $this->options );
                 }
 
                 if ( isset( $_GET['redux_framework_enable_tracking'] ) && ! empty( $_GET['redux_framework_enable_tracking'] ) ) {
-                    $this->options['allow_tracking'] = true;
+                    $this->options['allow_tracking'] = 'yes';
                     update_option( 'redux-framework-tracking', $this->options );
                 }
 
@@ -93,7 +92,7 @@
                 add_action( 'wp_ajax_nopriv_' . $hash, array( $this, 'support_args' ) );
                 add_action( 'wp_ajax_' . $hash, array( $this, 'support_args' ) );
 
-                if ( isset( $this->options['allow_tracking'] ) && $this->options['allow_tracking'] == true ) {
+                if ( isset( $this->options['allow_tracking'] ) && $this->options['allow_tracking'] == 'yes' ) {
                     // The tracking checks daily, but only sends new data every 7 days.
                     if ( ! wp_next_scheduled( 'redux_tracking' ) ) {
                         wp_schedule_event( time(), 'daily', 'redux_tracking' );
@@ -150,12 +149,12 @@
 
 
                 $content = '<h3>' . __( 'Welcome to the Redux Demo Panel', 'redux-framework' ) . '</h3>';
-                $content .= '<p><strong>' . __( 'Getting Started', 'redux-framework' ) . '</strong><br>' . sprintf( __( 'This panel demonstrates the many features of Redux.  Before digging in, we suggest you get up to speed by reviewing %1$s.', 'redux-framework' ), '<a href="http://docs.reduxframework.com/redux-framework/getting-started/" target="_blank">' . __( 'our documentation', 'redux-framework' ) . '</a>' );
-                $content .= '<p><strong>' . __( 'Redux Generator', 'redux-framework' ) . '</strong><br>' . sprintf( __( 'Want to get a head start? Use the %1$s. It will create a customized boilerplate theme or a standalone admin folder complete with all things Redux (with the help of Underscores and TGM). Save yourself a headache and try it today.', 'redux-framework' ), '<a href="http://generate.reduxframework.com/" target="_blank">' . __( 'Redux Generator', 'redux-framework' ) . '</a>' );
-                $content .= '<p><strong>' . __( 'Redux Extensions', 'redux-framework' ) . '</strong><br>' . sprintf( __( 'Did you know we have extensions, which greatly enhance the features of Redux?  Visit our %1$s to learn more!', 'redux-framework' ), '<a href="http://reduxframework.com/extensions/" target="_blank">' . __( 'extensions directory', 'redux-framework' ) . '</a>' );
-                $content .= '<p><strong>' . __( 'Like Redux?', 'redux-framework' ) . '</strong><br>' . sprintf( __( 'If so, please %1$s and consider making a %2$s to keep development of Redux moving forward.', 'redux-framework' ), '<a target="_blank" href="http://wordpress.org/support/view/plugin-reviews/redux-framework">' . __( 'leave us a favorable review on WordPress.org', 'redux-framework' ) . '</a>', '<a href="https://www.paypal.com/cgi-bin/webscr?cmd=admin-folder-xclick&hosted_button_id=N5AD7TSH8YA5U" target="_blank">' . __( 'donation', 'redux-framework' ) . '</a>' );
+                $content .= '<p><strong>' . __( 'Getting Started', 'redux-framework' ) . '</strong><br>' . sprintf( __( 'This panel demonstrates the many features of Redux.  Before digging in, we suggest you get up to speed by reviewing %1$s.', 'redux-framework' ), '<a href="' . 'http://' . 'docs.reduxframework.com/redux-framework/getting-started/" target="_blank">' . __( 'our documentation', 'redux-framework' ) . '</a>' );
+                $content .= '<p><strong>' . __( 'Redux Generator', 'redux-framework' ) . '</strong><br>' . sprintf( __( 'Want to get a head start? Use the %1$s. It will create a customized boilerplate theme or a standalone admin folder complete with all things Redux (with the help of Underscores and TGM). Save yourself a headache and try it today.', 'redux-framework' ), '<a href="' . 'http://' . 'generate.reduxframework.com/" target="_blank">' . __( 'Redux Generator', 'redux-framework' ) . '</a>' );
+                $content .= '<p><strong>' . __( 'Redux Extensions', 'redux-framework' ) . '</strong><br>' . sprintf( __( 'Did you know we have extensions, which greatly enhance the features of Redux?  Visit our %1$s to learn more!', 'redux-framework' ), '<a href="' . 'http://' . 'reduxframework.com/extensions/" target="_blank">' . __( 'extensions directory', 'redux-framework' ) . '</a>' );
+                $content .= '<p><strong>' . __( 'Like Redux?', 'redux-framework' ) . '</strong><br>' . sprintf( __( 'If so, please %1$s and consider making a %2$s to keep development of Redux moving forward.', 'redux-framework' ), '<a target="_blank" href="' . 'http://' . 'wordpress.org/support/view/plugin-reviews/redux-framework">' . __( 'leave us a favorable review on WordPress.org', 'redux-framework' ) . '</a>', '<a href="' . 'https://' . 'www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=N5AD7TSH8YA5U" target="_blank">' . __( 'donation', 'redux-framework' ) . '</a>' );
                 $content .= '<p><strong>' . __( 'Newsletter', 'redux-framework' ) . '</strong><br>' . __( 'If you\'d like to keep up to with all things Redux, please subscribe to our newsletter', 'redux-framework' ) . ':</p>';
-                $content .= '<form action="http://reduxframework.us7.list-manage2.com/subscribe/post?u=564f5178f6cc288064f332efd&amp;id=ace5bbc1f9&SOURCE=panel" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate><p style="text-align: center;"><label for="mce-EMAIL">' . __( 'Email address', 'redux-framework' ) . ' </label><input type="email" value="" name="EMAIL" class="required email" id="mce-EMAIL"><input type="hidden" value="panel" name="SOURCE">&nbsp;&nbsp;&nbsp;&nbsp;<input type="submit" value="' . __( 'Subscribe', 'redux-framework' ) . '" name="subscribe" id="mc-embedded-subscribe" class="button button-primary"></p></form>';
+                $content .= '<form action="' . 'http://' . 'reduxframework.us7.list-manage2.com/subscribe/post?u=564f5178f6cc288064f332efd&amp;id=ace5bbc1f9&SOURCE=panel" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate><p style="text-align: center;"><label for="mce-EMAIL">' . __( 'Email address', 'redux-framework' ) . ' </label><input type="email" value="" name="EMAIL" class="required email" id="mce-EMAIL"><input type="hidden" value="panel" name="SOURCE">&nbsp;&nbsp;&nbsp;&nbsp;<input type="submit" value="' . __( 'Subscribe', 'redux-framework' ) . '" name="subscribe" id="mc-embedded-subscribe" class="button button-primary"></p></form>';
                 $opt_arr = array(
                     'content'      => $content,
                     'position'     => array( 'edge' => 'top', 'align' => 'center' ),
@@ -310,14 +309,15 @@
 
 
                 $version = explode( '.', PHP_VERSION );
-                $version = array( 'major'   => $version[0],
-                                  'minor'   => $version[0] . '.' . $version[1],
-                                  'release' => PHP_VERSION
+                $version = array(
+                    'major'   => $version[0],
+                    'minor'   => $version[0] . '.' . $version[1],
+                    'release' => PHP_VERSION
                 );
 
-                $user_query = new WP_User_Query( array( 'blog_id' => $blog_id, 'count_total' => true, ) );
-                $comments_query = new WP_Comment_Query(); 
-                $data = array(
+                $user_query     = new WP_User_Query( array( 'blog_id' => $blog_id, 'count_total' => true, ) );
+                $comments_query = new WP_Comment_Query();
+                $data           = array(
                     '_id'       => $this->options['hash'],
                     'localhost' => ( $_SERVER['REMOTE_ADDR'] === '127.0.0.1' ) ? 1 : 0,
                     'php'       => $version,
@@ -388,7 +388,7 @@
                     $response = wp_remote_post( 'https://redux-tracking.herokuapp.com', $args );
 
                     // Store for a week, then push data again.
-                    set_transient( 'redux_tracking_cache', true, 7 * 60 * 60 * 24 );
+                    set_transient( 'redux_tracking_cache', true, WEEK_IN_SECONDS );
                 }
             }
 

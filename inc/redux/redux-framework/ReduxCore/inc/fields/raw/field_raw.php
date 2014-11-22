@@ -49,13 +49,14 @@
                 echo '<fieldset id="' . $this->parent->args['opt_name'] . '-' . $this->field['id'] . '" class="redux-field redux-container-' . $this->field['type'] . ' ' . $this->field['class'] . '" data-id="' . $this->field['id'] . '">';
 
                 if ( ! empty( $this->field['include'] ) && file_exists( $this->field['include'] ) ) {
-                    include( $this->field['include'] );
+                    require_once( $this->field['include'] );
                 }
 
                 if ( ! empty( $this->field['content'] ) && isset( $this->field['content'] ) ) {
                     if ( isset( $this->field['markdown'] ) && $this->field['markdown'] == true ) {
                         require_once dirname( __FILE__ ) . "/parsedown.php";
-                        echo Parsedown::instance()->parse( $this->field['content'] );
+                        $Parsedown = new Parsedown();
+                        echo $Parsedown->text( $this->field['content'] );
                     } else {
                         echo $this->field['content'];
                     }

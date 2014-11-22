@@ -317,10 +317,15 @@
                         if ( $key == "units" ) {
                             continue;
                         }
-                        if ( empty( $value ) ) {
-                            $value = '0';
+
+                        // Strip off any alpha for is_numeric test - kp
+                        $num_no_alpha = preg_replace('/[^\d.-]/', '', $value);
+                        
+                        // Output if it's a numeric entry
+                        if ( isset( $value ) && is_numeric( $num_no_alpha ) ) {
+                            $style .= $key . ':' . $value . ';';
                         }
-                        $style .= $key . ':' . $value . ';';
+
                     }
                 } else {
                     $this->value['top']    = isset( $this->value['top'] ) ? $this->value['top'] : 0;

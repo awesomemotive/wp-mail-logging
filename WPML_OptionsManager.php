@@ -394,7 +394,7 @@ class WPML_OptionsManager {
 	public function LogMenu() {
 	    global $wp_version;
 
-    	if ( !$this->isUserRoleEqualOrBetterThan( $this->getSetting( 'can-see-submission-data', 'Administrator' ) ) ) {
+    	if ( !current_user_can( $this->getSetting( 'can-see-submission-data', 'manage_options' ) ) ) {
     		wp_die(__('You do not have sufficient permissions to access this page.', 'wpml'));
     	}
     	
