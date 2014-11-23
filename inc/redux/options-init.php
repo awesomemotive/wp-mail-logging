@@ -255,7 +255,7 @@ if (!class_exists('admin_folder_Redux_Framework_config')) {
                			'id'        => 'can-see-submission-data',
            				'type'      => 'select',
            				'data'      => 'capabilities',
-           				'default' 	=> 'manage_options',
+						'default' 	=> 'manage_options',
            				'title'     => __('Can See Submission data', 'wpml'), 
            				'subtitle'  => __('Select the minimum role.', 'wpml'),
                 			
