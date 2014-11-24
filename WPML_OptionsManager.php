@@ -405,11 +405,7 @@ class WPML_OptionsManager {
     	?>
     	 <div class="wrap">
             <h2><?php echo $this->getPluginDisplayName(); echo ' '; _e('Log', 'wpml'); ?></h2>
-			<?php
-			$emailLoggingListTable = new Email_Logging_ListTable();
-			$emailLoggingListTable->prepare_items();
-			?>
-
+			
 			<div id="wp-mail-logging-modal-wrap">
 				<div id="wp-mail-logging-modal-backdrop"></div>
 				<div id="wp-mail-logging-modal-content-wrap">
@@ -443,8 +439,12 @@ class WPML_OptionsManager {
 
 			<form id="email-list" method="get">
 				<input type="hidden" name="page" value="<?php echo $_REQUEST['page'] ?>" />
-				<?php
-				$emailLoggingListTable->display();
+					<?php
+					$search = ( isset( $_REQUEST['s'] ) ) ? $_REQUEST['s'] : false;
+					$emailLoggingListTable = new Email_Logging_ListTable();
+					$emailLoggingListTable->prepare_items( $search );
+					$emailLoggingListTable->search_box( __( 'Search' ), 's' );
+					$emailLoggingListTable->display();
 				?>
 			</form>
 		</div> 
