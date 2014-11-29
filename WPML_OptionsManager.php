@@ -298,6 +298,12 @@ class WPML_OptionsManager {
 				<li>Developer: Boost your development performance by keeping track of sent mails from your WordPress site.</li>
 				<li>Developer: Use Filters that are provided to extend the columns.</li>
 			</ul>
+			<h3>Contributors</h3>
+			<p>This plugin is open source and some people helped to make it better:</p>
+			<ul>
+				<li>tripflex</li>
+				<li><a href="http://www.grafixone.co.za" title="GrafixONE">Andr&eacute; Groenewald</a> (Icon)</li>
+			</ul>
 			<h3>Donate</h3>
 			<p>Please consider to make a donation if you like the plugin. I spent a lot of time for support, enhancements and updates in general.</p>
 			<a title="Donate" href="http://no3x.de/web/donate">Donate</a>
