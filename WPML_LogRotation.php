@@ -7,7 +7,7 @@
  */
 class WPML_LogRotation {
 	
-	const WPML_LOGROTATION_SCHEDULE_HOOK = 'LogRotationScheduleHook';
+	const WPML_LOGROTATION_SCHEDULE_HOOK = 'wpml_log_rotation';
 	const WPML_LOGROTATION_SCHEDULE = 'LogRotationSchedule';
 	
 	public static function init() {
