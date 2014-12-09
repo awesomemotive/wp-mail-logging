@@ -55,17 +55,17 @@ class WPML_LogRotation {
 		if ( $wpml_settings['log-rotation-limit-amout'] == '1') {
 			$keep = $wpml_settings['log-rotation-limit-amout-keep'];
 			if ( $keep > 0 ) {
-				$wpdb->query(  
-					"DELETE p
-						FROM 
-	       			$tableName AS p
-	  					JOIN
-	       			( SELECT mail_id 
-	         			FROM $tableName 
-	         		ORDER BY mail_id       
-	           			LIMIT 1 OFFSET $keep
-	       			) AS lim
-	     			ON p.mail_id < lim.mail_id;"
+				$wpdb->query(
+						"DELETE p
+						FROM
+						$tableName AS p
+						JOIN
+						( SELECT mail_id
+						FROM $tableName
+						ORDER BY mail_id DESC
+						LIMIT 1 OFFSET $keep
+				) AS lim
+						ON p.mail_id <= lim.mail_id;"
 				);
 			}
 		}
