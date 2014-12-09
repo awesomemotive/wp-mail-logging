@@ -5,7 +5,7 @@ Tags: mail, email, log, logging, debug, list, store, collect, view
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 Requires at least: 3.0
-Tested up to: 4.0
+Tested up to: 4.0.1
 Stable tag: 1.3.2
 
 Logs each email sent by WordPress.
@@ -17,9 +17,9 @@ Logs each email sent by WordPress. This can be useful if you don't want to lose 
 [youtube http://www.youtube.com/watch?v=zU858JxhczA]
 
 Features of the plugin include:
-
-* Zero-configuration - just install and enjoy
-* Complete list of sent mails
+* Complete list of sent mails - view and search through the mails.
+* Zero-configuration - just install and enjoy.
+* Log rotation - decide which emails you want to keep.
 * Developer: Filters are provided to extend the columns. *
 
 **Follow this plugin on [GitHub](https://github.com/No3x/wp-mail-logging)**
@@ -33,7 +33,8 @@ Just install and activate wp-mail-logging. The plugin will do the work for you! 
 
 
 == Frequently Asked Questions ==
-
+= How do I know the Mail was delivered? =
+The logged email has been sent by WordPress but please note this does NOT mean it has been delivered. With the given functionality of WordPress you can't determine if a mail was sent successfully. 
 
 == Screenshots ==
 1. The List
@@ -42,26 +43,33 @@ Just install and activate wp-mail-logging. The plugin will do the work for you! 
 
 
 == Changelog ==
+= 1.4.0, December 22, 2014  =
+- New: Log Rotation
+- New: Search
+- Tweak: Settings
+- Fix: international characters are supported now
+- Fix: Mandrill support
+
 = 1.3.2, September 21, 2014  =
-- Fixed HTML mails broken in previous version.
+- Fix: HTML mails broken in previous version.
 
 = 1.3.1, September 12, 2014  =
-- Fixed angle brackets notation support (e.g. John Doe <john.doe@example.org>).
+- Fix: angle brackets notation support (e.g. John Doe <john.doe@example.org>).
 
 = 1.3, August 24, 2014  =
-- Performance improvement
-- Fixed screen option for mails per page
-- New clean mail listing including:
-  Modal window for mail details.
+- New: clean mail listing including:
+  Modal window for mail details. 
   Attachment support with appropriate icon for mime type.
+- Tweak: Performance improvement
+- Fix: screen option for mails per page
 
 = 1.2, August 12, 2014  =
-- Fixed deletion of mails regardless of options (on update to 1.2 your mails will be deleted hopefully this happens for the last time)
-- Improved help & stability
-- Added video
+- New: video
+- Tweak: Improved help & stability
+- Fix: deletion of mails regardless of options (on update to 1.2 your mails will be deleted hopefully this happens for the last time)
 
 = 1.1 =
-- Modified readme. 
+- Tweak: Modified readme. 
 
 = 1.0 =
 - Initial Revision
