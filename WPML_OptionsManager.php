@@ -100,6 +100,14 @@ class WPML_OptionsManager {
     public function getPluginDisplayName() {
         return get_class($this);
     }
+    
+    /**
+     * @return string slug of the plugin to use as identifier.
+     * Just returns the class name in lowercase.
+     */
+    public function getPluginSlug() {
+        return strtolower( get_class($this) );
+    }
 
     /**
      * Get the prefixed version input $name suitable for storing in WP options
@@ -261,7 +269,7 @@ class WPML_OptionsManager {
 	    $pluginIcon = '';
 	    if ( $wp_version >= 3.8 ) $pluginIcon = 'dashicons-email-alt';
 
-        $pluginNameSlug = strtolower( get_class($this) );
+        $pluginNameSlug = $this->getPluginSlug();
         //create new top-level menu
         $wp_logging_list_page = add_menu_page(__('WP Mail Log', 'wpml'),
 									          __('WP Mail Log', 'wpml'),
@@ -334,7 +342,7 @@ class WPML_OptionsManager {
     	global $hook_suffix;
     	
     	// Just add if we are at the plugin page
-    	if( strpos($hook_suffix, get_class($this) . '_log' ) == false )
+    	if( strpos($hook_suffix, $this->getPluginSlug() . '_log' ) == false )
     		return $contextual_help;
     	
     	// The add_help_tab function for screen was introduced in WordPress 3.3.
