@@ -43,7 +43,7 @@ class WPML_Plugin extends WPML_LifeCycle {
 				`attachments` VARCHAR(800) NOT NULL DEFAULT '0',
 				`plugin_version` VARCHAR(200) NOT NULL DEFAULT '0',
 				PRIMARY KEY (`mail_id`) 
-            );");	
+            ) DEFAULT CHARACTER SET = utf8 DEFAULT COLLATE utf8_general_ci;");	
     }
     
 
@@ -76,6 +76,9 @@ class WPML_Plugin extends WPML_LifeCycle {
     		}
     		if ($this->isVersionLessThan($savedVersion, '1.3')) {
     			$wpdb->query("ALTER TABLE `$tableName` MODIFY COLUMN `attachments` VARCHAR(800) NOT NULL DEFAULT '0'");
+    		}
+    		if ($this->isVersionLessThan($savedVersion, '1.4')) {
+    			$wpdb->query("ALTER TABLE `$tableName` CHARACTER SET utf8 COLLATE utf8_general_ci;");
     		}
     	}
     	
