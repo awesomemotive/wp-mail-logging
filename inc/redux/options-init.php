@@ -359,7 +359,7 @@ if (!class_exists('admin_folder_Redux_Framework_config')) {
                 'menu_title' => 'Settings',
                 'allow_sub_menu' => true,
 				'page_parent' => 'wpml_plugin_log',
-                'customizer' => true,
+                'customizer' => false,
                 'default_mark' => '*',
                 'hints' => 
                 array(
