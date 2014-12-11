@@ -214,7 +214,7 @@ class WPML_OptionsManager {
      * @return string a WP capability or '' if unknown input role
      */
     protected function roleToCapability($roleName) {
-        switch ( $roleName ) {
+        switch ( ucfirst( $roleName ) ) {
             case 'Super Admin':
                 return 'manage_options';
             case 'Administrator':
@@ -270,10 +270,12 @@ class WPML_OptionsManager {
 	    if ( $wp_version >= 3.8 ) $pluginIcon = 'dashicons-email-alt';
 
         $pluginNameSlug = $this->getPluginSlug();
+        $capability = $this->roleToCapability('Administrator');
+        
         //create new top-level menu
         $wp_logging_list_page = add_menu_page(__('WP Mail Log', 'wpml'),
 									          __('WP Mail Log', 'wpml'),
-						                      'administrator',
+						                      $capability,
 						                      $pluginNameSlug . '_log', 
 						                      array(&$this, 'LogMenu'),
 							                  $pluginIcon
@@ -285,7 +287,7 @@ class WPML_OptionsManager {
 	    add_submenu_page($pluginNameSlug . '_log',
 	    				       	__('About', 'wpml'),
 	    				        __('About', 'wpml'),
-	    				        'administrator',
+	    				        $capability,
 	    		        		$pluginNameSlug . '_about',
 	    						array(&$this, 'LogSubMenuAbout') );
 
