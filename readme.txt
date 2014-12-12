@@ -14,13 +14,15 @@ Logs each email sent by WordPress.
 
 Logs each email sent by WordPress. This can be useful if you don't want to lose such mail contents. It can also be useful for debugging purposes while development.
 
-[youtube http://www.youtube.com/watch?v=zU858JxhczA]
-
 Features of the plugin include:
-* Complete list of sent mails - view and search through the mails.
-* Zero-configuration - just install and enjoy.
-* Log rotation - decide which emails you want to keep.
-* Developer: Filters are provided to extend the columns. *
+
+ * Complete list of sent mails - view and search through the mails.
+ * Zero-configuration - just install and enjoy.
+ * Log rotation - decide which emails you want to keep.
+ * Developer: Boost your development performance by keeping track of sent mails.
+ * Developer: Filters are provided to extend the columns.
+
+[youtube http://www.youtube.com/watch?v=zU858JxhczA]
 
 **Follow this plugin on [GitHub](https://github.com/No3x/wp-mail-logging)**
 
