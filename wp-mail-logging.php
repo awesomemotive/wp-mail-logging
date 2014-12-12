@@ -39,22 +39,22 @@ $WPML_minimalRequiredPhpVersion = '5.0';
  * an error message on the Admin page
  */
 function WPML_noticePhpVersionWrong() {
-    global $WPML_minimalRequiredPhpVersion;
-    echo '<div class="updated fade">' .
-      __('Error: plugin "WP Mail Logging" requires a newer version of PHP to be running.',  'wpml').
-            '<br/>' . __('Minimal version of PHP required: ', 'wpml') . '<strong>' . $WPML_minimalRequiredPhpVersion . '</strong>' .
-            '<br/>' . __('Your server\'s PHP version: ', 'wpml') . '<strong>' . phpversion() . '</strong>' .
-         '</div>';
+	global $WPML_minimalRequiredPhpVersion;
+	echo '<div class="updated fade">' .
+		__('Error: plugin "WP Mail Logging" requires a newer version of PHP to be running.',  'wpml').
+		'<br/>' . __('Minimal version of PHP required: ', 'wpml') . '<strong>' . $WPML_minimalRequiredPhpVersion . '</strong>' .
+		'<br/>' . __('Your server\'s PHP version: ', 'wpml') . '<strong>' . phpversion() . '</strong>' .
+		'</div>';
 }
 
 
 function WPML_PhpVersionCheck() {
-    global $WPML_minimalRequiredPhpVersion;
-    if (version_compare(phpversion(), $WPML_minimalRequiredPhpVersion) < 0) {
-        add_action('admin_notices', 'WPML_noticePhpVersionWrong');
-        return false;
-    }
-    return true;
+	global $WPML_minimalRequiredPhpVersion;
+	if (version_compare(phpversion(), $WPML_minimalRequiredPhpVersion) < 0) {
+		add_action('admin_notices', 'WPML_noticePhpVersionWrong');
+		return false;
+	}
+	return true;
 }
 
 
@@ -66,8 +66,8 @@ function WPML_PhpVersionCheck() {
  * @return void
  */
 function WPML_i18n_init() {
-    $pluginDir = dirname(plugin_basename(__FILE__));
-    load_plugin_textdomain('wpml', false, $pluginDir . '/languages/');
+	$pluginDir = dirname(plugin_basename(__FILE__));
+	load_plugin_textdomain('wpml', false, $pluginDir . '/languages/');
 }
 
 
@@ -82,7 +82,7 @@ WPML_i18n_init();
 // Next, run the version check.
 // If it is successful, continue with initialization for this plugin
 if (WPML_PhpVersionCheck()) {
-    // Only load and run the init function if we know PHP version can parse it
-    include_once('wp-mail-logging_init.php');
-    WPML_init(__FILE__);
+	// Only load and run the init function if we know PHP version can parse it
+	include_once('wp-mail-logging_init.php');
+	WPML_init(__FILE__);
 }

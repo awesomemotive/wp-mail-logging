@@ -6,15 +6,15 @@
  * @since 1.4
  */
 class WPML_LogRotation {
-	
+
 	const WPML_LOGROTATION_SCHEDULE_HOOK = 'wpml_log_rotation';
 	const WPML_LOGROTATION_SCHEDULE = 'LogRotationSchedule';
-	
+
 	public static function init() {
 		add_action( self::WPML_LOGROTATION_SCHEDULE_HOOK , array('WPML_LogRotation', self::WPML_LOGROTATION_SCHEDULE) );
 		new WPML_LogRotation();
 	}
-	
+
 	public function __construct() {
 		global $wpml_settings;
 		$this->unschedule();
@@ -24,7 +24,7 @@ class WPML_LogRotation {
 			$this->unschedule();
 		}
 	}
-	
+
 	/**
 	 * Schedules an event.
 	 * @since 1.4
@@ -34,7 +34,7 @@ class WPML_LogRotation {
 			wp_schedule_event( time(), 'hourly', self::WPML_LOGROTATION_SCHEDULE_HOOK );
 		}
 	}
-	
+
 	/**
 	 * Unschedules an event.
 	 * @since 1.4
@@ -43,7 +43,7 @@ class WPML_LogRotation {
 		$timestamp = wp_next_scheduled( self::WPML_LOGROTATION_SCHEDULE_HOOK );
 		wp_unschedule_event( $timestamp, self::WPML_LOGROTATION_SCHEDULE_HOOK );
 	}
-	
+
 	/**
 	 * Executes log rotation periodically.
 	 * @since 1.4
@@ -51,12 +51,12 @@ class WPML_LogRotation {
 	static function LogRotationSchedule() {
 		global $wpml_settings, $wpdb;
 		$tableName = WPML_Plugin::getTablename( 'mails' );
-		
+
 		if ( $wpml_settings['log-rotation-limit-amout'] == '1') {
 			$keep = $wpml_settings['log-rotation-limit-amout-keep'];
 			if ( $keep > 0 ) {
 				$wpdb->query(
-						"DELETE p
+					"DELETE p
 						FROM
 						$tableName AS p
 						JOIN
@@ -69,7 +69,7 @@ class WPML_LogRotation {
 				);
 			}
 		}
-		
+
 		if ( $wpml_settings['log-rotation-delete-time'] == '1') {
 			$days = $wpml_settings['log-rotation-delete-time-days'];
 			if ( $days > 0 ) {
