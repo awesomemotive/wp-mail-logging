@@ -208,7 +208,7 @@ class WPML_OptionsManager {
     }
 
     /**
-     * Given a WP role name, return a WP capability which only that role and roles above it have
+     * Given a WP role name (case insensitive), return a WP capability which only that role and roles above it have.
      * http://codex.wordpress.org/Roles_and_Capabilities
      * @param  $roleName
      * @return string a WP capability or '' if unknown input role
