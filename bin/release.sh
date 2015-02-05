@@ -106,14 +106,14 @@ echo "Versions match in readme.txt and $MAINFILE. Let's proceed..."
 echo "Changing to $GITPATH"
 cd $GITPATH
 # GaryJ: Commit message variable not needed . Hard coded for SVN trunk commit for consistency.
-#echo -e "Enter a commit message for this new version: \c"
-#read COMMITMSG
+echo -e "Enter a commit message for this new version: \c"
+read COMMITMSG
 # GaryJ: git flow release finish already covers this commit.
-#git commit -am "$COMMITMSG"
+git commit -am "$COMMITMSG"
 
 # GaryJ: git flow release finish already covers this tag creation.
-#echo "Tagging new version in git"
-#git tag -a "release/$NEWVERSION1" -m "Tagging version $NEWVERSION1"
+echo "Tagging new version in git"
+git tag -a "release/$NEWVERSION1" -m "Tagging version $NEWVERSION1"
 
 echo "Pushing git master to origin, with tags"
 git push origin master
@@ -127,6 +127,7 @@ svn update --quiet $SVNPATH/trunk --set-depth infinity
 echo "Ignoring GitHub specific files"
 svn propset svn:ignore "README.md
 CONTRIBUTING.md
+README.md
 phpunit.xml
 Thumbs.db
 .travis.yml
