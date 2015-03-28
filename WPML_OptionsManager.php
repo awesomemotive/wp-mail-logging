@@ -270,7 +270,7 @@ class WPML_OptionsManager {
 	    if ( $wp_version >= 3.8 ) $pluginIcon = 'dashicons-email-alt';
 
         $pluginNameSlug = $this->getPluginSlug();
-        $capability = $this->roleToCapability('Administrator');
+        $capability = $this->getSetting( 'can-see-submission-data', 'manage_options' );
         
         //create new top-level menu
         $wp_logging_list_page = add_menu_page(__('WP Mail Log', 'wpml'),
