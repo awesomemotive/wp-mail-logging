@@ -307,7 +307,7 @@ if (!class_exists('admin_folder_Redux_Framework_config')) {
                 			'desc'      	=> __('Delete mails older than days...', 'wpml'),
                 			'default'       => 30,
                 			'min'           => 1,
-                			'step'          => 10,
+                			'step'          => 7,
                 			'max'           => 400,
                 			'display_value' => 'text'
                 	),
