@@ -31,7 +31,7 @@ class WPML_OptionsManager {
 	public function getSetting($settingName, $default = null) {
 		global $wpml_settings;
 
-		if( key_exists($settingName, $wpml_settings)) {
+		if( array_key_exists($settingName, $wpml_settings)) {
 			$retVal = $wpml_settings[$settingName];
 		}
 		if (!isset($retVal) && $default !== null) {
