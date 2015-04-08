@@ -61,10 +61,35 @@
                 $defaults    = array(
                     'title'  => '',
                     'desc'   => '',
-                    'notice' => false,
-                    'style'  => ''
+                    'notice' => true,
+                    'style'  => '',
+                    'color'  => '',
                 );
+
                 $this->field = wp_parse_args( $this->field, $defaults );
+
+                $styles = array(
+                    'normal',
+                    'info',
+                    'warning',
+                    'success',
+                    'critical',
+                    'custom'
+                );
+
+                if (!in_array($this->field['style'], $styles)) {
+                    $this->field['style'] = 'normal';
+                }
+                if ($this->field['style'] == "custom") {
+                    if (!empty($this->field['color']) ) {
+                        $this->field['color'] = "border-color:".$this->field['color'].';';
+                    } else {
+                        $this->field['style'] = 'normal';
+                        $this->field['color'] = "";
+                    }
+                } else {
+                    $this->field['color'] = "";
+                }
 
                 if ( empty( $this->field['desc'] ) && ! empty( $this->field['default'] ) ) {
                     $this->field['desc'] = $this->field['default'];
@@ -87,16 +112,14 @@
                         $this->field['class'] .= ' redux-info-field';
                     }
 
-                    if ( empty( $this->field['style'] ) ) {
-                        $this->field['style'] = 'normal';
-                    }
+
 
                     $this->field['style'] = 'redux-' . $this->field['style'] . ' ';
                 }
 
                 $indent = ( isset( $this->field['sectionIndent'] ) && $this->field['sectionIndent'] ) ? ' form-table-section-indented' : '';
 
-                echo '</td></tr></table><div id="info-' . $this->field['id'] . '" class="' . $this->field['style'] . $this->field['class'] . ' redux-field-' . $this->field['type'] . $indent . '">';
+                echo '</td></tr></table><div id="info-' . $this->field['id'] . '" class="' . $this->field['style'] . $this->field['class'] . ' redux-field-' . $this->field['type'] . $indent . '"'.( !empty($this->field['color']) ? ' style="'.$this->field['color'].'"' : '' ).'>';
 
                 if ( ! empty( $this->field['raw_html'] ) && $this->field['raw_html'] ) {
                     echo $this->field['desc'];
@@ -118,7 +141,7 @@
                     }
                 }
 
-                echo '</div><table class="form-table no-border" style="margin-top: 0;"><tbody><tr style="border-bottom:0;"><th style="padding-top:0;"></th><td style="padding-top:0;">';
+                echo '</div><table class="form-table no-border" style="margin-top: 0;"><tbody><tr style="border-bottom:0; display:none;"><th style="padding-top:0;"></th><td style="padding-top:0;">';
             }
 
             /**
@@ -130,13 +153,15 @@
              * @return      void
              */
             public function enqueue() {
-
-                wp_enqueue_style(
-                    'redux-field-info-css',
-                    ReduxFramework::$_url . 'inc/fields/info/field_info.css',
-                    time(),
-                    true
-                );
+                if ($this->parent->args['dev_mode']) {
+                    wp_enqueue_style(
+                        'redux-field-info-css',
+                        ReduxFramework::$_url . 'inc/fields/info/field_info.css',
+                        array(),
+                        time(),
+                        'all'
+                    );
+                }
             }
         }
     }
