@@ -5,8 +5,8 @@ Tags: mail, email, log, logging, debug, list, store, collect, view
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 Requires at least: 3.0
-Tested up to: 4.0.1
-Stable tag: 1.4.1
+Tested up to: 4.1.1
+Stable tag: 1.4.2
 
 Logs each email sent by WordPress.
 
@@ -45,6 +45,9 @@ The logged email has been sent by WordPress but please note this does NOT mean i
 
 
 == Changelog ==
+= 1.4.2, April 4, 2015  =
+- Tweak: Library updated - settings load speed improved.
+
 = 1.4.1, March 28, 2015  =
 - Fix: Restrict submission data works now.
 - Fix: Granularity of cleanup by time slider changed to 7.
