@@ -74,7 +74,7 @@
             // Please update the build number with each push, no matter how small.
             // This will make for easier support when we ask users what version they are using.
 
-            public static $_version = '3.5.0';
+            public static $_version = '3.5.0.6';
             public static $_dir;
             public static $_url;
             public static $_upload_dir;
@@ -193,7 +193,6 @@
              * @return \ReduxFramework
              */
             public function __construct( $sections = array(), $args = array(), $extra_tabs = array() ) {
-
                 // Disregard WP AJAX 'heartbeat'call.  Why waste resources?
                 if ( isset ( $_POST ) && isset ( $_POST['action'] ) && $_POST['action'] == 'heartbeat' ) {
 
@@ -2064,21 +2063,6 @@
                                 //$display = false;
                             }
 
-
-                            // TODO AFTER GROUP WORKS - Remove IF statement
-//                            if ( $field['type'] == "group" && isset( $_GET['page'] ) && $_GET['page'] == $this->args['page_slug'] ) {
-//                                if ( $this->args['dev_mode'] ) {
-//                                    $this->admin_notices[] = array(
-//                                        'type'    => 'error',
-//                                        'msg'     => 'The <strong>group field</strong> has been <strong>removed</strong> while we retool it for improved performance.',
-//                                        'id'      => 'group_err',
-//                                        'dismiss' => true,
-//                                    );
-//                                }
-//                                continue; // Disabled for now
-//                            }
-
-
                             if ( isset ( $field['permissions'] ) ) {
 
                                 if ( ! current_user_can( $field['permissions'] ) ) {
@@ -2118,7 +2102,7 @@
 
                             // Set the defaults to the value if not present
                             $doUpdate = false;
-
+                            
                             // Check fields for values in the default parameter
                             if ( ! isset ( $this->options[ $field['id'] ] ) && isset ( $field['default'] ) ) {
                                 $this->options_defaults[ $field['id'] ] = $this->options[ $field['id'] ] = $field['default'];
@@ -2695,23 +2679,43 @@
                 if ( ! empty ( $_POST['data'] ) && ! empty ( $redux->args['opt_name'] ) ) {
 
                     $values        = array();
+                    //if (function_exists('get_magic_quotes_gpc') && get_magic_quotes_gpc()) {
+                    //    $process = array(&$_GET, &$_POST, &$_COOKIE, &$_REQUEST);
+                    //    while (list($key, $val) = each($process)) {
+                    //        foreach ($val as $k => $v) {
+                    //            unset($process[$key][$k]);
+                    //            if (is_array($v)) {
+                    //                $process[$key][stripslashes($k)] = $v;
+                    //                $process[] = &$process[$key][stripslashes($k)];
+                    //            } else {
+                    //                $process[$key][stripslashes($k)] = stripslashes($v);
+                    //            }
+                    //        }
+                    //    }
+                    //    unset($process);
+                    //}
                     $_POST['data'] = stripslashes( $_POST['data'] );
                     parse_str( $_POST['data'], $values );
                     $values = $values[ $redux->args['opt_name'] ];
 
-                    $beforeDeep = $values;
-                    $values     = array_map( 'stripslashes_deep', $values );
 
-                    // Ace editor hack for < PHP 5.4. Oy
-                    if ( isset( $this->fields['ace_editor'] ) ) {
-                        foreach ( $this->fields['ace_editor'] as $id => $v ) {
-                            if ( version_compare( phpversion(), '5.4', '<' ) ) {
-                                $values[ $id ] = stripslashes( $beforeDeep[ $id ] );
-                            } else {
-                                $values[ $id ] = $beforeDeep[ $id ];
-                            }
-                        }
+                    if ( function_exists('get_magic_quotes_gpc') && get_magic_quotes_gpc() ) {
+                        $values = array_map( 'stripslashes_deep', $values );
                     }
+
+                    //$beforeDeep = $values;
+                    //// Ace editor hack for < PHP 5.4. Oy
+                    //if ( isset( $this->fields['ace_editor'] ) ) {
+                    //    if ( function_exists( 'get_magic_quotes_gpc' ) && get_magic_quotes_gpc() ) {
+                    //        foreach ( $this->fields['ace_editor'] as $id => $v ) {
+                    //            if ( version_compare( phpversion(), '5.4', '<' ) ) {
+                    //                $values[ $id ] = stripslashes( $beforeDeep[ $id ] );
+                    //            } else {
+                    //                $values[ $id ] = $beforeDeep[ $id ];
+                    //            }
+                    //        }
+                    //    }
+                    //}
 
                     if ( ! empty ( $values ) ) {
 

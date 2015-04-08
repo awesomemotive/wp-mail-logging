@@ -40,17 +40,14 @@
              * @return      void
              */
             function __construct( $field = array(), $value = '', $parent ) {
-
-
+                
                 $this->parent   = $parent;
                 $this->field    = $field;
                 $this->value    = $value;
                 $this->is_field = $this->parent->extensions['import_export']->is_field;
 
-                if ( empty( $this->extension_dir ) ) {
-                    $this->extension_dir = trailingslashit( str_replace( '\\', '/', dirname( __FILE__ ) ) );
-                    $this->extension_url = site_url( str_replace( trailingslashit( str_replace( '\\', '/', ABSPATH ) ), '', $this->extension_dir ) );
-                }
+                $this->extension_dir = ReduxFramework::$_dir . 'inc/extensions/import_export/import_export/';
+                $this->extension_url = ReduxFramework::$_url . 'inc/extensions/import_export/import_export/';
 
                 // Set default args for this field to avoid bad indexes. Change this to anything you use.
                 $defaults    = array(
@@ -159,7 +156,7 @@
 
                 wp_enqueue_script(
                     'redux-import-export',
-                    $this->extension_url . 'field_import_export' . Redux_Functions::isMin() . '.js',
+                    $this->extension_url . 'import_export/field_import_export' . Redux_Functions::isMin() . '.js',
                     array( 'jquery' ),
                     ReduxFramework_extension_import_export::$version,
                     true
@@ -167,7 +164,7 @@
 
                 wp_enqueue_style(
                     'redux-import-export',
-                    $this->extension_url . 'field_import_export.css',
+                    $this->extension_url . 'import_export/field_import_export.css',
                     time(),
                     true
                 );

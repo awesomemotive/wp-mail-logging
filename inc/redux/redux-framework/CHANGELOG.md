@@ -1,5 +1,27 @@
 # Redux Framework Changelog
 
+## 3.5.0.6
+* Fixed     #2127 - Elusive icons not working in footer as before.
+* Fixed     Issue where Status tab not showing extension versions properly.
+* Fixed     Issue in support URL not passing data correctly.
+
+## 3.5.0.5
+* Fixed     Support URLs now work even if max_input_vars is way low in PHP 5.3+
+
+## 3.5.0.4
+* Fixed     #2197 - Import/export not loading proper for those who have opted to install Wordpress in ways it was never intended.
+
+## 3.5.0.3
+* Fixed:    'Generate Support URL' feature kicking back error. 
+
+## 3.5.0.2
+* Fixed     Sortable checkbox labels not displaying properly.
+* Fixed     Sortable textbox not displaying default value as placeholder.
+* Updated:  sample-config with accurate example for both sortable modes.
+
+## 3.5.0.1
+* Fixed     #2181 - Fixed issue with Ajax Save when PHP 5.3 Magic Quotes were disabled.
+
 ## 3.5.0     OFFICIAL RELEASE
             Various fixes and improvements for release.
 

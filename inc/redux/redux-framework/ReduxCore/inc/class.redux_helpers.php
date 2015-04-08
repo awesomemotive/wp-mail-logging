@@ -65,11 +65,13 @@
                 }
             }
 
-            public static function isLocalHost(){
-                return ($_SERVER['REMOTE_ADDR'] === '127.0.0.1' || $_SERVER['REMOTE_ADDR'] === 'localhost' ) ? 1 : 0;
+            public static function isLocalHost() {
+                return ( $_SERVER['REMOTE_ADDR'] === '127.0.0.1' || $_SERVER['REMOTE_ADDR'] === 'localhost' ) ? 1 : 0;
             }
-            
+
             public static function getTrackingObject() {
+                global $wpdb;
+
                 $hash = md5( network_site_url() . '-' . $_SERVER['REMOTE_ADDR'] );
 
                 global $blog_id, $wpdb;
@@ -173,16 +175,18 @@
                         $software[ strtolower( $chunk[0] ) ] = $chunk[1];
                     }
                 }
-                $software['full']    = $_SERVER['SERVER_SOFTWARE'];
-                $data['environment'] = $software;
-                if ( function_exists( 'mysqli_get_server_info' ) ) {
-                    $link = mysqli_connect() or die( "Error " . mysqli_error( $link ) );
-                    $data['environment']['mysql'] = mysqli_get_server_info( $link );
-                } else if ( class_exists( 'PDO' ) && method_exists( 'PDO', 'getAttribute' ) ) {
-                    $data['environment']['mysql'] = PDO::getAttribute( PDO::ATTR_SERVER_VERSION );
-                } else {
-                    $data['environment']['mysql'] = mysql_get_server_info();
-                }
+                $software['full']             = $_SERVER['SERVER_SOFTWARE'];
+                $data['environment']          = $software;
+                $data['environment']['mysql'] = $wpdb->db_version();
+//                if ( function_exists( 'mysqli_get_server_info' ) ) {
+//                    $link = mysqli_connect() or die( "Error " . mysqli_error( $link ) );
+//                    $data['environment']['mysql'] = mysqli_get_server_info( $link );
+//                } else if ( class_exists( 'PDO' ) && method_exists( 'PDO', 'getAttribute' ) ) {
+//                    $data['environment']['mysql'] = PDO::getAttribute( PDO::ATTR_SERVER_VERSION );
+//                } else {
+//                    $data['environment']['mysql'] = mysql_get_server_info();
+//                }
+
                 if ( empty( $data['developer'] ) ) {
                     unset( $data['developer'] );
                 }
@@ -366,6 +370,7 @@
                 $sysinfo['redux_ver']            = esc_html( ReduxFramework::$_version );
                 $sysinfo['redux_data_dir']       = ReduxFramework::$_upload_dir;
                 $sysinfo['redux_data_writeable'] = self::makeBoolStr( @fopen( ReduxFramework::$_upload_dir . 'test-log.log', 'a' ) );
+                $sysinfo['wp_content_url']       = WP_CONTENT_URL;
                 $sysinfo['wp_ver']               = get_bloginfo( 'version' );
                 $sysinfo['wp_multisite']         = is_multisite();
                 $sysinfo['permalink_structure']  = get_option( 'permalink_structure' ) ? get_option( 'permalink_structure' ) : 'Default';
@@ -405,8 +410,9 @@
                 );
 
                 $sysinfo['server_info'] = esc_html( $_SERVER['SERVER_SOFTWARE'] );
-                $sysinfo['localhost']   = self::makeBoolStr( self::isLocalHost());
+                $sysinfo['localhost']   = self::makeBoolStr( self::isLocalHost() );
                 $sysinfo['php_ver']     = function_exists( 'phpversion' ) ? esc_html( phpversion() ) : 'phpversion() function does not exist.';
+                $sysinfo['abspath']     = ABSPATH;
 
                 if ( function_exists( 'ini_get' ) ) {
                     $sysinfo['php_mem_limit']      = size_format( self::let_to_num( ini_get( 'memory_limit' ) ) );
@@ -514,7 +520,13 @@
                                 }
                             }
                         }
+
                         $sysinfo['redux_instances'][ $inst ]['extensions'] = Redux::getExtensions( $inst );
+
+                        if ( isset( $data->extensions['metaboxes'] ) ) {
+                            $data->extensions['metaboxes']->init();
+                            $sysinfo['redux_instances'][ $inst ]['metaboxes'] =  $data->extensions['metaboxes']->boxes;
+                        }
 
                         if ( isset( $data->args['templates_path'] ) && $data->args['templates_path'] != '' ) {
                             $sysinfo['redux_instances'][ $inst ]['templates'] = self::getReduxTemplates( $data->args['templates_path'] );
