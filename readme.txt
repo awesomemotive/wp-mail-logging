@@ -22,7 +22,7 @@ Features of the plugin include:
  * Developer: Boost your development performance by keeping track of sent mails.
  * Developer: Filters are provided to extend the columns.
 
-[youtube http://www.youtube.com/watch?v=zU858JxhczA]
+[youtube https://www.youtube.com/watch?v=mQK6VPSV2-E]
 
 **Follow this plugin on [GitHub](https://github.com/No3x/wp-mail-logging)**
 
