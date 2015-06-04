@@ -92,8 +92,30 @@
                 padding-right: 5px;
             }
 
+            .redux-dev-mode-notice-container {
+                position: absolute;
+                top: 67px;
+                left: 20px;
+                bottom: auto;
+                width: auto;
+            }
+            
             span {
                 color: #888;
+                
+                &.redux-dev-mode-notice {
+                    //position: absolute;
+                    background-color: #f0ad4e;
+                    display: inline;
+                    padding: .2em .5em .2em;
+                    font-weight: 700;
+                    line-height: 1;
+                    color: #fff !important;
+                    text-align: center;
+                    white-space: nowrap;
+                    vertical-align: baseline;
+                    border-radius: .25em;
+                }
             }
         }
 
@@ -690,6 +712,13 @@
         padding-right: 25px;
     }
 
+    #redux-header {
+        text-align: center;
+        
+        .display_header {
+            float: none;
+        }
+    }
 }
 
 /* sidebar */
@@ -1075,8 +1104,8 @@ pre {
                         -o-transition: all 0.2;
                         transition: all 0.2;
                         &:hover {
-                            color: #2ea2cc;
-                            background: #000;
+                            color: $buttonPrimary;
+                            background: darken($secondaryColor, 10%);
                         }
                         span.group_title {
                             padding-left: 5px !important;
@@ -1108,14 +1137,17 @@ pre {
             &.hasSubSections {
                 a {
                     background: $darkColor;
+                    text-shadow: 1px 1px darken($darkColor, 30%);
                 }
                 ul.subsection li {
                     a {
                         background: $secondaryColor;
+                        text-shadow: none;
                     }
                     &.active {
                         a {
                             background: $accentColor;
+                            text-shadow: 1px 1px darken($accentColor, 20%);
                         }
                     }
                 }
@@ -1155,7 +1187,7 @@ pre {
 
 /* Light fresh theme */
 .admin-color-fresh {
-    @include adminThemeColorOverrides(#bbb, #0074a2, #222222, #1e8cbe);
+    @include adminThemeColorOverrides(#a0a5aa, #0073aa, #23282d, #1e8cbe);
 }
 
 /* Light admin theme */
@@ -1377,22 +1409,6 @@ pre {
     position: relative;
 }
 
-.redux-container #redux-header .display_header span.redux-dev-mode-notice {
-    position: absolute;
-    left: 20px;
-    bottom: 9px;
-    background-color: #f0ad4e;
-    display: inline;
-    padding: .2em .6em .3em;
-    font-weight: 700;
-    line-height: 1;
-    color: #fff !important;
-    text-align: center;
-    white-space: nowrap;
-    vertical-align: baseline;
-    border-radius: .25em;
-}
-
 /* Leftovers? */
 
 /*.shadow1 {
@@ -1486,14 +1502,5 @@ pre {
         margin-left: -20px;
         margin-right: -20px;
         margin-bottom: -10px;
-    }
-}
-
-.redux-sidebar {
-    #redux-header {
-        text-align: center;
-        .display_header {
-            float: none;
-        }
     }
 }

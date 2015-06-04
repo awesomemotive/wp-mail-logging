@@ -111,7 +111,7 @@
                 },
                 success: function( response ) {
                     if ( response.action && response.action == "reload" ) {
-                        location.reload();
+                        location.reload(true);
                     } else if ( response.status == "success" ) {
                         jQuery( '.redux-action_bar input' ).removeAttr( 'disabled' );
                         overlay.fadeOut( 'fast' );
@@ -367,6 +367,36 @@
             // Tip hide effect
             var tipHideEffect = redux.args.hints.tip_effect.hide.effect;
             var tipHideDuration = redux.args.hints.tip_effect.hide.duration;
+
+            $( 'div.redux-dev-qtip' ).each(function(){
+                $( this ).qtip(
+                    {
+                        content: {
+                            text: $( this ).attr( 'qtip-content' ),
+                            title: $( this ).attr( 'qtip-title' )
+                        },
+                        show: {
+                            effect: function() {
+                                $( this ).slideDown( 500 );
+                            },
+                            event: 'mouseover',
+                        },
+                        hide: {
+                            effect: function() {
+                                $( this ).slideUp( 500 );
+                            },
+                            event: 'mouseleave',
+                        },
+                        style: {
+                            classes: 'qtip-shadow qtip-light',
+                        },
+                        position: {
+                            my: 'top center',
+                            at: 'bottom center',
+                        },
+                    }
+                );
+            });
 
             $( 'div.redux-hint-qtip' ).each(
                 function() {

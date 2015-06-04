@@ -1,4 +1,51 @@
-# Redux Framework Changelog
+    # Redux Framework Changelog
+
+## 3.5.4.3
+* Fixed:    #2258 - welcome redirect error with embedding plugin scenarios.
+* Fixed:    Redux plugin load order when activating plugins.
+
+## 3.5.4.2
+* Fixed:    #2271 - stuck redirect on godaddy (seriously, get a real host, people) servers.
+
+## 3.5.4.1
+* Fixed:    #2216 - Reset section not always working within FF.
+    
+## 3.5.4
+* Modified: update_notice arg only truly shows up if dev_mode is on.
+
+## 3.5.3.3
+* Added:    Tooltip to developer mode badge, for informational purposes.
+* Modified: Added css_layout ext to default value filter, to avoid errors.
+
+## 3.5.3.2
+* Fixed:    #2239 - Various extensions didn't support default values for default arg.  Filtered out offending extensions.
+
+## 3.5.3.1
+* Fixed:    WP.org ONLY SVN mixup.
+
+## 3.5.3
+* Fixed:    #2228 - Submenu items still visible if permissions not allowed.
+* Fixed:    Import/Export showing up in customizer.
+* Modified: Admin-fresh theme to match new WordPress 4.2
+* Modified: Redux widget now has a proper ID. Thanks @corradomatt!
+* Modified: Added text-shadow to submenu items to give a stronger "pop"
+* Modified: Page_slug now dynamically generated if not specified.
+
+## 3.5.2.2
+* Modified: Admin blast message pinging server on each load after three day expiration.  Possible slow down of the overall panel loading time.
+
+## 3.5.2.1
+* Fixed:   #2221 - Background field media not enqueueing when used with no other media based fields.
+
+## 3.5.2
+* Fixed:   #2214: Bad path for import/export enqueue.
+* Release: Wp.org release.
+
+## 3.5.1
+* Release: Wp.org release.
+
+## 3.5.0.7
+* Modified: Redux News dashboard widget appears only when dev_mode is true or in a local host environment.
 
 ## 3.5.0.6
 * Fixed     #2127 - Elusive icons not working in footer as before.
