@@ -17,7 +17,6 @@ class WPML_LogRotation {
 	
 	public function __construct() {
 		global $wpml_settings;
-		$this->unschedule();
 		if ( $wpml_settings['log-rotation-limit-amout'] == '1' || $wpml_settings['log-rotation-delete-time'] == '1' ) {
 			$this->schedule();
 		} else {
