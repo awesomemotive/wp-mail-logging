@@ -117,6 +117,7 @@ class WPML_Plugin extends WPML_LifeCycle {
         add_filter( 'set-screen-option', array( &$this, 'save_screen_options' ), 10, 3);
         add_filter( 'wpml_get_plugin_version', array( &$this, 'getVersion' ) );
         add_filter( 'wpml_get_plugin_name', array( &$this, 'getPluginDisplayName' ) );
+        add_filter( 'wpml_get_date_time_format', array( &$this, 'getDateTimeFormatString' ) );
         // Adding scripts & styles to all pages
         // Examples:
         //        wp_enqueue_script('jquery');

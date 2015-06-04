@@ -260,6 +260,15 @@ if (!class_exists('admin_folder_Redux_Framework_config')) {
            				'subtitle'  => __('Select the minimum role.', 'wpml'),
                 			
                 	),
+                    array(
+                        'id'        => 'datetimeformat-use-wordpress',
+                        'type'      => 'switch',
+                        'title'     => __('WordPress Date Time Format', 'wpml' ),
+                        'subtitle'  => __( sprintf("Use format from WordPress settings (%s)", date_i18n( get_option( 'date_format' ) . " " . get_option( 'time_format' ) ) ), 'wpml'),
+                        'default'   => 0,
+                        'on'        => 'Enabled',
+                        'off'       => 'Disabled',
+                    ),
                 	array(
                         'id'        => 'section-log-rotation-start',
                         'type'      => 'section',

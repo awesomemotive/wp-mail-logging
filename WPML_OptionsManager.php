@@ -39,6 +39,18 @@ class WPML_OptionsManager {
 		}
 		return $retVal;
 	}
+
+    /**
+     * Returns the appropriate datetime format string.
+     * @since 1.5.0
+     * @return string datetime format string
+     */
+    public function getDateTimeFormatString() {
+        $timeFormat = "Y-m-d H:i:s";
+        if( $this->getSetting( 'datetimeformat-use-wordpress', false) == true )
+            $timeFormat = get_option( 'date_format' ) . " " . get_option( 'time_format' );
+        return $timeFormat;
+    }
 	
     public function getOptionNamePrefix() {
         return get_class($this) . '_';

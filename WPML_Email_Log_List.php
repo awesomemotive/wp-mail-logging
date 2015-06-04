@@ -167,6 +167,16 @@ class Email_Logging_ListTable extends WP_List_Table {
 		$message = "<a class=\"wp-mail-logging-view-message button button-secondary\" href=\"#\" data-message=\"" . $this->render_mail( $item )  . "\">View</a>";
 		return $message;
 	}
+
+    /**
+     * Renders the timestamp column.
+     * @since 1.5.0
+     * @param object $item The current item
+     * @return void|string
+     */
+    function column_timestamp( $item ) {
+        return date_i18n( apply_filters('wpml_get_date_time_format', ''), strtotime( $item['timestamp'] ) );
+    }
 	
 	/**
 	 * Determines appropirate fa icon for a file
