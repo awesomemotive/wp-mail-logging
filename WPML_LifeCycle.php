@@ -199,4 +199,12 @@ class WPML_LifeCycle extends WPML_InstallIndicator {
         return admin_url('admin-ajax.php') . '?action=' . $actionName;
     }
 
+    public function registerPluginActionLinks( $actions, $plugin_file ) {
+        if ($this->getMainPluginFileName() == basename($plugin_file)) {
+            $settings = array('settings' => '<a href="admin.php?page=wpml_plugin_settings">' . __('Settings', 'General') . '</a>');
+            $actions = array_merge($settings, $actions);
+        }
+        return $actions;
+    }
+
 }
