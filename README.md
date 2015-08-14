@@ -1,4 +1,4 @@
-# :envelope: wp-mail-logging [![Build Status](https://travis-ci.org/No3x/wp-mail-logging.png?branch=master)](https://travis-ci.org/No3x/wp-mail-logging)
+# :envelope: wp-mail-logging [![Build Status](https://travis-ci.org/No3x/wp-mail-logging.png?branch=master)](https://travis-ci.org/No3x/wp-mail-logging) [![Join the chat at https://gitter.im/No3x/wp-mail-logging](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/No3x/wp-mail-logging?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 ## Welcome ##
 wp-mail-logging is a WordPress plugin that logs each mail sent by WordPress.
 
