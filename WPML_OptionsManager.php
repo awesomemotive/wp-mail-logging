@@ -465,9 +465,10 @@ class WPML_OptionsManager {
 				</div>
 			</div>
 
-			<form id="email-list" method="get">
-				<input type="hidden" name="page" value="<?php echo $_REQUEST['page'] ?>" />
+			<form id="email-list" method="post">
+				<input type="hidden" name="page" value="<?php echo esc_attr( $_REQUEST['page'] ); ?>" />
 					<?php
+					wp_nonce_field( Email_Logging_ListTable::NONCE_LIST_TABLE, Email_Logging_ListTable::NONCE_LIST_TABLE . '_nonce' );
 					$search = ( isset( $_REQUEST['s'] ) ) ? $_REQUEST['s'] : false;
 					$emailLoggingListTable = new Email_Logging_ListTable();
 					$emailLoggingListTable->prepare_items( $search );
