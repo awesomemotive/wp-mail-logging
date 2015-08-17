@@ -12,23 +12,23 @@
   */
 
 /*
-    "WordPress Plugin Template" Copyright (C) 2013 Michael Simpson  (email : michael.d.simpson@gmail.com)
+	"WordPress Plugin Template" Copyright (C) 2013 Michael Simpson  (email : michael.d.simpson@gmail.com)
 
-    This following part of this file is part of WordPress Plugin Template for WordPress.
+	This following part of this file is part of WordPress Plugin Template for WordPress.
 
-    WordPress Plugin Template is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+	WordPress Plugin Template is free software: you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation, either version 3 of the License, or
+	(at your option) any later version.
 
-    WordPress Plugin Template is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+	WordPress Plugin Template is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
-    along with Contact Form to Database Extension.
-    If not, see http://www.gnu.org/licenses/gpl-3.0.html
+	You should have received a copy of the GNU General Public License
+	along with Contact Form to Database Extension.
+	If not, see http://www.gnu.org/licenses/gpl-3.0.html
 */
 
 $WPML_minimalRequiredPhpVersion = '5.0';
@@ -39,22 +39,22 @@ $WPML_minimalRequiredPhpVersion = '5.0';
  * an error message on the Admin page
  */
 function WPML_noticePhpVersionWrong() {
-    global $WPML_minimalRequiredPhpVersion;
-    echo '<div class="updated fade">' .
-      __('Error: plugin "WP Mail Logging" requires a newer version of PHP to be running.',  'wpml').
-            '<br/>' . __('Minimal version of PHP required: ', 'wpml') . '<strong>' . $WPML_minimalRequiredPhpVersion . '</strong>' .
-            '<br/>' . __('Your server\'s PHP version: ', 'wpml') . '<strong>' . phpversion() . '</strong>' .
-         '</div>';
+	global $WPML_minimalRequiredPhpVersion;
+	echo '<div class="updated fade">' .
+	  __('Error: plugin "WP Mail Logging" requires a newer version of PHP to be running.',  'wpml').
+			'<br/>' . __('Minimal version of PHP required: ', 'wpml') . '<strong>' . $WPML_minimalRequiredPhpVersion . '</strong>' .
+			'<br/>' . __('Your server\'s PHP version: ', 'wpml') . '<strong>' . phpversion() . '</strong>' .
+		 '</div>';
 }
 
 
 function WPML_PhpVersionCheck() {
-    global $WPML_minimalRequiredPhpVersion;
-    if (version_compare(phpversion(), $WPML_minimalRequiredPhpVersion) < 0) {
-        add_action('admin_notices', 'WPML_noticePhpVersionWrong');
-        return false;
-    }
-    return true;
+	global $WPML_minimalRequiredPhpVersion;
+	if (version_compare(phpversion(), $WPML_minimalRequiredPhpVersion) < 0) {
+		add_action('admin_notices', 'WPML_noticePhpVersionWrong');
+		return false;
+	}
+	return true;
 }
 
 
@@ -66,8 +66,8 @@ function WPML_PhpVersionCheck() {
  * @return void
  */
 function WPML_i18n_init() {
-    $pluginDir = dirname(plugin_basename(__FILE__));
-    load_plugin_textdomain('wpml', false, $pluginDir . '/languages/');
+	$pluginDir = dirname(plugin_basename(__FILE__));
+	load_plugin_textdomain('wpml', false, $pluginDir . '/languages/');
 }
 
 
@@ -82,7 +82,7 @@ WPML_i18n_init();
 // Next, run the version check.
 // If it is successful, continue with initialization for this plugin
 if (WPML_PhpVersionCheck()) {
-    // Only load and run the init function if we know PHP version can parse it
-    include_once('wp-mail-logging_init.php');
-    WPML_init(__FILE__);
+	// Only load and run the init function if we know PHP version can parse it
+	include_once('wp-mail-logging_init.php');
+	WPML_init(__FILE__);
 }

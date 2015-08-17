@@ -44,7 +44,7 @@ class Email_Logging_ListTable extends WP_List_Table {
 	 */
 	function get_columns() {
 		$columns = array(
-		 	'cb'			=> '<input type="checkbox" />',
+			'cb'			=> '<input type="checkbox" />',
 			'mail_id'		=> __( 'ID', 'wml' ),
 			'timestamp'		=> __( 'Time', 'wml' ),
 			'receiver'		=> __( 'Receiver', 'wml' ),
@@ -82,23 +82,23 @@ class Email_Logging_ListTable extends WP_List_Table {
 		);
 	}
 
-    /**
-     * Sanitize orderby parameter.
-     * @return string sanitized orderby parameter
-     */
-    private function sanitize_orderby() {
-        return WPML_Utils::sanitize_expected_value( ( !empty( $_GET['orderby'] ) ) ? $_GET['orderby'] : null, $this->get_sortable_columns(), 'mail_id');
-    }
+	/**
+	 * Sanitize orderby parameter.
+	 * @return string sanitized orderby parameter
+	 */
+	private function sanitize_orderby() {
+		return WPML_Utils::sanitize_expected_value( ( !empty( $_GET['orderby'] ) ) ? $_GET['orderby'] : null, $this->get_sortable_columns(), 'mail_id');
+	}
 
-    /**
-     * Sanitize order parameter.
-     * @return string sanitized order parameter
-     */
-    private function sanitize_order() {
-        return WPML_Utils::sanitize_expected_value( ( !empty( $_GET['order'] ) ) ? $_GET['order'] : null, array('desc', 'asc'), 'desc');
-    }
+	/**
+	 * Sanitize order parameter.
+	 * @return string sanitized order parameter
+	 */
+	private function sanitize_order() {
+		return WPML_Utils::sanitize_expected_value( ( !empty( $_GET['order'] ) ) ? $_GET['order'] : null, array('desc', 'asc'), 'desc');
+	}
 
-    /**
+	/**
 	 * Prepares the items for rendering
 	 * @since 1.0
 	 * @param string you want to search for
@@ -106,8 +106,8 @@ class Email_Logging_ListTable extends WP_List_Table {
 	 */
 	function prepare_items( $search = false ) {
 		global $wpdb;
-        $orderby = $this->sanitize_orderby();
-        $order = $this->sanitize_order();
+		$orderby = $this->sanitize_orderby();
+		$order = $this->sanitize_order();
 		$tableName = WPML_Plugin::getTablename( 'mails' );
 
 		$columns = $this->get_columns();
@@ -122,21 +122,21 @@ class Email_Logging_ListTable extends WP_List_Table {
 		$total_items = $wpdb->get_var( "SELECT COUNT(*) FROM `$tableName`;" );
 
 		$offset = ( $current_page-1 ) * $per_page;
-        $order_sql = 'ORDER BY ' . sanitize_sql_orderby($orderby . ' ' . $order );
+		$order_sql = 'ORDER BY ' . sanitize_sql_orderby($orderby . ' ' . $order );
 
-        $search_query = '';
-        if( $search ) {
-            $search = esc_sql( sanitize_text_field( $search ) );
-            $search_query = sprintf( "
+		$search_query = '';
+		if( $search ) {
+			$search = esc_sql( sanitize_text_field( $search ) );
+			$search_query = sprintf( "
 				WHERE
 				(`receiver` LIKE '%%%1\$s%%') OR
 				(`subject` LIKE '%%%1\$s%%') OR
 				(`message` LIKE '%%%1\$s%%') OR
 				(`headers` LIKE '%%%1\$s%%') OR
 				(`attachments` LIKE '%%%1\$s%%')", $search );
-        }
+		}
 
-        $dataset = $wpdb->get_results( "SELECT * FROM `$tableName` $search_query ORDER BY $orderby $order LIMIT $per_page OFFSET $offset;", ARRAY_A);
+		$dataset = $wpdb->get_results( "SELECT * FROM `$tableName` $search_query ORDER BY $orderby $order LIMIT $per_page OFFSET $offset;", ARRAY_A);
 
 		$this->set_pagination_args( array(
 			'total_items' => count($dataset), // the total number of items
@@ -171,18 +171,18 @@ class Email_Logging_ListTable extends WP_List_Table {
 		}
 	}
 
-    /**
-     * Sanitize message to remove unsafe html.
-     * @since 1.6.0
-     * @param $message unsafe message
-     * @return string safe message
-     */
-    function sanitize_message( $message ) {
-        $allowed_tags = wp_kses_allowed_html( 'post' );
-        $allowed_tags['a']['data-message'] = true;
-        $allowed_tags['style'][''] = true;
-        return wp_kses( $message, $allowed_tags );
-    }
+	/**
+	 * Sanitize message to remove unsafe html.
+	 * @since 1.6.0
+	 * @param $message unsafe message
+	 * @return string safe message
+	 */
+	function sanitize_message( $message ) {
+		$allowed_tags = wp_kses_allowed_html( 'post' );
+		$allowed_tags['a']['data-message'] = true;
+		$allowed_tags['style'][''] = true;
+		return wp_kses( $message, $allowed_tags );
+	}
 
 	/**
 	 * Renders the message column.
@@ -197,15 +197,15 @@ class Email_Logging_ListTable extends WP_List_Table {
 		return $message;
 	}
 
-    /**
-     * Renders the timestamp column.
-     * @since 1.5.0
-     * @param object $item The current item
-     * @return void|string
-     */
-    function column_timestamp( $item ) {
-        return date_i18n( apply_filters('wpml_get_date_time_format', ''), strtotime( $item['timestamp'] ) );
-    }
+	/**
+	 * Renders the timestamp column.
+	 * @since 1.5.0
+	 * @param object $item The current item
+	 * @return void|string
+	 */
+	function column_timestamp( $item ) {
+		return date_i18n( apply_filters('wpml_get_date_time_format', ''), strtotime( $item['timestamp'] ) );
+	}
 
 	/**
 	 * Determines appropirate fa icon for a file
@@ -347,27 +347,27 @@ class Email_Logging_ListTable extends WP_List_Table {
 		return $actions;
 	}
 
-    /**
-     * Processes bulk actions.
-     * @since 1.0
-     */
+	/**
+	 * Processes bulk actions.
+	 * @since 1.0
+	 */
 	function process_bulk_action() {
 		global $wpdb;
 
-        if( false === $this->current_action() )
-            return;
+		if( false === $this->current_action() )
+			return;
 
-        if ( check_admin_referer( Email_Logging_ListTable::NONCE_LIST_TABLE, Email_Logging_ListTable::NONCE_LIST_TABLE . '_nonce' ) ) {
-            $name = $this->_args['singular'];
-            $tableName = WPML_Plugin::getTablename( 'mails' );
+		if ( check_admin_referer( Email_Logging_ListTable::NONCE_LIST_TABLE, Email_Logging_ListTable::NONCE_LIST_TABLE . '_nonce' ) ) {
+			$name = $this->_args['singular'];
+			$tableName = WPML_Plugin::getTablename( 'mails' );
 
-            //Detect when a bulk action is being triggered...
-            if( 'delete' == $this->current_action() ) {
-                foreach( $_REQUEST[$name] as $item_id) {
-                    $wpdb->query( $wpdb->prepare("DELETE FROM `$tableName` WHERE `mail_id` = %d", esc_sql($item_id) ), ARRAY_A );
-                }
-            }
-        }
+			//Detect when a bulk action is being triggered...
+			if( 'delete' == $this->current_action() ) {
+				foreach( $_REQUEST[$name] as $item_id) {
+					$wpdb->query( $wpdb->prepare("DELETE FROM `$tableName` WHERE `mail_id` = %d", esc_sql($item_id) ), ARRAY_A );
+				}
+			}
+		}
 	}
 
 	/**
