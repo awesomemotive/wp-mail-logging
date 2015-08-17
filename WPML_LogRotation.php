@@ -1,5 +1,8 @@
 <?php
 
+// Exit if accessed directly
+if(!defined( 'ABSPATH' )) exit;
+
 /**
  * Log rotation for database.
  * @author No3x

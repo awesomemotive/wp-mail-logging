@@ -1,5 +1,8 @@
 <?php
 
+// Exit if accessed directly
+if(!defined( 'ABSPATH' )) exit;
+
 /**
  * @author No3x
  * @since 1.0

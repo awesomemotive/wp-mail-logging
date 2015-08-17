@@ -1,5 +1,8 @@
 <?php
 
+// Exit if accessed directly
+if(!defined( 'ABSPATH' )) exit;
+
 if( !class_exists( 'WP_List_Table' ) ) {
 	require_once( plugin_dir_path( __FILE__ ) . 'inc/class-wp-list-table.php' );
 }
