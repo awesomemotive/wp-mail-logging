@@ -174,8 +174,9 @@ class WPML_Plugin extends WPML_LifeCycle {
     		'message'			=> $this->extractMessage( $mail ),
     		'headers'			=> $this->extractHeader( $mail['headers'] ),
     		'attachments'		=> $this->extractAttachments( $mail['attachments'] ),
-    		'plugin_version'	=> $this->getVersionSaved()
-    	);
+			'plugin_version'	=> $this->getVersionSaved(),
+			'timestamp'         => current_time( 'mysql' )
+	    );
     }
     
     public function log_email( $mailOriginal ) {
