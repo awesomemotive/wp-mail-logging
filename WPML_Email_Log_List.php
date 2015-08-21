@@ -1,4 +1,8 @@
 <?php
+use WordPress\ORM\Model\WPML_Mail as Mail;
+
+// Exit if accessed directly
+if(!defined( 'ABSPATH' )) exit;
 
 if( !class_exists( 'WP_List_Table' ) ) {
 	require_once( plugin_dir_path( __FILE__ ) . 'inc/class-wp-list-table.php' );
@@ -10,9 +14,9 @@ if( !class_exists( 'WP_List_Table' ) ) {
  * @since 1.0
  */
 class Email_Logging_ListTable extends WP_List_Table {
-	
+
 	const NONCE_LIST_TABLE = 'wpml-list_table';
-	
+
 	/**
 	 * Initializes the List Table
 	 * @since 1.0
@@ -44,7 +48,7 @@ class Email_Logging_ListTable extends WP_List_Table {
 	 */
 	function get_columns() {
 		$columns = array(
-		 	'cb'			=> '<input type="checkbox" />',
+			'cb'			=> '<input type="checkbox" />',
 			'mail_id'		=> __( 'ID', 'wml' ),
 			'timestamp'		=> __( 'Time', 'wml' ),
 			'receiver'		=> __( 'Receiver', 'wml' ),
@@ -55,7 +59,7 @@ class Email_Logging_ListTable extends WP_List_Table {
 			'plugin_version'=> __( 'Plugin Version', 'wml' )
 		);
 
-		// give a plugin the change to edit the columns
+		// give a plugin the chance to edit the columns
 		$columns = apply_filters( WPML_Plugin::HOOK_LOGGING_COLUMNS, $columns );
 
 		$reserved = array( '_title', 'comment', 'media', 'name', 'title', 'username', 'blogname' );
@@ -67,7 +71,6 @@ class Email_Logging_ListTable extends WP_List_Table {
 				break;
 			}
 		}
-
 		return $columns;
 	}
 
@@ -84,14 +87,30 @@ class Email_Logging_ListTable extends WP_List_Table {
 	}
 
 	/**
+	 * Sanitize orderby parameter.
+	 * @return string sanitized orderby parameter
+	 */
+	private function sanitize_orderby() {
+		return WPML_Utils::sanitize_expected_value( ( !empty( $_GET['orderby'] ) ) ? $_GET['orderby'] : null, $this->get_sortable_columns(), 'mail_id');
+	}
+
+	/**
+	 * Sanitize order parameter.
+	 * @return string sanitized order parameter
+	 */
+	private function sanitize_order() {
+		return WPML_Utils::sanitize_expected_value( ( !empty( $_GET['order'] ) ) ? $_GET['order'] : null, array('desc', 'asc'), 'desc');
+	}
+
+	/**
 	 * Prepares the items for rendering
 	 * @since 1.0
 	 * @param string you want to search for
 	 * @see WP_List_Table::prepare_items()
 	 */
 	function prepare_items( $search = false ) {
-		global $wpdb;
-		$tableName = WPML_Plugin::getTablename( 'mails' );
+		$orderby = $this->sanitize_orderby();
+		$order = $this->sanitize_order();
 
 		$columns = $this->get_columns();
 		$hidden = $this->get_hidden_columns();
@@ -102,35 +121,28 @@ class Email_Logging_ListTable extends WP_List_Table {
 
 		$per_page = $this->get_items_per_page( 'per_page', 25 );
 		$current_page = $this->get_pagenum();
-		$total_items = $wpdb->get_var( "SELECT COUNT(*) FROM `$tableName`;" );
-
-		$orderby_default = "mail_id";
-		$order_default = "desc";
-		$orderby = ( !empty( $_GET['orderby'] ) ) ? $_GET['orderby'] : $orderby_default;
-		$order = ( !empty($_GET['order'] ) ) ? $_GET['order'] : $order_default;
 		$offset = ( $current_page-1 ) * $per_page;
 
-		$search_query = '';
-		if( $search ) {
-			$search = esc_sql( sanitize_text_field( $search ) );
-			$search_query = sprintf( "
-				WHERE 
-				(`receiver` LIKE '%%%1\$s%%') OR  
-				(`subject` LIKE '%%%1\$s%%') OR 
-				(`message` LIKE '%%%1\$s%%') OR 
-				(`headers` LIKE '%%%1\$s%%') OR 
-				(`attachments` LIKE '%%%1\$s%%')", $search );
+		$total_items = Mail::query()
+			->search($search)
+			->find(true);
+
+		$mails = Mail::query()
+			->search($search)
+			->sort_by($orderby)
+			->order($order)
+			->limit($per_page)
+			->offset($offset)
+			->find();
+
+		foreach($mails as $mail) {
+			$this->items[] = $mail->to_array();
 		}
 
-        $order_sql = sanitize_sql_orderby( $orderby . ' ' . $order );
-        $dataset = $wpdb->get_results( $wpdb->prepare("SELECT * FROM `$tableName` $search_query ORDER BY $order_sql LIMIT %d OFFSET %d;", $per_page, $offset), ARRAY_A );
-
 		$this->set_pagination_args( array(
-			'total_items' => count($dataset), // the total number of items
+			'total_items' => $total_items, // the total number of items
 			'per_page'    => $per_page // number of items per page
 		) );
-
-		$this->items = $dataset;
 	}
 
 	/**
@@ -151,11 +163,24 @@ class Email_Logging_ListTable extends WP_List_Table {
 			case 'attachments':
 			case 'plugin_version':
 			case 'receiver':
-				return esc_html( $item[ $column_name ] );
+				return $item[ $column_name ];
 			default:
 				// if we don't know this column maybe a hook does - if no hook extracted data (string) out of the array we can avoid the output of 'Array()' (array)
 				return (is_array( $res = apply_filters( WPML_Plugin::HOOK_LOGGING_COLUMNS_RENDER, $item, $column_name ) ) ) ? "" : $res;
 		}
+	}
+
+	/**
+	 * Sanitize message to remove unsafe html.
+	 * @since 1.6.0
+	 * @param $message unsafe message
+	 * @return string safe message
+	 */
+	function sanitize_message( $message ) {
+		$allowed_tags = wp_kses_allowed_html( 'post' );
+		$allowed_tags['a']['data-message'] = true;
+		$allowed_tags['style'][''] = true;
+		return wp_kses( $message, $allowed_tags );
 	}
 
 	/**
@@ -166,96 +191,19 @@ class Email_Logging_ListTable extends WP_List_Table {
 	 */
 	function column_message( $item ) {
 		if( empty( $item['message'] ) ) return;
-		$message = "<a class=\"wp-mail-logging-view-message button button-secondary\" href=\"#\" data-message=\"" . $this->render_mail( $item )  . "\">View</a>";
+		$content = $this->sanitize_message($this->render_mail( $item ));
+		$message = "<a class=\"wp-mail-logging-view-message button button-secondary\" href=\"#\" data-message=\"" . htmlentities( $content )  . "\">View</a>";
 		return $message;
 	}
 
-    /**
-     * Renders the timestamp column.
-     * @since 1.5.0
-     * @param object $item The current item
-     * @return void|string
-     */
-    function column_timestamp( $item ) {
-        return date_i18n( apply_filters('wpml_get_date_time_format', ''), strtotime( $item['timestamp'] ) );
-    }
-
 	/**
-	 * Determines appropirate fa icon for a file
-	 * @sine 1.3
-	 * @param string $path
-	 * @return Ambigous <boolean, string> Returns the most suitable icon or false if not possible.
+	 * Renders the timestamp column.
+	 * @since 1.5.0
+	 * @param object $item The current item
+	 * @return void|string
 	 */
-	function determine_fa_icon( $path ) {
-		$supported = array(
-				'archive' => array (
-						'application/zip',
-						'application/x-rar-compressed',
-						'application/x-rar',
-						'application/x-gzip',
-						'application/x-msdownload',
-						'application/x-msdownload',
-						'application/vnd.ms-cab-compressed'
-				),
-				'audio',
-				'code' => array(
-						'text/x-c',
-						'text/x-c++'
-				),
-				'excel' => array( 'application/vnd.ms-excel'
-				),
-				'image', 'text', 'movie', 'pdf', 'photo', 'picture',
-				'powerpoint' => array(
-						'application/vnd.ms-powerpoint'
-				), 'sound', 'video', 'word' => array(
-						'application/msword'
-				), 'zip'
-		);
-
-		$mime = mime_content_type( $path );
-		$mime_parts = explode( '/', $mime );
-		$attribute = $mime_parts[0];
-		$type = $mime_parts[1];
-
-		$fa_icon = false;
-		if( ($key = $this->recursive_array_search( $mime, $supported ) ) !== FALSE ) {
-			// search for specific mime first
-			$fa_icon = $key;
-		} elseif( in_array( $attribute, $supported ) ) {
-			// generic file icons
-			$fa_icon = $attribute;
-		}
-
-		if( $fa_icon === FALSE ) {
-			return '<i class="fa fa-file-o"></i>';
-		} else {
-			return '<i class="fa fa-file-' . $fa_icon . '-o"></i>';
-		}
-	}
-
-	/**
-	 * Find appropriate fa icon from file path
-	 * @since 1.3
-	 * @param string $attachment_path
-	 * @return string
-	 */
-	function generate_attachment_icon( $path ) {
-		return $this->determine_fa_icon( $path );
-	}
-
-	/**
-	 * Multilevel array_search
-	 * @since 1.3
-	 * @see array_search()
-	 */
-	function recursive_array_search( $needle, $haystack ) {
-		foreach( $haystack as $key => $value ) {
-			$current_key = $key;
-			if($needle === $value OR ( is_array($value) && $this->recursive_array_search( $needle, $value ) !== false ) ) {
-				return $current_key;
-			}
-		}
-		return false;
+	function column_timestamp( $item ) {
+		return date_i18n( apply_filters('wpml_get_date_time_format', ''), strtotime( $item['timestamp'] ) );
 	}
 
 	/**
@@ -275,14 +223,14 @@ class Email_Logging_ListTable extends WP_List_Table {
 				$attachment_url = WP_CONTENT_URL . $attachment;
 
 				if( is_file( $attachment_path ) ) {
-					$attachment_append .= '<a href="' . $attachment_url . '" title="' . $filename . '">' .$this->generate_attachment_icon( $attachment_path ) . '</a> ';
+					$attachment_append .= '<a href="' . $attachment_url . '" title="' . $filename . '">' . WPML_Utils::generate_attachment_icon( $attachment_path ) . '</a> ';
 				} else {
 					$message = sprintf( __( 'Attachment %s is not present', 'wpml' ), $filename);
 					$attachment_append .= '<i class="fa fa-times" title="' . $message . '"></i>';
 				}
 			}
 		}
-		return esc_html( $attachment_append );
+		return $attachment_append;
 	}
 
 	/**
@@ -301,11 +249,11 @@ class Email_Logging_ListTable extends WP_List_Table {
 				if ( $column_name != 'message' && method_exists( $this, 'column_' . $column_name ) ) {
 					$mailAppend .= call_user_func( array( $this, 'column_' . $column_name ), $item );
 				} else {
-					$mailAppend .= $this->column_default( $item, $column_name );
+				$mailAppend .= $this->column_default( $item, $column_name );
 				}
 			}
 		}
-		return esc_html( $mailAppend );
+		return $mailAppend;
 	}
 
 	/**
@@ -320,20 +268,24 @@ class Email_Logging_ListTable extends WP_List_Table {
 		return $actions;
 	}
 
+	/**
+	 * Processes bulk actions.
+	 * @since 1.0
+	 */
 	function process_bulk_action() {
-		global $wpdb;
+		if( false === $this->current_action() )
+			return;
 
-        if( false === $this->current_action() )
-            return;
-        check_admin_referer( Email_Logging_ListTable::NONCE_LIST_TABLE );
+		if ( check_admin_referer( Email_Logging_ListTable::NONCE_LIST_TABLE, Email_Logging_ListTable::NONCE_LIST_TABLE . '_nonce' ) ) {
+			$name = $this->_args['singular'];
 
-		$name = $this->_args['singular'];
-		$tableName = WPML_Plugin::getTablename( 'mails' );
-
-		//Detect when a bulk action is being triggered...
-		if( 'delete' == $this->current_action() ) {
-			foreach( $_REQUEST[$name] as $item_id) {
-				$wpdb->query( $wpdb->prepare("DELETE FROM `$tableName` WHERE `mail_id` = %d", $item_id), ARRAY_A );
+			//Detect when a bulk action is being triggered...
+			if( 'delete' == $this->current_action() ) {
+				foreach( $_REQUEST[$name] as $item_id) {
+					$mail = Mail::find_one( $item_id );
+					if( $mail != false )
+						$mail->delete();
+				}
 			}
 		}
 	}

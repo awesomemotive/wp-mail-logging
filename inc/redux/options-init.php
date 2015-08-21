@@ -4,9 +4,9 @@
      * For full documentation, please visit: http://docs.reduxframework.com/
      */
 
-if (!class_exists('admin_folder_Redux_Framework_config')) {
+if (!class_exists('WPML_Redux_Framework_config')) {
 
-    class admin_folder_Redux_Framework_config {
+    class WPML_Redux_Framework_config {
 
             public $args = array();
             public $sections = array();
@@ -539,7 +539,7 @@ if (!class_exists('admin_folder_Redux_Framework_config')) {
         }
 
         global $reduxConfig;
-        $reduxConfig = new admin_folder_Redux_Framework_config();
+        $reduxConfig = new WPML_Redux_Framework_config();
     } else {
         echo "The class named Redux_Framework_sample_config has already been called. <strong>Developers, you need to prefix this class with your company name or you'll run into problems!</strong>";
     }

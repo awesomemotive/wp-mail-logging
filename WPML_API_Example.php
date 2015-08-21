@@ -1,5 +1,8 @@
 <?php
 
+// Exit if accessed directly
+if(!defined( 'ABSPATH' )) exit;
+
 /**
  * @author No3x
  * @since 1.0
@@ -37,8 +40,8 @@ class WPML_API_Example {
 	 * Is called when the List Table could not find the column. So we can hook in and modify the column.
 	 * @since 1.0
 	 * @param array $item A singular item (one full row's worth of data)
-     * @param array $column_name The name/slug of the column to be processed
-     * @return string Text or HTML to be placed inside the column <td>
+	 * @param array $column_name The name/slug of the column to be processed
+	 * @return string Text or HTML to be placed inside the column <td>
 	 */
 	public function render_column( $item, $column_name ) {
 	
