@@ -1,5 +1,7 @@
 <?php
 
+use WordPress\ORM\Model\WPML_Mail as Mail;
+
 // Exit if accessed directly
 if(!defined( 'ABSPATH' )) exit;
 
@@ -183,12 +185,9 @@ class WPML_Plugin extends WPML_LifeCycle {
 	public function log_email( $mailOriginal ) {
 		// make copy to avoid any changes on the original mail
 		$mail = $mailOriginal;
-		global $wpdb;
 
 		$fields = $this->extractFields( $mail );
-
-		$tableName = WPML_Plugin::getTablename('mails');
-		$wpdb->insert($tableName, $fields);
+		Mail::create($fields)->save();
 
 		return $mailOriginal;
 	}

@@ -1,4 +1,5 @@
 <?php
+use WordPress\ORM\Model\WPML_Mail as Mail;
 
 // Exit if accessed directly
 if(!defined( 'ABSPATH' )) exit;
@@ -108,10 +109,8 @@ class Email_Logging_ListTable extends WP_List_Table {
 	 * @see WP_List_Table::prepare_items()
 	 */
 	function prepare_items( $search = false ) {
-		global $wpdb;
 		$orderby = $this->sanitize_orderby();
 		$order = $this->sanitize_order();
-		$tableName = WPML_Plugin::getTablename( 'mails' );
 
 		$columns = $this->get_columns();
 		$hidden = $this->get_hidden_columns();
@@ -122,31 +121,28 @@ class Email_Logging_ListTable extends WP_List_Table {
 
 		$per_page = $this->get_items_per_page( 'per_page', 25 );
 		$current_page = $this->get_pagenum();
-		$total_items = $wpdb->get_var( "SELECT COUNT(*) FROM `$tableName`;" );
-
 		$offset = ( $current_page-1 ) * $per_page;
-		$order_sql = 'ORDER BY ' . sanitize_sql_orderby($orderby . ' ' . $order );
 
-		$search_query = '';
-		if( $search ) {
-			$search = esc_sql( sanitize_text_field( $search ) );
-			$search_query = sprintf( "
-				WHERE
-				(`receiver` LIKE '%%%1\$s%%') OR
-				(`subject` LIKE '%%%1\$s%%') OR
-				(`message` LIKE '%%%1\$s%%') OR
-				(`headers` LIKE '%%%1\$s%%') OR
-				(`attachments` LIKE '%%%1\$s%%')", $search );
+		$total_items = Mail::query()
+			->search($search)
+			->find(true);
+
+		$mails = Mail::query()
+			->search($search)
+			->sort_by($orderby)
+			->order($order)
+			->limit($per_page)
+			->offset($offset)
+			->find();
+
+		foreach($mails as $mail) {
+			$this->items[] = $mail->to_array();
 		}
 
-		$dataset = $wpdb->get_results( "SELECT * FROM `$tableName` $search_query ORDER BY $orderby $order LIMIT $per_page OFFSET $offset;", ARRAY_A);
-
 		$this->set_pagination_args( array(
-			'total_items' => count($dataset), // the total number of items
+			'total_items' => $total_items, // the total number of items
 			'per_page'    => $per_page // number of items per page
 		) );
-
-		$this->items = $dataset;
 	}
 
 	/**
@@ -277,19 +273,18 @@ class Email_Logging_ListTable extends WP_List_Table {
 	 * @since 1.0
 	 */
 	function process_bulk_action() {
-		global $wpdb;
-
 		if( false === $this->current_action() )
 			return;
 
 		if ( check_admin_referer( Email_Logging_ListTable::NONCE_LIST_TABLE, Email_Logging_ListTable::NONCE_LIST_TABLE . '_nonce' ) ) {
 			$name = $this->_args['singular'];
-			$tableName = WPML_Plugin::getTablename( 'mails' );
 
 			//Detect when a bulk action is being triggered...
 			if( 'delete' == $this->current_action() ) {
 				foreach( $_REQUEST[$name] as $item_id) {
-					$wpdb->query( $wpdb->prepare("DELETE FROM `$tableName` WHERE `mail_id` = %d", esc_sql($item_id) ), ARRAY_A );
+					$mail = Mail::find_one( $item_id );
+					if( $mail != false )
+						$mail->delete();
 				}
 			}
 		}

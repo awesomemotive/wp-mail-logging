@@ -24,7 +24,9 @@ if(!defined( 'ABSPATH' )) exit;
 
 function WPML_init($file) {
 
+	require plugin_dir_path( __FILE__ ) . '/vendor/autoload.php';
 	require_once('WPML_Utils.php');
+	require_once(plugin_dir_path( __FILE__ ) . 'model/WPML_Mail.php');
 	require_once('WPML_Plugin.php');
 	require_once('WPML_LogRotation.php');
 	require_once(plugin_dir_path( __FILE__ ) . 'inc/redux/admin-init.php');

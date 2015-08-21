@@ -3,7 +3,7 @@
 /**
  * @author No3x
  * Tests are written in the AAA-Rule
- * There are three basic sections to our test: Arrange, Act, and Assert.
+ * There are three basic sections for our test: Arrange, Act, and Assert.
  */
 class WPML_Plugin_Test extends WP_UnitTestCase {
 	

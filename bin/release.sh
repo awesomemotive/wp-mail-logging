@@ -134,7 +134,9 @@ Thumbs.db
 .git
 .gitignore 
 tests
-bin" "$SVNPATH/trunk/"
+bin
+composer.json
+composer.lock" "$SVNPATH/trunk/"
 
 echo "Exporting the HEAD of master from git to the trunk of SVN"
 git checkout-index -a -f --prefix=$SVNPATH/trunk/

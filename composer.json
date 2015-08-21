@@ -1,0 +1,37 @@
+{
+    "name": "no3x/wp-mail-logging",
+    "description": "WordPress plugin that logs each email sent by WordPress.",
+    "type": "wordpress-plugin",
+    "keywords": ["mail", "email", "log", "logging", "debug", "list", "store", "collect", "view"],
+    "homepage": "https://github.com/No3x/wp-mail-logging",
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/No3x/wp-orm"
+        }
+    ],
+    "require": {
+        "brandonwamboldt/wp-orm": "dev-master",
+        "redux-framework/redux-framework": "3.5.5.*"
+    },
+    "license": "GPL-2.0",
+    "authors": [
+        {
+            "name": "No3x",
+            "email": "no3x@no3x.de",
+            "homepage": "http://no3x.de",
+            "role": "Developer"
+        }
+    ],
+    "support": {
+        "issues": "https://github.com/No3x/wp-mail-logging/issues",
+        "source": "https://github.com/No3x/wp-mail-logging/releases"
+
+    },
+    "extra": {
+        "installer-paths": {
+            "vendor/redux-framework/redux-framework": ["redux-framework/redux-framework"]
+        }
+    },
+    "minimum-stability": "dev"
+}
