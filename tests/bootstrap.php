@@ -14,5 +14,14 @@ function _manually_load_plugin() {
 }
 tests_add_filter( 'muplugins_loaded', '_manually_load_plugin' );
 
+// Include the uninstall test tools functions.
+include_once dirname( __FILE__ ) . '/../vendor/jdgrimes/wp-plugin-uninstall-tester/includes/functions.php';
+
+// Check if the tests are running. Only load the plugin if they aren't.
+if ( ! running_wp_plugin_uninstall_tests() ) {
+	tests_add_filter( 'muplugins_loaded', '_manually_load_plugin' );
+}
+
 require $_tests_dir . '/includes/bootstrap.php';
+include_once dirname( __FILE__ ) . '/../vendor/jdgrimes/wp-plugin-uninstall-tester/bootstrap.php';
 

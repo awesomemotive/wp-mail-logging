@@ -51,6 +51,7 @@ class WPML_LifeCycle extends WPML_InstallIndicator {
 			//TOOD: is multi site?
 			$this->unInstallDatabaseTables();
 			$this->deleteSavedOptions();
+			$this->deleteVersionOption();
 		}
 		$this->markAsUnInstalled();
 	}

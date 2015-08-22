@@ -109,6 +109,15 @@ class WPML_OptionsManager {
 	}
 
 	/**
+	 * Cleanup: remove version option
+	 * @since 1.6.0
+	 * @return void
+	 */
+	protected function deleteVersionOption() {
+		delete_option( $this->prefix( WPML_Plugin::optionVersion ) );
+	}
+
+	/**
 	 * @return string display name of the plugin to show as a name/title in HTML.
 	 * Just returns the class name. Override this method to return something more readable
 	 */

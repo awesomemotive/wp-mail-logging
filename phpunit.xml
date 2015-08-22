@@ -11,6 +11,11 @@
 			<directory prefix="test-" suffix=".php">./tests/</directory>
 		</testsuite>
 	</testsuites>
+    <groups>
+        <exclude>
+            <group>uninstall</group>
+        </exclude>
+    </groups>
 	<logging>
 		<!-- <log type="coverage-clover" target="build/logs/clover.xml"/> -->
 	</logging>

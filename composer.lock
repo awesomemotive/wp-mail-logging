@@ -1,10 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "8025d12cf6ad8c2abea8d7f21e74b8d7",
+    "hash": "83031a61474505414458324d4ef292dc",
     "packages": [
         {
             "name": "brandonwamboldt/wp-orm",
@@ -181,13 +181,52 @@
             "time": "2014-08-07 19:17:53"
         }
     ],
-    "packages-dev": [],
+    "packages-dev": [
+        {
+            "name": "jdgrimes/wp-plugin-uninstall-tester",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/No3x/wp-plugin-uninstall-tester.git",
+                "reference": "af69f37079075ab6b384fe0362ab856d707439cd"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/No3x/wp-plugin-uninstall-tester/zipball/af69f37079075ab6b384fe0362ab856d707439cd",
+                "reference": "af69f37079075ab6b384fe0362ab856d707439cd",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.2.0"
+            },
+            "type": "library",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "J.D. Grimes",
+                    "email": "jdg@codesymphony.co",
+                    "homepage": "http://codesymphony.co",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Utilities for testing WordPress plugin install/uninstall with PHPUnit",
+            "homepage": "https://github.com/JDGrimes/wp-plugin-uninstall-tester",
+            "support": {
+                "source": "https://github.com/No3x/wp-plugin-uninstall-tester/tree/master"
+            },
+            "time": "2015-08-22 15:46:19"
+        }
+    ],
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
-        "brandonwamboldt/wp-orm": 20
+        "brandonwamboldt/wp-orm": 20,
+        "jdgrimes/wp-plugin-uninstall-tester": 20
     },
     "prefer-stable": false,
+    "prefer-lowest": false,
     "platform": [],
     "platform-dev": []
 }

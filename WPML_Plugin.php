@@ -161,7 +161,7 @@ class WPML_Plugin extends WPML_LifeCycle {
 
 	private function extractMessage( $mail ) {
 		if( isset($mail['message']) ) {
-			// usally the message is stored in the message field
+			// usually the message is stored in the message field
 			return $mail['message'];
 		} elseif( isset($mail['html']) ) {
 			// for example Mandrill stores the message in the 'html' field (see gh-22)
