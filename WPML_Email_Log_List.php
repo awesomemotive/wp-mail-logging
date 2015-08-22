@@ -249,7 +249,7 @@ class Email_Logging_ListTable extends WP_List_Table {
 				if ( $column_name != 'message' && method_exists( $this, 'column_' . $column_name ) ) {
 					$mailAppend .= call_user_func( array( $this, 'column_' . $column_name ), $item );
 				} else {
-				$mailAppend .= $this->column_default( $item, $column_name );
+					$mailAppend .= $this->column_default( $item, $column_name );
 				}
 			}
 		}

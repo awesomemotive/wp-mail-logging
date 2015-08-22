@@ -10,7 +10,7 @@ if(!defined( 'ABSPATH' )) exit;
 
 /**
  * WordPress post model.
- *
+ * @sine 1.6.0
  * @author No3x
  */
 class WPML_Mail extends BaseModel
