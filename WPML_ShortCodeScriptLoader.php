@@ -19,8 +19,8 @@
 	If not, see http://www.gnu.org/licenses/gpl-3.0.html
 */
 
-// Exit if accessed directly
-if(!defined( 'ABSPATH' )) exit;
+// Exit if accessed directly.
+if ( ! defined( 'ABSPATH' ) ) exit;
 
 include_once('WPML_ShortCodeLoader.php');
 

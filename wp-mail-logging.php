@@ -31,8 +31,8 @@
 	If not, see http://www.gnu.org/licenses/gpl-3.0.html
 */
 
-// Exit if accessed directly
-if(!defined( 'ABSPATH' )) exit;
+// Exit if accessed directly.
+if ( ! defined( 'ABSPATH' ) ) exit;
 
 $WPML_minimalRequiredPhpVersion = '5.3';
 
@@ -44,17 +44,17 @@ $WPML_minimalRequiredPhpVersion = '5.3';
 function WPML_noticePhpVersionWrong() {
 	global $WPML_minimalRequiredPhpVersion;
 	echo '<div class="updated fade">' .
-	  __('Error: plugin "WP Mail Logging" requires a newer version of PHP to be running.',  'wpml').
-			'<br/>' . __('Minimal version of PHP required: ', 'wpml') . '<strong>' . $WPML_minimalRequiredPhpVersion . '</strong>' .
-			'<br/>' . __('Your server\'s PHP version: ', 'wpml') . '<strong>' . phpversion() . '</strong>' .
+	  __( 'Error: plugin "WP Mail Logging" requires a newer version of PHP to be running.',  'wpml' ).
+			'<br/>' . __( 'Minimal version of PHP required: ', 'wpml' ) . '<strong>' . $WPML_minimalRequiredPhpVersion . '</strong>' .
+			'<br/>' . __( 'Your server\'s PHP version: ', 'wpml' ) . '<strong>' . phpversion() . '</strong>' .
 		 '</div>';
 }
 
 
 function WPML_PhpVersionCheck() {
 	global $WPML_minimalRequiredPhpVersion;
-	if (version_compare(phpversion(), $WPML_minimalRequiredPhpVersion) < 0) {
-		add_action('admin_notices', 'WPML_noticePhpVersionWrong');
+	if ( version_compare( phpversion(), $WPML_minimalRequiredPhpVersion ) < 0 ) {
+		add_action( 'admin_notices', 'WPML_noticePhpVersionWrong' );
 		return false;
 	}
 	return true;

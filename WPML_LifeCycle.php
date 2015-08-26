@@ -19,8 +19,8 @@
 	If not, see http://www.gnu.org/licenses/gpl-3.0.html
 */
 
-// Exit if accessed directly
-if(!defined( 'ABSPATH' )) exit;
+// Exit if accessed directly.
+if ( ! defined( 'ABSPATH' ) ) exit;
 
 include_once('WPML_InstallIndicator.php');
 
@@ -47,7 +47,7 @@ class WPML_LifeCycle extends WPML_InstallIndicator {
 	public function uninstall() {
 		$this->otherUninstall();
 
-		if( $this->getSetting('delete-on-deactivation', false) == true ) {
+		if ( $this->getSetting('delete-on-deactivation', false) == true ) {
 			//TOOD: is multi site?
 			$this->unInstallDatabaseTables();
 			$this->deleteSavedOptions();

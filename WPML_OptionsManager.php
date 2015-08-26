@@ -19,8 +19,8 @@
 	If not, see http://www.gnu.org/licenses/gpl-3.0.html
 */
 
-// Exit if accessed directly
-if(!defined( 'ABSPATH' )) exit;
+// Exit if accessed directly.
+if ( ! defined( 'ABSPATH' ) ) exit;
 
 class WPML_OptionsManager {
 	/**
@@ -34,7 +34,7 @@ class WPML_OptionsManager {
 	public function getSetting($settingName, $default = null) {
 		global $wpml_settings;
 
-		if( array_key_exists($settingName, $wpml_settings)) {
+		if ( array_key_exists($settingName, $wpml_settings)) {
 			$retVal = $wpml_settings[$settingName];
 		}
 		if (!isset($retVal) && $default !== null) {
@@ -50,7 +50,7 @@ class WPML_OptionsManager {
 	 */
 	public function getDateTimeFormatString() {
 		$timeFormat = "Y-m-d H:i:s";
-		if( $this->getSetting( 'datetimeformat-use-wordpress', false) == true )
+		if ( $this->getSetting( 'datetimeformat-use-wordpress', false) == true )
 			$timeFormat = get_option( 'date_format' ) . " " . get_option( 'time_format' );
 		return $timeFormat;
 	}
@@ -354,7 +354,7 @@ class WPML_OptionsManager {
 			return;
 
 		// Enqueue Styles and Scripts if we're on the list page
-		wp_enqueue_script( 'wp-logging-modal', untrailingslashit( plugin_dir_url( __FILE__ ) ) . '/js/modal.js', array( 'jquery' ), '1.0.0', TRUE );
+		wp_enqueue_script( 'wp-logging-modal', untrailingslashit( plugin_dir_url( __FILE__ ) ) . '/js/modal.js', array( 'jquery' ), '1.0.0', true );
 		wp_enqueue_style( 'wp-logging-modal', untrailingslashit( plugin_dir_url( __FILE__ ) ) . '/css/modal.css', array(), '1.0.0' );
 		wp_enqueue_style( 'wp-logging-icons', untrailingslashit( plugin_dir_url( __FILE__ ) ) . '/lib/font-awesome/css/font-awesome.min.css', array(), '4.1.0' );
 
@@ -368,7 +368,7 @@ class WPML_OptionsManager {
 		global $hook_suffix;
 
 		// Just add if we are at the plugin page
-		if( strpos($hook_suffix, $this->getPluginSlug() . '_log' ) == false )
+		if ( strpos($hook_suffix, $this->getPluginSlug() . '_log' ) == false )
 			return $contextual_help;
 
 		// The add_help_tab function for screen was introduced in WordPress 3.3.

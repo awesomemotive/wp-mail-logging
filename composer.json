@@ -19,7 +19,8 @@
         "redux-framework/redux-framework": "3.5.5.*"
     },
     "require-dev": {
-        "jdgrimes/wp-plugin-uninstall-tester": "dev-master"
+        "jdgrimes/wp-plugin-uninstall-tester": "dev-master",
+        "wp-coding-standards/wpcs": "0.6.0"
     },
     "license": "GPL-2.0",
     "authors": [
@@ -39,6 +40,10 @@
         "installer-paths": {
             "vendor/redux-framework/redux-framework": ["redux-framework/redux-framework"]
         }
+    },
+    "scripts": {
+        "post-install-cmd": "\"vendor/bin/phpcs\" --config-set installed_paths ../../..,../../../vendor/wp-coding-standards/wpcs",
+        "post-update-cmd": "\"vendor/bin/phpcs\" --config-set installed_paths ../../..,../../../vendor/wp-coding-standards/wpcs"
     },
     "minimum-stability": "dev"
 }

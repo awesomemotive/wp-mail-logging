@@ -2,8 +2,8 @@
 
 use WordPress\ORM\Model\WPML_Mail as Mail;
 
-// Exit if accessed directly
-if(!defined( 'ABSPATH' )) exit;
+// Exit if accessed directly.
+if ( ! defined( 'ABSPATH' ) ) exit;
 
 include_once('WPML_LifeCycle.php');
 
@@ -86,9 +86,9 @@ class WPML_Plugin extends WPML_LifeCycle {
 			}
 		}
 
-		if( !empty( $wpdb->last_error ) ) {
+		if ( !empty( $wpdb->last_error ) ) {
 			$upgradeOk = false;
-			if( is_admin() ) {
+			if ( is_admin() ) {
 				echo "There was at least one error while upgrading the database schema. Please report the following error: {$wpdb->last_error}";
 			}
 		}
@@ -152,7 +152,7 @@ class WPML_Plugin extends WPML_LifeCycle {
 		$uploads = wp_upload_dir();
 		$basename = basename( $uploads['baseurl'] );
 		$basename_needle = '/'.$basename.'/';
-		foreach( $attachments as $attachment ) {
+		foreach ( $attachments as $attachment ) {
 			$append_url = substr( $attachment, strrpos( $attachment, $basename_needle ) );
 			$attachment_urls[] = $append_url;
 		}
@@ -160,10 +160,10 @@ class WPML_Plugin extends WPML_LifeCycle {
 	}
 
 	private function extractMessage( $mail ) {
-		if( isset($mail['message']) ) {
+		if ( isset($mail['message']) ) {
 			// usually the message is stored in the message field
 			return $mail['message'];
-		} elseif( isset($mail['html']) ) {
+		} elseif ( isset($mail['html']) ) {
 			// for example Mandrill stores the message in the 'html' field (see gh-22)
 			return $mail['html'];
 		}
