@@ -1,7 +1,9 @@
 <?php
 
-// Exit if accessed directly
-if(!defined( 'ABSPATH' )) exit;
+use WordPress\ORM\Model\WPML_Mail as Mail;
+
+// Exit if accessed directly.
+if ( ! defined( 'ABSPATH' ) ) exit;
 
 /**
  * Log rotation for database.
@@ -50,7 +52,7 @@ class WPML_LogRotation {
 	 * Executes log rotation periodically.
 	 * @since 1.4
 	 */
-	static function LogRotationSchedule() {
+	static function limitNumberOfMailsByAmount() {
 		global $wpml_settings, $wpdb;
 		$tableName = WPML_Plugin::getTablename( 'mails' );
 		
@@ -71,6 +73,11 @@ class WPML_LogRotation {
 				);
 			}
 		}
+	}
+	
+	static function limitNumberOfMailsByTime() {
+		global $wpml_settings, $wpdb;
+		$tableName = WPML_Plugin::getTablename( 'mails' );
 		
 		if ( $wpml_settings['log-rotation-delete-time'] == '1') {
 			$days = $wpml_settings['log-rotation-delete-time-days'];
@@ -78,6 +85,15 @@ class WPML_LogRotation {
 				$wpdb->query( "DELETE FROM $tableName WHERE DATEDIFF(now(), timestamp) >= $days" );
 			}
 		}
+	}
+	
+	/**
+	 * Executes log rotation periodically.
+	 * @since 1.6.0
+	 */
+	static function LogRotationSchedule() {
+		self::limitNumberOfMailsByAmount();
+		self::limitNumberOfMailsByTime();
 	}
 }
 
