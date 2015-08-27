@@ -82,20 +82,22 @@ class WPML_LogRotation_Test extends WP_UnitTestCase {
 	 * @return Mail
 	 */
 	private function latest_mail() {
-		return Mail::query()
+		$mails = Mail::query()
 			->sort_by('mail_id')
 			->order('desc')
 			->limit(1)
-			->find()[0];
+			->find();
+		return reset( $mails );
 	}
 	/**
 	 * @return Mail
 	 */
 	private function oldest_mail() {
-		return Mail::query()
+		$mails = Mail::query()
 			->sort_by('mail_id')
 			->order('asc')
 			->limit(1)
-			->find()[0];
+			->find();
+		return reset( $mails );
 	}
 }
