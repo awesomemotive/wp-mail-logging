@@ -34,7 +34,7 @@
 // Exit if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-$WPML_minimalRequiredPhpVersion = '5.3';
+$WPML_minimalRequiredPhpVersion = '5.4';
 
 /**
  * Check the PHP version and give a useful error message if the user's version is less than the required version

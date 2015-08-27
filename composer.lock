@@ -4,20 +4,70 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "23bbac6128ff14f7bacf7c917adcbc45",
+    "hash": "fe43a23d045cef1e55663820f813e0bf",
     "packages": [
+        {
+            "name": "bocharsky-bw/arrayzy",
+            "version": "v0.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/bocharsky-bw/Arrayzy.git",
+                "reference": "364cda2180574868c37ed84fb5734fcf4fb6853a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/bocharsky-bw/Arrayzy/zipball/364cda2180574868c37ed84fb5734fcf4fb6853a",
+                "reference": "364cda2180574868c37ed84fb5734fcf4fb6853a",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "php": ">=5.4"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~4.5"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Arrayzy\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Bocharsky Victor",
+                    "email": "bocharsky.bw@gmail.com"
+                }
+            ],
+            "description": "A PHP array easy manipulation library in OOP way",
+            "homepage": "https://github.com/bocharsky-bw/Arrayzy",
+            "keywords": [
+                "OOP",
+                "array",
+                "arrayzy",
+                "helper",
+                "manipulation",
+                "utility",
+                "wrapper"
+            ],
+            "time": "2015-07-12 19:31:25"
+        },
         {
             "name": "brandonwamboldt/wp-orm",
             "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/No3x/wp-orm.git",
-                "reference": "d9a34b4052a1f6967de7b849ba6d73abeea29dd7"
+                "reference": "12663882381ce71e8be4b49703e5697bc29d1fb0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/No3x/wp-orm/zipball/d9a34b4052a1f6967de7b849ba6d73abeea29dd7",
-                "reference": "d9a34b4052a1f6967de7b849ba6d73abeea29dd7",
+                "url": "https://api.github.com/repos/No3x/wp-orm/zipball/12663882381ce71e8be4b49703e5697bc29d1fb0",
+                "reference": "12663882381ce71e8be4b49703e5697bc29d1fb0",
                 "shasum": ""
             },
             "require": {
@@ -42,7 +92,7 @@
             "support": {
                 "source": "https://github.com/No3x/wp-orm/tree/master"
             },
-            "time": "2015-08-20 11:29:59"
+            "time": "2015-08-27 13:33:09"
         },
         {
             "name": "composer/installers",
