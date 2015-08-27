@@ -1,6 +1,7 @@
 <?php
 
 use WordPress\ORM\Model\WPML_Mail as Mail;
+use Arrayzy\ImmutableArray;
 
 /**
  * Tests for LogRotation
@@ -41,7 +42,7 @@ class WPML_LogRotation_Test extends WP_UnitTestCase {
 	}
 
 	/**
-	 * Check if the number of kept messages is correct.
+	 * Test limitNumberOfMailsByAmount - Check if the number of kept messages is correct.
 	 */
 	function test_limitNumberOfMailsByAmount_count() {
 		global $wpml_settings;
@@ -58,7 +59,7 @@ class WPML_LogRotation_Test extends WP_UnitTestCase {
 	}
 
 	/**
-	 * Check if old messages where deleted first
+	 * Test limitNumberOfMailsByAmount - Check if old messages where deleted first
 	 */
 	function test_limitNumberOfMailsByAmount_order() {
 		global $wpml_settings;
@@ -74,30 +75,64 @@ class WPML_LogRotation_Test extends WP_UnitTestCase {
 		$this->assertLessThan( $lates_mail->get_mail_id(), $oldest_mail->get_mail_id() );
 	}
 
+	function test_limitNumberOfMailsByTime_order() {
+		global $wpml_settings;
+		$amount = 10;
+		$old = 3;
+		$days = 5;
+		$this->prepareMessages( $amount );
+		$wpml_settings['log-rotation-delete-time'] = '1';
+		$wpml_settings['log-rotation-delete-time-days'] = $days;
+
+		foreach( $this->query_some_mails( $old ) as $mail ) {
+			// Make mails $days older
+			$mail->set_timestamp( gmdate( 'Y-m-d H:i:s', ( time() + ( get_option( 'gmt_offset' ) * HOUR_IN_SECONDS ) + $days * DAY_IN_SECONDS ) ) )
+				 ->save();
+		}
+		WPML_LogRotation::limitNumberOfMailsByTime();
+
+		$this->assertEquals( $amount-$old, $this->count_mails() );
+
+	}
+
 	private function count_mails() {
 		return Mail::query()->find(true);
+	}
+
+	/**
+	 * @param $amount
+	 * @return Mail[] array
+	 */
+	private function query_some_mails( $amount ) {
+		return Mail::query()
+			->sort_by( Mail::get_primary_key() )
+			->order( 'desc' )
+			->limit( $amount )
+			->find();
 	}
 
 	/**
 	 * @return Mail
 	 */
 	private function latest_mail() {
-		$mails = Mail::query()
-			->sort_by('mail_id')
-			->order('desc')
-			->limit(1)
-			->find();
-		return reset( $mails );
+		return ImmutableArray::create(
+			Mail::query()
+				->sort_by( Mail::get_primary_key() )
+				->order( 'desc' )
+				->limit(1)
+				->find()
+		)->first();
 	}
 	/**
 	 * @return Mail
 	 */
 	private function oldest_mail() {
-		$mails = Mail::query()
-			->sort_by('mail_id')
-			->order('asc')
-			->limit(1)
-			->find();
-		return reset( $mails );
+		return ImmutableArray::create(
+			Mail::query()
+				->sort_by( Mail::get_primary_key() )
+				->order( 'asc' )
+				->limit(1)
+				->find()
+		)->first();
 	}
 }

@@ -82,7 +82,7 @@ class WPML_LogRotation {
 		if ( $wpml_settings['log-rotation-delete-time'] == '1') {
 			$days = $wpml_settings['log-rotation-delete-time-days'];
 			if ( $days > 0 ) {
-				$wpdb->query( "DELETE FROM $tableName WHERE DATEDIFF(now(), timestamp) >= $days" );
+				$wpdb->query( "DELETE FROM `$tableName` WHERE DATEDIFF(`timestamp`, NOW()) >= $days" );
 			}
 		}
 	}
