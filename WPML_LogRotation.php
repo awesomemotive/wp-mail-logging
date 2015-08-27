@@ -49,8 +49,8 @@ class WPML_LogRotation {
 	}
 	
 	/**
-	 * Executes log rotation periodically.
-	 * @since 1.4
+	 * The LogRotation supports the limitation of stored mails by amount.
+	 * @since 1.6.0.
 	 */
 	static function limitNumberOfMailsByAmount() {
 		global $wpml_settings, $wpdb;
@@ -74,7 +74,11 @@ class WPML_LogRotation {
 			}
 		}
 	}
-	
+
+	/**
+	 * The LogRotation supports the limitation of stored mails by date.
+	 * @since 1.6.0.
+	 */
 	static function limitNumberOfMailsByTime() {
 		global $wpml_settings, $wpdb;
 		$tableName = WPML_Plugin::getTablename( 'mails' );
@@ -89,7 +93,7 @@ class WPML_LogRotation {
 	
 	/**
 	 * Executes log rotation periodically.
-	 * @since 1.6.0
+	 * @since 1.4
 	 */
 	static function LogRotationSchedule() {
 		self::limitNumberOfMailsByAmount();
