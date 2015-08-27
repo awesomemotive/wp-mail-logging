@@ -9,7 +9,7 @@ use WordPress\ORM\BaseModel;
 if(!defined( 'ABSPATH' )) exit;
 
 /**
- * WordPress post model.
+ * WPML Mail model.
  * @sine 1.6.0
  * @author No3x
  */
