@@ -58,7 +58,7 @@ class WPML_OptionsManager {
 	}
 	
 	public function getOptionNamePrefix() {
-		return get_class($this) . '_';
+		return $this->getPluginSlug() . '_';
 	}
 
 
