@@ -2,7 +2,7 @@
 
 namespace No3x\WPML;
 
-use WordPress\ORM\Model\WPML_Mail as Mail;
+use No3x\WPML\Model\WPML_Mail as Mail;
 
 // Exit if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) exit;

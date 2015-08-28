@@ -14,7 +14,7 @@ namespace No3x\WPML\Tests;
  *
  * @group uninstall
  */
-class WPML_Uninstall_Plugin_Test extends WP_Plugin_Uninstall_UnitTestCase {
+class WPML_Uninstall_Plugin_Test extends \WP_Plugin_Uninstall_UnitTestCase {
 
 	//
 	// Protected properties.

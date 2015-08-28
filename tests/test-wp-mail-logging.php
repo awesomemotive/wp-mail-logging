@@ -2,12 +2,14 @@
 
 namespace No3x\WPML\Tests;
 
+use No3x\WPML\WPML_Plugin;
+
 /**
  * @author No3x
  * Tests are written in the AAA-Rule
  * There are three basic sections for our test: Arrange, Act, and Assert.
  */
-class WPML_Plugin_Test extends WP_UnitTestCase {
+class WPML_Plugin_Test extends \WP_UnitTestCase {
 	
 	private $plugin;
 
