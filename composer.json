@@ -48,6 +48,9 @@
     },
     "minimum-stability": "dev",
     "autoload": {
-        "psr-4": {"No3x\\WPML\\": ""}
+        "psr-4": {
+            "No3x\\WPML\\": "",
+            "No3x\\WPML\\Model\\": "model"
+        }
     }
 }
