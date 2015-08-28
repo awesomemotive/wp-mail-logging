@@ -1,5 +1,7 @@
 <?php
 
+namespace No3x\WPML\Tests;
+
 use WordPress\ORM\Model\WPML_Mail as Mail;
 use Arrayzy\ImmutableArray;
 

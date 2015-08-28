@@ -1,5 +1,7 @@
 <?php
 
+namespace No3x\WPML\Tests;
+
 /**
  * @author No3x
  * Tests are written in the AAA-Rule

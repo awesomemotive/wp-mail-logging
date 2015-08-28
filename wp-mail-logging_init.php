@@ -19,18 +19,15 @@
 	If not, see http://www.gnu.org/licenses/gpl-3.0.html
 */
 
+namespace No3x\WPML;
+
 // Exit if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) exit;
 
 function WPML_init( $file ) {
 
-	require plugin_dir_path( __FILE__ ) . 'vendor/autoload.php';
-	require_once( 'WPML_Utils.php' );
-	require_once( plugin_dir_path( __FILE__ ) . 'model/WPML_Mail.php' );
-	require_once( 'WPML_Plugin.php' );
-	require_once( 'WPML_LogRotation.php' );
+	require __DIR__ . '/vendor/autoload.php';
 	require_once( plugin_dir_path( __FILE__ ) . 'inc/redux/admin-init.php' );
-
 	$aPlugin = new WPML_Plugin();
 
 	// For Testing make plugin available global.

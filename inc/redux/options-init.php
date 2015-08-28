@@ -24,6 +24,7 @@ if (!class_exists('WPML_Redux_Framework_config')) {
                     $this->initSettings();
                 } else {
                     add_action( 'plugins_loaded', array( $this, 'initSettings' ), 10 );
+
                 }
 
             }

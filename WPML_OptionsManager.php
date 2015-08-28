@@ -19,6 +19,8 @@
 	If not, see http://www.gnu.org/licenses/gpl-3.0.html
 */
 
+namespace No3x\WPML;
+
 // Exit if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) exit;
 
@@ -29,7 +31,7 @@ class WPML_OptionsManager {
 	 * @since 1.4
 	 * @param string $settingName The option name to return
 	 * @param mixed $default (null) The value to return if option not set.
-	 * @return Ambigous <string, mixed> the options value or $default if not found.
+	 * @return ambigous <string, mixed> the options value or $default if not found.
 	 */
 	public function getSetting($settingName, $default = null) {
 		global $wpml_settings;
@@ -130,7 +132,20 @@ class WPML_OptionsManager {
 	 * Just returns the class name in lowercase.
 	 */
 	public function getPluginSlug() {
-		return strtolower( get_class($this) );
+		return strtolower( $this->getClassnameWithoutNamespace() );
+	}
+
+	/**
+	 * Get the class name without the namespace
+	 * @return string class name without the namespace.
+	 * @link http://php.net/manual/de/function.get-class.php#114568
+	 */
+	private function getClassnameWithoutNamespace() {
+		$classname = get_class($this);
+		if ($pos = strrpos( $classname, '\\')) {
+			return substr($classname, $pos + 1);
+		}
+		return $classname;
 	}
 
 	/**

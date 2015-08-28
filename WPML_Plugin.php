@@ -1,5 +1,7 @@
 <?php
 
+namespace No3x\WPML;
+
 use WordPress\ORM\Model\WPML_Mail as Mail;
 
 // Exit if accessed directly.

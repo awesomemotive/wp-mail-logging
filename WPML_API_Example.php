@@ -1,5 +1,7 @@
 <?php
 
+namespace No3x\WPML;
+
 // Exit if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) exit;
 

@@ -4,7 +4,17 @@ Community made patches, localisations, bug reports and contributions are always 
 
 When contributing please ensure you follow the guidelines below.
 
-## Environment (eclipse PDT recommended)
+## Environment
+All dependencies are managed via [composer](http://getcomposer.org). 
+To install the plugin with development depencdencies run:
+
+```composer install```
+
+To get a working plugin installation run:
+
+```composer install --no-dev --no-scripts --prefer-dist``` (perfect for making a release by zipping the resulting environment)
+
+## IDE
 
 Please insure to be conform with the development guidelines.
 * use tabs and not spaces. The tab indent size should be 4 for all wp-mail-logging code.

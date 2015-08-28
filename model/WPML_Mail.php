@@ -1,8 +1,8 @@
 <?php
 
-namespace WordPress\ORM\Model;
+namespace No3x\WPML\Model;
 
-use DateTime;
+use \DateTime;
 use WordPress\ORM\BaseModel;
 
 // Exit if accessed directly

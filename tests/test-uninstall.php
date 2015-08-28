@@ -1,5 +1,7 @@
 <?php
 
+namespace No3x\WPML\Tests;
+
 /**
  * Test uninstallation.
  */

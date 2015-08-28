@@ -19,6 +19,8 @@
 	If not, see http://www.gnu.org/licenses/gpl-3.0.html
 */
 
+namespace No3x\WPML;
+
 // Exit if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) exit;
 

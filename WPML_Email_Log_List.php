@@ -1,5 +1,8 @@
 <?php
-use WordPress\ORM\Model\WPML_Mail as Mail;
+
+namespace No3x\WPML;
+
+use No3x\WPML\Model\WPML_Mail as Mail;
 
 // Exit if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) exit;
@@ -13,7 +16,7 @@ if ( ! class_exists( 'WP_List_Table' ) ) {
  * @author No3x
  * @since 1.0
  */
-class Email_Logging_ListTable extends WP_List_Table {
+class Email_Logging_ListTable extends \WP_List_Table {
 
 	const NONCE_LIST_TABLE = 'wpml-list_table';
 
