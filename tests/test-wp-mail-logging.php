@@ -2,6 +2,7 @@
 
 namespace No3x\WPML\Tests;
 
+use No3x\WPML\Tests\Helper\WPML_UnitTestCase;
 use No3x\WPML\WPML_Plugin;
 
 /**
@@ -9,22 +10,8 @@ use No3x\WPML\WPML_Plugin;
  * Tests are written in the AAA-Rule
  * There are three basic sections for our test: Arrange, Act, and Assert.
  */
-class WPML_Plugin_Test extends \WP_UnitTestCase {
-	
-	private $plugin;
+class WPML_Plugin_Test extends WPML_UnitTestCase {
 
-	function setUp() {
-		parent::setUp();
-		$this->plugin = &$GLOBALS['WPML_Plugin'];
-		if( !isset( $_SERVER['SERVER_NAME'] ) ) {
-			$_SERVER['SERVER_NAME'] = 'vvv';
-		}
-	}
-	
-	function test_PluginInitialization() {
-		$this->assertFalse( null == $this->plugin );
-	}
-	
 	function test_getTablename() {
 		global $wpdb;
 		
