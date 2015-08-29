@@ -2,6 +2,7 @@
 
 namespace No3x\WPML\Tests;
 
+use No3x\WPML\Tests\Helper\WPML_UnitTestCase;
 use No3x\WPML\Model\WPML_Mail as Mail;
 use No3x\WPML\WPML_LogRotation;
 use Arrayzy\ImmutableArray;
@@ -13,21 +14,7 @@ use Arrayzy\ImmutableArray;
  * Tests are written in the AAA-Rule
  * There are three basic sections for our test: Arrange, Act, and Assert.
  */
-class WPML_LogRotation_Test extends \WP_UnitTestCase {
-	
-	private $plugin;
-
-	function setUp() {
-		parent::setUp();
-		$this->plugin = &$GLOBALS['WPML_Plugin'];
-		if( !isset( $_SERVER['SERVER_NAME'] ) ) {
-			$_SERVER['SERVER_NAME'] = 'vvv';
-		}
-	}
-
-	function test_PluginInitialization() {
-		$this->assertFalse( null == $this->plugin );
-	}
+class WPML_LogRotation_Test extends WPML_UnitTestCase {
 
 	private function prepareMessages( $amount ) {
 		$to = 'email@example.com';
