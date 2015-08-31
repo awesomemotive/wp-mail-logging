@@ -28,8 +28,8 @@ class Email_Logging_ListTable extends \WP_List_Table {
 		global $status, $page, $hook_suffix;
 
 		parent::__construct( array(
-			'singular' 	=> __( 'Email', 'wml' ),// singular name of the listed records
-			'plural' 	=> __( 'Emails', 'wml' ),// plural name of the listed records
+			'singular' 	=> __( 'Email', 'wpml' ),// singular name of the listed records
+			'plural' 	=> __( 'Emails', 'wpml' ),// plural name of the listed records
 			'ajax' 		=> false,				// does this table support ajax?
 		) );
 	}
@@ -52,14 +52,14 @@ class Email_Logging_ListTable extends \WP_List_Table {
 	function get_columns() {
 		$columns = array(
 			'cb'				=> '<input type="checkbox" />',
-			'mail_id'			=> __( 'ID', 'wml' ),
-			'timestamp'			=> __( 'Time', 'wml' ),
-			'receiver'			=> __( 'Receiver', 'wml' ),
-			'subject'			=> __( 'Subject', 'wml' ),
-			'message'			=> __( 'Message', 'wml' ),
-			'headers'			=> __( 'Headers', 'wml' ),
-			'attachments'		=> __( 'Attachments', 'wml' ),
-			'plugin_version'	=> __( 'Plugin Version', 'wml' ),
+			'mail_id'			=> __( 'ID', 'wpml' ),
+			'timestamp'			=> __( 'Time', 'wpml' ),
+			'receiver'			=> __( 'Receiver', 'wpml' ),
+			'subject'			=> __( 'Subject', 'wpml' ),
+			'message'			=> __( 'Message', 'wpml' ),
+			'headers'			=> __( 'Headers', 'wpml' ),
+			'attachments'		=> __( 'Attachments', 'wpml' ),
+			'plugin_version'	=> __( 'Plugin Version', 'wpml' ),
 		);
 
 		// Give a plugin the chance to edit the columns.

@@ -30,8 +30,8 @@ class WPML_API_Example {
 	 */
 	public function add_column( $columns ) {
 		return $columns = array_merge( $columns,
-			array( 'test' => __( 'test', 'wml' ) )
-			//,array('test2'	=> __( 'test2', 'wml' ) ) // ...
+			array( 'test' => __( 'test', 'wpml' ) )
+			//,array('test2'	=> __( 'test2', 'wpml' ) ) // ...
 		);
 	}
 
