@@ -28,9 +28,9 @@ class Email_Logging_ListTable extends \WP_List_Table {
 		global $status, $page, $hook_suffix;
 
 		parent::__construct( array(
-			'singular' 	=> __( 'Email', 'wpml' ),// singular name of the listed records
-			'plural' 	=> __( 'Emails', 'wpml' ),// plural name of the listed records
-			'ajax' 		=> false,				// does this table support ajax?
+			'singular' 	=> 'email', 	// singular name of the listed records
+			'plural' 	=> 'emails',	// plural name of the listed records
+			'ajax' 		=> false,		// does this table support ajax?
 		) );
 	}
 
@@ -40,7 +40,7 @@ class Email_Logging_ListTable extends \WP_List_Table {
 	 * @see WP_List_Table::no_items()
 	 */
 	function no_items() {
-		_e( 'No ' . $this->_args['singular'] . ' found.' );
+		_e( 'No email found.', 'wpml' );
 		return;
 	}
 
