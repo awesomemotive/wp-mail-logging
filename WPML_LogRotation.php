@@ -12,44 +12,47 @@ if ( ! defined( 'ABSPATH' ) ) exit;
  * @author No3x
  * @since 1.4
  */
-class WPML_LogRotation {
-	
+class WPML_LogRotation extends WPML_Plugin {
+
 	const WPML_LOGROTATION_SCHEDULE_HOOK = 'wpml_log_rotation';
 	const WPML_LOGROTATION_SCHEDULE = 'LogRotationSchedule';
-	
+
 	public static function init() {
-		add_action( self::WPML_LOGROTATION_SCHEDULE_HOOK , array('WPML_LogRotation', self::WPML_LOGROTATION_SCHEDULE) );
-		new WPML_LogRotation();
+		add_action( self::WPML_LOGROTATION_SCHEDULE_HOOK , array( __NAMESPACE__ . '\\WPML_LogRotation', self::WPML_LOGROTATION_SCHEDULE) );
+		$logRotation = new WPML_LogRotation();
+		register_deactivation_hook( plugin_dir_path( __FILE__ ). $logRotation->getMainPluginFileName(), array( $logRotation, 'unschedule' ) );
 	}
-	
+
 	public function __construct() {
 		global $wpml_settings;
-		if ( $wpml_settings['log-rotation-limit-amout'] == '1' || $wpml_settings['log-rotation-delete-time'] == '1' ) {
-			$this->schedule();
-		} else {
-			$this->unschedule();
+
+		if ( isset( $wpml_settings ) ) {
+			if ( $wpml_settings['log-rotation-limit-amout'] == '1' || $wpml_settings['log-rotation-delete-time'] == '1' ) {
+				$this->schedule();
+			} else {
+				$this->unschedule();
+			}
 		}
 	}
-	
+
 	/**
 	 * Schedules an event.
 	 * @since 1.4
 	 */
 	function schedule() {
-		if ( !wp_next_scheduled( self::WPML_LOGROTATION_SCHEDULE_HOOK ) ) {
+		if ( ! wp_next_scheduled( self::WPML_LOGROTATION_SCHEDULE_HOOK ) ) {
 			wp_schedule_event( time(), 'hourly', self::WPML_LOGROTATION_SCHEDULE_HOOK );
 		}
 	}
-	
+
 	/**
 	 * Unschedules an event.
 	 * @since 1.4
 	 */
 	function unschedule() {
-		$timestamp = wp_next_scheduled( self::WPML_LOGROTATION_SCHEDULE_HOOK );
-		wp_unschedule_event( $timestamp, self::WPML_LOGROTATION_SCHEDULE_HOOK );
+		wp_clear_scheduled_hook( self::WPML_LOGROTATION_SCHEDULE_HOOK );
 	}
-	
+
 	/**
 	 * The LogRotation supports the limitation of stored mails by amount.
 	 * @since 1.6.0.
@@ -102,5 +105,3 @@ class WPML_LogRotation {
 		self::limitNumberOfMailsByTime();
 	}
 }
-
-add_action('plugins_loaded', array( 'WPML_LogRotation', 'init' ), 11 );
