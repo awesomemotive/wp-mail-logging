@@ -33,6 +33,8 @@
 
 namespace No3x\WPML;
 
+use No3x\WPML\WPML_Init;
+
 // Exit if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) exit;
 
@@ -87,7 +89,7 @@ WPML_i18n_init();
 // Next, run the version check.
 // If it is successful, continue with initialization for this plugin
 if (WPML_PhpVersionCheck()) {
-	// Only load and run the init function if we know PHP version can parse it
-	include_once('wp-mail-logging_init.php');
-	WPML_init(__FILE__);
+	// Only init and run the init function if we know PHP version can parse it
+	require __DIR__ . '/vendor/autoload.php';
+	WPML_Init::init(__FILE__);
 }

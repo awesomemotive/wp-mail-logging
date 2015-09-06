@@ -2,7 +2,7 @@
 
 namespace No3x\WPML\Tests\Helper;
 
-use No3x\WPML\WPML_Plugin;
+use No3x\WPML\WPML_Init;
 
 class WPML_UnitTestCase extends \WP_UnitTestCase {
 
@@ -19,7 +19,8 @@ class WPML_UnitTestCase extends \WP_UnitTestCase {
 	function setUp() {
 		parent::setUp();
 
-		$this->plugin = &$GLOBALS['WPML_Plugin'];
+		$this->plugin = apply_filters('wpml_get_di_service', 'plugin' );
+
 		if( ! isset( $_SERVER['SERVER_NAME'] ) ) {
 			$_SERVER['SERVER_NAME'] = 'vvv';
 		}

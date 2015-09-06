@@ -1,4 +1,7 @@
 <?php
+
+namespace No3x\WPML\Settings;
+
     /**
      * ReduxFramework Sample Config File
      * For full documentation, please visit: http://docs.reduxframework.com/
@@ -12,19 +15,20 @@ if (!class_exists('WPML_Redux_Framework_config')) {
             public $sections = array();
             public $theme;
             public $ReduxFramework;
+			protected $plugin_meta = array();
 
-            public function __construct() {
+            public function __construct( $plugin_meta ) {
+				$this->plugin_meta = $plugin_meta;
 
                 if ( ! class_exists( 'ReduxFramework' ) ) {
                     return;
                 }
 
                 // This is needed. Bah WordPress bugs.  ;)
-                if ( true == Redux_Helpers::isTheme( __FILE__ ) ) {
+                if ( true == \Redux_Helpers::isTheme( __FILE__ ) ) {
                     $this->initSettings();
                 } else {
                     add_action( 'plugins_loaded', array( $this, 'initSettings' ), 10 );
-
                 }
 
             }
@@ -63,7 +67,7 @@ if (!class_exists('WPML_Redux_Framework_config')) {
                 // Dynamically add a section. Can be also used to modify sections/fields
                 //add_filter('redux/options/' . $this->args['opt_name'] . '/sections', array($this, 'dynamic_section'));
 
-                $this->ReduxFramework = new ReduxFramework( $this->sections, $this->args );
+                $this->ReduxFramework = new \ReduxFramework( $this->sections, $this->args );
             }
 
             /**
@@ -155,8 +159,8 @@ if (!class_exists('WPML_Redux_Framework_config')) {
                  * Used within different fields. Simply examples. Search for ACTUAL DECLARATION for field examples
                  * */
                 // Background Patterns Reader
-                $sample_patterns_path = ReduxFramework::$_dir . '../sample/patterns/';
-                $sample_patterns_url  = ReduxFramework::$_url . '../sample/patterns/';
+                $sample_patterns_path = \ReduxFramework::$_dir . '../sample/patterns/';
+                $sample_patterns_url  = \ReduxFramework::$_url . '../sample/patterns/';
                 $sample_patterns      = array();
 
                 if ( is_dir( $sample_patterns_path ) ) :
@@ -363,14 +367,14 @@ if (!class_exists('WPML_Redux_Framework_config')) {
                     // This is where your data is stored in the database and also becomes your global variable name.
                     'display_name'         => 'WP Mail Logging Settings',
                     // Name that appears at the top of your panel
-                    'display_version'      => apply_filters('wpml_get_plugin_version', ''),
+                    'display_version'      => $this->plugin_meta['version_installed'],
                     // Version that appears at the top of your panel
                     'menu_type'            => 'submenu',
                     //Specify if the admin menu should appear or not. Options: menu or submenu (Under appearance only)
                     'allow_sub_menu'       => true,
                     // Show the sections below the admin menu item or not
                     'menu_title'           => 'Settings',
-                    'page_title'           => apply_filters('wpml_get_plugin_name', ''),
+                    'page_title'           => $this->plugin_meta['display_name'],
                     // You will need to generate a Google API key to use this feature.
                     // Please visit: https://developers.google.com/fonts/docs/developer_api#Auth
                     'google_api_key'       => '',
@@ -493,7 +497,7 @@ if (!class_exists('WPML_Redux_Framework_config')) {
                     //'img'   => '', // You can use icon OR img. IMG needs to be a full URL.
                 );
                 $this->args['share_icons'][] = array(
-                    'url'   => 'https://wordpress.org/plugins/wp-mail-logging/',
+                    'url'   => $this->plugin_meta['wp_uri'],
                     'title' => 'Visit us on WordPress',
                     'icon'  => 'el-icon-wordpress'
                 );
@@ -540,7 +544,7 @@ if (!class_exists('WPML_Redux_Framework_config')) {
         }
 
         global $reduxConfig;
-        $reduxConfig = new WPML_Redux_Framework_config();
+        //$reduxConfig = new WPML_Redux_Framework_config();
     } else {
         echo "The class named Redux_Framework_sample_config has already been called. <strong>Developers, you need to prefix this class with your company name or you'll run into problems!</strong>";
     }

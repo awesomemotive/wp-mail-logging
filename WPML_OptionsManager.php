@@ -495,12 +495,11 @@ class WPML_OptionsManager {
 			<form id="email-list" method="post">
 				<input type="hidden" name="page" value="<?php echo esc_attr( $_REQUEST['page'] ); ?>" />
 					<?php
-					wp_nonce_field( Email_Logging_ListTable::NONCE_LIST_TABLE, Email_Logging_ListTable::NONCE_LIST_TABLE . '_nonce' );
+					wp_nonce_field( WPML_Email_Log_List::NONCE_LIST_TABLE, WPML_Email_Log_List::NONCE_LIST_TABLE . '_nonce' );
 					$search = ( isset( $_REQUEST['s'] ) ) ? $_REQUEST['s'] : false;
-					$emailLoggingListTable = new Email_Logging_ListTable();
-					$emailLoggingListTable->prepare_items( $search );
-					$emailLoggingListTable->search_box( __( 'Search' ), 's' );
-					$emailLoggingListTable->display();
+					$this->emailLogList->prepare_items( $search );
+					$this->emailLogList->search_box( __( 'Search' ), 's' );
+					$this->emailLogList->display();
 				?>
 			</form>
 		</div> 

@@ -24,8 +24,6 @@ namespace No3x\WPML;
 // Exit if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-include_once( 'WPML_OptionsManager.php' );
-
 class WPML_InstallIndicator extends WPML_OptionsManager {
 
 	const optionInstalled = '_installed';

@@ -24,8 +24,6 @@ namespace No3x\WPML;
 // Exit if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-include_once('WPML_InstallIndicator.php');
-
 class WPML_LifeCycle extends WPML_InstallIndicator {
 
 	public function install() {

@@ -7,13 +7,19 @@ use No3x\WPML\Model\WPML_Mail as Mail;
 // Exit if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-include_once('WPML_LifeCycle.php');
-
 class WPML_Plugin extends WPML_LifeCycle {
+
+	protected $emailLogList;
 
 	const HOOK_LOGGING_COLUMNS = 'wpml_hook_mail_columns';
 	const HOOK_LOGGING_COLUMNS_RENDER = 'wpml_hook_mail_columns_render';
-	
+	const HOOK_LOGGING_SUPPORTED_FORMATS = 'wpml_hook_supported_formats';
+	const HOOK_LOGGING_FORMAT_CONTENT = 'wpml_hook_format_content';
+
+	function __construct( $emailLogList )
+	{
+		$this->emailLogList = $emailLogList;
+	}
 
 	public static function getTablename( $name ) {
 		global $wpdb;
@@ -24,8 +30,12 @@ class WPML_Plugin extends WPML_LifeCycle {
 		return 'WP Mail Logging';
 	}
 
-	protected function getMainPluginFileName() {
+	public function getMainPluginFileName() {
 		return 'wp-mail-logging.php';
+	}
+
+	public function getVersionSaved() {
+		return parent::getVersionSaved();
 	}
 
 	/**
@@ -103,11 +113,11 @@ class WPML_Plugin extends WPML_LifeCycle {
 	}
 
 	public function addActionsAndFilters() {
-		
 		// Add options administration page
 		// http://plugin.michael-simpson.com/?page_id=47
 		add_action( 'plugins_loaded', array( __NAMESPACE__ . '\\WPML_LogRotation', 'init' ), 11 );
 		add_action( 'admin_menu', array(&$this, 'createSettingsMenu'), 9 );
+
 
 		// Example adding a script & style just for the options administration page
 		// http://plugin.michael-simpson.com/?page_id=47

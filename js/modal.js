@@ -14,12 +14,25 @@ jQuery(function ($) {
         },
         hide: function () {
             $('#wp-mail-logging-modal-wrap').fadeOut();
+        },
+        getSelectedFormat: function() {
+            return 'html';
         }
     };
 
     $('.wp-mail-logging-view-message').click(function () {
-        var emailMessage = $(this).data('message');
-        wpml.modal.set(emailMessage);
+        var emailMessage = "";
+        var id = $(this).data('mail-id');
+        jQuery.post(ajaxurl, {
+            'action': 'wpml_email_get',
+            //'nonce': top.tinymce.settings.bss_nonce,
+            'id': id,
+            'format': wpml.modal.getSelectedFormat()
+        }, function(response) {
+            emailMessage = response;
+            wpml.modal.set(emailMessage);
+        });
+
         wpml.modal.show();
     });
 
