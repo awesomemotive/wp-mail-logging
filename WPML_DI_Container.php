@@ -12,7 +12,7 @@ use \Pimple\Container;
 class WPML_DI_Container extends Container {
 
 	public function run() {
-		foreach( $this->values  as $key => $content ) {
+		foreach( $this->keys() as $key ) {
 			$content = $this[$key];
 			if( is_object( $content ) ) {
 				$reflection = new \ReflectionClass( $content );
