@@ -22,12 +22,20 @@ class WPML_LogRotation {
 		$this->plugin_meta = $plugin_meta;
 	}
 
+	/**
+	 * Add actions and filters for this module.
+	 * @since 1.6.0
+	 */
 	public function addActionsAndFilters() {
 		add_action( 'plugins_loaded', array( $this, 'init') );
 		add_action( self::WPML_LOGROTATION_SCHEDULE_HOOK , array( __CLASS__, self::WPML_LOGROTATION_SCHEDULE_ACTION) );
 		register_deactivation_hook( plugin_dir_path( __FILE__ ) . $this->plugin_meta['main_file'], array( $this, 'unschedule' ) );
 	}
 
+	/**
+	 * Init this module.
+	 * @since 1.6.0
+	 */
 	public function init() {
 		global $wpml_settings;
 
@@ -60,7 +68,7 @@ class WPML_LogRotation {
 
 	/**
 	 * The LogRotation supports the limitation of stored mails by amount.
-	 * @since 1.6.0.
+	 * @since 1.6.0
 	 */
 	static function limitNumberOfMailsByAmount() {
 		global $wpml_settings, $wpdb;
@@ -87,7 +95,7 @@ class WPML_LogRotation {
 
 	/**
 	 * The LogRotation supports the limitation of stored mails by date.
-	 * @since 1.6.0.
+	 * @since 1.6.0
 	 */
 	static function limitNumberOfMailsByTime() {
 		global $wpml_settings, $wpdb;

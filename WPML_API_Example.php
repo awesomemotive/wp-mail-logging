@@ -58,7 +58,7 @@ class WPML_API_Example {
 
 	/**
 	 * Is called when supported formats are collected. You can add a format here then you can provide a content function.
-	 * @since 1.6.0.
+	 * @since 1.6.0
 	 * @param array $formats supported formats
 	 * @return array supported formats + your additional formats
 	 * @see WPML_Plugin::HOOK_LOGGING_SUPPORTED_FORMATS
@@ -71,7 +71,7 @@ class WPML_API_Example {
 	/**
 	 * This function is called for each of your additional formats. Change the content of the modal here.
 	 * For example I add some dashes.
-	 * @since 1.6.0.
+	 * @since 1.6.0
 	 * @param $mail
 	 * @return string
 	 * @see WPML_Plugin::HOOK_LOGGING_FORMAT_CONTENT

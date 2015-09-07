@@ -282,7 +282,7 @@ class WPML_Email_Log_List extends \WP_List_Table {
 
 	/**
 	 * Renders all components of the mail.
-	 * @since 1.6.0.
+	 * @since 1.6.0
 	 * @param array $item The current item.
 	 * @return string The mail as html
 	 */
