@@ -28,32 +28,31 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 
 class WPML_Init {
 
-	public static $plugin;
-
 	static function init( $file ) {
 
 		require_once( plugin_dir_path( __FILE__ ) . 'inc/redux/admin-init.php' );
-
 		$container = new WPML_DI_Container();
 
 		$container['plugin'] = function ($c) {
-			return new WPML_Plugin($c['emailLogList']);
+			return new WPML_Plugin( $c['emailLogList'] );
 		};
 		$container['plugin-meta'] = function ($c) {
+			/* @var $plugin WPML_Plugin  */
+			$plugin = $c['plugin'];
 			return array(
 				'path' => realpath( plugin_dir_path( __FILE__ ) ) . DIRECTORY_SEPARATOR,
 				'uri' => plugin_dir_url( __FILE__ ),
-				'display_name' => $c['plugin']->getPluginDisplayName(),
-				'slug' => $c['plugin']->getPluginSlug(),
-				'main_file' => $c['plugin']->getMainPluginFileName(),
-				'description' =>  $c['plugin']->getPluginHeaderValue('Description'),
-				'version' => $c['plugin']->getVersion(),
-				'version_installed' => $c['plugin']->getVersionSaved(),
-				'author_name' => $c['plugin']->getPluginHeaderValue( 'Author' ),
-				'author_uri' => $c['plugin']->getPluginHeaderValue( 'Author URI' ),
-				'wp_uri' => $c['plugin']->getPluginHeaderValue( 'Plugin URI' ),
-				'support_uri' => $c['plugin']->getPluginHeaderValue( 'Support URI' ),
-				'license' => $c['plugin']->getPluginHeaderValue( 'License' ),
+				'display_name' => $plugin->getPluginDisplayName(),
+				'slug' => $plugin->getPluginSlug(),
+				'main_file' => $plugin->getMainPluginFileName(),
+				'description' => $plugin->getPluginHeaderValue( 'Description' ),
+				'version' => $plugin->getVersion(),
+				'version_installed' => $plugin->getVersionSaved(),
+				'author_name' => $plugin->getPluginHeaderValue( 'Author' ),
+				'author_uri' => $plugin->getPluginHeaderValue( 'Author URI' ),
+				'wp_uri' => $plugin->getPluginHeaderValue( 'Plugin URI' ),
+				'support_uri' => $plugin->getPluginHeaderValue( 'Support URI' ),
+				'license' => $plugin->getPluginHeaderValue( 'License' ),
 			);
 		};
 		$container['emailLogList'] = function ($c) {
@@ -62,24 +61,22 @@ class WPML_Init {
 		$container['settings'] = function ($c) {
 			return new WPML_Redux_Framework_config( $c['plugin-meta'] );
 		};
+		$container['logRotation'] = function ($c) {
+			return new WPML_LogRotation( $c['plugin-meta'] );
+		};
 		$container['api'] = function ($c) {
 			// Uncomment for an API Exmaple
 			// return new WPML_API_Example();
 		};
-		$container->run();
+		$container->addActionsAndFilters();
 
 		add_filter( 'wpml_get_di_container', function() use( $container ) {
 			return $container;
 		} );
 
 		add_filter( 'wpml_get_di_service', function( $service ) use( $container ) {
-			return $container[$service];
+			return $container[ $service ];
 		} );
-
-		// For Testing make plugin available global.
-		/*if ( ! array_key_exists( 'WPML_Plugin', $GLOBALS ) ) {
-			$GLOBALS['WPML_Plugin'] = &$container['plugin'];
-		}*/
 
 		/*
 		 * Install the plugin
@@ -89,7 +86,7 @@ class WPML_Init {
 		 * So here, the plugin tracks whether or not it has run its install operation, and we ensure it is run only once
 		 * on the first activation
 		 */
-		if (!$container['plugin']->isInstalled()) {
+		if ( ! $container['plugin']->isInstalled() ) {
 			$container['plugin']->install();
 		} else {
 			// Perform any version-upgrade activities prior to activation (e.g. database changes).

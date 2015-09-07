@@ -16,8 +16,7 @@ class WPML_Plugin extends WPML_LifeCycle {
 	const HOOK_LOGGING_SUPPORTED_FORMATS = 'wpml_hook_supported_formats';
 	const HOOK_LOGGING_FORMAT_CONTENT = 'wpml_hook_format_content';
 
-	function __construct( $emailLogList )
-	{
+	function __construct( $emailLogList ) {
 		$this->emailLogList = $emailLogList;
 	}
 
@@ -115,9 +114,7 @@ class WPML_Plugin extends WPML_LifeCycle {
 	public function addActionsAndFilters() {
 		// Add options administration page
 		// http://plugin.michael-simpson.com/?page_id=47
-		add_action( 'plugins_loaded', array( __NAMESPACE__ . '\\WPML_LogRotation', 'init' ), 11 );
 		add_action( 'admin_menu', array(&$this, 'createSettingsMenu'), 9 );
-
 
 		// Example adding a script & style just for the options administration page
 		// http://plugin.michael-simpson.com/?page_id=47

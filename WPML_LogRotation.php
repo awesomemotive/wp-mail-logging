@@ -12,22 +12,27 @@ if ( ! defined( 'ABSPATH' ) ) exit;
  * @author No3x
  * @since 1.4
  */
-class WPML_LogRotation extends WPML_Plugin {
+class WPML_LogRotation {
 
 	const WPML_LOGROTATION_SCHEDULE_HOOK = 'wpml_log_rotation';
-	const WPML_LOGROTATION_SCHEDULE = 'LogRotationSchedule';
+	const WPML_LOGROTATION_SCHEDULE_ACTION = 'LogRotationSchedule';
+	private $plugin_meta;
 
-	public static function init() {
-		add_action( self::WPML_LOGROTATION_SCHEDULE_HOOK , array( __NAMESPACE__ . '\\WPML_LogRotation', self::WPML_LOGROTATION_SCHEDULE) );
-		$logRotation = new WPML_LogRotation();
-		register_deactivation_hook( plugin_dir_path( __FILE__ ). $logRotation->getMainPluginFileName(), array( $logRotation, 'unschedule' ) );
+	function __construct( $plugin_meta ) {
+		$this->plugin_meta = $plugin_meta;
 	}
 
-	public function __construct() {
+	public function addActionsAndFilters() {
+		add_action( 'plugins_loaded', array( $this, 'init') );
+		add_action( self::WPML_LOGROTATION_SCHEDULE_HOOK , array( __CLASS__, self::WPML_LOGROTATION_SCHEDULE_ACTION) );
+		register_deactivation_hook( plugin_dir_path( __FILE__ ) . $this->plugin_meta['main_file'], array( $this, 'unschedule' ) );
+	}
+
+	public function init() {
 		global $wpml_settings;
 
 		if ( isset( $wpml_settings ) ) {
-			if ( $wpml_settings['log-rotation-limit-amout'] == '1' || $wpml_settings['log-rotation-delete-time'] == '1' ) {
+			if ( $wpml_settings['log-rotation-limit-amout'] == true || $wpml_settings['log-rotation-delete-time'] == true ) {
 				$this->schedule();
 			} else {
 				$this->unschedule();
@@ -61,7 +66,7 @@ class WPML_LogRotation extends WPML_Plugin {
 		global $wpml_settings, $wpdb;
 		$tableName = WPML_Plugin::getTablename( 'mails' );
 		
-		if ( $wpml_settings['log-rotation-limit-amout'] == '1') {
+		if ( $wpml_settings['log-rotation-limit-amout'] == true) {
 			$keep = $wpml_settings['log-rotation-limit-amout-keep'];
 			if ( $keep > 0 ) {
 				$wpdb->query(
@@ -87,15 +92,15 @@ class WPML_LogRotation extends WPML_Plugin {
 	static function limitNumberOfMailsByTime() {
 		global $wpml_settings, $wpdb;
 		$tableName = WPML_Plugin::getTablename( 'mails' );
-		
-		if ( $wpml_settings['log-rotation-delete-time'] == '1') {
+
+		if ( $wpml_settings['log-rotation-delete-time'] == true) {
 			$days = $wpml_settings['log-rotation-delete-time-days'];
 			if ( $days > 0 ) {
 				$wpdb->query( "DELETE FROM `$tableName` WHERE DATEDIFF( NOW(), `timestamp`) >= $days" );
 			}
 		}
 	}
-	
+
 	/**
 	 * Executes log rotation periodically.
 	 * @since 1.4
