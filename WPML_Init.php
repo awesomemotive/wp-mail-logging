@@ -55,8 +55,15 @@ class WPML_Init {
 				'license' => $plugin->getPluginHeaderValue( 'License' ),
 			);
 		};
+		$container['emailLogList-supported-formats'] = function ($c) {
+			return array(
+				'html',
+				'raw',
+				'json'
+			);
+		};
 		$container['emailLogList'] = function ($c) {
-			return new WPML_Email_Log_List();
+			return new WPML_Email_Log_List( $c['emailLogList-supported-formats'] );
 		};
 		$container['settings'] = function ($c) {
 			return new WPML_Redux_Framework_config( $c['plugin-meta'] );

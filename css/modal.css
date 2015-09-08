@@ -62,6 +62,11 @@
   line-height: 30px;
   padding-left: 5px;
 }
+#wp-mail-logging-modal-content-header-format-switch {
+  float: right;
+  line-height: 30px;
+  padding-right: 45px;
+}
 #wp-mail-logging-modal-content-body {
   bottom: 40px;
   left: 0;

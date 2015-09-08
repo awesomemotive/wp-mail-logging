@@ -263,7 +263,6 @@ if (!class_exists('WPML_Redux_Framework_config')) {
 						'default' 	=> 'manage_options',
            				'title'     => __('Can See Submission data', 'wpml'), 
            				'subtitle'  => __('Select the minimum role.', 'wpml'),
-                			
                 	),
                     array(
                         'id'        => 'datetimeformat-use-wordpress',
@@ -274,6 +273,17 @@ if (!class_exists('WPML_Redux_Framework_config')) {
                         'on'        => 'Enabled',
                         'off'       => 'Disabled',
                     ),
+					/*array(
+						'id'        => 'preferred-mail-format',
+						'type'      => 'select',
+						'options' 	=> array(
+							'first' => 'first',
+							'1' => 'second'
+						),
+						'default' 	=> 'first',
+						'title'     => __('Default Format for Message', 'wpml'),
+						'subtitle'  => __('Select your preferred format.', 'wpml'),
+					),*/
                 	array(
                         'id'        => 'section-log-rotation-start',
                         'type'      => 'section',

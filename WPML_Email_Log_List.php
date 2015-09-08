@@ -22,17 +22,20 @@ if ( ! class_exists( 'WP_List_Table' ) ) {
 class WPML_Email_Log_List extends \WP_List_Table {
 
 	const NONCE_LIST_TABLE = 'wpml-list_table';
-
+	private $supported_formats = array();
 	/**
 	 * Initializes the List Table
 	 * @since 1.0
 	 */
-	function __construct() {
-
+	function __construct( $supported_formats = array() ) {
+		$this->supported_formats = $supported_formats;
 	}
 
 	function addActionsAndFilters() {
 		add_action( 'admin_init', array( $this, 'init') );
+		add_filter( WPML_Plugin::HOOK_LOGGING_SUPPORTED_FORMATS, function() {
+			return $this->supported_formats;
+		} );
 		add_action( 'wp_ajax_wpml_email_get', __CLASS__ . '::ajax_wpml_email_get' );
 	}
 
@@ -375,21 +378,19 @@ class WPML_Email_Log_List extends \WP_List_Table {
 	 * @since 1.6.0
 	 */
 	public static function ajax_wpml_email_get() {
-		$supported_formats = array( 'html', 'raw', 'json' );
-		$additional_formats = is_array( $additional = apply_filters( WPML_Plugin::HOOK_LOGGING_SUPPORTED_FORMATS, array() ) ) ? $additional : array();
-		$formats = array_merge( $supported_formats, $additional_formats);
+		$formats = is_array( $additional = apply_filters( WPML_Plugin::HOOK_LOGGING_SUPPORTED_FORMATS, array() ) ) ? $additional : array();
 
 		if( ! isset( $_POST['id'] ) )
 			wp_die("huh?");
 		$id = intval( $_POST['id'] );
-		$format = isset( $_POST['format'] ) ? $_POST['format'] : 'html';
-		if( ! in_array( $format, $formats ) )
+		$format_requested = isset( $_POST['format'] ) ? $_POST['format'] : 'html';
+		if( ! in_array( $format_requested, $formats ) )
 			wp_die("Unsupported Format");
 
 		$mail = Mail::find_one($id);
 		$instance = apply_filters('wpml_get_di_service', 'emailLogList' );
 		$mailAppend = '';
-		switch( $format ) {
+		switch( $format_requested ) {
 			case 'html': {
 				 $mailAppend .= $instance->render_mail_html( $mail->to_array() );
 				 break;
@@ -400,11 +401,11 @@ class WPML_Email_Log_List extends \WP_List_Table {
 			}
 			case 'json': {
 				$mailAppend .= json_encode( $mail->to_array() );
-			 	break;
+				break;
 			}
 			default:
-				foreach( $additional_formats as $additional_format )
-					$mailAppend .= apply_filters( WPML_Plugin::HOOK_LOGGING_FORMAT_CONTENT . "_{$additional_format}", $mail->to_array() );
+				$mailAppend .= apply_filters( WPML_Plugin::HOOK_LOGGING_FORMAT_CONTENT . "_{$format_requested}", $mail->to_array() );
+				break;
 		}
 		echo $mailAppend;
 		wp_die(); // this is required to terminate immediately and return a proper response

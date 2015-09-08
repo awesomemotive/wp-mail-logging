@@ -16,7 +16,7 @@
     ],
     "require": {
         "brandonwamboldt/wp-orm": "dev-master",
-        "redux-framework/redux-framework": "3.5.5.*",
+        "redux-framework/redux-framework": "3.5.*",
         "bocharsky-bw/arrayzy": "v0.1.1",
         "pimple/pimple": "~3.0"
     },

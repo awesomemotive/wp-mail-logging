@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "cbe2b3c88f200e7b4f75e9b1cbdfdfaa",
+    "hash": "11d907db004507dbd566de06d6f8232f",
     "packages": [
         {
             "name": "bocharsky-bw/arrayzy",
@@ -237,16 +237,16 @@
         },
         {
             "name": "redux-framework/redux-framework",
-            "version": "3.5.5.10",
+            "version": "3.5.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/reduxframework/redux-framework.git",
-                "reference": "e447b1c0f3edfa06cdc66e83b74c278f139f272f"
+                "reference": "9f01b974e96aa8883967d8b0026af5e725aba23c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/reduxframework/redux-framework/zipball/e447b1c0f3edfa06cdc66e83b74c278f139f272f",
-                "reference": "e447b1c0f3edfa06cdc66e83b74c278f139f272f",
+                "url": "https://api.github.com/repos/reduxframework/redux-framework/zipball/9f01b974e96aa8883967d8b0026af5e725aba23c",
+                "reference": "9f01b974e96aa8883967d8b0026af5e725aba23c",
                 "shasum": ""
             },
             "require": {
@@ -274,7 +274,7 @@
                 "redux",
                 "wordpress"
             ],
-            "time": "2014-08-07 19:17:53"
+            "time": "2015-08-26 05:55:53"
         }
     ],
     "packages-dev": [
