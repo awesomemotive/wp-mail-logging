@@ -198,7 +198,11 @@ class Email_Logging_ListTable extends \WP_List_Table {
 		if ( empty( $item['message'] ) ) {
 			return '';
 		}
-		$content = $this->sanitize_message( $this->render_mail( $item ) );
+		if(strstr($item['headers'],"Content-Type: text/html")){
+			$content = $this->render_mail( $item );
+		} else {
+			$content = "<pre>".$this->sanitize_message( $this->render_mail( $item ) )."</pre>";
+		}
 		$message = '<a class="wp-mail-logging-view-message button button-secondary" href="#" data-message="' . htmlentities( $content )  . '">View</a>';
 		return $message;
 	}
