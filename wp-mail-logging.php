@@ -47,7 +47,7 @@ $WPML_minimalRequiredPhpVersion = '5.4';
  */
 function WPML_noticePhpVersionWrong() {
 	global $WPML_minimalRequiredPhpVersion;
-	echo '<div class="updated fade">' .
+	echo '<div class="error">' .
 	  __( 'Error: plugin "WP Mail Logging" requires a newer version of PHP to be running.',  'wpml' ).
 			'<br/>' . __( 'Minimal version of PHP required: ', 'wpml' ) . '<strong>' . $WPML_minimalRequiredPhpVersion . '</strong>' .
 			'<br/>' . __( 'Your server\'s PHP version: ', 'wpml' ) . '<strong>' . phpversion() . '</strong>' .
@@ -58,7 +58,7 @@ function WPML_noticePhpVersionWrong() {
 function WPML_PhpVersionCheck() {
 	global $WPML_minimalRequiredPhpVersion;
 	if ( version_compare( phpversion(), $WPML_minimalRequiredPhpVersion ) < 0 ) {
-		add_action( 'admin_notices', 'WPML_noticePhpVersionWrong' );
+		add_action( 'admin_notices',  __NAMESPACE__ . '\WPML_noticePhpVersionWrong' );
 		return false;
 	}
 	return true;
@@ -90,6 +90,22 @@ WPML_i18n_init();
 // If it is successful, continue with initialization for this plugin
 if (WPML_PhpVersionCheck()) {
 	// Only init and run the init function if we know PHP version can parse it
-	require __DIR__ . '/vendor/autoload.php';
-	WPML_Init::init(__FILE__);
+	require __DIR__ . '/autoload.php';
+
+	// Create a new instance of the autoloader
+	$loader = new \WPML_Psr4AutoloaderClass();
+
+	// Register this instance
+	$loader->register();
+
+	// Add our namespace and the folder it maps to
+	require_once __DIR__ . '/inc/redux/admin-init.php';
+	$loader->addNamespace('No3x\\WPML\\', __DIR__ );
+	$loader->addNamespace('No3x\\WPML\\Settings\\', __DIR__ . '/inc/redux');
+	$loader->addNamespace('No3x\\WPML\\ORM\\', __DIR__ . '/lib/vendor/brandonwamboldt/wp-orm/src');
+	$loader->addNamespace('No3x\\WPML\\Pimple\\', __DIR__ . '/lib/vendor/pimple/pimple/src');
+	if( file_exists( __DIR__ . '/vendor/autoload.php' ) ) {
+		require_once __DIR__ . '/vendor/autoload.php';
+	}
+	WPML_Init::init( __FILE__ );
 }

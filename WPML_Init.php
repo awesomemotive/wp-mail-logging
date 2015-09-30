@@ -30,7 +30,6 @@ class WPML_Init {
 
 	static function init( $file ) {
 
-		require_once( plugin_dir_path( __FILE__ ) . 'inc/redux/admin-init.php' );
 		$container = new WPML_DI_Container();
 
 		$container['plugin'] = function ($c) {

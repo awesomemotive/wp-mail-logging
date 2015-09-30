@@ -2,7 +2,7 @@
 
 namespace No3x\WPML;
 
-use WordPress\ORM\Model\WPML_Mail as Mail;
+use No3x\WPML\Model\WPML_Mail as Mail;
 
 // Exit if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) exit;
@@ -104,7 +104,7 @@ class WPML_LogRotation {
 		if ( $wpml_settings['log-rotation-delete-time'] == true) {
 			$days = $wpml_settings['log-rotation-delete-time-days'];
 			if ( $days > 0 ) {
-				$wpdb->query( "DELETE FROM `$tableName` WHERE DATEDIFF( NOW(), `timestamp`) >= $days" );
+				$wpdb->query( "DELETE FROM `$tableName` WHERE DATEDIFF( NOW(), `timestamp` ) >= $days" );
 			}
 		}
 	}

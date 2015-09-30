@@ -3,7 +3,7 @@
 namespace No3x\WPML\Model;
 
 use \DateTime;
-use WordPress\ORM\BaseModel;
+use No3x\WPML\ORM\BaseModel;
 
 // Exit if accessed directly
 if(!defined( 'ABSPATH' )) exit;
