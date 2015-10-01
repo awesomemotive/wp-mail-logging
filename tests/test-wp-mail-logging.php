@@ -70,5 +70,11 @@ class WPML_Plugin_Test extends WPML_UnitTestCase {
 		$this->assertTrue( strpos( $row->message, "?" ) === false );
 		
 	}
-	
+
+	function test_version_compare() {
+		$this->assertEquals( 1, version_compare( '1.6.0', '1.4.0' ) );
+		$this->assertEquals( 1, version_compare( '1.4.0', '1.4.0_betaR1' ) );
+		$this->assertEquals( 1, version_compare( '1.4.0_betaR2', '1.4.0_betaR1' ) );
+		$this->assertEquals( 1, version_compare( '1.6.0_betaR2', '1.4.0_betaR1' ) );
+	}
 }
