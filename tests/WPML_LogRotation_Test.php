@@ -137,7 +137,7 @@ class WPML_LogRotation_Test extends WPML_UnitTestCase {
 
 		// Make #$old mails #$days older:
 		foreach( $this->query_some_mails( $old ) as $mail ) {
-			$mail->set_timestamp( gmdate( 'Y-m-d H:i:s', ( time() + ( get_option( 'gmt_offset' ) * HOUR_IN_SECONDS ) + $days * DAY_IN_SECONDS ) ) )
+			$mail->set_timestamp( gmdate( 'Y-m-d H:i:s', ( time() + ( get_option( 'gmt_offset' ) * HOUR_IN_SECONDS ) - ($days+1) * DAY_IN_SECONDS  ) ) )
 				 ->save();
 		}
 

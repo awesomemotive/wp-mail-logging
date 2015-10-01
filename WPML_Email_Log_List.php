@@ -7,6 +7,9 @@ use No3x\WPML\Model\WPML_Mail as Mail;
 // Exit if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) exit;
 
+require_once( ABSPATH . 'wp-admin/includes/screen.php' );
+require_once( ABSPATH . 'wp-admin/includes/class-wp-list-table.php' );
+
 if ( ! class_exists( 'WP_List_Table' ) ) {
 	require_once( plugin_dir_path( __FILE__ ) . 'inc/class-wp-list-table.php' );
 }
@@ -16,15 +19,27 @@ if ( ! class_exists( 'WP_List_Table' ) ) {
  * @author No3x
  * @since 1.0
  */
-class Email_Logging_ListTable extends \WP_List_Table {
+class WPML_Email_Log_List extends \WP_List_Table {
 
 	const NONCE_LIST_TABLE = 'wpml-list_table';
-
+	private $supported_formats = array();
 	/**
 	 * Initializes the List Table
 	 * @since 1.0
 	 */
-	function __construct() {
+	function __construct( $supported_formats = array() ) {
+		$this->supported_formats = $supported_formats;
+	}
+
+	function addActionsAndFilters() {
+		add_action( 'admin_init', array( $this, 'init') );
+		add_filter( WPML_Plugin::HOOK_LOGGING_SUPPORTED_FORMATS, function() {
+			return $this->supported_formats;
+		} );
+		add_action( 'wp_ajax_wpml_email_get', __CLASS__ . '::ajax_wpml_email_get' );
+	}
+
+	function init() {
 		global $status, $page, $hook_suffix;
 
 		parent::__construct( array(
@@ -198,8 +213,9 @@ class Email_Logging_ListTable extends \WP_List_Table {
 		if ( empty( $item['message'] ) ) {
 			return '';
 		}
-		$content = $this->sanitize_message( $this->render_mail( $item ) );
-		$message = '<a class="wp-mail-logging-view-message button button-secondary" href="#" data-message="' . htmlentities( $content )  . '">View</a>';
+		//$content = $this->sanitize_message( $this->render_mail_html( $item ) );
+		$content = $item['mail_id'];
+		$message = '<a class="wp-mail-logging-view-message button button-secondary" href="#" data-mail-id="' . esc_attr( $content )  . '">View</a>';
 		return $message;
 	}
 
@@ -253,6 +269,32 @@ class Email_Logging_ListTable extends \WP_List_Table {
 			if ( array_key_exists( $key, $this->get_columns() ) && ! in_array( $key, $this->get_hidden_columns() ) ) {
 				$display = $this->get_columns();
 				$column_name = $key;
+				$title = "<span class=\"title\">{$display[$key]}: </span>";
+				$content = '';
+				if ( 'message' !== $column_name  && method_exists( $this, 'column_' . $column_name ) ) {
+					$content .= call_user_func( array( $this, 'column_' . $column_name ), $item );
+				} else {
+					$content .= $this->column_default( $item, $column_name );
+				}
+				$mailAppend .= $title . htmlentities( $content );
+			}
+		}
+
+		return $mailAppend;
+	}
+
+	/**
+	 * Renders all components of the mail.
+	 * @since 1.6.0
+	 * @param array $item The current item.
+	 * @return string The mail as html
+	 */
+	function render_mail_html( $item ) {
+		$mailAppend = '';
+		foreach ( $item as $key => $value ) {
+			if ( array_key_exists( $key, $this->get_columns() ) && ! in_array( $key, $this->get_hidden_columns() ) ) {
+				$display = $this->get_columns();
+				$column_name = $key;
 				$mailAppend .= "<span class=\"title\">{$display[$key]}: </span>";
 				if ( 'message' !== $column_name  && method_exists( $this, 'column_' . $column_name ) ) {
 					$mailAppend .= call_user_func( array( $this, 'column_' . $column_name ), $item );
@@ -263,7 +305,6 @@ class Email_Logging_ListTable extends \WP_List_Table {
 		}
 		return $mailAppend;
 	}
-
 	/**
 	 * Defines available bulk actions.
 	 * @since 1.0
@@ -331,4 +372,42 @@ class Email_Logging_ListTable extends \WP_List_Table {
 			'plugin_version'=> array( 'plugin_version', true ),
 		);
 	}
+
+	/**
+	 * Ajax function to retrieve rendered mail in certain format.
+	 * @since 1.6.0
+	 */
+	public static function ajax_wpml_email_get() {
+		$formats = is_array( $additional = apply_filters( WPML_Plugin::HOOK_LOGGING_SUPPORTED_FORMATS, array() ) ) ? $additional : array();
+
+		if( ! isset( $_POST['id'] ) )
+			wp_die("huh?");
+		$id = intval( $_POST['id'] );
+		$format_requested = isset( $_POST['format'] ) ? $_POST['format'] : 'html';
+		if( ! in_array( $format_requested, $formats ) )
+			wp_die("Unsupported Format");
+
+		$mail = Mail::find_one($id);
+		$instance = apply_filters('wpml_get_di_service', 'emailLogList' );
+		$mailAppend = '';
+		switch( $format_requested ) {
+			case 'html': {
+				 $mailAppend .= $instance->render_mail_html( $mail->to_array() );
+				 break;
+			}
+			case 'raw': {
+				$mailAppend .= $instance->render_mail( $mail->to_array() );
+				break;
+			}
+			case 'json': {
+				$mailAppend .= json_encode( $mail->to_array() );
+				break;
+			}
+			default:
+				$mailAppend .= apply_filters( WPML_Plugin::HOOK_LOGGING_FORMAT_CONTENT . "_{$format_requested}", $mail->to_array() );
+				break;
+		}
+		echo $mailAppend;
+		wp_die(); // this is required to terminate immediately and return a proper response
+    }
 }

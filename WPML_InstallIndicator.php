@@ -24,8 +24,6 @@ namespace No3x\WPML;
 // Exit if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-include_once( 'WPML_OptionsManager.php' );
-
 class WPML_InstallIndicator extends WPML_OptionsManager {
 
 	const optionInstalled = '_installed';
@@ -96,7 +94,7 @@ class WPML_InstallIndicator extends WPML_OptionsManager {
 		// Read the string from the comment header of the main plugin file.
 		$data = file_get_contents( $this->getPluginDir() . DIRECTORY_SEPARATOR . $this->getMainPluginFileName() );
 		$match = array();
-		preg_match( '/' . $key . ':\s*(\S+)/', $data, $match );
+		preg_match( '/' . $key . ':\s*(.*)/', $data, $match );
 		if ( count( $match ) >= 1 ) {
 			return $match[1];
 		}

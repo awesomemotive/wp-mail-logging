@@ -45,11 +45,15 @@ class WPML_Uninstall_Plugin_Test extends \WP_Plugin_Uninstall_UnitTestCase {
 	 */
 	public function setUp() {
 
-		$this->install_function = array( $GLOBALS['WPML_Plugin'], 'install');
-		$this->uninstall_function = array( $GLOBALS['WPML_Plugin'], 'uninstall');
+		$plugin = apply_filters('wpml_get_di_service', 'plugin' );
+		$plugin_meta = apply_filters('wpml_get_di_service', 'plugin-meta' );
+		$mainfile = $plugin_meta['main_file'];
+
+		$this->install_function = array( $plugin, 'install');
+		$this->uninstall_function = array( $plugin, 'uninstall');
 
 		// You must set the path to your plugin here.
-		$this->plugin_file = dirname( dirname( __FILE__ ) ) . '/wp-mail-logging_init.php';
+		$this->plugin_file = dirname( dirname( __FILE__ ) ) . '/' . $mainfile;
 
 		// Don't forget to call the parent's setUp(), or the plugin won't get installed.
 		parent::setUp();

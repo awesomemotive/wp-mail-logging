@@ -24,8 +24,6 @@ namespace No3x\WPML;
 // Exit if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-include_once('WPML_ShortCodeLoader.php');
-
 /**
  * Adapted from this excellent article:
  * http://scribu.net/wordpress/optimal-script-loading.html

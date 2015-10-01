@@ -372,7 +372,8 @@ class WPML_OptionsManager {
 		wp_enqueue_script( 'wp-logging-modal', untrailingslashit( plugin_dir_url( __FILE__ ) ) . '/js/modal.js', array( 'jquery' ), '1.0.0', true );
 		wp_enqueue_style( 'wp-logging-modal', untrailingslashit( plugin_dir_url( __FILE__ ) ) . '/css/modal.css', array(), '1.0.0' );
 		wp_enqueue_style( 'wp-logging-icons', untrailingslashit( plugin_dir_url( __FILE__ ) ) . '/lib/font-awesome/css/font-awesome.min.css', array(), '4.1.0' );
-
+		wp_enqueue_script( 'icheck', untrailingslashit( plugin_dir_url( __FILE__ ) ) . '/lib/icheck/icheck.min.js', array(), '1.0.2' );
+		wp_enqueue_style( 'icheck-polaris', untrailingslashit( plugin_dir_url( __FILE__ ) ) . '/lib/icheck/polaris/polaris.css', array(), '1.0.2' );
 	}
 
 	/**
@@ -460,7 +461,15 @@ class WPML_OptionsManager {
 		?>
 		 <div class="wrap">
 			<h2><?php echo $this->getPluginDisplayName(); echo ' '; _e('Log', 'wpml'); ?></h2>
-			
+			 <script>
+				 jQuery(document).ready(function($) {
+					 $('#wp-mail-logging-modal-content-header-format-switch input').iCheck({
+						 checkboxClass: 'icheckbox_polaris',
+						 radioClass: 'iradio_polaris',
+						 increaseArea: '-10%' // optional
+					 });
+				 });
+			 </script>
 			<div id="wp-mail-logging-modal-wrap">
 				<div id="wp-mail-logging-modal-backdrop"></div>
 				<div id="wp-mail-logging-modal-content-wrap">
@@ -479,6 +488,15 @@ class WPML_OptionsManager {
 							<div id="wp-mail-logging-modal-content-header-title">
 								<?php _e( 'Message', 'wpml' ); ?>
 							</div>
+							<div id="wp-mail-logging-modal-content-header-format-switch">
+								<?php
+									$supported_formats = apply_filters( WPML_Plugin::HOOK_LOGGING_SUPPORTED_FORMATS, array('html') );
+									foreach( $supported_formats as $format ) {
+										//TODO: $checked = checked(true, $wpml_settings['preferred-mail-format'], false);
+										echo '<input type="radio" name="format" id="' . esc_attr( $format ) . '">' . esc_html( $format ) . '</input>';
+									}
+								?>
+							</div>
 						</div>
 						<div id="wp-mail-logging-modal-content-body">
 							<div id="wp-mail-logging-modal-content-body-content">
@@ -495,12 +513,11 @@ class WPML_OptionsManager {
 			<form id="email-list" method="post">
 				<input type="hidden" name="page" value="<?php echo esc_attr( $_REQUEST['page'] ); ?>" />
 					<?php
-					wp_nonce_field( Email_Logging_ListTable::NONCE_LIST_TABLE, Email_Logging_ListTable::NONCE_LIST_TABLE . '_nonce' );
+					wp_nonce_field( WPML_Email_Log_List::NONCE_LIST_TABLE, WPML_Email_Log_List::NONCE_LIST_TABLE . '_nonce' );
 					$search = ( isset( $_REQUEST['s'] ) ) ? $_REQUEST['s'] : false;
-					$emailLoggingListTable = new Email_Logging_ListTable();
-					$emailLoggingListTable->prepare_items( $search );
-					$emailLoggingListTable->search_box( __( 'Search' ), 's' );
-					$emailLoggingListTable->display();
+					$this->emailLogList->prepare_items( $search );
+					$this->emailLogList->search_box( __( 'Search' ), 's' );
+					$this->emailLogList->display();
 				?>
 			</form>
 		</div> 

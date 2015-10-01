@@ -1,1 +1,5 @@
 /vendor/
+/credentials.json
+/releases
+/node_modules
+/build

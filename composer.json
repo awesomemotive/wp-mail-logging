@@ -7,21 +7,13 @@
     "repositories": [
         {
             "type": "vcs",
-            "url": "https://github.com/No3x/wp-orm"
-        },
-        {
-            "type": "vcs",
             "url": "https://github.com/No3x/wp-plugin-uninstall-tester"
         }
     ],
-    "require": {
-        "brandonwamboldt/wp-orm": "dev-master",
-        "redux-framework/redux-framework": "3.5.5.*",
-        "bocharsky-bw/arrayzy": "v0.1.1"
-    },
     "require-dev": {
         "jdgrimes/wp-plugin-uninstall-tester": "dev-master",
-        "wp-coding-standards/wpcs": "0.6.0"
+        "wp-coding-standards/wpcs": "0.6.0",
+        "bocharsky-bw/arrayzy": "v0.1.1"
     },
     "license": "GPL-2.0",
     "authors": [
@@ -49,8 +41,6 @@
     "minimum-stability": "dev",
     "autoload": {
         "psr-4": {
-            "No3x\\WPML\\": "",
-            "No3x\\WPML\\Model\\": "model",
             "No3x\\WPML\\Tests\\": "tests",
             "No3x\\WPML\\Tests\\Helper\\": "tests/helper"
         }
