@@ -27,27 +27,27 @@ module.exports = function (grunt) {
 				cmd: 'composer'
 			}
 		},
-        copyto: {
-            vendor: {
-                files: [
-                    {
-                        src: ['vendor/**'], dest: 'build/',
-                        expand: true
-                    }
-                ]
-            }
-        },
-        search: {
-            credentials: {
-                files: {
-                    src: ["**/credentials.json"]
-                },
-                options: {
-                    failOnMatch: true
-                }
-            }
-        },
-        compress: {
+		copyto: {
+			vendor: {
+				files: [
+					{
+						src: ['vendor/**'], dest: 'build/',
+						expand: true
+					}
+				]
+			}
+		},
+		search: {
+			credentials: {
+				files: {
+					src: ["**/credentials.json"]
+				},
+				options: {
+					failOnMatch: true
+				}
+			}
+		},
+		compress: {
 			main: {
 				options: {
 					mode: 'zip',
@@ -125,7 +125,7 @@ module.exports = function (grunt) {
 		},
 		'github-release': {
 			options: {
-				repository: 'No3x/testrepo', // Path to repository
+				repository: 'No3x/wp-mail-logging', // Path to repository
 				auth: grunt.file.readJSON('credentials.json'),
 				release: {
 					tag_name: 'release/<%= pkg.version %>',
@@ -143,8 +143,8 @@ module.exports = function (grunt) {
 	});
 
 	//load modules
-    grunt.loadNpmTasks('grunt-search');
-    grunt.loadNpmTasks('grunt-copy-to');
+	grunt.loadNpmTasks('grunt-search');
+	grunt.loadNpmTasks('grunt-copy-to');
 	grunt.loadNpmTasks('grunt-contrib-compress');
 	grunt.loadNpmTasks('grunt-contrib-clean');
 	grunt.loadNpmTasks('grunt-git');
@@ -153,7 +153,7 @@ module.exports = function (grunt) {
 	grunt.loadNpmTasks('grunt-github-releaser');
 
 	//release tasks
-    grunt.registerTask('assert-valid-copy', [ 'search:credentials' ]);
+	grunt.registerTask('assert-valid-copy', [ 'search:credentials' ]);
 	grunt.registerTask('copy', [ 'shell:git_checkout' ]);
 	grunt.registerTask('clean_pre_build', [ 'clean:pre_build' ]);
 	grunt.registerTask('version_number', [ 'replace:core_file', 'replace:readme' ]);
