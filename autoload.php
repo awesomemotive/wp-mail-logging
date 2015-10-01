@@ -147,7 +147,7 @@ class WPML_Psr4AutoloaderClass
 				// yes, we're done
 				return $file;
 			}
-		}echo $file;
+		}
 		// never found it
 		return false;
 	}
