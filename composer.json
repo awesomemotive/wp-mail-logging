@@ -41,11 +41,8 @@
     "minimum-stability": "dev",
     "autoload": {
         "psr-4": {
-            "No3x\\WPML\\": "",
-            "No3x\\WPML\\Model\\": "model",
             "No3x\\WPML\\Tests\\": "tests",
-            "No3x\\WPML\\Tests\\Helper\\": "tests/helper",
-            "No3x\\WPML\\Settings\\": "inc/redux"
+            "No3x\\WPML\\Tests\\Helper\\": "tests/helper"
         }
     }
 }

@@ -101,6 +101,7 @@ if (WPML_PhpVersionCheck()) {
 	// Add our namespace and the folder it maps to
 	require_once __DIR__ . '/inc/redux/admin-init.php';
 	$loader->addNamespace('No3x\\WPML\\', __DIR__ );
+	$loader->addNamespace('No3x\\WPML\\Model\\', __DIR__ . '/model' );
 	$loader->addNamespace('No3x\\WPML\\Settings\\', __DIR__ . '/inc/redux');
 	$loader->addNamespace('No3x\\WPML\\ORM\\', __DIR__ . '/lib/vendor/brandonwamboldt/wp-orm/src');
 	$loader->addNamespace('No3x\\WPML\\Pimple\\', __DIR__ . '/lib/vendor/pimple/pimple/src');
