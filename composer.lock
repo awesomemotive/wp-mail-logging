@@ -4,8 +4,9 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "11d907db004507dbd566de06d6f8232f",
-    "packages": [
+    "hash": "ee37eb475bd9146985e742d155f745b2",
+    "packages": [],
+    "packages-dev": [
         {
             "name": "bocharsky-bw/arrayzy",
             "version": "v0.1.1",
@@ -57,228 +58,6 @@
             "time": "2015-07-12 19:31:25"
         },
         {
-            "name": "brandonwamboldt/wp-orm",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/No3x/wp-orm.git",
-                "reference": "12663882381ce71e8be4b49703e5697bc29d1fb0"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/No3x/wp-orm/zipball/12663882381ce71e8be4b49703e5697bc29d1fb0",
-                "reference": "12663882381ce71e8be4b49703e5697bc29d1fb0",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "WordPress\\ORM\\": "src"
-                }
-            },
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Brandon Wamboldt",
-                    "email": "brandon.wamboldt@gmail.com"
-                }
-            ],
-            "description": "WordPress ORM",
-            "support": {
-                "source": "https://github.com/No3x/wp-orm/tree/master"
-            },
-            "time": "2015-08-27 13:33:09"
-        },
-        {
-            "name": "composer/installers",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/composer/installers.git",
-                "reference": "e420b539e8d7b38b7c6f3f99dccc0386bd3dfe41"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/composer/installers/zipball/e420b539e8d7b38b7c6f3f99dccc0386bd3dfe41",
-                "reference": "e420b539e8d7b38b7c6f3f99dccc0386bd3dfe41",
-                "shasum": ""
-            },
-            "replace": {
-                "roundcube/plugin-installer": "*",
-                "shama/baton": "*"
-            },
-            "require-dev": {
-                "composer/composer": "1.0.*@dev",
-                "phpunit/phpunit": "4.1.*"
-            },
-            "type": "composer-installer",
-            "extra": {
-                "class": "Composer\\Installers\\Installer",
-                "branch-alias": {
-                    "dev-master": "1.0-dev"
-                }
-            },
-            "autoload": {
-                "psr-0": {
-                    "Composer\\Installers\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Kyle Robinson Young",
-                    "email": "kyle@dontkry.com",
-                    "homepage": "https://github.com/shama"
-                }
-            ],
-            "description": "A multi-framework Composer library installer",
-            "homepage": "http://composer.github.com/installers/",
-            "keywords": [
-                "Craft",
-                "Dolibarr",
-                "Hurad",
-                "MODX Evo",
-                "OXID",
-                "SMF",
-                "Thelia",
-                "WolfCMS",
-                "agl",
-                "aimeos",
-                "annotatecms",
-                "bitrix",
-                "cakephp",
-                "chef",
-                "codeigniter",
-                "concrete5",
-                "croogo",
-                "dokuwiki",
-                "drupal",
-                "elgg",
-                "fuelphp",
-                "grav",
-                "installer",
-                "joomla",
-                "kohana",
-                "laravel",
-                "lithium",
-                "magento",
-                "mako",
-                "mediawiki",
-                "modulework",
-                "moodle",
-                "phpbb",
-                "piwik",
-                "ppi",
-                "puppet",
-                "roundcube",
-                "shopware",
-                "silverstripe",
-                "symfony",
-                "typo3",
-                "wordpress",
-                "zend",
-                "zikula"
-            ],
-            "time": "2015-06-13 15:30:38"
-        },
-        {
-            "name": "pimple/pimple",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/silexphp/Pimple.git",
-                "reference": "62b5d317a83b02eea42b5b785b62a29fba458bcf"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/silexphp/Pimple/zipball/62b5d317a83b02eea42b5b785b62a29fba458bcf",
-                "reference": "62b5d317a83b02eea42b5b785b62a29fba458bcf",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.0"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "3.0.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-0": {
-                    "Pimple": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Fabien Potencier",
-                    "email": "fabien@symfony.com"
-                }
-            ],
-            "description": "Pimple is a simple Dependency Injection Container for PHP 5.3",
-            "homepage": "http://pimple.sensiolabs.org",
-            "keywords": [
-                "container",
-                "dependency injection"
-            ],
-            "time": "2015-08-01 06:02:40"
-        },
-        {
-            "name": "redux-framework/redux-framework",
-            "version": "3.5.7",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/reduxframework/redux-framework.git",
-                "reference": "9f01b974e96aa8883967d8b0026af5e725aba23c"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/reduxframework/redux-framework/zipball/9f01b974e96aa8883967d8b0026af5e725aba23c",
-                "reference": "9f01b974e96aa8883967d8b0026af5e725aba23c",
-                "shasum": ""
-            },
-            "require": {
-                "composer/installers": "~1.0",
-                "php": ">=5.2.0"
-            },
-            "type": "wordpress-plugin",
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "GPL-3.0+"
-            ],
-            "authors": [
-                {
-                    "name": "Team Redux"
-                }
-            ],
-            "description": "Redux is a simple, truly extensible options framework for WordPress themes and plugins.",
-            "homepage": "http://reduxframework.com",
-            "keywords": [
-                "Settings",
-                "customizer",
-                "framework",
-                "options",
-                "plugin",
-                "redux",
-                "wordpress"
-            ],
-            "time": "2015-08-26 05:55:53"
-        }
-    ],
-    "packages-dev": [
-        {
             "name": "jdgrimes/wp-plugin-uninstall-tester",
             "version": "dev-master",
             "source": {
@@ -316,16 +95,16 @@
         },
         {
             "name": "squizlabs/php_codesniffer",
-            "version": "2.3.3",
+            "version": "2.3.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/squizlabs/PHP_CodeSniffer.git",
-                "reference": "c1a26c729508f73560c1a4f767f60b8ab6b4a666"
+                "reference": "11a2545c44a5915f883e2e5ec12e14ed345e3ab2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/squizlabs/PHP_CodeSniffer/zipball/c1a26c729508f73560c1a4f767f60b8ab6b4a666",
-                "reference": "c1a26c729508f73560c1a4f767f60b8ab6b4a666",
+                "url": "https://api.github.com/repos/squizlabs/PHP_CodeSniffer/zipball/11a2545c44a5915f883e2e5ec12e14ed345e3ab2",
+                "reference": "11a2545c44a5915f883e2e5ec12e14ed345e3ab2",
                 "shasum": ""
             },
             "require": {
@@ -386,7 +165,7 @@
                 "phpcs",
                 "standards"
             ],
-            "time": "2015-06-24 03:16:23"
+            "time": "2015-09-09 00:18:50"
         },
         {
             "name": "wp-coding-standards/wpcs",
@@ -428,7 +207,6 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
-        "brandonwamboldt/wp-orm": 20,
         "jdgrimes/wp-plugin-uninstall-tester": 20
     },
     "prefer-stable": false,
