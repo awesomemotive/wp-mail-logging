@@ -28,14 +28,48 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 
 class WPML_Init {
 
-	static function init( $file ) {
+	/**
+	 * @var Singleton The reference to *Singleton* instance of this class
+	 */
+	private static $instance;
+	/**
+	 * @var DIContainer The DI Container
+	 */
+	private $container;
 
-		$container = new WPML_DI_Container();
+	/**
+	 * Returns the *Singleton* instance of this class.
+	 *
+	 * @return WPML_Init The *Singleton* instance.
+	 */
+	public static function getInstance() {
+		if (null === static::$instance) {
+			static::$instance = new static();
+		}
 
-		$container['plugin'] = function ($c) {
-			return new WPML_Plugin( $c['emailLogList'] );
+		return static::$instance;
+	}
+
+	/**
+	 * Protected constructor to prevent creating a new instance of the
+	 * *Singleton* via the `new` operator from outside of this class.
+	 */
+	protected function __construct() {
+		$this->container = new WPML_DI_Container();
+	}
+
+	public function getClosure() {
+		return function ($prop) {
+			return $this->$prop;
 		};
-		$container['plugin-meta'] = function ($c) {
+	}
+
+	public function init( $file ) {
+
+		$this->container['plugin'] = function ($c) {
+			return new WPML_Plugin();
+		};
+		$this->container['plugin-meta'] = function ($c) {
 			/* @var $plugin WPML_Plugin  */
 			$plugin = $c['plugin'];
 			return array(
@@ -54,34 +88,34 @@ class WPML_Init {
 				'license' => $plugin->getPluginHeaderValue( 'License' ),
 			);
 		};
-		$container['emailLogList-supported-formats'] = function ($c) {
+		$this->container['emailLogList-supported-formats'] = function ($c) {
 			return array(
 				'html',
 				'raw',
 				'json'
 			);
 		};
-		$container['emailLogList'] = function ($c) {
+		$this->container['emailLogList'] = function ($c) {
 			return new WPML_Email_Log_List( $c['emailLogList-supported-formats'] );
 		};
-		$container['settings'] = function ($c) {
+		$this->container['settings'] = function ($c) {
 			return new WPML_Redux_Framework_config( $c['plugin-meta'] );
 		};
-		$container['logRotation'] = function ($c) {
+		$this->container['logRotation'] = function ($c) {
 			return new WPML_LogRotation( $c['plugin-meta'] );
 		};
-		$container['api'] = function ($c) {
+		$this->container['api'] = function ($c) {
 			// Uncomment for an API Exmaple
 			// return new WPML_API_Example();
 		};
-		$container->addActionsAndFilters();
+		$this->container->addActionsAndFilters();
 
-		add_filter( 'wpml_get_di_container', function() use( $container ) {
-			return $container;
+		add_filter( 'wpml_get_di_container', function() {
+			return $this->container;
 		} );
 
-		add_filter( 'wpml_get_di_service', function( $service ) use( $container ) {
-			return $container[ $service ];
+		add_filter( 'wpml_get_di_service', function( $service ) {
+			return $this->getService( $service );
 		} );
 
 		/*
@@ -92,20 +126,27 @@ class WPML_Init {
 		 * So here, the plugin tracks whether or not it has run its install operation, and we ensure it is run only once
 		 * on the first activation
 		 */
-		if ( ! $container['plugin']->isInstalled() ) {
-			$container['plugin']->install();
+		if ( ! $this->container['plugin']->isInstalled() ) {
+			$this->container['plugin']->install();
 		} else {
 			// Perform any version-upgrade activities prior to activation (e.g. database changes).
-			$container['plugin']->upgrade();
+			$this->container['plugin']->upgrade();
 		}
 
 		if ( ! $file ) {
 			$file = __FILE__;
 		}
 		// Register the Plugin Activation Hook.
-		register_activation_hook( $file, array( &$container['plugin'], 'activate' ) );
+		register_activation_hook( $file, array( &$this->container['plugin'], 'activate' ) );
 
 		// Register the Plugin Deactivation Hook.
-		register_deactivation_hook( $file, array( &$container['plugin'], 'deactivate' ) );
+		register_deactivation_hook( $file, array( &$this->container['plugin'], 'deactivate' ) );
+	}
+
+	public function getService( $key ) {
+		if( in_array( $key, $this->container->keys() ) ) {
+			return $this->container[ $key ];
+		}
+		throw new \Exception("Service '{$key}' is not registered");
 	}
 }

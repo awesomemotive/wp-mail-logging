@@ -16,10 +16,6 @@ class WPML_Plugin extends WPML_LifeCycle {
 	const HOOK_LOGGING_SUPPORTED_FORMATS = 'wpml_hook_supported_formats';
 	const HOOK_LOGGING_FORMAT_CONTENT = 'wpml_hook_format_content';
 
-	function __construct( $emailLogList ) {
-		$this->emailLogList = $emailLogList;
-	}
-
 	public static function getTablename( $name ) {
 		global $wpdb;
 		return $wpdb->prefix . 'wpml_' . $name;

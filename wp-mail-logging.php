@@ -108,5 +108,5 @@ if (WPML_PhpVersionCheck()) {
 	if( file_exists( __DIR__ . '/vendor/autoload.php' ) ) {
 		require_once __DIR__ . '/vendor/autoload.php';
 	}
-	WPML_Init::init( __FILE__ );
+	WPML_Init::getInstance()->init( __FILE__ );
 }

@@ -515,9 +515,10 @@ class WPML_OptionsManager {
 					<?php
 					wp_nonce_field( WPML_Email_Log_List::NONCE_LIST_TABLE, WPML_Email_Log_List::NONCE_LIST_TABLE . '_nonce' );
 					$search = ( isset( $_REQUEST['s'] ) ) ? $_REQUEST['s'] : false;
-					$this->emailLogList->prepare_items( $search );
-					$this->emailLogList->search_box( __( 'Search' ), 's' );
-					$this->emailLogList->display();
+					$emailLogList = WPML_Init::getInstance()->getService('emailLogList');
+					$emailLogList->prepare_items( $search );
+					$emailLogList->search_box( __( 'Search' ), 's' );
+					$emailLogList->display();
 				?>
 			</form>
 		</div> 

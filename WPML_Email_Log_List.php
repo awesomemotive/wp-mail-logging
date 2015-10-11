@@ -388,7 +388,7 @@ class WPML_Email_Log_List extends \WP_List_Table {
 			wp_die("Unsupported Format");
 
 		$mail = Mail::find_one($id);
-		$instance = apply_filters('wpml_get_di_service', 'emailLogList' );
+		$instance = WPML_Init::getInstance()->getService('emailLogList');
 		$mailAppend = '';
 		switch( $format_requested ) {
 			case 'html': {
