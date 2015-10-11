@@ -123,7 +123,7 @@ class WPML_Plugin extends WPML_LifeCycle {
 		// Add Actions & Filters
 		// http://plugin.michael-simpson.com/?page_id=37
 		add_filter( 'plugin_action_links', array( &$this, 'registerPluginActionLinks'), 10, 5 );
-		add_filter( 'wp_mail', array( &$this, 'log_email' ) );
+		add_filter( 'wp_mail', array( &$this, 'log_email' ), PHP_INT_MAX );
 		add_filter( 'set-screen-option', array( &$this, 'save_screen_options' ), 10, 3);
 		add_filter( 'wpml_get_plugin_version', array( &$this, 'getVersion' ) );
 		add_filter( 'wpml_get_plugin_name', array( &$this, 'getPluginDisplayName' ) );
