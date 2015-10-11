@@ -5,8 +5,8 @@ Tags: mail, email, log, logging, debug, list, store, collect, view
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 Requires at least: 3.0
-Tested up to: 4.2.2
-Stable tag: 1.5.0
+Tested up to: 4.3.1
+Stable tag: 1.5.1
 
 Logs each email sent by WordPress.
 
@@ -43,8 +43,14 @@ The logged email has been sent by WordPress but please note this does NOT mean i
 2. The Detail View
 3. The Settings
 
+== Upgrade Notice ==
+= 1.5.1 =
+Fixed security issues.
 
 == Changelog ==
+= 1.5.1, October 11, 2015  =
+- Tweak: Fixed security issues
+
 = 1.5.0, June 4, 2015  =
 - New: Setting for date time format
 - Tweak: Removed admin bar menu
