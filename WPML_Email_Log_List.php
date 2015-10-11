@@ -24,9 +24,9 @@ class Email_Logging_ListTable extends WP_List_Table {
 		global $status, $page, $hook_suffix;
 
 		parent::__construct( array(
-			'singular' 	=> __( 'Email', 'wml' ),//singular name of the listed records
-			'plural' 	=> __( 'Emails', 'wml' ),//plural name of the listed records
-			'ajax' 		=> false				//does this table support ajax?
+			'singular' 	=> 'email', 	// singular name of the listed records
+			'plural' 	=> 'emails',	// plural name of the listed records
+			'ajax' 		=> false,		// does this table support ajax?
 		) );
 	}
 
@@ -36,7 +36,7 @@ class Email_Logging_ListTable extends WP_List_Table {
 	 * @see WP_List_Table::no_items()
 	 */
 	function no_items() {
-		_e( 'No ' . $this->_args['singular'] . ' found.' );
+		_e( 'No email found.', 'wpml' );
 		return;
 	}
 
@@ -110,6 +110,8 @@ class Email_Logging_ListTable extends WP_List_Table {
 	function prepare_items( $search = false ) {
 		global $wpdb;
 		$tableName = WPML_Plugin::getTablename( 'mails' );
+		$orderby = $this->sanitize_orderby();
+		$order = $this->sanitize_order();
 
 		$columns = $this->get_columns();
 		$hidden = $this->get_hidden_columns();
@@ -121,11 +123,6 @@ class Email_Logging_ListTable extends WP_List_Table {
 		$per_page = $this->get_items_per_page( 'per_page', 25 );
 		$current_page = $this->get_pagenum();
 		$total_items = $wpdb->get_var( "SELECT COUNT(*) FROM `$tableName`;" );
-
-		$orderby_default = "mail_id";
-		$order_default = "desc";
-		$orderby = ( !empty( $_GET['orderby'] ) ) ? $_GET['orderby'] : $orderby_default;
-		$order = ( !empty($_GET['order'] ) ) ? $_GET['order'] : $order_default;
 		$offset = ( $current_page-1 ) * $per_page;
 
 		$search_query = '';
@@ -178,7 +175,7 @@ class Email_Logging_ListTable extends WP_List_Table {
 
     /**
      * Sanitize message to remove unsafe html.
-     * @since 1.6.0
+     * @since 1.5.1
      * @param $message unsafe message
      * @return string safe message
      */
@@ -236,13 +233,13 @@ class Email_Logging_ListTable extends WP_List_Table {
 				}
 			}
 		}
-		return esc_html( $attachment_append );
+		return $attachment_append;
 	}
 
 	/**
 	 * Renders all components of the mail.
 	 * @since 1.3
-	 * @param object $item The current item
+	 * @param array $item The current item.
 	 * @return string The mail as html
 	 */
 	function render_mail( $item ) {
@@ -259,7 +256,7 @@ class Email_Logging_ListTable extends WP_List_Table {
 				}
 			}
 		}
-		return esc_html( $mailAppend );
+		return $mailAppend;
 	}
 
 	/**
