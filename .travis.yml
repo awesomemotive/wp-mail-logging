@@ -162,3 +162,7 @@ script:
     #- mkdir -p build/logs
     - phpunit
     - phpunit --group=uninstall
+    
+notifications:
+  slack:
+    secure: BuxbWZmhmdSIs1sXblUpG38Yw30YB+lZWTlslFtkYBi8Y0IGsgLBg5iMVg753eCWNQIIG92i/rntf1BG1ZyxiEFkd+2ZZxlPJ1Mgdp3LkWwS4qnZvr6OnpnxcGmpBsE8srnwhzziHvb9IlhBFW5G3CwCuKZJef/ftNI7wLBjRH0=
