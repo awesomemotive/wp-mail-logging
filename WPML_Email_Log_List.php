@@ -192,7 +192,7 @@ class WPML_Email_Log_List extends \WP_List_Table {
 
 	/**
 	 * Sanitize message to remove unsafe html.
-	 * @since 1.6.0
+	 * @since 1.5.1
 	 * @param string $message unsafe message.
 	 * @return string safe message.
 	 */
