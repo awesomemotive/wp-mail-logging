@@ -6,7 +6,7 @@ License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 Requires at least: 3.0
 Tested up to: 4.3.1
-Stable tag: 1.5.1
+Stable tag: 1.5.2
 
 Logs each email sent by WordPress.
 
@@ -22,7 +22,7 @@ Features of the plugin include:
  * Developer: Boost your development performance by keeping track of sent mails.
  * Developer: Filters are provided to extend the columns.
 
-[youtube http://www.youtube.com/watch?v=zU858JxhczA]
+[youtube https://www.youtube.com/watch?v=mQK6VPSV2-E]
 
 **Follow this plugin on [GitHub](https://github.com/No3x/wp-mail-logging)**
 
@@ -44,10 +44,16 @@ The logged email has been sent by WordPress but please note this does NOT mean i
 3. The Settings
 
 == Upgrade Notice ==
+= 1.5.2 =
+Fix: Search
+
 = 1.5.1 =
 Fixed security issues.
 
 == Changelog ==
+= 1.5.2, October 16, 2015  =
+- Fix: Search
+
 = 1.5.1, October 11, 2015  =
 - Tweak: Fixed security issues
 
