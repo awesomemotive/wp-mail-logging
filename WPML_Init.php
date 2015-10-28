@@ -105,7 +105,7 @@ class WPML_Init {
 			return new WPML_LogRotation( $c['plugin-meta'] );
 		};
 		$this->container['api'] = function ($c) {
-			// Uncomment for an API Exmaple
+			// Uncomment for an API Example
 			// return new WPML_API_Example();
 		};
 		$this->container->addActionsAndFilters();
