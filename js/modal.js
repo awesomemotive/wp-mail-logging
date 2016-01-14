@@ -5,8 +5,9 @@ jQuery(function ($) {
     wpml.modal = {
         self : this,
         id : undefined,
-        selectedFormat: 'html',
+        selectedFormat: undefined,
         init: function () {
+            wpml.modal.setSelectedFormat('html');
             $('#wp-mail-logging-modal-content-header-format-switch input').on('ifChecked', function( event ) {
                 wpml.modal.setSelectedFormat( $(this).attr('id') );
             });
@@ -23,21 +24,17 @@ jQuery(function ($) {
         hide: function () {
             $('#wp-mail-logging-modal-wrap').fadeOut();
         },
-        setSelectedFormat: function( $newFormat ) {
-            this.selectedFormat = $newFormat;
+        setSelectedFormat: function( newFormat ) {
+            wpml.modal.selectedFormat = newFormat;
             jQuery.post(ajaxurl, {
                 'action': 'wpml_email_get',
-                //'nonce': top.tinymce.settings.bss_nonce,
+                'ajax_nonce': wpml_modal.ajax_nonce,
                 'id': wpml.modal.id,
                 'format': wpml.modal.selectedFormat
             }, function(response) {
                 emailMessage = response;
                 wpml.modal.set(emailMessage);
             });
-
-        },
-        getSelectedFormat: function() {
-            return this.selectedFormat;
         }
     };
 

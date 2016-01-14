@@ -370,10 +370,11 @@ class WPML_OptionsManager {
 
 		// Enqueue Styles and Scripts if we're on the list page
 		wp_enqueue_script( 'wp-logging-modal', untrailingslashit( plugin_dir_url( __FILE__ ) ) . '/js/modal.js', array( 'jquery' ), '1.0.0', true );
+		wp_localize_script( 'wp-logging-modal', 'wpml_modal', array('ajax_nonce' => wp_create_nonce( 'wpml-modal-show' ) ) );
 		wp_enqueue_style( 'wp-logging-modal', untrailingslashit( plugin_dir_url( __FILE__ ) ) . '/css/modal.css', array(), '1.0.0' );
 		wp_enqueue_style( 'wp-logging-icons', untrailingslashit( plugin_dir_url( __FILE__ ) ) . '/lib/font-awesome/css/font-awesome.min.css', array(), '4.1.0' );
 		wp_enqueue_script( 'icheck', untrailingslashit( plugin_dir_url( __FILE__ ) ) . '/lib/icheck/icheck.min.js', array(), '1.0.2' );
-		wp_enqueue_style( 'icheck-polaris', untrailingslashit( plugin_dir_url( __FILE__ ) ) . '/lib/icheck/polaris/polaris.css', array(), '1.0.2' );
+		wp_enqueue_style( 'icheck-square', untrailingslashit( plugin_dir_url( __FILE__ ) ) . '/lib/icheck/square/blue.css', array(), '1.0.2' );
 	}
 
 	/**
@@ -464,9 +465,9 @@ class WPML_OptionsManager {
 			 <script>
 				 jQuery(document).ready(function($) {
 					 $('#wp-mail-logging-modal-content-header-format-switch input').iCheck({
-						 checkboxClass: 'icheckbox_polaris',
-						 radioClass: 'iradio_polaris',
-						 increaseArea: '-10%' // optional
+						 checkboxClass: 'icheckbox_square-blue',
+						 radioClass: 'iradio_square-blue',
+						 increaseArea: '20%' // optional
 					 });
 				 });
 			 </script>
@@ -491,9 +492,10 @@ class WPML_OptionsManager {
 							<div id="wp-mail-logging-modal-content-header-format-switch">
 								<?php
 									$supported_formats = apply_filters( WPML_Plugin::HOOK_LOGGING_SUPPORTED_FORMATS, array('html') );
-									foreach( $supported_formats as $format ) {
+									foreach( $supported_formats as $key => $format ) {
 										//TODO: $checked = checked(true, $wpml_settings['preferred-mail-format'], false);
-										echo '<input type="radio" name="format" id="' . esc_attr( $format ) . '">' . esc_html( $format ) . '</input>';
+										$checked = ( 0 === $key ) ? " checked" : "";
+										echo ' <input type="radio" name="format" ' . $checked . ' id="' . esc_attr( $format ) . '"> ' . esc_html( $format ) . '</input> ';
 									}
 								?>
 							</div>

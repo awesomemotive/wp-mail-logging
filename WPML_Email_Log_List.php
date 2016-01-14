@@ -380,6 +380,8 @@ class WPML_Email_Log_List extends \WP_List_Table {
 	public static function ajax_wpml_email_get() {
 		$formats = is_array( $additional = apply_filters( WPML_Plugin::HOOK_LOGGING_SUPPORTED_FORMATS, array() ) ) ? $additional : array();
 
+		check_ajax_referer('wpml-modal-show', 'ajax_nonce', true );
+
 		if( ! isset( $_POST['id'] ) )
 			wp_die("huh?");
 		$id = intval( $_POST['id'] );
