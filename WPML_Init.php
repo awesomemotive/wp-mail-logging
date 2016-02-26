@@ -98,7 +98,7 @@ class WPML_Init {
 		$this->container['emailLogList'] = function ($c) {
 			return new WPML_Email_Log_List( $c['emailLogList-supported-formats'] );
 		};
-		$this->container['settings'] = function ($c) {
+		$this->container['redux'] = function ($c) {
 			return new WPML_Redux_Framework_config( $c['plugin-meta'] );
 		};
 		$this->container['logRotation'] = function ($c) {

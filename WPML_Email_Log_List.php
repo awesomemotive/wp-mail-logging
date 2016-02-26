@@ -380,17 +380,19 @@ class WPML_Email_Log_List extends \WP_List_Table {
 	public static function ajax_wpml_email_get() {
 		$formats = is_array( $additional = apply_filters( WPML_Plugin::HOOK_LOGGING_SUPPORTED_FORMATS, array() ) ) ? $additional : array();
 
-		check_ajax_referer('wpml-modal-show', 'ajax_nonce', true );
+		check_ajax_referer( 'wpml-modal-show', 'ajax_nonce', true );
 
 		if( ! isset( $_POST['id'] ) )
-			wp_die("huh?");
+			wp_die( "huh?" );
 		$id = intval( $_POST['id'] );
-		$format_requested = isset( $_POST['format'] ) ? $_POST['format'] : 'html';
-		if( ! in_array( $format_requested, $formats ) )
-			wp_die("Unsupported Format");
 
-		$mail = Mail::find_one($id);
-		$instance = WPML_Init::getInstance()->getService('emailLogList');
+		$format_requested = isset( $_POST['format'] ) ? $_POST['format'] : 'html';
+		if ( ! in_array( $format_requested, $formats ) )  {
+			echo "Unsupported Format. Using html as fallback.";
+			$format_requested = WPML_Utils::sanitize_expected_value($format_requested, $formats, 'html');
+		}
+		$mail = Mail::find_one( $id );
+		$instance = WPML_Init::getInstance()->getService( 'emailLogList' );
 		$mailAppend = '';
 		switch( $format_requested ) {
 			case 'html': {

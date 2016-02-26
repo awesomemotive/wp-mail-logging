@@ -273,17 +273,18 @@ if (!class_exists('WPML_Redux_Framework_config')) {
                         'on'        => 'Enabled',
                         'off'       => 'Disabled',
                     ),
-					/*array(
+					array(
 						'id'        => 'preferred-mail-format',
 						'type'      => 'select',
 						'options' 	=> array(
-							'first' => 'first',
-							'1' => 'second'
+							'html' => 'html',
+							'raw' => 'raw',
+							'json' => 'json'
 						),
-						'default' 	=> 'first',
+						'default' 	=> 'html',
 						'title'     => __('Default Format for Message', 'wpml'),
-						'subtitle'  => __('Select your preferred format.', 'wpml'),
-					),*/
+						'subtitle'  => __('Select your preferred display format.', 'wpml'),
+					),
                 	array(
                         'id'        => 'section-log-rotation-start',
                         'type'      => 'section',
