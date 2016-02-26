@@ -449,7 +449,7 @@ class WPML_OptionsManager {
 	}
 	
 	public function LogMenu() {
-		global $wp_version;
+		global $wp_version, $wpml_settings;
 		
 		if ( !current_user_can( $this->getSetting( 'can-see-submission-data', 'manage_options' ) ) ) {
 			wp_die(__('You do not have sufficient permissions to access this page.', 'wpml'));
@@ -493,8 +493,7 @@ class WPML_OptionsManager {
 								<?php
 									$supported_formats = apply_filters( WPML_Plugin::HOOK_LOGGING_SUPPORTED_FORMATS, array('html') );
 									foreach( $supported_formats as $key => $format ) {
-										//TODO: $checked = checked(true, $wpml_settings['preferred-mail-format'], false);
-										$checked = ( 0 === $key ) ? " checked" : "";
+										$checked = checked($format, $wpml_settings['preferred-mail-format'], false);
 										echo ' <input type="radio" name="format" ' . $checked . ' id="' . esc_attr( $format ) . '"> ' . esc_html( $format ) . '</input> ';
 									}
 								?>

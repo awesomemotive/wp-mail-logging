@@ -7,7 +7,9 @@ jQuery(function ($) {
         id : undefined,
         selectedFormat: undefined,
         init: function () {
-            wpml.modal.setSelectedFormat('html');
+            var selected = $('#wp-mail-logging-modal-content-header-format-switch').find('.checked');
+            var selectedFormat = $(selected).children("input").attr('id');
+            wpml.modal.setSelectedFormat(selectedFormat);
             $('#wp-mail-logging-modal-content-header-format-switch input').on('ifChecked', function( event ) {
                 wpml.modal.setSelectedFormat( $(this).attr('id') );
             });
