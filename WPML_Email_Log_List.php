@@ -230,12 +230,12 @@ class WPML_Email_Log_List extends \WP_List_Table {
 	}
 
 	/**
-	 * Renders the attachment column.
-	 * @since 1.3
+	 * Renders the attachment column in compbat mode for mails prior 1.6.0.
+	 * @since 1.6.0
 	 * @param array $item The current item.
 	 * @return string The attachment column.
 	 */
-	function column_attachments( $item ) {
+	function column_attachments_compat_152( $item ) {
 		$attachment_append = '';
 		$attachments = explode( ',\n', $item['attachments'] );
 		$attachments = is_array( $attachments ) ? $attachments : array( $attachments );
@@ -245,6 +245,39 @@ class WPML_Email_Log_List extends \WP_List_Table {
 				$filename = basename( $attachment );
 				$attachment_path = WP_CONTENT_DIR . $attachment;
 				$attachment_url = WP_CONTENT_URL . $attachment;
+				if ( is_file( $attachment_path ) ) {
+					$attachment_append .= '<a href="' . $attachment_url . '" title="' . $filename . '">' . WPML_Utils::generate_attachment_icon( $attachment_path ) . '</a> ';
+				} else {
+					$message = sprintf( __( 'Attachment %s is not present', 'wpml' ), $filename );
+					$attachment_append .= '<i class="fa fa-times" title="' . $message . '"></i>';
+				}
+			}
+		}
+		return $attachment_append;
+	}
+
+	/**
+	 * Renders the attachment column.
+	 * @since 1.3
+	 * @param array $item The current item.
+	 * @return string The attachment column.
+	 */
+	function column_attachments( $item ) {
+
+		if ( version_compare( $item ['plugin_version'], '1.6.0', '<' ) ) {
+			return $this->column_attachments_compat_152( $item );
+		}
+
+		$attachment_append = '';
+		$attachments = explode( ',\n', $item['attachments'] );
+		$attachments = is_array( $attachments ) ? $attachments : array( $attachments );
+		foreach ( $attachments as $attachment ) {
+			// $attachment can be an empty string ''.
+			if ( ! empty( $attachment ) ) {
+				$filename = basename( $attachment );
+				$basename = '/uploads';
+				$attachment_path = WP_CONTENT_DIR . $basename . $attachment;
+				$attachment_url = WP_CONTENT_URL . $basename . $attachment;
 
 				if ( is_file( $attachment_path ) ) {
 					$attachment_append .= '<a href="' . $attachment_url . '" title="' . $filename . '">' . WPML_Utils::generate_attachment_icon( $attachment_path ) . '</a> ';
