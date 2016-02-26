@@ -264,7 +264,7 @@ class WPML_Email_Log_List extends \WP_List_Table {
 	 */
 	function column_attachments( $item ) {
 
-		if ( version_compare( $item ['plugin_version'], '1.6.0', '<' ) ) {
+		if ( version_compare( trim( $item ['plugin_version'] ), '1.6.0', '<' ) ) {
 			return $this->column_attachments_compat_152( $item );
 		}
 
