@@ -159,7 +159,7 @@ class WPML_Plugin extends WPML_LifeCycle {
 		$basename = basename( $uploads['baseurl'] );
 		$basename_needle = '/'.$basename.'/';
 		foreach ( $attachments as $attachment ) {
-			$append_url = substr( $attachment, strrpos( $attachment, $basename_needle ) );
+    		$append_url = substr( $attachment, strrpos( $attachment, $basename_needle ) + strlen($basename_needle) - 1 );
 			$attachment_urls[] = $append_url;
 		}
 		return implode( ',\n', $attachment_urls );
