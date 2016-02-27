@@ -341,6 +341,45 @@ if (!class_exists('WPML_Redux_Framework_config')) {
                         'type'      => 'section',
                         'indent'    => false // Indent all options below until the next 'section' option is set.
                 	),
+                    array(
+                        'id'        => 'section-rest-start',
+                        'type'      => 'section',
+                        'title'     => __('REST API', 'wpml' ),
+                        'subtitle'  => __('Configure REST endpoint integration.', 'wpml'),
+                        'indent'    => true, // Indent all options below until the next 'section' option is set.
+                    ),
+                    array(
+                        'id'        => 'rest-endpoint-mails-enabled',
+                        'type'      => 'switch',
+                        'title'     => __('REST mail Endpoint', 'wpml' ),
+                        'subtitle'  => __('Provide a /mail endpoint', 'wpml'),
+                        'hint'      => array(
+                            'title'   => __('Advanced'),
+                            'content' => __('RESTful applications use HTTP requests to post data (create and/or update), read data (e.g. make queries), and delete data. This is implemented for mails as endpoint.')
+                        ),
+                        'default'   => false,
+                        'on'        => 'Enabled',
+                        'off'       => 'Disabled',
+                    ),
+                    array(
+                        'id'        => 'rest-endpoint-mails-auth-enabled',
+                        'type'      => 'switch',
+                        'title'     => __('REST mail Endpoint Auth', 'wpml' ),
+                        'subtitle'  => __('Authentication required.', 'wpml'),
+                        'hint'      => array(
+                            'title'   => __('Advanced'),
+                            'content' => 'If enabled the access to the data of the endpoint depends on the logged in user. All queries will need an auth token. See WP REST API'
+                        ),
+                        'required' => array('rest-endpoint-mails-enabled','equals', true),
+                        'default'   => true,
+                        'on'        => 'Enabled',
+                        'off'       => 'Disabled',
+                    ),
+                    array(
+                        'id'        => 'section-rest-end',
+                        'type'      => 'section',
+                        'indent'    => false // Indent all options below until the next 'section' option is set.
+                    ),
                 ),
             );
         }
@@ -452,14 +491,14 @@ if (!class_exists('WPML_Redux_Framework_config')) {
 
                     // HINTS
                     'hints'                => array(
-                        'icon'          => 'icon-question-sign',
+                        'icon'          => 'el el-question-sign',
                         'icon_position' => 'right',
                         'icon_color'    => 'lightgray',
                         'icon_size'     => 'normal',
                         'tip_style'     => array(
                             'color'   => 'light',
                             'shadow'  => true,
-                            'rounded' => false,
+                            'rounded' => true,
                             'style'   => 'bootstrap',
                         ),
                         'tip_position'  => array(
@@ -468,13 +507,13 @@ if (!class_exists('WPML_Redux_Framework_config')) {
                         ),
                         'tip_effect'    => array(
                             'show' => array(
-                                'effect'   => 'slide',
-                                'duration' => '500',
+                                'effect'   => 'fade',
+                                'duration' => '150',
                                 'event'    => 'mouseover',
                             ),
                             'hide' => array(
-                                'effect'   => 'slide',
-                                'duration' => '500',
+                                'effect'   => 'fade',
+                                'duration' => '150',
                                 'event'    => 'click mouseleave',
                             ),
                         ),
