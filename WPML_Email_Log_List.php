@@ -95,7 +95,7 @@ class WPML_Email_Log_List extends \WP_List_Table {
 	/**
 	 * Define which columns are hidden
 	 * @since 1.0
-	 * @return Array
+	 * @return array
 	 */
 	function get_hidden_columns() {
 		return array(
@@ -390,7 +390,7 @@ class WPML_Email_Log_List extends \WP_List_Table {
 	/**
 	 * Define the sortable columns
 	 * @since 1.0
-	 * @return Array
+	 * @return array
 	 */
 	function get_sortable_columns() {
 		return array(
