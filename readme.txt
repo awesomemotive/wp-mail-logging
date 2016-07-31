@@ -5,7 +5,7 @@ Tags: mail, email, log, logging, debug, list, store, collect, view
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 Requires at least: 3.0
-Tested up to: 4.3.1
+Tested up to: 4.6
 Stable tag: 1.6.0
 
 Logs each email sent by WordPress.
@@ -45,9 +45,19 @@ The logged email has been sent by WordPress but please note this does NOT mean i
 
 == Upgrade Notice ==
 = 1.5.1 =
-Fixed security issues.
+- New: Improved modal, added view types
+- Tweak: Proper date if none set in WordPress settings
+- Tweak: Updated libraries
+- Tweak: Added wp_mail hook to very last priority
 
 == Changelog ==
+
+= 1.6.0, July 31, 2016  =
+- New: Improved modal, added view types
+- Tweak: Proper date if none set in WordPress settings
+- Tweak: Updated libraries
+- Tweak: Added wp_mail hook to very last priority
+
 = 1.5.1, October 11, 2015  =
 - Tweak: Fixed security issues
 
