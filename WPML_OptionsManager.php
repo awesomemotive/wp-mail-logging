@@ -51,19 +51,22 @@ class WPML_OptionsManager {
 	 * @return string datetime format string
 	 */
 	public function getDateTimeFormatString() {
+		// default database like format
+		$format = 'Y-m-d G:i:s';
 		$date_format = get_option( 'date_format' );
 		$time_format = get_option( 'time_format' );
+		// get option or change to user friendly format as the options maybe not set at all
 		$date_format = empty( $date_format ) ? 'F j, Y' : $date_format;
 		$time_format = empty( $time_format ) ? 'g:i a' : $time_format;
 		if ( $this->getSetting( 'datetimeformat-use-wordpress', false) == true )
-			$timeFormat = $date_format . " " . $time_format;
-		return $timeFormat;
+			// Overwrite with defined values or default
+			$format = $date_format . " " . $time_format;
+		return $format;
 	}
 	
 	public function getOptionNamePrefix() {
 		return $this->getClassnameWithoutNamespace() . '_';
 	}
-
 
 	/**
 	 * Define your options meta data here as an array, where each element in the array
