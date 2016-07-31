@@ -51,9 +51,11 @@ class WPML_OptionsManager {
 	 * @return string datetime format string
 	 */
 	public function getDateTimeFormatString() {
+		$date_format = empty( get_option( 'date_format' ) ) ? 'F j, Y' : get_option( 'date_format' );
+		$time_format = empty( get_option( 'time_format' ) ) ? 'g:i a' : get_option( 'time_format' );
 		$timeFormat = "Y-m-d H:i:s";
 		if ( $this->getSetting( 'datetimeformat-use-wordpress', false) == true )
-			$timeFormat = get_option( 'date_format' ) . " " . get_option( 'time_format' );
+			$timeFormat = $date_format . " " . $time_format;
 		return $timeFormat;
 	}
 	
