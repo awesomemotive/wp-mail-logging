@@ -33,7 +33,7 @@ class WPML_Init {
 	 */
 	private static $instance;
 	/**
-	 * @var DIContainer The DI Container
+	 * @var WPML_DI_Container The DI Container
 	 */
 	private $container;
 
