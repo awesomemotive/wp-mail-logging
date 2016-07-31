@@ -268,7 +268,7 @@ if (!class_exists('WPML_Redux_Framework_config')) {
                         'id'        => 'datetimeformat-use-wordpress',
                         'type'      => 'switch',
                         'title'     => __('WordPress Date Time Format', 'wpml' ),
-                        'subtitle'  => __( sprintf("Use format from WordPress settings (%s)", date_i18n( get_option( 'date_format' ) . " " . get_option( 'time_format' ) ) ), 'wpml'),
+                        'subtitle'  => __( sprintf("Use format from WordPress settings (%s)", date_i18n( apply_filters( 'wpml_get_date_time_format', '' ), current_time( 'timestamp' ) ) ), 'wpml'),
                         'default'   => 0,
                         'on'        => 'Enabled',
                         'off'       => 'Disabled',
