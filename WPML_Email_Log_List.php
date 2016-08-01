@@ -359,7 +359,7 @@ class WPML_Email_Log_List extends \WP_List_Table {
 			return;
 		}
 
-		if ( check_admin_referer( Email_Logging_ListTable::NONCE_LIST_TABLE, Email_Logging_ListTable::NONCE_LIST_TABLE . '_nonce' ) ) {
+		if ( check_admin_referer( WPML_Email_Log_List::NONCE_LIST_TABLE, WPML_Email_Log_List::NONCE_LIST_TABLE . '_nonce' ) ) {
 			$name = $this->_args['singular'];
 
 			// Detect when a bulk action is being triggered.
@@ -425,6 +425,7 @@ class WPML_Email_Log_List extends \WP_List_Table {
 			$format_requested = WPML_Utils::sanitize_expected_value($format_requested, $formats, 'html');
 		}
 		$mail = Mail::find_one( $id );
+        /* @var $instance WPML_Email_Log_List */
 		$instance = WPML_Init::getInstance()->getService( 'emailLogList' );
 		$mailAppend = '';
 		switch( $format_requested ) {
