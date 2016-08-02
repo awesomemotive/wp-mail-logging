@@ -13,7 +13,8 @@
     "require-dev": {
         "jdgrimes/wp-plugin-uninstall-tester": "dev-master",
         "wp-coding-standards/wpcs": "0.6.0",
-        "bocharsky-bw/arrayzy": "v0.1.1"
+        "bocharsky-bw/arrayzy": "v0.1.1",
+        "phpunit/phpunit": "4.8.*"
     },
     "license": "GPL-2.0",
     "authors": [
