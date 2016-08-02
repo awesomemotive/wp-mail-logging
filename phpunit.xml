@@ -7,8 +7,8 @@
 	convertWarningsToExceptions="true"
 	>
 	<php>
-		<const name="AUTH_KEY" value="(m+%rCB/5}=M:#zR{dI>fWo0CTCAM6KfEBuSf.b<^o+0jPJSJ_Li-b^vkFkX/0(q"/>
-		<const name="SECURE_AUTH_KEY" value="uL)+/}vexI*^J{#I-~|NAlTd0`4oYM4<#uFU/Y?eJ<l~L$;MR#WULP7D_lWz,_Wx"/>
+		<const name="AUTH_KEY" value="(m+%rCB/5}=M:#zR{dIffWo0CTCAM6KfEBuSf.bf^o+0jPJSJ_Li-b^vkFkX/0(q"/>
+		<const name="SECURE_AUTH_KEY" value="uL)+/}vexI*^J{#I-~|NAlTd0`4oYM4f#uFU/Y?eJfl~L$;MR#WULP7D_lWz,_Wx"/>
 	</php>
 	<testsuites>
 		<testsuite>
