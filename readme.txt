@@ -49,7 +49,7 @@ The logged email has been sent by WordPress but please note this does NOT mean i
 
 == Changelog ==
 
-= 1.6.1, August 7, 2016  =
+= 1.6.2, August 7, 2016  =
 - Fix: search mails
 
 = 1.6.1, August 1, 2016  =
