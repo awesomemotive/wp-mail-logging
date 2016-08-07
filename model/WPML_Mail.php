@@ -15,83 +15,83 @@ if(!defined( 'ABSPATH' )) exit;
  */
 class WPML_Mail extends BaseModel
 {
-	/**
-	 * @var integer
-	 */
-	protected $mail_id;
+    /**
+     * @var integer
+     */
+    protected $mail_id;
 
-	/**
-	 * @var DateTime
-	 */
-	protected $timestamp;
+    /**
+     * @var DateTime
+     */
+    protected $timestamp;
 
-	/**
-	 * @var string
-	 */
-	protected $receiver;
+    /**
+     * @var string
+     */
+    protected $receiver;
 
-	/**
-	 * @var string
-	 */
-	protected $subject;
+    /**
+     * @var string
+     */
+    protected $subject;
 
-	/**
-	 * @var string
-	 */
-	protected $message;
+    /**
+     * @var string
+     */
+    protected $message;
 
-	/**
-	 * @var string
-	 */
-	protected $headers;
+    /**
+     * @var string
+     */
+    protected $headers;
 
-	/**
-	 * @var string
-	 */
-	protected $attachments;
+    /**
+     * @var string
+     */
+    protected $attachments;
 
-	/**
-	 * @var string
-	 */
-	protected $plugin_version;
+    /**
+     * @var string
+     */
+    protected $plugin_version;
 
-	/**
-	 * @var string
-	 */
+    /**
+     * @var string
+     */
 
-	public function __construct(array $properties = array())
-	{
-		parent::__construct($properties);
-	}
+    public function __construct(array $properties = array())
+    {
+        parent::__construct($properties);
+    }
 
-	/**
-	 * Get the model's primary key.
-	 *
-	 * @return string
-	 */
-	public static function get_primary_key()
-	{
-		return 'mail_id';
-	}
+    /**
+     * Get the model's primary key.
+     *
+     * @return string
+     */
+    public static function get_primary_key()
+    {
+        return 'mail_id';
+    }
 
-	/**
-	 * Get the table used to store posts.
-	 *
-	 * @return string
-	 */
-	public static function get_table()
-	{
-		global $wpdb;
-		return $wpdb->prefix . 'wpml_mails';
-	}
+    /**
+     * Get the table used to store posts.
+     *
+     * @return string
+     */
+    public static function get_table()
+    {
+        global $wpdb;
+        return $wpdb->prefix . 'wpml_mails';
+    }
 
-	/**
-	 * Get an array of properties to search when doing a search query.
-	 *
-	 * @return array
-	 */
-	public static function get_searchable_fields()
-	{
-		return array('receiver', 'subject', 'headers', 'attachments');
-	}
+    /**
+     * Get an array of properties to search when doing a search query.
+     *
+     * @return array
+     */
+    public static function get_searchable_fields()
+    {
+        return array('receiver', 'subject', 'headers', 'attachments');
+    }
 }
