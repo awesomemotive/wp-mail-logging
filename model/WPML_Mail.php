@@ -92,6 +92,6 @@ class WPML_Mail extends BaseModel
      */
     public static function get_searchable_fields()
     {
-        return array('receiver', 'subject', 'headers', 'attachments');
+        return array('receiver', 'subject', 'headers', 'message', 'attachments');
     }
 }
