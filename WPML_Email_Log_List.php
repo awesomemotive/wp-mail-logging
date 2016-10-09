@@ -77,6 +77,19 @@ class WPML_Email_Log_List extends \WP_List_Table {
 			'plugin_version'	=> __( 'Plugin Version', 'wpml' ),
 		);
 
+        /* @var $instance WPML_Plugin */
+        $instance = WPML_Init::getInstance()->getService( 'plugin' );
+
+        $switch = $instance->getSetting('display-host', false );
+        if( true == $switch ) {
+            $posAfterTimestamp = array_search('timestamp', array_keys($columns) ) + 1;
+            $columns = array_merge(
+                array_slice( $columns, 0, $posAfterTimestamp),
+                [ 'host' =>  __( 'Host', 'wpml' ) ],
+                array_slice( $columns, $posAfterTimestamp )
+            );
+        }
+
 		// Give a plugin the chance to edit the columns.
 		$columns = apply_filters( WPML_Plugin::HOOK_LOGGING_COLUMNS, $columns );
 
@@ -177,6 +190,7 @@ class WPML_Email_Log_List extends \WP_List_Table {
 		switch ( $column_name ) {
 			case 'mail_id':
 			case 'timestamp':
+			case 'host':
 			case 'subject':
 			case 'message':
 			case 'headers':
@@ -397,6 +411,7 @@ class WPML_Email_Log_List extends \WP_List_Table {
 			// Description: column_name => array( 'display_name', true[asc] | false[desc] ).
 			'mail_id'  		=> array( 'mail_id', false ),
 			'timestamp' 	=> array( 'timestamp', true ),
+			'host' 	        => array( 'host', true ),
 			'receiver' 		=> array( 'receiver', true ),
 			'subject' 		=> array( 'subject', true ),
 			'message' 		=> array( 'message', true ),

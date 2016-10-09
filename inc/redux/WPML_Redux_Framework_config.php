@@ -285,6 +285,19 @@ if (!class_exists('WPML_Redux_Framework_config')) {
 						'title'     => __('Default Format for Message', 'wpml'),
 						'subtitle'  => __('Select your preferred display format.', 'wpml'),
 					),
+                    array(
+                        'id'        => 'display-host',
+                        'type'      => 'switch',
+                        'title'     => __('Display Host', 'wpml' ),
+                        'subtitle'  => __('Display host column in list.', 'wpml'),
+                        'hint'     => array(
+                            'title'   => 'Host',
+                            'content' => 'Display the IP of the host WordPress is running on. This is useful when running it on multiple servers at the same time.',
+                        ),
+                        'default'   => 0,
+                        'on'        => 'Enabled',
+                        'off'       => 'Disabled',
+                    ),
                 	array(
                         'id'        => 'section-log-rotation-start',
                         'type'      => 'section',

@@ -350,6 +350,7 @@ class WPML_OptionsManager {
 				<li>View a complete list of sent mails.</li>
 				<li>Search for mails.</li>
 				<li>Count on regular updates, enhancements, and troubleshooting.</li>
+				<li>DevOP: IP of server sent the mail</li>
 				<li>Developer: Boost your development performance by keeping track of sent mails from your WordPress site.</li>
 				<li>Developer: Use Filters that are provided to extend the columns.</li>
 			</ul>
@@ -361,7 +362,7 @@ class WPML_OptionsManager {
 			</ul>
 			<h3>Donate</h3>
 			<p>Please consider to make a donation if you like the plugin. I spent a lot of time for support, enhancements and updates in general.</p>
-			<a title="Donate" href="http://no3x.de/web/donate">Donate</a>
+			<a title="Donate" class="button button-primary" href="http://no3x.de/web/donate">Donate</a>
 			</div>
 			<?php 
 	}
@@ -517,11 +518,12 @@ class WPML_OptionsManager {
 				</div>
 			</div>
 
-			<form id="email-list" method="post">
+			<form id="email-list" method="get">
 				<input type="hidden" name="page" value="<?php echo esc_attr( $_REQUEST['page'] ); ?>" />
 					<?php
 					wp_nonce_field( WPML_Email_Log_List::NONCE_LIST_TABLE, WPML_Email_Log_List::NONCE_LIST_TABLE . '_nonce' );
 					$search = ( isset( $_REQUEST['s'] ) ) ? $_REQUEST['s'] : false;
+					/** @var WPML_Email_Log_List $emailLogList */
 					$emailLogList = WPML_Init::getInstance()->getService('emailLogList');
 					$emailLogList->prepare_items( $search );
 					$emailLogList->search_box( __( 'Search' ), 's' );
