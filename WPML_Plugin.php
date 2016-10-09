@@ -47,12 +47,13 @@ class WPML_Plugin extends WPML_LifeCycle {
 		$wpdb->query("CREATE TABLE IF NOT EXISTS `$tableName` (
 				`mail_id` INT NOT NULL AUTO_INCREMENT,
 				`timestamp` TIMESTAMP NOT NULL,
+				`host` VARCHAR(200) NOT NULL DEFAULT '0',
 				`receiver` VARCHAR(200) NOT NULL DEFAULT '0',
 				`subject` VARCHAR(200) NOT NULL DEFAULT '0',
 				`message` TEXT NULL,
 				`headers` TEXT NULL,
 				`attachments` VARCHAR(800) NOT NULL DEFAULT '0',
-				`plugin_version` VARCHAR(200) NOT NULL DEFAULT '0',
+				`plugin_version` VARCHAR(200) NOT NULL DEFAULT '',
 				PRIMARY KEY (`mail_id`) 
 			) DEFAULT CHARACTER SET = utf8 DEFAULT COLLATE utf8_general_ci;");
 	}
@@ -79,7 +80,18 @@ class WPML_Plugin extends WPML_LifeCycle {
 		global $wpdb;
 		$upgradeOk = true;
 		$savedVersion = $this->getVersionSaved();
+        $codeVersion = $this->getVersion();
 		$tableName = $this->getTablename('mails');
+
+        /* check for downgrade or beta
+        if( $this->isVersionLessThan($codeVersion, $savedVersion)
+            ||  false !== strpos($savedVersion, 'beta') ) {
+            $upgradeOk = false;
+            // This is only be the case if the user had a beta version installed
+            if ( is_admin() ) {
+                wp_die( "[{$this->getPluginDisplayName()}] You have installed version {$savedVersion} but try to install {$codeVersion}! This would require a database downgrade which is not supported! You need to install {$savedVersion} again, enable \"Cleanup\" in the settings and disable the plugin.");
+            }
+        }*/
 
 		if ($this->isVersionLessThan($savedVersion, '2.0')) {
 			if ($this->isVersionLessThan($savedVersion, '1.2')) {
@@ -91,6 +103,9 @@ class WPML_Plugin extends WPML_LifeCycle {
 			if ($this->isVersionLessThan($savedVersion, '1.4')) {
 				$wpdb->query("ALTER TABLE `$tableName` CHARACTER SET utf8 COLLATE utf8_general_ci;");
 			}
+            if ($this->isVersionLessThan($savedVersion, '1.7')) {
+                $wpdb->query("ALTER TABLE `$tableName` ADD COLUMN `host` VARCHAR(200) NOT NULL DEFAULT '' AFTER `timestamp`;");
+            }
 		}
 
 		if ( !empty( $wpdb->last_error ) ) {
@@ -101,7 +116,6 @@ class WPML_Plugin extends WPML_LifeCycle {
 		}
 
 		// Post-upgrade, set the current version in the options
-		$codeVersion = $this->getVersion();
 		if ($upgradeOk && $savedVersion != $codeVersion) {
 			$this->saveInstalledVersion();
 		}
@@ -185,7 +199,8 @@ class WPML_Plugin extends WPML_LifeCycle {
 			'headers'			=> $this->extractHeader( $mail['headers'] ),
 			'attachments'		=> $this->extractAttachments( $mail['attachments'] ),
 			'plugin_version'	=> $this->getVersionSaved(),
-			'timestamp'         => current_time( 'mysql' )
+			'timestamp'         => current_time( 'mysql' ),
+			'host'              => $_SERVER['SERVER_ADDR']
 		);
 	}
 

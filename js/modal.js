@@ -45,8 +45,10 @@ jQuery(function ($) {
         wpml.modal.init();
         wpml.modal.show();
     });
-
     $('.wp-mail-logging-modal-close').click(function () {
         wpml.modal.hide();
+    });
+    $(document).keyup(function(e) {
+        if (e.keyCode === 27) wpml.modal.hide();
     });
 });

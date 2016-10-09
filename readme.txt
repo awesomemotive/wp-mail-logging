@@ -6,7 +6,7 @@ License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 Requires at least: 3.0
 Tested up to: 4.6
-Stable tag: 1.6.2
+Stable tag: 1.7.0
 
 Logs each email sent by WordPress.
 
@@ -19,6 +19,7 @@ Features of the plugin include:
  * Complete list of sent mails - view and search through the mails.
  * Zero-configuration - just install and enjoy.
  * Log rotation - decide which emails you want to keep.
+ * DevOP: IP of server sent the mail
  * Developer: Boost your development performance by keeping track of sent mails.
  * Developer: Filters are provided to extend the columns.
 
@@ -44,10 +45,17 @@ The logged email has been sent by WordPress but please note this does NOT mean i
 3. The Settings
 
 == Upgrade Notice ==
-= 1.6.2 =
-- Fix: search mails
+= 1.7.0 =
+- New: Storing host IP
+- Fix: passing search term for pagination
+- Tweak: close modal with ESC
 
 == Changelog ==
+
+= 1.7.0, October 9, 2016 =
+- New: logging host IP
+- Fix: passing search term for pagination
+- Tweak: close modal with ESC
 
 = 1.6.2, August 7, 2016  =
 - Fix: search mails

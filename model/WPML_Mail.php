@@ -28,6 +28,11 @@ class WPML_Mail extends BaseModel
     /**
      * @var string
      */
+    protected $host;
+
+    /**
+     * @var string
+     */
     protected $receiver;
 
     /**
@@ -92,6 +97,6 @@ class WPML_Mail extends BaseModel
      */
     public static function get_searchable_fields()
     {
-        return array('receiver', 'subject', 'headers', 'message', 'attachments');
+        return array('receiver', 'subject', 'headers', 'message', 'attachments', 'host');
     }
 }
