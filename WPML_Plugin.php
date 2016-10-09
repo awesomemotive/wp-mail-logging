@@ -200,7 +200,7 @@ class WPML_Plugin extends WPML_LifeCycle {
 			'attachments'		=> $this->extractAttachments( $mail['attachments'] ),
 			'plugin_version'	=> $this->getVersionSaved(),
 			'timestamp'         => current_time( 'mysql' ),
-			'host'              => $_SERVER['SERVER_ADDR']
+			'host'              => isset( $_SERVER['SERVER_ADDR'] ) ? $_SERVER['SERVER_ADDR'] : ''
 		);
 	}
 
