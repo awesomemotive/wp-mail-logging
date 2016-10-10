@@ -52,9 +52,10 @@ class WPML_Utils {
 	 * Determines appropriate fa icon for a file
 	 * @sine 1.3
 	 * @param string $file_path path to file.
-	 * @return Ambigous <boolean, string> Returns the most suitable icon or false if not possible.
+	 * @return string returns the most suitable icon or generic one if not possible.
 	 */
 	public static function determine_fa_icon( $file_path ) {
+        $default_icon = '<i class="fa fa-file-o"></i>';
 		$supported = array(
 			'archive' => array(
 				'application/zip',
@@ -79,6 +80,10 @@ class WPML_Utils {
 				'application/msword'
 			), 'zip'
 		);
+        
+        if( !function_exists('mime_content_type') ) {
+            return $default_icon;
+        }
 
 		$mime = mime_content_type( $file_path );
 		$mime_parts = explode( '/', $mime );
@@ -95,7 +100,7 @@ class WPML_Utils {
 		}
 
 		if ( false === $fa_icon  ) {
-			return '<i class="fa fa-file-o"></i>';
+			return $default_icon;
 		} else {
 			return '<i class="fa fa-file-' . $fa_icon . '-o"></i>';
 		}
