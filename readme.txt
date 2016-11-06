@@ -5,7 +5,7 @@ Tags: mail, email, log, logging, debug, list, store, collect, view
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 Requires at least: 3.0
-Tested up to: 4.6
+Tested up to: 4.6.1
 Stable tag: 1.7.0
 
 Logs each email sent by WordPress.
@@ -52,7 +52,7 @@ The logged email has been sent by WordPress but please note this does NOT mean i
 
 == Changelog ==
 
-= 1.7.0, October 9, 2016 =
+= 1.7.0, November 6, 2016 =
 - New: logging host IP
 - Fix: passing search term for pagination
 - Tweak: close modal with ESC
