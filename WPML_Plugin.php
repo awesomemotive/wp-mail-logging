@@ -53,7 +53,7 @@ class WPML_Plugin extends WPML_LifeCycle {
 				`message` TEXT NULL,
 				`headers` TEXT NULL,
 				`attachments` VARCHAR(800) NOT NULL DEFAULT '0',
-				`error` VARCHAR(800) NOT NULL DEFAULT '0',
+				`error` VARCHAR(400) NULL DEFAULT '',
 				`plugin_version` VARCHAR(200) NOT NULL DEFAULT '0',
 				PRIMARY KEY (`mail_id`) 
 			) DEFAULT CHARACTER SET = utf8 DEFAULT COLLATE utf8_general_ci;");
@@ -106,7 +106,7 @@ class WPML_Plugin extends WPML_LifeCycle {
                 $wpdb->query("ALTER TABLE `$tableName` ADD COLUMN `host` VARCHAR(800) NOT NULL DEFAULT '0' AFTER `timestamp`;");
             }
             if ($this->isVersionLessThan($savedVersion, '1.8')) {
-                $wpdb->query("ALTER TABLE `$tableName` ADD COLUMN `error` VARCHAR(200) NULL DEFAULT '' AFTER `attachments`;");
+                $wpdb->query("ALTER TABLE `$tableName` ADD COLUMN `error` VARCHAR(400) NULL DEFAULT '' AFTER `attachments`;");
             }
 		}
 
