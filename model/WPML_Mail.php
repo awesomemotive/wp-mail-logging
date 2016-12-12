@@ -58,7 +58,7 @@ class WPML_Mail extends BaseModel
     /**
      * @var string
      */
-    protected $errors;
+    protected $error;
 
     /**
      * @var string
