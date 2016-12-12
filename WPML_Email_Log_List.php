@@ -334,7 +334,12 @@ class WPML_Email_Log_List extends \WP_List_Table {
 				$title = "<span class=\"title\">{$display[$key]}: </span>";
 				$content = '';
 				if ( 'message' !== $column_name  && method_exists( $this, 'column_' . $column_name ) ) {
-					$content .= call_user_func( array( $this, 'column_' . $column_name ), $item );
+                    if( 'error' === $column_name || 'attachments' === $column_name ) {
+                        // don't render with icons and stuff, just plain
+                        $content .= is_array($item[$column_name]) ? join("\n", $item[$column_name]) : $item[$column_name];
+                    } else {
+                    $content .= call_user_func( array( $this, 'column_' . $column_name ), $item );
+                    }
 				} else {
 					$content .= $this->column_default( $item, $column_name );
 				}
