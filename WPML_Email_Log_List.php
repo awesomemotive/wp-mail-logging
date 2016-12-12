@@ -74,6 +74,7 @@ class WPML_Email_Log_List extends \WP_List_Table {
 			'message'			=> __( 'Message', 'wpml' ),
 			'headers'			=> __( 'Headers', 'wpml' ),
 			'attachments'		=> __( 'Attachments', 'wpml' ),
+			'error'		        => __( 'Error', 'wpml' ),
 			'plugin_version'	=> __( 'Plugin Version', 'wpml' ),
 		);
 
@@ -195,6 +196,7 @@ class WPML_Email_Log_List extends \WP_List_Table {
 			case 'message':
 			case 'headers':
 			case 'attachments':
+			case 'error':
 			case 'plugin_version':
 			case 'receiver':
 				return $item[ $column_name ];
@@ -303,6 +305,19 @@ class WPML_Email_Log_List extends \WP_List_Table {
 		}
 		return $attachment_append;
 	}
+
+    /**
+     * Renders the error column.
+     * @since 1.8.0
+     * @param $item
+     * @return string
+     */
+    function column_error($item ) {
+        $error = $item['error'];
+        if( empty($error)) return "";
+        $errorMessage = is_array($error) ? join(',', $error) : $error;
+        return "<i class='fa fa-exclamation-circle' title='{$errorMessage}' aria-hidden='true'></i>";
+    }
 
 	/**
 	 * Renders all components of the mail.

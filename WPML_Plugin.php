@@ -53,11 +53,11 @@ class WPML_Plugin extends WPML_LifeCycle {
 				`message` TEXT NULL,
 				`headers` TEXT NULL,
 				`attachments` VARCHAR(800) NOT NULL DEFAULT '0',
-				`plugin_version` VARCHAR(200) NOT NULL DEFAULT '',
+				`error` VARCHAR(800) NOT NULL DEFAULT '0',
+				`plugin_version` VARCHAR(200) NOT NULL DEFAULT '0',
 				PRIMARY KEY (`mail_id`) 
 			) DEFAULT CHARACTER SET = utf8 DEFAULT COLLATE utf8_general_ci;");
 	}
-
 
 	/**
 	 * See: http://plugin.michael-simpson.com/?page_id=101
@@ -69,7 +69,6 @@ class WPML_Plugin extends WPML_LifeCycle {
 		$tableName = WPML_Plugin::getTablename('mails');
 		$wpdb->query("DROP TABLE IF EXISTS `$tableName`");
 	}
-
 
 	/**
 	 * Perform actions when upgrading from version X to version Y
@@ -104,7 +103,10 @@ class WPML_Plugin extends WPML_LifeCycle {
 				$wpdb->query("ALTER TABLE `$tableName` CHARACTER SET utf8 COLLATE utf8_general_ci;");
 			}
             if ($this->isVersionLessThan($savedVersion, '1.7')) {
-                $wpdb->query("ALTER TABLE `$tableName` ADD COLUMN `host` VARCHAR(200) NOT NULL DEFAULT '' AFTER `timestamp`;");
+                $wpdb->query("ALTER TABLE `$tableName` ADD COLUMN `host` VARCHAR(800) NOT NULL DEFAULT '0' AFTER `timestamp`;");
+            }
+            if ($this->isVersionLessThan($savedVersion, '1.8')) {
+                $wpdb->query("ALTER TABLE `$tableName` ADD COLUMN `error` VARCHAR(200) NULL DEFAULT '' AFTER `attachments`;");
             }
 		}
 
@@ -138,6 +140,7 @@ class WPML_Plugin extends WPML_LifeCycle {
 		// http://plugin.michael-simpson.com/?page_id=37
 		add_filter( 'plugin_action_links', array( &$this, 'registerPluginActionLinks'), 10, 5 );
 		add_filter( 'wp_mail', array( &$this, 'log_email' ), PHP_INT_MAX );
+		add_action( 'wp_mail_failed', array( &$this, 'log_email_failed' ) );
 		add_filter( 'set-screen-option', array( &$this, 'save_screen_options' ), 10, 3);
 		add_filter( 'wpml_get_plugin_version', array( &$this, 'getVersion' ) );
 		add_filter( 'wpml_get_plugin_name', array( &$this, 'getPluginDisplayName' ) );
@@ -155,8 +158,21 @@ class WPML_Plugin extends WPML_LifeCycle {
 
         // Register AJAX hooks
         // http://plugin.michael-simpson.com/?page_id=41
-
 	}
+
+    /**
+     * Action to log errors for mails failed to send.
+     *
+     * @since 1.8.0
+     * @global $wpml_current_mail_id
+     * @param \WP_Error $wperror
+     */
+	public function log_email_failed( $wperror ) {
+        global $wpml_current_mail_id;
+        if(!isset($wpml_current_mail_id)) return;
+        $failed_mail = Mail::find_one($wpml_current_mail_id);
+        $failed_mail->set_error($wperror->get_error_message())->save();
+    }
 
 	private function extractReceiver( $receiver ) {
 		return is_array( $receiver ) ? implode( ',\n', $receiver ) : $receiver;
@@ -204,12 +220,22 @@ class WPML_Plugin extends WPML_LifeCycle {
 		);
 	}
 
+
+    /**
+     * Logs mail to database.
+     *
+     * @param array $mailOriginal
+     * @global $wpml_current_mail_id
+     * @since 1.0
+     * @return array $mailOriginal
+     */
 	public function log_email( $mailOriginal ) {
+        global $wpml_current_mail_id;
 		// make copy to avoid any changes on the original mail
 		$mail = $mailOriginal;
 
 		$fields = $this->extractFields( $mail );
-		Mail::create($fields)->save();
+		$wpml_current_mail_id = Mail::create($fields)->save();
 
 		return $mailOriginal;
 	}

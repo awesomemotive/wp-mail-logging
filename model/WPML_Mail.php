@@ -10,7 +10,7 @@ if(!defined( 'ABSPATH' )) exit;
 
 /**
  * WPML Mail model.
- * @sine 1.6.0
+ * @since 1.6.0
  * @author No3x
  */
 class WPML_Mail extends BaseModel
@@ -54,6 +54,11 @@ class WPML_Mail extends BaseModel
      * @var string
      */
     protected $attachments;
+
+    /**
+     * @var string
+     */
+    protected $errors;
 
     /**
      * @var string
