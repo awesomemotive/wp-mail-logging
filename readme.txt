@@ -17,6 +17,7 @@ Logs each email sent by WordPress. This can be useful if you don't want to lose 
 Features of the plugin include:
 
  * Complete list of sent mails - view and search through the mails.
+ * Error status from mail implementation is logged
  * Zero-configuration - just install and enjoy.
  * Log rotation - decide which emails you want to keep.
  * DevOP: IP of server sent the mail
@@ -33,11 +34,15 @@ Features of the plugin include:
 
 == Installation ==
 Just install and activate wp-mail-logging. The plugin will do the work for you! You can list all logged mails on the plugin site.
-
+I recommend the following plugins if you want to send mails via SMTP because they are technically well integrated into WordPress and provide error messages on failure.:
+- [WP Mail SMTP](https://de.wordpress.org/plugins/wp-mail-smtp/)
+- [SMTP Mailer](https://de.wordpress.org/plugins/smtp-mailer/)
 
 == Frequently Asked Questions ==
-= How do I know the Mail was delivered? =
-The logged email has been sent by WordPress but please note this does NOT mean it has been delivered. With the given functionality of WordPress you can't determine if a mail was sent successfully. 
+= How do I know the mail was sent? =
+If there is no error logged chances are high the mail was sent. There are plugins that overwrite (do not customize) the default mailing mechanism of WordPress - they maybe do not inform about failure so it can't be logged by WP Mail Logging.
+= How do I know the wail was delivered? =
+The logged email has been sent by WordPress but please note this does NOT mean it has been delivered. With the given functionality of WordPress you can't determine if a mail was delivered successfully.
 
 == Screenshots ==
 1. The List
@@ -51,6 +56,11 @@ The logged email has been sent by WordPress but please note this does NOT mean i
 - Tweak: close modal with ESC
 
 == Changelog ==
+
+= 1.8.0, December, 2016
+- New: Error status from mail implementation is logged
+- New: Resend mail
+- Fix: raw mode of message renders attachments as text
 
 = 1.7.0, November 6, 2016 =
 - New: logging host IP
