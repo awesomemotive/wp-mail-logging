@@ -37,6 +37,7 @@ class WPML_Email_Log_List extends \WP_List_Table {
 			return $this->supported_formats;
 		} );
 		add_action( 'wp_ajax_wpml_email_get', __CLASS__ . '::ajax_wpml_email_get' );
+        add_action( 'admin_head', array( &$this, 'admin_header' ) );
 	}
 
 	function init() {
@@ -48,6 +49,28 @@ class WPML_Email_Log_List extends \WP_List_Table {
 			'ajax' 		=> false,		// does this table support ajax?
 		) );
 	}
+
+    /**
+     * Admin page css
+     *
+     * @sine 1.8.0
+     */
+    function admin_header() {
+        $page = ( isset($_GET['page'] ) ) ? esc_attr( $_GET['page'] ) : false;
+        if( 'wpml_plugin_log' != $page )
+            return;
+
+        echo '<style type="text/css">';
+        echo '.wp-list-table .column-timestamp { width: 10%; }';
+        echo '.wp-list-table .column-host { width: 10%; }';
+        echo '.wp-list-table .column-subject { width: 10%; }';
+        echo '.wp-list-table .column-message { width: 10%; }';
+        echo '.wp-list-table .column-headers { width: 10%; }';
+        echo '.wp-list-table .column-attachments { width: 10%; }';
+        echo '.wp-list-table .column-error { width: 4%; }';
+        echo '.wp-list-table .column-receiver { width: 10%; }';
+        echo '</style>';
+    }
 
 	/**
 	 * Is displayed if no item is available to render
@@ -74,6 +97,7 @@ class WPML_Email_Log_List extends \WP_List_Table {
 			'message'			=> __( 'Message', 'wpml' ),
 			'headers'			=> __( 'Headers', 'wpml' ),
 			'attachments'		=> __( 'Attachments', 'wpml' ),
+			'error'		        => __( 'Error', 'wpml' ),
 			'plugin_version'	=> __( 'Plugin Version', 'wpml' ),
 		);
 
@@ -195,6 +219,7 @@ class WPML_Email_Log_List extends \WP_List_Table {
 			case 'message':
 			case 'headers':
 			case 'attachments':
+			case 'error':
 			case 'plugin_version':
 			case 'receiver':
 				return $item[ $column_name ];
@@ -304,6 +329,19 @@ class WPML_Email_Log_List extends \WP_List_Table {
 		return $attachment_append;
 	}
 
+    /**
+     * Renders the error column.
+     * @since 1.8.0
+     * @param $item
+     * @return string
+     */
+    function column_error($item ) {
+        $error = $item['error'];
+        if( empty($error)) return "";
+        $errorMessage = is_array($error) ? join(',', $error) : $error;
+        return "<i class='fa fa-exclamation-circle' title='{$errorMessage}' aria-hidden='true'></i>";
+    }
+
 	/**
 	 * Renders all components of the mail.
 	 * @since 1.3
@@ -319,7 +357,12 @@ class WPML_Email_Log_List extends \WP_List_Table {
 				$title = "<span class=\"title\">{$display[$key]}: </span>";
 				$content = '';
 				if ( 'message' !== $column_name  && method_exists( $this, 'column_' . $column_name ) ) {
-					$content .= call_user_func( array( $this, 'column_' . $column_name ), $item );
+                    if( 'error' === $column_name || 'attachments' === $column_name ) {
+                        // don't render with icons and stuff, just plain
+                        $content .= is_array($item[$column_name]) ? join("\n", $item[$column_name]) : $item[$column_name];
+                    } else {
+                    $content .= call_user_func( array( $this, 'column_' . $column_name ), $item );
+                    }
 				} else {
 					$content .= $this->column_default( $item, $column_name );
 				}
