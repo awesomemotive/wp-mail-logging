@@ -2,8 +2,6 @@
 
 namespace No3x\WPML;
 
-use No3x\WPML\Model\WPML_Mail as Mail;
-
 // Exit if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) exit;
 
@@ -39,13 +37,16 @@ class WPML_LogRotation {
 	public function init() {
 		global $wpml_settings;
 
-		if ( isset( $wpml_settings ) ) {
-			if ( $wpml_settings['log-rotation-limit-amout'] == true || $wpml_settings['log-rotation-delete-time'] == true ) {
-				$this->schedule();
-			} else {
-				$this->unschedule();
-			}
-		}
+        // if plugin is installed the first time settings are not initialized properly so quit early.
+        if( !isset($wpml_settings) || !array_key_exists('log-rotation-limit-amout', $wpml_settings) ) {
+            return;
+        }
+
+        if ( $wpml_settings['log-rotation-limit-amout'] == true || $wpml_settings['log-rotation-delete-time'] == true ) {
+            $this->schedule();
+        } else {
+            $this->unschedule();
+        }
 	}
 
 	/**
@@ -72,6 +73,11 @@ class WPML_LogRotation {
 	 */
 	static function limitNumberOfMailsByAmount() {
 		global $wpml_settings, $wpdb;
+
+        if(!isset($wpml_settings)) {
+            return;
+        }
+
 		$tableName = WPML_Plugin::getTablename( 'mails' );
 		
 		if ( $wpml_settings['log-rotation-limit-amout'] == true) {
@@ -99,6 +105,11 @@ class WPML_LogRotation {
 	 */
 	static function limitNumberOfMailsByTime() {
 		global $wpml_settings, $wpdb;
+
+        if(!isset($wpml_settings)) {
+            return;
+        }
+
 		$tableName = WPML_Plugin::getTablename( 'mails' );
 
 		if ( $wpml_settings['log-rotation-delete-time'] == true) {
