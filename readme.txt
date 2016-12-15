@@ -17,8 +17,9 @@ Logs each email sent by WordPress. This can be useful if you don't want to lose 
 Features of the plugin include:
 
  * Complete list of sent mails - view and search through the mails.
- * Error status from mail implementation is logged
  * Zero-configuration - just install and enjoy.
+ * Error status from mail implementation is logged
+ * REST API Endpoint (needs to be enabled manually. Please see the Installation page)
  * Log rotation - decide which emails you want to keep.
  * DevOP: IP of server sent the mail
  * Developer: Boost your development performance by keeping track of sent mails.
@@ -37,6 +38,8 @@ Just install and activate wp-mail-logging. The plugin will do the work for you! 
 I recommend the following plugins if you want to send mails via SMTP because they are technically well integrated into WordPress and provide error messages on failure.:
 - [WP Mail SMTP](https://de.wordpress.org/plugins/wp-mail-smtp/)
 - [SMTP Mailer](https://de.wordpress.org/plugins/smtp-mailer/)
+There is a REST API integration (I'm not sure anybody needs this so it's not enabled by default) & a API Example that uses some hooks the plugin provides:
+Open the WPML_Init.php and follow the instructions.
 
 == Frequently Asked Questions ==
 = How do I know the mail was sent? =

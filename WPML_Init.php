@@ -108,9 +108,10 @@ class WPML_Init {
 			// Uncomment for an API Example
 			// return new WPML_API_Example();
 		};
-		$this->container['rest'] = function ($c) {
-			return new WPML_REST();
-		};
+        $this->container['REST'] = function ($c) {
+            // Uncomment for REST API
+            // return new WPML_REST();
+        };
 		$this->container->addActionsAndFilters();
 
 		add_filter( 'wpml_get_di_container', function() {
