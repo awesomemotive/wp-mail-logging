@@ -27,7 +27,7 @@ class WPML_LogRotation {
 	 * @since 1.6.0
 	 */
 	public function addActionsAndFilters() {
-		add_action( 'plugins_loaded', array( $this, 'init'), 12 );
+		add_action( 'plugins_loaded', array( $this, 'init') );
 		add_action( self::WPML_LOGROTATION_SCHEDULE_HOOK , array( __CLASS__, self::WPML_LOGROTATION_SCHEDULE_ACTION) );
 		register_deactivation_hook( plugin_dir_path( __FILE__ ) . $this->plugin_meta['main_file'], array( $this, 'unschedule' ) );
 	}
@@ -72,6 +72,11 @@ class WPML_LogRotation {
 	 */
 	static function limitNumberOfMailsByAmount() {
 		global $wpml_settings, $wpdb;
+
+        if(!isset($wpml_settings)) {
+            return;
+        }
+
 		$tableName = WPML_Plugin::getTablename( 'mails' );
 		
 		if ( $wpml_settings['log-rotation-limit-amout'] == true) {
@@ -99,6 +104,11 @@ class WPML_LogRotation {
 	 */
 	static function limitNumberOfMailsByTime() {
 		global $wpml_settings, $wpdb;
+
+        if(!isset($wpml_settings)) {
+            return;
+        }
+
 		$tableName = WPML_Plugin::getTablename( 'mails' );
 
 		if ( $wpml_settings['log-rotation-delete-time'] == true) {
