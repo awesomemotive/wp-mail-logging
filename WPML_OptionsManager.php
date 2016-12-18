@@ -358,7 +358,7 @@ class WPML_OptionsManager {
 			<p>This plugin is open source and some people helped to make it better:</p>
 			<ul>
 				<li>tripflex</li>
-				<li><a href="http://www.grafixone.co.za" title="GrafixONE">Andr&eacute; Groenewald</a> (Icon)</li>
+				<li><a href="http://www.grafixone.co.za" title="GrafixONE">Andr&eacute; Groenewald</a> (Icon before version 1.8.0, icon after this version slightly modified)</li>
 			</ul>
 			<h3>Donate</h3>
 			<p>Please consider to make a donation if you like the plugin. I spent a lot of time for support, enhancements and updates in general.</p>
