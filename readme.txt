@@ -61,6 +61,7 @@ The logged email has been sent by WordPress but please note this does NOT mean i
 - New: Error status from mail implementation is logged
 - New: Resend mail
 - Fix: raw mode of message renders attachments as text
+- Fix: fallback to raw mode for json mode if mail is containing html
 
 = 1.7.0, November 6, 2016 =
 - New: logging host IP

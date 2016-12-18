@@ -139,6 +139,16 @@ module.exports = function (grunt) {
 				src: ['releases/<%= pkg.name %>-<%= pkg.version %>.zip']
 			}
 		},
+        less: {
+            compile: {
+                options: {
+                    paths: ['css']
+                },
+				files: {
+                    'css/modal.css': 'css/modal.less'
+                }
+            }
+        }
 
 	});
 
@@ -151,6 +161,7 @@ module.exports = function (grunt) {
 	grunt.loadNpmTasks('grunt-text-replace');
 	grunt.loadNpmTasks('grunt-shell');
 	grunt.loadNpmTasks('grunt-github-releaser');
+	grunt.loadNpmTasks('grunt-contrib-less');
 
 	//release tasks
 	grunt.registerTask('assert-valid-copy', [ 'search:credentials' ]);
@@ -162,4 +173,5 @@ module.exports = function (grunt) {
 
 	grunt.registerTask('just_build', [  'clean_pre_build', 'shell:composer', 'copy', 'copyto:vendor', 'assert-valid-copy', 'compress' ]);
 	grunt.registerTask('release', [ 'clean_pre_build', 'pre_vcs', 'do_git', 'github-release', 'clean:post_build' ]);
+	grunt.registerTask('compilecss', [ 'less' ]);
 };

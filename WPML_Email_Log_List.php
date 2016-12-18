@@ -246,13 +246,12 @@ class WPML_Email_Log_List extends \WP_List_Table {
 	 * Renders the message column.
 	 * @since 1.3
 	 * @param array $item The current item.
-	 * @return void|string
+	 * @return string
 	 */
 	function column_message( $item ) {
 		if ( empty( $item['message'] ) ) {
 			return '';
 		}
-		//$content = $this->sanitize_message( $this->render_mail_html( $item ) );
 		$content = $item['mail_id'];
 		$message = '<a class="wp-mail-logging-view-message button button-secondary" href="#" data-mail-id="' . esc_attr( $content )  . '">View</a>';
 		return $message;
@@ -262,7 +261,7 @@ class WPML_Email_Log_List extends \WP_List_Table {
 	 * Renders the timestamp column.
 	 * @since 1.5.0
 	 * @param array $item The current item.
-	 * @return void|string
+	 * @return string
 	 */
 	function column_timestamp( $item ) {
 		return date_i18n( apply_filters( 'wpml_get_date_time_format', '' ), strtotime( $item['timestamp'] ) );
@@ -496,7 +495,13 @@ class WPML_Email_Log_List extends \WP_List_Table {
 				break;
 			}
 			case 'json': {
-				$mailAppend .= json_encode( $mail->to_array() );
+                if( stristr( str_replace(' ', '', $mail->get_headers()),  "Content-Type:text/html")) {
+                    // Fallback to raw in case it is a html mail
+                    $mailAppend .= sprintf("<span class='info'>%s</span>", __("Fallback to raw format because html is not convertible to json.", 'wpml' ) );
+                    $mailAppend .= $instance->render_mail( $mail->to_array() );
+                } else {
+                    $mailAppend .= json_encode( $mail->to_array() );
+                }
 				break;
 			}
 			default:
