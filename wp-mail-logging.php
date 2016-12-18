@@ -38,7 +38,7 @@ use No3x\WPML\WPML_Init;
 // Exit if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-$WPML_minimalRequiredPhpVersion = '5.4';
+define('WPML_PHP_MIN_VERSION', '5.4');
 
 /**
  * Check the PHP version and give a useful error message if the user's version is less than the required version
@@ -46,18 +46,16 @@ $WPML_minimalRequiredPhpVersion = '5.4';
  * an error message on the Admin page
  */
 function WPML_noticePhpVersionWrong() {
-	global $WPML_minimalRequiredPhpVersion;
 	echo '<div class="error">' .
 	  __( 'Error: plugin "WP Mail Logging" requires a newer version of PHP to be running.',  'wpml' ).
-			'<br/>' . __( 'Minimal version of PHP required: ', 'wpml' ) . '<strong>' . $WPML_minimalRequiredPhpVersion . '</strong>' .
+			'<br/>' . __( 'Minimal version of PHP required: ', 'wpml' ) . '<strong>' . WPML_PHP_MIN_VERSION . '</strong>' .
 			'<br/>' . __( 'Your server\'s PHP version: ', 'wpml' ) . '<strong>' . phpversion() . '</strong>' .
 		 '</div>';
 }
 
 
 function WPML_PhpVersionCheck() {
-	global $WPML_minimalRequiredPhpVersion;
-	if ( version_compare( phpversion(), $WPML_minimalRequiredPhpVersion ) < 0 ) {
+	if ( version_compare( phpversion(), WPML_PHP_MIN_VERSION ) < 0 ) {
 		add_action( 'admin_notices',  __NAMESPACE__ . '\WPML_noticePhpVersionWrong' );
 		return false;
 	}
