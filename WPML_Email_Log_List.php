@@ -402,6 +402,7 @@ class WPML_Email_Log_List extends \WP_List_Table {
 	function get_bulk_actions() {
 		$actions = array(
 			'delete'    => 'Delete',
+			'resend'	=> 'Resend'
 		);
 		return $actions;
 	}
@@ -426,9 +427,28 @@ class WPML_Email_Log_List extends \WP_List_Table {
 						$mail->delete();
 					}
 				}
+			} else if ( 'resend' == $this->current_action() ) {
+				foreach ( $_REQUEST[$name] as $item_id ) {
+					$mail = Mail::find_one( $item_id );
+					if ( false !== $mail ) {
+						$this->resend_email( $mail );
+					}
+				}
 			}
 		}
 	}
+
+	/**
+	 * Send logged email via wp_mail
+	 * @param $email
+	 */
+	function resend_email( $email ) {
+		$email_array = ( $email->to_array() );
+
+		// send mail. returns boolean; ould use this.
+		wp_mail( $email_array['receiver'], $email_array['subject'], $email_array['message'], $email_array['headers'], $email_array['attachments'] ) ;
+	}
+
 
 	/**
 	 * Render the cb column
