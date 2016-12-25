@@ -440,12 +440,12 @@ class WPML_Email_Log_List extends \WP_List_Table {
 
 	/**
 	 * Send logged email via wp_mail
-	 * @param $email
+	 * @param object $email the email object to resend
 	 */
 	function resend_email( $email ) {
 		$email_array = ( $email->to_array() );
 
-		// send mail. returns boolean; ould use this.
+		// send mail. returns boolean; could use this.
 		wp_mail( $email_array['receiver'], $email_array['subject'], $email_array['message'], $email_array['headers'], $email_array['attachments'] ) ;
 	}
 
