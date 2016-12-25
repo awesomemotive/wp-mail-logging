@@ -10,15 +10,15 @@ use No3x\WPML\Pimple\Container;
 
 class WPML_DI_Container extends Container {
 
-	public function addActionsAndFilters() {
-		foreach ( $this->keys() as $key ) {
-			$content = $this[ $key ];
-			if ( is_object( $content ) ) {
-				$reflection = new \ReflectionClass( $content );
-				if ( $reflection->hasMethod( 'addActionsAndFilters' ) ) {
-					$content->addActionsAndFilters();
-				}
-			}
-		}
-	}
+    public function addActionsAndFilters() {
+        foreach ( $this->keys() as $key ) {
+            $content = $this[ $key ];
+            if ( is_object( $content ) ) {
+                $reflection = new \ReflectionClass( $content );
+                if ( $reflection->hasMethod( 'addActionsAndFilters' ) ) {
+                    $content->addActionsAndFilters();
+                }
+            }
+        }
+    }
 }
