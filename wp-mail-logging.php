@@ -33,8 +33,6 @@
 
 namespace No3x\WPML;
 
-use No3x\WPML\WPML_Init;
-
 // Exit if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) exit;
 

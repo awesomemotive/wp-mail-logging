@@ -38,7 +38,6 @@ class WPML_Email_Log_List extends \WP_List_Table {
 			return $this->supported_formats;
 		} );
 		add_action( 'wp_ajax_wpml_email_get', __CLASS__ . '::ajax_wpml_email_get' );
-        add_action( 'admin_head', array( &$this, 'admin_header' ) );
 	}
 
 	function init() {
@@ -50,28 +49,6 @@ class WPML_Email_Log_List extends \WP_List_Table {
 			'ajax' 		=> false,		// does this table support ajax?
 		) );
 	}
-
-    /**
-     * Admin page css
-     *
-     * @sine 1.8.0
-     */
-    function admin_header() {
-        $page = ( isset($_GET['page'] ) ) ? esc_attr( $_GET['page'] ) : false;
-        if( 'wpml_plugin_log' != $page )
-            return;
-
-        echo '<style type="text/css">';
-        echo '.wp-list-table .column-timestamp { width: 10%; }';
-        echo '.wp-list-table .column-host { width: 10%; }';
-        echo '.wp-list-table .column-subject { width: 10%; }';
-        echo '.wp-list-table .column-message { width: 10%; }';
-        echo '.wp-list-table .column-headers { width: 10%; }';
-        echo '.wp-list-table .column-attachments { width: 10%; }';
-        echo '.wp-list-table .column-error { width: 4%; }';
-        echo '.wp-list-table .column-receiver { width: 10%; }';
-        echo '</style>';
-    }
 
 	/**
 	 * Is displayed if no item is available to render
