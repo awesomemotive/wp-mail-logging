@@ -3,6 +3,7 @@
 namespace No3x\WPML;
 
 use No3x\WPML\Model\WPML_Mail as Mail;
+use No3x\WPML\Model\WPML_Mail;
 
 // Exit if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) exit;
@@ -440,15 +441,12 @@ class WPML_Email_Log_List extends \WP_List_Table {
 
 	/**
 	 * Send logged email via wp_mail
-	 * @param object $email the email object to resend
+	 * @param WPML_Mail $mail the email object to resend
+	 * @since 1.8.0
 	 */
-	function resend_email( $email ) {
-		$email_array = ( $email->to_array() );
-
-		// send mail. returns boolean; could use this.
-		wp_mail( $email_array['receiver'], $email_array['subject'], $email_array['message'], $email_array['headers'], $email_array['attachments'] ) ;
+	function resend_email( $mail ) {
+		wp_mail( $mail->get_receiver(), $mail->get_subject(), $mail->get_message(), $mail->get_headers(), $mail->get_attachments() ) ;
 	}
-
 
 	/**
 	 * Render the cb column
