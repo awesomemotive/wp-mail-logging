@@ -495,7 +495,7 @@ class WPML_Email_Log_List extends \WP_List_Table {
                     $mailAppend .= sprintf("<span class='info'>%s</span>", __("Fallback to raw format because html is not convertible to json.", 'wpml' ) );
                     $mailAppend .= $instance->render_mail( $mail->to_array() );
                 } else {
-                    $mailAppend .= json_encode( $mail->to_array() );
+                    $mailAppend .= "<pre>" . json_encode( $mail->to_array(), JSON_PRETTY_PRINT ) . "</pre>";
                 }
                 break;
             }
