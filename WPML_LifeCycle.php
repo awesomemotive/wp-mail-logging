@@ -40,8 +40,6 @@ class WPML_LifeCycle extends WPML_InstallIndicator {
         // Record the installed version
         $this->saveInstalledVersion();
 
-        // To avoid running install() more then once
-        $this->markAsInstalled();
     }
 
     public function uninstall() {
@@ -53,7 +51,6 @@ class WPML_LifeCycle extends WPML_InstallIndicator {
             $this->deleteSavedOptions();
             $this->deleteVersionOption();
         }
-        $this->markAsUnInstalled();
     }
 
     /**

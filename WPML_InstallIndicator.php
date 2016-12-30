@@ -34,25 +34,10 @@ class WPML_InstallIndicator extends WPML_OptionsManager {
      * @return bool indicating if the plugin is installed already
      */
     public function isInstalled() {
-        return $this->getOption( self::optionInstalled ) == true;
-    }
-
-    /**
-     * Note in DB that the plugin is installed
-     * @return null
-     */
-    protected function markAsInstalled() {
-        return $this->updateOption( self::optionInstalled, true );
-    }
-
-    /**
-     * Note in DB that the plugin is uninstalled
-     * @return bool returned form delete_option.
-     * true implies the plugin was installed at the time of this call,
-     * false implies it was not.
-     */
-    protected function markAsUnInstalled() {
-        return $this->deleteOption( self::optionInstalled );
+        global $wpdb;
+        $mails = $this->getTablename('mails');
+        $query = $wpdb->query("SHOW TABLES LIKE \"$mails\"");
+        return (bool) $query;
     }
 
     /**
