@@ -5,7 +5,6 @@ namespace No3x\WPML\Tests;
 /**
  * Test uninstallation.
  */
-use No3x\WPML\WPML_InstallIndicator;
 
 /**
  * Plugin uninstall test case.
@@ -79,7 +78,7 @@ class WPML_Uninstall_Plugin_Test extends \WP_Plugin_Uninstall_UnitTestCase {
 		$this->assertTableExists( $wpdb->prefix . 'wpml_mails' );
 
 		// Check that an option was added to the database.
-		$this->assertEquals( $this->plugin_meta['version'], get_option( "WPML__version" ) );
+		$this->assertEquals( $this->plugin_meta['version'], get_option( "WPML_Plugin__version" ) );
 
 		/*
 		 * Now, test that it uninstalls itself properly.
