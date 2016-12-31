@@ -5,6 +5,7 @@ namespace No3x\WPML\Tests;
 /**
  * Test uninstallation.
  */
+use No3x\WPML\WPML_InstallIndicator;
 
 /**
  * Plugin uninstall test case.
@@ -15,6 +16,8 @@ namespace No3x\WPML\Tests;
  * @group uninstall
  */
 class WPML_Uninstall_Plugin_Test extends \WP_Plugin_Uninstall_UnitTestCase {
+
+    private $plugin_meta;
 
 	//
 	// Protected properties.
@@ -46,8 +49,8 @@ class WPML_Uninstall_Plugin_Test extends \WP_Plugin_Uninstall_UnitTestCase {
 	public function setUp() {
 
 		$plugin = apply_filters('wpml_get_di_service', 'plugin' );
-		$plugin_meta = apply_filters('wpml_get_di_service', 'plugin-meta' );
-		$mainfile = $plugin_meta['main_file'];
+        $this->plugin_meta = apply_filters('wpml_get_di_service', 'plugin-meta' );
+		$mainfile = $this->plugin_meta['main_file'];
 
 		$this->install_function = array( $plugin, 'install');
 		$this->uninstall_function = array( $plugin, 'uninstall');
@@ -76,7 +79,7 @@ class WPML_Uninstall_Plugin_Test extends \WP_Plugin_Uninstall_UnitTestCase {
 		$this->assertTableExists( $wpdb->prefix . 'wpml_mails' );
 
 		// Check that an option was added to the database.
-		$this->assertEquals( '1', get_option( 'WPML_Plugin__installed' ) );
+		$this->assertEquals( $this->plugin_meta['version'], get_option( "WPML__version" ) );
 
 		/*
 		 * Now, test that it uninstalls itself properly.
@@ -89,12 +92,10 @@ class WPML_Uninstall_Plugin_Test extends \WP_Plugin_Uninstall_UnitTestCase {
 		$this->assertTableNotExists( $wpdb->prefix . 'wpml_mails' );
 
 		// Check that all options with a prefix was deleted.
-		$this->assertNoOptionsWithPrefix( 'wpml_' );
-
-		$this->assertFalse( get_option( 'WPML_Plugin__installed' ) );
+		$this->assertNoOptionsWithPrefix( 'WPML_' );
 
 		// Same for usermeta and comment meta.
-		$this->assertNoUserMetaWithPrefix( 'wpml_' );
-		$this->assertNoCommentMetaWithPrefix( 'wpml_' );
+		$this->assertNoUserMetaWithPrefix( 'WPML_' );
+		$this->assertNoCommentMetaWithPrefix( 'WPML_' );
 	}
 }
