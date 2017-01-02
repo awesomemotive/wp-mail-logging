@@ -78,7 +78,8 @@ class WPML_Plugin extends WPML_LifeCycle {
     public function upgrade() {
         global $wpdb;
 
-        if(! $this->isInstalled() || empty( $this->getVersionSaved() ) ) {
+        $savedVersion = $this->getVersionSaved();
+        if(! $this->isInstalled() || empty( $savedVersion ) ) {
             // The plugin must be installed before any upgrades
             return;
         }
