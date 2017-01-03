@@ -318,8 +318,8 @@ class WPML_OptionsManager {
         $capability = $this->getSetting( 'can-see-submission-data', 'manage_options' );
 
         //create new top-level menu
-        $wp_logging_list_page = add_menu_page(__('WP Mail Log', 'wpml'),
-            __('WP Mail Log', 'wpml'),
+        $wp_logging_list_page = add_menu_page(__('WP Mail Log', 'wp-mail-logging'),
+            __('WP Mail Log', 'wp-mail-logging'),
             $capability,
             $pluginNameSlug . '_log',
             array(&$this, 'LogMenu'),
@@ -330,8 +330,8 @@ class WPML_OptionsManager {
         add_action( 'load-' . $wp_logging_list_page, array( $this, 'load_assets' ) );
 
         add_submenu_page($pluginNameSlug . '_log',
-            __('About', 'wpml'),
-            __('About', 'wpml'),
+            __('About', 'wp-mail-logging'),
+            __('About', 'wp-mail-logging'),
             $capability,
             $pluginNameSlug . '_about',
             array(&$this, 'LogSubMenuAbout') );
@@ -342,7 +342,7 @@ class WPML_OptionsManager {
     public function LogSubMenuAbout() {
         ?>
         <div class="wrap">
-            <h2><?php echo $this->getPluginDisplayName(); echo ' '; _e('About', 'wpml'); ?></h2>
+            <h2><?php echo $this->getPluginDisplayName(); echo ' '; _e('About', 'wp-mail-logging'); ?></h2>
             <h3>Why use?</h3>
             <p>Sometimes you may ask yourself if a mail was actually sent by WordPress - with
                 <strong>With <?php echo $this->getPluginDisplayName(); ?>, you can:</strong></p>
@@ -419,25 +419,25 @@ class WPML_OptionsManager {
          */
         $screen->add_help_tab(
             array(
-                'title'    => __('About Plugin', 'wpml'),
+                'title'    => __('About Plugin', 'wp-mail-logging'),
                 'id'       => 'about_tab',
-                'content'  => '<p>' . __( "{$this->getPluginDisplayName()}, logs each email sent by WordPress.", 'wpml') . '</p>' . $help_content,
+                'content'  => '<p>' . __( "{$this->getPluginDisplayName()}, logs each email sent by WordPress.", 'wp-mail-logging') . '</p>' . $help_content,
                 'callback' => false
             )
         );
 
         // Add help sidebar
         $screen->set_help_sidebar(
-            '<p><strong>' . __('More information', 'wpml') . '</strong></p>' .
-            '<p><a href = "http://wordpress.org/extend/plugins/wp-mail-logging/">' . __('Plugin Homepage/support', 'wpml') . '</a></p>' .
-            '<p><a href = "http://no3x.de/">' . __("Plugin author's blog", 'wpml') . '</a></p>'
+            '<p><strong>' . __('More information', 'wp-mail-logging') . '</strong></p>' .
+            '<p><a href = "http://wordpress.org/extend/plugins/wp-mail-logging/">' . __('Plugin Homepage/support', 'wp-mail-logging') . '</a></p>' .
+            '<p><a href = "http://no3x.de/">' . __("Plugin author's blog", 'wp-mail-logging') . '</a></p>'
         );
 
         // Add screen options
         $screen->add_option(
             'per_page',
             array(
-                'label' => __('Entries per page', 'wpml'),
+                'label' => __('Entries per page', 'wp-mail-logging'),
                 'default' => 25,
                 'option' => 'per_page'
             )
@@ -459,7 +459,7 @@ class WPML_OptionsManager {
         global $wp_version, $wpml_settings;
 
         if ( !current_user_can( $this->getSetting( 'can-see-submission-data', 'manage_options' ) ) ) {
-            wp_die(__('You do not have sufficient permissions to access this page.', 'wpml'));
+            wp_die(__('You do not have sufficient permissions to access this page.', 'wp-mail-logging'));
         }
 
         if (!class_exists( 'Email_Log_List_Table' ) ) {
@@ -468,7 +468,7 @@ class WPML_OptionsManager {
 
         ?>
         <div class="wrap">
-            <h2><?php echo $this->getPluginDisplayName(); echo ' '; _e('Log', 'wpml'); ?></h2>
+            <h2><?php echo $this->getPluginDisplayName(); echo ' '; _e('Log', 'wp-mail-logging'); ?></h2>
             <script>
                 jQuery(document).ready(function($) {
                     $('#wp-mail-logging-modal-content-header-format-switch input').iCheck({
@@ -494,7 +494,7 @@ class WPML_OptionsManager {
                                 <div id="wp-mail-logging-modal-content-header-icon" class="dashicons dashicons-email-alt"></div>
                             <?php endif; ?>
                             <div id="wp-mail-logging-modal-content-header-title">
-                                <?php _e( 'Message', 'wpml' ); ?>
+                                <?php _e( 'Message', 'wp-mail-logging' ); ?>
                             </div>
                             <div id="wp-mail-logging-modal-content-header-format-switch">
                                 <?php
@@ -512,7 +512,7 @@ class WPML_OptionsManager {
                             </div>
                         </div>
                         <div id="wp-mail-logging-modal-content-footer">
-                            <a class="wp-mail-logging-modal-close button button-primary" href="#"><?php _e( 'Close', 'wpml' ); ?></a>
+                            <a class="wp-mail-logging-modal-close button button-primary" href="#"><?php _e( 'Close', 'wp-mail-logging' ); ?></a>
                         </div>
                     </div>
                 </div>
@@ -551,22 +551,22 @@ class WPML_OptionsManager {
     protected function getOptionValueI18nString($optionValue) {
         switch ($optionValue) {
             case 'true':
-                return __('true', 'wpml');
+                return __('true', 'wp-mail-logging');
             case 'false':
-                return __('false', 'wpml');
+                return __('false', 'wp-mail-logging');
 
             case 'Administrator':
-                return __('Administrator', 'wpml');
+                return __('Administrator', 'wp-mail-logging');
             case 'Editor':
-                return __('Editor', 'wpml');
+                return __('Editor', 'wp-mail-logging');
             case 'Author':
-                return __('Author', 'wpml');
+                return __('Author', 'wp-mail-logging');
             case 'Contributor':
-                return __('Contributor', 'wpml');
+                return __('Contributor', 'wp-mail-logging');
             case 'Subscriber':
-                return __('Subscriber', 'wpml');
+                return __('Subscriber', 'wp-mail-logging');
             case 'Anyone':
-                return __('Anyone', 'wpml');
+                return __('Anyone', 'wp-mail-logging');
         }
         return $optionValue;
     }

@@ -45,9 +45,9 @@ define('WPML_PHP_MIN_VERSION', '5.4');
  */
 function WPML_noticePhpVersionWrong() {
     echo '<div class="error">' .
-        __( 'Error: plugin "WP Mail Logging" requires a newer version of PHP to be running.',  'wpml' ).
-        '<br/>' . __( 'Minimal version of PHP required: ', 'wpml' ) . '<strong>' . WPML_PHP_MIN_VERSION . '</strong>' .
-        '<br/>' . __( 'Your server\'s PHP version: ', 'wpml' ) . '<strong>' . phpversion() . '</strong>' .
+        __( 'Error: plugin "WP Mail Logging" requires a newer version of PHP to be running.',  'wp-mail-logging' ).
+        '<br/>' . __( 'Minimal version of PHP required: ', 'wp-mail-logging' ) . '<strong>' . WPML_PHP_MIN_VERSION . '</strong>' .
+        '<br/>' . __( 'Your server\'s PHP version: ', 'wp-mail-logging' ) . '<strong>' . phpversion() . '</strong>' .
         '</div>';
 }
 
@@ -70,7 +70,7 @@ function WPML_PhpVersionCheck() {
  */
 function WPML_i18n_init() {
     $pluginDir = dirname(plugin_basename(__FILE__));
-    load_plugin_textdomain('wpml', false, $pluginDir . '/languages/');
+    load_plugin_textdomain('wp-mail-logging', false, $pluginDir . '/languages/');
 }
 
 

@@ -110,8 +110,8 @@ if (!class_exists('WPML_Redux_Framework_config')) {
         function dynamic_section( $sections ) {
             //$sections = array();
             $sections[] = array(
-                'title'  => __( 'Section via hook', 'redux-framework-demo' ),
-                'desc'   => __( '<p class="description">This is a section created by adding a filter to the sections array. Can be used by child themes to add/remove sections from the options.</p>', 'redux-framework-demo' ),
+                'title'  => 'Section via hook',
+                'desc'   => '<p class="description">This is a section created by adding a filter to the sections array. Can be used by child themes to add/remove sections from the options.</p>',
                 'icon'   => 'el-icon-paper-clip',
                 // Leave this as a blank section, no options just some intro text set above.
                 'fields' => array()
@@ -241,8 +241,8 @@ if (!class_exists('WPML_Redux_Framework_config')) {
 
             // ACTUAL DECLARATION OF SECTIONS
             $this->sections[] = array(
-                'title'     => __('General Settings', 'wpml'),
-                'desc'      => __('', 'wpml'),
+                'title'     => __('General Settings', 'wp-mail-logging'),
+                'desc'      => __('', 'wp-mail-logging'),
                 'icon'      => 'el-icon-cogs',
                 // 'submenu' => false, // Setting submenu to false on a given section will hide it from the WordPress sidebar menu!
                 'fields'    => array(
@@ -250,28 +250,28 @@ if (!class_exists('WPML_Redux_Framework_config')) {
                     array(
                         'id'        => 'delete-on-deactivation',
                         'type'      => 'switch',
-                        'title'     => __('Cleanup', 'wpml' ),
-                        'subtitle'  => __('Delete all data on deactivation? (emails and settings)?', 'wpml'),
+                        'title'     => __('Cleanup', 'wp-mail-logging' ),
+                        'subtitle'  => __('Delete all data on deactivation? (emails and settings)?', 'wp-mail-logging'),
                         'default'   => 0,
-                        'on'        => 'Enabled',
-                        'off'       => 'Disabled',
+                        'on'        => __(__('Enabled', 'wp-mail-logging' ), 'wp-mail-logging' ),
+                        'off'       => __(__('Disabled', 'wp-mail-logging' ), 'wp-mail-logging' ),
                     ),
                     array(
                         'id'        => 'can-see-submission-data',
                         'type'      => 'select',
                         'data'      => 'capabilities',
                         'default' 	=> 'manage_options',
-                        'title'     => __('Can See Submission data', 'wpml'),
-                        'subtitle'  => __('Select the minimum role.', 'wpml'),
+                        'title'     => __('Can See Submission data', 'wp-mail-logging'),
+                        'subtitle'  => __('Select the minimum role.', 'wp-mail-logging'),
                     ),
                     array(
                         'id'        => 'datetimeformat-use-wordpress',
                         'type'      => 'switch',
-                        'title'     => __('WordPress Date Time Format', 'wpml' ),
-                        'subtitle'  => __( sprintf("Use format from WordPress settings (%s)", date_i18n( $this->wordpress_default_format(), current_time( 'timestamp' ) ) ), 'wpml'),
+                        'title'     => __('WordPress Date Time Format', 'wp-mail-logging' ),
+                        'subtitle'  => sprintf( __( "Use format from WordPress settings (%s)", 'wp-mail-logging' ), date_i18n( $this->wordpress_default_format(), current_time( 'timestamp' ) ) ),
                         'default'   => 0,
-                        'on'        => 'Enabled',
-                        'off'       => 'Disabled',
+                        'on'        => __('Enabled', 'wp-mail-logging' ),
+                        'off'       => __('Disabled', 'wp-mail-logging' ),
                     ),
                     array(
                         'id'        => 'preferred-mail-format',
@@ -282,45 +282,45 @@ if (!class_exists('WPML_Redux_Framework_config')) {
                             'json' => 'json'
                         ),
                         'default' 	=> 'html',
-                        'title'     => __('Default Format for Message', 'wpml'),
-                        'subtitle'  => __('Select your preferred display format.', 'wpml'),
+                        'title'     => __('Default Format for Message', 'wp-mail-logging'),
+                        'subtitle'  => __('Select your preferred display format.', 'wp-mail-logging'),
                     ),
                     array(
                         'id'        => 'display-host',
                         'type'      => 'switch',
-                        'title'     => __('Display Host', 'wpml' ),
-                        'subtitle'  => __('Display host column in list.', 'wpml'),
+                        'title'     => __('Display Host', 'wp-mail-logging' ),
+                        'subtitle'  => __('Display host column in list.', 'wp-mail-logging'),
                         'hint'     => array(
                             'title'   => 'Host',
                             'content' => 'Display the IP of the host WordPress is running on. This is useful when running it on multiple servers at the same time.',
                         ),
                         'default'   => 0,
-                        'on'        => 'Enabled',
-                        'off'       => 'Disabled',
+                        'on'        => __('Enabled', 'wp-mail-logging' ),
+                        'off'       => __('Disabled', 'wp-mail-logging' ),
                     ),
                     array(
                         'id'        => 'section-log-rotation-start',
                         'type'      => 'section',
-                        'title'     => __('Log Rotation', 'wpml' ),
-                        'subtitle'  => __('Save space by deleting logs regularly.', 'wpml'),
+                        'title'     => __('Log Rotation', 'wp-mail-logging' ),
+                        'subtitle'  => __('Save space by deleting logs regularly.', 'wp-mail-logging'),
                         'indent'    => true, // Indent all options below until the next 'section' option is set.
                     ),
                     array(
                         'id'        => 'log-rotation-limit-amout',
                         'type'      => 'switch',
-                        'title'     => __('Cleanup by Amount', 'wpml' ),
-                        'subtitle'  => __('Setup a automated cleanup routine!', 'wpml'),
+                        'title'     => __('Cleanup by Amount', 'wp-mail-logging' ),
+                        'subtitle'  => __('Setup a automated cleanup routine!', 'wp-mail-logging'),
                         'default'   => 0,
-                        'on'        => 'Enabled',
-                        'off'       => 'Disabled',
+                        'on'        => __('Enabled', 'wp-mail-logging' ),
+                        'off'       => __('Disabled', 'wp-mail-logging' ),
                     ),
                     array(
                         'id'            => 'log-rotation-limit-amout-keep',
                         'type'          => 'slider',
                         'required'  => array('log-rotation-limit-amout', '=', '1'),
-                        'title'         => __('Amount', 'wpml' ),
-                        'subtitle'      => __('When should mails are deleted?', 'wpml'),
-                        'desc'      	=> __('Cleanup when the stored mails exceed...', 'wpml'),
+                        'title'         => __('Amount', 'wp-mail-logging' ),
+                        'subtitle'      => __('When should mails are deleted?', 'wp-mail-logging'),
+                        'desc'      	=> __('Cleanup when the stored mails exceed...', 'wp-mail-logging'),
                         'default'       => 75,
                         'min'           => 25,
                         'step'          => 50,
@@ -330,19 +330,19 @@ if (!class_exists('WPML_Redux_Framework_config')) {
                     array(
                         'id'        => 'log-rotation-delete-time',
                         'type'      => 'switch',
-                        'title'     => __('Cleanup by Time', 'wpml' ),
-                        'subtitle'  => __('Setup a automated cleanup routine!', 'wpml'),
+                        'title'     => __('Cleanup by Time', 'wp-mail-logging' ),
+                        'subtitle'  => __('Setup a automated cleanup routine!', 'wp-mail-logging'),
                         'default'   => 0,
-                        'on'        => 'Enabled',
-                        'off'       => 'Disabled',
+                        'on'        => __('Enabled', 'wp-mail-logging' ),
+                        'off'       => __('Disabled', 'wp-mail-logging' ),
                     ),
                     array(
                         'id'            => 'log-rotation-delete-time-days',
                         'type'          => 'slider',
                         'required'  	=> array('log-rotation-delete-time', '=', '1'),
-                        'title'         => __('Time', 'wpml' ),
-                        'subtitle'      => __('When should mails are deleted?', 'wpml'),
-                        'desc'      	=> __('Delete mails older than days...', 'wpml'),
+                        'title'         => __('Time', 'wp-mail-logging' ),
+                        'subtitle'      => __('When should mails are deleted?', 'wp-mail-logging'),
+                        'desc'      	=> __('Delete mails older than days...', 'wp-mail-logging'),
                         'default'       => 30,
                         'min'           => 1,
                         'step'          => 7,
@@ -372,18 +372,18 @@ if (!class_exists('WPML_Redux_Framework_config')) {
             // Custom page help tabs, displayed using the help API. Tabs are shown in order of definition.
             $this->args['help_tabs'][] = array(
                 'id'      => 'redux-help-tab-1',
-                'title'   => __( 'Theme Information 1', 'redux-framework-demo' ),
-                'content' => __( '<p>This is the tab content, HTML is allowed.</p>', 'redux-framework-demo' )
+                'title'   => 'Theme Information 1',
+                'content' => '<p>This is the tab content, HTML is allowed.</p>'
             );
 
             $this->args['help_tabs'][] = array(
                 'id'      => 'redux-help-tab-2',
-                'title'   => __( 'Theme Information 2', 'redux-framework-demo' ),
-                'content' => __( '<p>This is the tab content, HTML is allowed.</p>', 'redux-framework-demo' )
+                'title'   => 'Theme Information 2', 'redux-framework-demo',
+                'content' => '<p>This is the tab content, HTML is allowed.</p>'
             );
 
             // Set the help sidebar
-            $this->args['help_sidebar'] = __( '<p>This is the sidebar content, HTML is allowed.</p>', 'redux-framework-demo' );
+            $this->args['help_sidebar'] = '<p>This is the sidebar content, HTML is allowed.</p>';
         }
 
         /**

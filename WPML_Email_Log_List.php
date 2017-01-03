@@ -56,7 +56,7 @@ class WPML_Email_Log_List extends \WP_List_Table {
      * @see WP_List_Table::no_items()
      */
     function no_items() {
-        _e( 'No email found.', 'wpml' );
+        _e( 'No email found.', 'wp-mail-logging' );
         return;
     }
 
@@ -68,15 +68,15 @@ class WPML_Email_Log_List extends \WP_List_Table {
     function get_columns() {
         $columns = array(
             'cb'				=> '<input type="checkbox" />',
-            'mail_id'			=> __( 'ID', 'wpml' ),
-            'timestamp'			=> __( 'Time', 'wpml' ),
-            'receiver'			=> __( 'Receiver', 'wpml' ),
-            'subject'			=> __( 'Subject', 'wpml' ),
-            'message'			=> __( 'Message', 'wpml' ),
-            'headers'			=> __( 'Headers', 'wpml' ),
-            'attachments'		=> __( 'Attachments', 'wpml' ),
-            'error'		        => __( 'Error', 'wpml' ),
-            'plugin_version'	=> __( 'Plugin Version', 'wpml' ),
+            'mail_id'			=> __( 'ID', 'wp-mail-logging' ),
+            'timestamp'			=> __( 'Time', 'wp-mail-logging' ),
+            'receiver'			=> __( 'Receiver', 'wp-mail-logging' ),
+            'subject'			=> __( 'Subject', 'wp-mail-logging' ),
+            'message'			=> __( 'Message', 'wp-mail-logging' ),
+            'headers'			=> __( 'Headers', 'wp-mail-logging' ),
+            'attachments'		=> __( 'Attachments', 'wp-mail-logging' ),
+            'error'		        => __( 'Error', 'wp-mail-logging' ),
+            'plugin_version'	=> __( 'Plugin Version', 'wp-mail-logging' ),
         );
 
         /* @var $instance WPML_Plugin */
@@ -87,7 +87,7 @@ class WPML_Email_Log_List extends \WP_List_Table {
             $posAfterTimestamp = array_search('timestamp', array_keys($columns) ) + 1;
             $columns = array_merge(
                 array_slice( $columns, 0, $posAfterTimestamp),
-                [ 'host' =>  __( 'Host', 'wpml' ) ],
+                [ 'host' =>  __( 'Host', 'wp-mail-logging' ) ],
                 array_slice( $columns, $posAfterTimestamp )
             );
         }
@@ -264,7 +264,7 @@ class WPML_Email_Log_List extends \WP_List_Table {
                 if ( is_file( $attachment_path ) ) {
                     $attachment_append .= '<a href="' . $attachment_url . '" title="' . $filename . '">' . WPML_Utils::generate_attachment_icon( $attachment_path ) . '</a> ';
                 } else {
-                    $message = sprintf( __( 'Attachment %s is not present', 'wpml' ), $filename );
+                    $message = sprintf( __( 'Attachment %s is not present', 'wp-mail-logging' ), $filename );
                     $attachment_append .= '<i class="fa fa-times" title="' . $message . '"></i>';
                 }
             }
@@ -298,7 +298,7 @@ class WPML_Email_Log_List extends \WP_List_Table {
                 if ( is_file( $attachment_path ) ) {
                     $attachment_append .= '<a href="' . $attachment_url . '" title="' . $filename . '">' . WPML_Utils::generate_attachment_icon( $attachment_path ) . '</a> ';
                 } else {
-                    $message = sprintf( __( 'Attachment %s is not present', 'wpml' ), $filename );
+                    $message = sprintf( __( 'Attachment %s is not present', 'wp-mail-logging' ), $filename );
                     $attachment_append .= '<i class="fa fa-times" title="' . $message . '"></i>';
                 }
             }
@@ -492,7 +492,7 @@ class WPML_Email_Log_List extends \WP_List_Table {
             case 'json': {
                 if( stristr( str_replace(' ', '', $mail->get_headers()),  "Content-Type:text/html")) {
                     // Fallback to raw in case it is a html mail
-                    $mailAppend .= sprintf("<span class='info'>%s</span>", __("Fallback to raw format because html is not convertible to json.", 'wpml' ) );
+                    $mailAppend .= sprintf("<span class='info'>%s</span>", __("Fallback to raw format because html is not convertible to json.", 'wp-mail-logging' ) );
                     $mailAppend .= $instance->render_mail( $mail->to_array() );
                 } else {
                     $mailAppend .= "<pre>" . json_encode( $mail->to_array(), JSON_PRETTY_PRINT ) . "</pre>";

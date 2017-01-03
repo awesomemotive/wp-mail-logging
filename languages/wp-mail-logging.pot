@@ -1,0 +1,371 @@
+# Copyright (C) 2017 Christian Z&ouml;ller
+# This file is distributed under the GPLv3.
+msgid ""
+msgstr ""
+"Project-Id-Version: WP Mail Logging 1.8.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wp-mail-logging\n"
+"POT-Creation-Date: 2017-01-03 18:59:13+00:00\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"PO-Revision-Date: 2017-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"X-Generator: grunt-wp-i18n 0.5.4\n"
+"Language: en_GB\n"
+
+#: WPML_Email_Log_List.php:59
+msgid "No email found."
+msgstr ""
+
+#: WPML_Email_Log_List.php:71
+msgid "ID"
+msgstr ""
+
+#: WPML_Email_Log_List.php:72 inc/redux/WPML_Redux_Framework_config.php:343
+msgid "Time"
+msgstr ""
+
+#: WPML_Email_Log_List.php:73
+msgid "Receiver"
+msgstr ""
+
+#: WPML_Email_Log_List.php:74
+msgid "Subject"
+msgstr ""
+
+#: WPML_Email_Log_List.php:75 WPML_OptionsManager.php:497
+msgid "Message"
+msgstr ""
+
+#: WPML_Email_Log_List.php:76
+msgid "Headers"
+msgstr ""
+
+#: WPML_Email_Log_List.php:77
+msgid "Attachments"
+msgstr ""
+
+#: WPML_Email_Log_List.php:78
+msgid "Error"
+msgstr ""
+
+#: WPML_Email_Log_List.php:79
+msgid "Plugin Version"
+msgstr ""
+
+#: WPML_Email_Log_List.php:90
+msgid "Host"
+msgstr ""
+
+#: WPML_Email_Log_List.php:267 WPML_Email_Log_List.php:301
+msgid "Attachment %s is not present"
+msgstr ""
+
+#: WPML_Email_Log_List.php:495
+msgid "Fallback to raw format because html is not convertible to json."
+msgstr ""
+
+#: WPML_LifeCycle.php:205
+msgid "Settings"
+msgstr ""
+
+#: WPML_OptionsManager.php:321 WPML_OptionsManager.php:322
+msgid "WP Mail Log"
+msgstr ""
+
+#: WPML_OptionsManager.php:333 WPML_OptionsManager.php:334
+#: WPML_OptionsManager.php:345
+msgid "About"
+msgstr ""
+
+#: WPML_OptionsManager.php:422
+msgid "About Plugin"
+msgstr ""
+
+#: WPML_OptionsManager.php:431
+msgid "More information"
+msgstr ""
+
+#: WPML_OptionsManager.php:432
+msgid "Plugin Homepage/support"
+msgstr ""
+
+#: WPML_OptionsManager.php:433
+msgid "Plugin author's blog"
+msgstr ""
+
+#: WPML_OptionsManager.php:440
+msgid "Entries per page"
+msgstr ""
+
+#: WPML_OptionsManager.php:462
+msgid "You do not have sufficient permissions to access this page."
+msgstr ""
+
+#: WPML_OptionsManager.php:471
+msgid "Log"
+msgstr ""
+
+#: WPML_OptionsManager.php:515
+msgid "Close"
+msgstr ""
+
+#: WPML_OptionsManager.php:529
+msgid "Search"
+msgstr ""
+
+#: WPML_OptionsManager.php:554
+msgid "true"
+msgstr ""
+
+#: WPML_OptionsManager.php:556
+msgid "false"
+msgstr ""
+
+#: WPML_OptionsManager.php:559
+msgid "Administrator"
+msgstr ""
+
+#: WPML_OptionsManager.php:561
+msgid "Editor"
+msgstr ""
+
+#: WPML_OptionsManager.php:563
+msgid "Author"
+msgstr ""
+
+#: WPML_OptionsManager.php:565
+msgid "Contributor"
+msgstr ""
+
+#: WPML_OptionsManager.php:567
+msgid "Subscriber"
+msgstr ""
+
+#: WPML_OptionsManager.php:569
+msgid "Anyone"
+msgstr ""
+
+#: inc/class-wp-list-table.php:191
+msgid "No items found."
+msgstr ""
+
+#: inc/class-wp-list-table.php:315
+msgid "Bulk Actions"
+msgstr ""
+
+#: inc/class-wp-list-table.php:325
+msgid "Apply"
+msgstr ""
+
+#: inc/class-wp-list-table.php:409
+msgid "Show all dates"
+msgstr ""
+
+#: inc/class-wp-list-table.php:422
+#. translators: 1: month name, 2: 4-digit year
+msgid "%1$s %2$d"
+msgstr ""
+
+#: inc/class-wp-list-table.php:438
+msgid "List View"
+msgstr ""
+
+#: inc/class-wp-list-table.php:439
+msgid "Excerpt View"
+msgstr ""
+
+#: inc/class-wp-list-table.php:465
+msgid "%s pending"
+msgstr ""
+
+#: inc/class-wp-list-table.php:533 inc/class-wp-list-table.php:948
+msgid "1 item"
+msgid_plural "%s items"
+msgstr[0] ""
+msgstr[1] ""
+
+#: inc/class-wp-list-table.php:551
+msgid "Go to the first page"
+msgstr ""
+
+#: inc/class-wp-list-table.php:558
+msgid "Go to the previous page"
+msgstr ""
+
+#: inc/class-wp-list-table.php:567
+msgid "Current page"
+msgstr ""
+
+#: inc/class-wp-list-table.php:577
+msgid "Go to the next page"
+msgstr ""
+
+#: inc/class-wp-list-table.php:584
+msgid "Go to the last page"
+msgstr ""
+
+#: inc/class-wp-list-table.php:720
+msgid "Select All"
+msgstr ""
+
+#: inc/redux/WPML_Redux_Framework_config.php:194
+msgid "Customize &#8220;%s&#8221;"
+msgstr ""
+
+#: inc/redux/WPML_Redux_Framework_config.php:203
+#: inc/redux/WPML_Redux_Framework_config.php:207
+msgid "Current theme preview"
+msgstr ""
+
+#: inc/redux/WPML_Redux_Framework_config.php:214
+msgid "By %s"
+msgstr ""
+
+#: inc/redux/WPML_Redux_Framework_config.php:215
+msgid "Version %s"
+msgstr ""
+
+#: inc/redux/WPML_Redux_Framework_config.php:216
+msgid "Tags"
+msgstr ""
+
+#: inc/redux/WPML_Redux_Framework_config.php:221
+msgid "This <a href=\"%1$s\">child theme</a> requires its parent theme, %2$s."
+msgstr ""
+
+#: inc/redux/WPML_Redux_Framework_config.php:221
+msgid "http://codex.wordpress.org/Child_Themes"
+msgstr ""
+
+#: inc/redux/WPML_Redux_Framework_config.php:244
+msgid "General Settings"
+msgstr ""
+
+#: inc/redux/WPML_Redux_Framework_config.php:253
+msgid "Cleanup"
+msgstr ""
+
+#: inc/redux/WPML_Redux_Framework_config.php:254
+msgid "Delete all data on deactivation? (emails and settings)?"
+msgstr ""
+
+#: inc/redux/WPML_Redux_Framework_config.php:264
+msgid "Can See Submission data"
+msgstr ""
+
+#: inc/redux/WPML_Redux_Framework_config.php:265
+msgid "Select the minimum role."
+msgstr ""
+
+#: inc/redux/WPML_Redux_Framework_config.php:270
+msgid "WordPress Date Time Format"
+msgstr ""
+
+#: inc/redux/WPML_Redux_Framework_config.php:271
+msgid "Use format from WordPress settings (%s)"
+msgstr ""
+
+#: inc/redux/WPML_Redux_Framework_config.php:273
+#: inc/redux/WPML_Redux_Framework_config.php:298
+#: inc/redux/WPML_Redux_Framework_config.php:314
+#: inc/redux/WPML_Redux_Framework_config.php:336
+msgid "Enabled"
+msgstr ""
+
+#: inc/redux/WPML_Redux_Framework_config.php:274
+#: inc/redux/WPML_Redux_Framework_config.php:299
+#: inc/redux/WPML_Redux_Framework_config.php:315
+#: inc/redux/WPML_Redux_Framework_config.php:337
+msgid "Disabled"
+msgstr ""
+
+#: inc/redux/WPML_Redux_Framework_config.php:285
+msgid "Default Format for Message"
+msgstr ""
+
+#: inc/redux/WPML_Redux_Framework_config.php:286
+msgid "Select your preferred display format."
+msgstr ""
+
+#: inc/redux/WPML_Redux_Framework_config.php:291
+msgid "Display Host"
+msgstr ""
+
+#: inc/redux/WPML_Redux_Framework_config.php:292
+msgid "Display host column in list."
+msgstr ""
+
+#: inc/redux/WPML_Redux_Framework_config.php:304
+msgid "Log Rotation"
+msgstr ""
+
+#: inc/redux/WPML_Redux_Framework_config.php:305
+msgid "Save space by deleting logs regularly."
+msgstr ""
+
+#: inc/redux/WPML_Redux_Framework_config.php:311
+msgid "Cleanup by Amount"
+msgstr ""
+
+#: inc/redux/WPML_Redux_Framework_config.php:312
+#: inc/redux/WPML_Redux_Framework_config.php:334
+msgid "Setup a automated cleanup routine!"
+msgstr ""
+
+#: inc/redux/WPML_Redux_Framework_config.php:321
+msgid "Amount"
+msgstr ""
+
+#: inc/redux/WPML_Redux_Framework_config.php:322
+#: inc/redux/WPML_Redux_Framework_config.php:344
+msgid "When should mails are deleted?"
+msgstr ""
+
+#: inc/redux/WPML_Redux_Framework_config.php:323
+msgid "Cleanup when the stored mails exceed..."
+msgstr ""
+
+#: inc/redux/WPML_Redux_Framework_config.php:333
+msgid "Cleanup by Time"
+msgstr ""
+
+#: inc/redux/WPML_Redux_Framework_config.php:345
+msgid "Delete mails older than days..."
+msgstr ""
+
+#: inc/redux/WPML_Redux_Framework_config.php:510
+msgid "Documentation"
+msgstr ""
+
+#: inc/redux/WPML_Redux_Framework_config.php:516
+msgid "Support"
+msgstr ""
+
+#: inc/redux/WPML_Redux_Framework_config.php:522
+msgid "Extensions"
+msgstr ""
+
+#: wp-mail-logging.php:48
+msgid ""
+"Error: plugin \"WP Mail Logging\" requires a newer version of PHP to be "
+"running."
+msgstr ""
+
+#: wp-mail-logging.php:49
+msgid "Minimal version of PHP required: "
+msgstr ""
+
+#: wp-mail-logging.php:50
+msgid "Your server's PHP version: "
+msgstr ""
+
+#. Description of the plugin/theme
+msgid "Logs each email sent by WordPress."
+msgstr ""
+
+#: inc/class-wp-list-table.php:573
+msgctxt "paging"
+msgid "%1$s of %2$s"
+msgstr ""
