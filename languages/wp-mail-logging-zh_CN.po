@@ -1,0 +1,371 @@
+# Copyright (C) 2017 Christian Z&ouml;ller
+# This file is distributed under the GPLv3.
+msgid ""
+msgstr ""
+"Project-Id-Version: WP Mail Logging 1.8.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wp-mail-logging\n"
+"POT-Creation-Date: 2017-02-12 02:34+0800\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"PO-Revision-Date: 2017-02-15 09:29+0800\n"
+"Language-Team: \n"
+"X-Generator: Poedit 1.8.1\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"Language: zh_CN\n"
+"Last-Translator: \n"
+
+#: WPML_Email_Log_List.php:59
+msgid "No email found."
+msgstr "未找到电子邮件。"
+
+#: WPML_Email_Log_List.php:71
+msgid "ID"
+msgstr "ID"
+
+#: WPML_Email_Log_List.php:72 inc/redux/WPML_Redux_Framework_config.php:343
+msgid "Time"
+msgstr "时间"
+
+#: WPML_Email_Log_List.php:73
+msgid "Receiver"
+msgstr "收件人"
+
+#: WPML_Email_Log_List.php:74
+msgid "Subject"
+msgstr "主题"
+
+#: WPML_Email_Log_List.php:75 WPML_OptionsManager.php:497
+msgid "Message"
+msgstr "消息"
+
+#: WPML_Email_Log_List.php:76
+msgid "Headers"
+msgstr "邮件头"
+
+#: WPML_Email_Log_List.php:77
+msgid "Attachments"
+msgstr "附件"
+
+#: WPML_Email_Log_List.php:78
+msgid "Error"
+msgstr "错误"
+
+#: WPML_Email_Log_List.php:79
+msgid "Plugin Version"
+msgstr "插件版本"
+
+#: WPML_Email_Log_List.php:90
+msgid "Host"
+msgstr "主机名"
+
+#: WPML_Email_Log_List.php:267 WPML_Email_Log_List.php:301
+msgid "Attachment %s is not present"
+msgstr "附件 %s 不存在"
+
+#: WPML_Email_Log_List.php:495
+msgid "Fallback to raw format because html is not convertible to json."
+msgstr "回退到原始格式，因为 html 不是转换为 json。"
+
+#: WPML_LifeCycle.php:205
+msgid "Settings"
+msgstr "设置"
+
+#: WPML_OptionsManager.php:321 WPML_OptionsManager.php:322
+msgid "WP Mail Log"
+msgstr "WP Mail Log"
+
+#: WPML_OptionsManager.php:333 WPML_OptionsManager.php:334
+#: WPML_OptionsManager.php:345
+msgid "About"
+msgstr "关于"
+
+#: WPML_OptionsManager.php:422
+msgid "About Plugin"
+msgstr "关于插件"
+
+#: WPML_OptionsManager.php:431
+msgid "More information"
+msgstr "更多信息"
+
+#: WPML_OptionsManager.php:432
+msgid "Plugin Homepage/support"
+msgstr "插件主页/支持"
+
+#: WPML_OptionsManager.php:433
+msgid "Plugin author's blog"
+msgstr "插件作者的博客"
+
+#: WPML_OptionsManager.php:440
+msgid "Entries per page"
+msgstr "每页的项目数："
+
+#: WPML_OptionsManager.php:462
+msgid "You do not have sufficient permissions to access this page."
+msgstr "您没有足够的权限来访问该页面。"
+
+#: WPML_OptionsManager.php:471
+msgid "Log"
+msgstr "日志"
+
+#: WPML_OptionsManager.php:515
+msgid "Close"
+msgstr "关闭"
+
+#: WPML_OptionsManager.php:529
+msgid "Search"
+msgstr "搜索"
+
+#: WPML_OptionsManager.php:554
+msgid "true"
+msgstr "true"
+
+#: WPML_OptionsManager.php:556
+msgid "false"
+msgstr "false"
+
+#: WPML_OptionsManager.php:559
+msgid "Administrator"
+msgstr "管理员"
+
+#: WPML_OptionsManager.php:561
+msgid "Editor"
+msgstr "编辑"
+
+#: WPML_OptionsManager.php:563
+msgid "Author"
+msgstr "作者"
+
+#: WPML_OptionsManager.php:565
+msgid "Contributor"
+msgstr "贡献者"
+
+#: WPML_OptionsManager.php:567
+msgid "Subscriber"
+msgstr "订阅者"
+
+#: WPML_OptionsManager.php:569
+msgid "Anyone"
+msgstr "任何人"
+
+#: inc/class-wp-list-table.php:191
+msgid "No items found."
+msgstr "没有找到项目。"
+
+#: inc/class-wp-list-table.php:315
+msgid "Bulk Actions"
+msgstr "批量操作"
+
+#: inc/class-wp-list-table.php:325
+msgid "Apply"
+msgstr "应用"
+
+#: inc/class-wp-list-table.php:409
+msgid "Show all dates"
+msgstr "显示所有日期"
+
+#. translators: 1: month name, 2: 4-digit year
+#: inc/class-wp-list-table.php:422
+msgid "%1$s %2$d"
+msgstr "%1$s %2$d"
+
+#: inc/class-wp-list-table.php:438
+msgid "List View"
+msgstr "列表视图"
+
+#: inc/class-wp-list-table.php:439
+msgid "Excerpt View"
+msgstr "摘要"
+
+#: inc/class-wp-list-table.php:465
+msgid "%s pending"
+msgstr "%s 待处理"
+
+#: inc/class-wp-list-table.php:533 inc/class-wp-list-table.php:948
+msgid "1 item"
+msgid_plural "%s items"
+msgstr[0] "1 项"
+
+#: inc/class-wp-list-table.php:551
+msgid "Go to the first page"
+msgstr "转到第一页"
+
+#: inc/class-wp-list-table.php:558
+msgid "Go to the previous page"
+msgstr "转到前一页"
+
+#: inc/class-wp-list-table.php:567
+msgid "Current page"
+msgstr "当前页面"
+
+#: inc/class-wp-list-table.php:577
+msgid "Go to the next page"
+msgstr "转到下一页"
+
+#: inc/class-wp-list-table.php:584
+msgid "Go to the last page"
+msgstr "转到最后一页"
+
+#: inc/class-wp-list-table.php:720
+msgid "Select All"
+msgstr "全选"
+
+#: inc/redux/WPML_Redux_Framework_config.php:194
+msgid "Customize &#8220;%s&#8221;"
+msgstr "自定义 &#8220;%s&#8221;"
+
+#: inc/redux/WPML_Redux_Framework_config.php:203
+#: inc/redux/WPML_Redux_Framework_config.php:207
+msgid "Current theme preview"
+msgstr "预览当前主题"
+
+#: inc/redux/WPML_Redux_Framework_config.php:214
+msgid "By %s"
+msgstr "由 %s"
+
+#: inc/redux/WPML_Redux_Framework_config.php:215
+msgid "Version %s"
+msgstr "版本 %s"
+
+#: inc/redux/WPML_Redux_Framework_config.php:216
+msgid "Tags"
+msgstr "标签"
+
+#: inc/redux/WPML_Redux_Framework_config.php:221
+msgid "This <a href=\"%1$s\">child theme</a> requires its parent theme, %2$s."
+msgstr "此<a href=\"%1$s\">子主题</a>需要其父主题 %2$s。"
+
+#: inc/redux/WPML_Redux_Framework_config.php:221
+msgid "http://codex.wordpress.org/Child_Themes"
+msgstr "http://codex.wordpress.org/Child_Themes"
+
+#: inc/redux/WPML_Redux_Framework_config.php:244
+msgid "General Settings"
+msgstr "常规设置"
+
+#: inc/redux/WPML_Redux_Framework_config.php:253
+msgid "Cleanup"
+msgstr "清理"
+
+#: inc/redux/WPML_Redux_Framework_config.php:254
+msgid "Delete all data on deactivation? (emails and settings)?"
+msgstr "删除所有停用的数据吗？（电子邮件和设置）？"
+
+#: inc/redux/WPML_Redux_Framework_config.php:264
+msgid "Can See Submission data"
+msgstr "可以看到提交数据"
+
+#: inc/redux/WPML_Redux_Framework_config.php:265
+msgid "Select the minimum role."
+msgstr "选择的最小的角色。"
+
+#: inc/redux/WPML_Redux_Framework_config.php:270
+msgid "WordPress Date Time Format"
+msgstr "WordPress 的日期时间格式"
+
+#: inc/redux/WPML_Redux_Framework_config.php:271
+msgid "Use format from WordPress settings (%s)"
+msgstr "从 WordPress 使用格式设置 (%s)"
+
+#: inc/redux/WPML_Redux_Framework_config.php:273
+#: inc/redux/WPML_Redux_Framework_config.php:298
+#: inc/redux/WPML_Redux_Framework_config.php:314
+#: inc/redux/WPML_Redux_Framework_config.php:336
+msgid "Enabled"
+msgstr "启用"
+
+#: inc/redux/WPML_Redux_Framework_config.php:274
+#: inc/redux/WPML_Redux_Framework_config.php:299
+#: inc/redux/WPML_Redux_Framework_config.php:315
+#: inc/redux/WPML_Redux_Framework_config.php:337
+msgid "Disabled"
+msgstr "禁用"
+
+#: inc/redux/WPML_Redux_Framework_config.php:285
+msgid "Default Format for Message"
+msgstr "消息的默认格式"
+
+#: inc/redux/WPML_Redux_Framework_config.php:286
+msgid "Select your preferred display format."
+msgstr "选择您喜欢的显示格式。"
+
+#: inc/redux/WPML_Redux_Framework_config.php:291
+msgid "Display Host"
+msgstr "显示主机"
+
+#: inc/redux/WPML_Redux_Framework_config.php:292
+msgid "Display host column in list."
+msgstr "在列表中显示主机。"
+
+#: inc/redux/WPML_Redux_Framework_config.php:304
+msgid "Log Rotation"
+msgstr "日志轮转"
+
+#: inc/redux/WPML_Redux_Framework_config.php:305
+msgid "Save space by deleting logs regularly."
+msgstr "定期删除日志以节省空间。"
+
+#: inc/redux/WPML_Redux_Framework_config.php:311
+msgid "Cleanup by Amount"
+msgstr "按数量清理"
+
+#: inc/redux/WPML_Redux_Framework_config.php:312
+#: inc/redux/WPML_Redux_Framework_config.php:334
+msgid "Setup a automated cleanup routine!"
+msgstr "设置自动清理"
+
+#: inc/redux/WPML_Redux_Framework_config.php:321
+msgid "Amount"
+msgstr "数量"
+
+#: inc/redux/WPML_Redux_Framework_config.php:322
+#: inc/redux/WPML_Redux_Framework_config.php:344
+msgid "When should mails are deleted?"
+msgstr "邮件何时被删除？"
+
+#: inc/redux/WPML_Redux_Framework_config.php:323
+msgid "Cleanup when the stored mails exceed..."
+msgstr "当存储的邮件超过上述数量时开始清理邮件..."
+
+#: inc/redux/WPML_Redux_Framework_config.php:333
+msgid "Cleanup by Time"
+msgstr "按时间清理"
+
+#: inc/redux/WPML_Redux_Framework_config.php:345
+msgid "Delete mails older than days..."
+msgstr "删除超过上述天数的邮件..."
+
+#: inc/redux/WPML_Redux_Framework_config.php:510
+msgid "Documentation"
+msgstr "文档"
+
+#: inc/redux/WPML_Redux_Framework_config.php:516
+msgid "Support"
+msgstr "支持"
+
+#: inc/redux/WPML_Redux_Framework_config.php:522
+msgid "Extensions"
+msgstr "扩展"
+
+#: wp-mail-logging.php:48
+msgid ""
+"Error: plugin \"WP Mail Logging\" requires a newer version of PHP to be "
+"running."
+msgstr "错误：插件“WP Mail Logging”需要运行较新版本的PHP。"
+
+#: wp-mail-logging.php:49
+msgid "Minimal version of PHP required: "
+msgstr "PHP的最低版本要求："
+
+#: wp-mail-logging.php:50
+msgid "Your server's PHP version: "
+msgstr "您的服务器的PHP版本："
+
+#. Description of the plugin/theme
+msgid "Logs each email sent by WordPress."
+msgstr "记录WordPress发送的每封电子邮件。"
+
+#: inc/class-wp-list-table.php:573
+msgctxt "paging"
+msgid "%1$s of %2$s"
+msgstr "%1$s of %2$s"
