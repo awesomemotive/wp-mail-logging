@@ -54,16 +54,18 @@ The logged email has been sent by WordPress but please note this does NOT mean i
 - New: Error status from mail implementation is logged
 - New: Resend mail
 - New: Added translation files
+- New: Added translation for de_DE and zh_CN
 - Fix: raw mode of message renders attachments as text
 - Fix: fallback to raw mode for json mode if mail is containing html
 - Tweak: Pretty print json
 
 == Changelog ==
 
-= 1.8.0, January 29, 2016
+= 1.8.0, February 15, 2017
 - New: Error status from mail implementation is logged
 - New: Resend mail
 - New: Added translation files
+- New: Added translation for de_DE and zh_CN
 - Fix: raw mode of message renders attachments as text
 - Fix: fallback to raw mode for json mode if mail is containing html
 - Tweak: Pretty print json
