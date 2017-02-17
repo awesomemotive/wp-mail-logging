@@ -61,7 +61,7 @@ The logged email has been sent by WordPress but please note this does NOT mean i
 
 == Changelog ==
 
-= 1.8.0, February 15, 2017
+= 1.8.0, February 15, 2017 =
 - New: Error status from mail implementation is logged
 - New: Resend mail
 - New: Added translation files
