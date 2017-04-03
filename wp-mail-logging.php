@@ -7,7 +7,7 @@
    Author: Christian Z&ouml;ller
    Author URI: http://no3x.de/
    Description: Logs each email sent by WordPress.
-   Text Domain: wpml
+   Text Domain: wp-mail-logging
    License: GPLv3
   */
 
