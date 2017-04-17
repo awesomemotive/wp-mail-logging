@@ -186,6 +186,7 @@ class WPML_Plugin extends WPML_LifeCycle {
         global $wpml_current_mail_id;
         if(!isset($wpml_current_mail_id)) return;
         $failed_mail = Mail::find_one($wpml_current_mail_id);
+        if( !$failed_mail ) return;
         $failed_mail->set_error($wperror->get_error_message())->save();
     }
 
