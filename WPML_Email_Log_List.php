@@ -24,12 +24,18 @@ class WPML_Email_Log_List extends \WP_List_Table {
 
     const NONCE_LIST_TABLE = 'wpml-list_table';
     private $supported_formats = array();
+    /** @var WPML_Email_Resender $emailResender */
+    private $emailResender;
+
     /**
      * Initializes the List Table
      * @since 1.0
+     * @param array $supported_formats
+     * @param WPML_Email_Resender $emailResender
      */
-    function __construct( $supported_formats = array() ) {
+    function __construct( $supported_formats = array(), $emailResender ) {
         $this->supported_formats = $supported_formats;
+        $this->emailResender = $emailResender;
     }
 
     function addActionsAndFilters() {
@@ -422,7 +428,7 @@ class WPML_Email_Log_List extends \WP_List_Table {
      * @since 1.8.0
      */
     function resend_email( $mail ) {
-        wp_mail( $mail->get_receiver(), $mail->get_subject(), $mail->get_message(), $mail->get_headers(), $mail->get_attachments() ) ;
+        $this->emailResender->resendMail( $mail );
     }
 
     /**
