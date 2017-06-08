@@ -110,6 +110,7 @@
 
                 // Initialize the Wordpress filesystem, no more using file_put_contents function
                 if ( empty( $wp_filesystem ) ) {
+                    require_once ABSPATH . '/wp-includes/pluggable.php';
                     require_once ABSPATH . '/wp-admin/includes/file.php';
                     WP_Filesystem();
                 }
@@ -216,7 +217,8 @@
                     $check = array();
                 }
 
-                if ( isset( $redux->args['dev_mode'] ) && $redux->args['dev_mode'] == true && ! ( isset( $redux->args['forced_dev_mode_off'] ) && $redux->args['forced_dev_mode_off'] == true ) ) {
+                //if ( isset( $redux->args['dev_mode'] ) && $redux->args['dev_mode'] == true && ! ( isset( $redux->args['forced_dev_mode_off'] ) && $redux->args['forced_dev_mode_off'] == true ) ) {
+                if ( isset( $redux->args['dev_mode'] ) && $redux->args['dev_mode'] == true  ) {                
                         update_user_option( get_current_user_id(), 'r_tru_u_x', array(
                             'id'      => '',
                             'expires' => 60 * 60 * 24

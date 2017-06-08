@@ -69,7 +69,7 @@
             // Please update the build number with each push, no matter how small.
             // This will make for easier support when we ask users what version they are using.
 
-            public static $_version = '3.6.0.11';
+            public static $_version = '3.6.5';
             public static $_dir;
             public static $_url;
             public static $_upload_dir;
@@ -637,7 +637,21 @@
 
                 $basepath = apply_filters( "redux/textdomain/basepath/{$this->args['opt_name']}", $basepath );
 
-                load_plugin_textdomain( 'redux-framework', false, $basepath . 'languages' );
+                $loaded = load_plugin_textdomain( 'redux-framework', false, $basepath . 'languages');
+
+                if ( !$loaded ){
+                    $loaded = load_muplugin_textdomain( 'redux-framework', $basepath . 'languages' );
+                }
+
+                if ( !$loaded ){
+                    $loaded = load_theme_textdomain( 'redux-framework', $basepath . 'languages' );
+                }
+
+                if ( ! $loaded ) {
+                    $locale = apply_filters( 'plugin_locale', get_locale(), 'redux-framework' );
+                    $mofile = dirname( __FILE__ ) . '/languages/redux-framework-' . $locale . '.mo';
+                    load_textdomain( 'redux-framework', $mofile );
+                }
             }
             // _internationalization()
 
@@ -1271,10 +1285,10 @@
                     }
                     $this->dev_mode_forced  = true;
                     $this->args['dev_mode'] = true;
-                    if ( isset( $this->args['forced_dev_mode_off'] ) && $this->args['forced_dev_mode_off'] == true ) {
-                        $this->dev_mode_forced  = false;
-                        $this->args['dev_mode'] = false;
-                    }
+//                    if ( isset( $this->args['forced_dev_mode_off'] ) && $this->args['forced_dev_mode_off'] == true ) {
+//                        $this->dev_mode_forced  = false;
+//                        $this->args['dev_mode'] = false;
+//                    }
                 }
 
                 // Auto create the page_slug appropriately
@@ -1448,7 +1462,7 @@
                                     continue;
                                 }
 
-                                if ( isset( $section['permissions'] ) && ! current_user_can( $section['permissions'] ) ) {
+                                if ( isset( $section['permissions'] ) && ! self::current_user_can( $section['permissions'] ) ) {
                                     continue;
                                 }
 
@@ -2070,7 +2084,7 @@
                     $heading = isset ( $section['heading'] ) ? $section['heading'] : $section['title'];
 
                     if ( isset ( $section['permissions'] ) ) {
-                        if ( ! current_user_can( $section['permissions'] ) ) {
+                        if ( ! self::current_user_can( $section['permissions'] ) ) {
                             $this->hidden_perm_sections[] = $section['title'];
 
                             foreach ( $section['fields'] as $num => $field_data ) {
@@ -2158,7 +2172,7 @@
 
                             if ( isset ( $field['permissions'] ) ) {
 
-                                if ( ! current_user_can( $field['permissions'] ) ) {
+                                if ( ! self::current_user_can( $field['permissions'] ) ) {
                                     $data = isset ( $this->options[ $field['id'] ] ) ? $this->options[ $field['id'] ] : $this->options_defaults[ $field['id'] ];
 
                                     $this->hidden_perm_fields[ $field['id'] ] = $data;
@@ -2743,12 +2757,14 @@
                 }
 
                 $this->transients['changed_values'] = array(); // Changed values since last save
-                foreach ( $this->options as $key => $value ) {
-                    if ( isset ( $plugin_options[ $key ] ) && $value != $plugin_options[ $key ] ) {
-                        $this->transients['changed_values'][ $key ] = $value;
+                if ( !empty( $this->options ) ) {
+                    foreach ( $this->options as $key => $value ) {
+                        if ( isset ( $plugin_options[ $key ] ) && $value != $plugin_options[ $key ] ) {
+                            $this->transients['changed_values'][ $key ] = $value;
+                        }
                     }
                 }
-
+                
                 unset ( $plugin_options['defaults'], $plugin_options['defaults_section'], $plugin_options['import'], $plugin_options['import_code'], $plugin_options['import_link'], $plugin_options['compiler'], $plugin_options['redux-section'] );
                 if ( $this->args['database'] == 'transient' || $this->args['database'] == 'theme_mods' || $this->args['database'] == 'theme_mods_expanded' ) {
                     $this->set_options( $plugin_options );
@@ -2782,7 +2798,7 @@
                     die();
                 }
 
-                if ( ! current_user_can( $this->args['page_permissions'] ) ) {
+                if ( ! self::current_user_can( $this->args['page_permissions'] ) ) {
                     echo json_encode( array(
                         'status' => __( 'Invalid user capability.  Please reload the page and try again.', 'redux-framework' ),
                         'action' => ''
@@ -2957,7 +2973,8 @@
 //                            }
 
                             if ( isset( $this->extensions[ $field['type'] ] ) && method_exists( $this->extensions[ $field['type'] ], '_validate_values' ) ) {
-                                $plugin_options = $this->extensions[ $field['type'] ]->_validate_values( $plugin_options, $field );
+                                $plugin_options = $this->extensions[ $field['type'] ]->_validate_values( $plugin_options, $field, $sections );
+
                             }
 
                             // Default 'not_empty 'flag to false.
@@ -3096,7 +3113,9 @@
                                 $callback = $field['validate_callback'];
                                 unset ( $field['validate_callback'] );
 
-                                $callbackvalues                 = call_user_func( $callback, $field, $plugin_options[ $field['id'] ], $options[ $field['id'] ] );
+                                $plugin_option                  = isset( $plugin_options[ $field['id'] ] ) ? $plugin_options[ $field['id'] ] : null;
+                                $option                         = isset( $options[ $field['id'] ] )        ? $options[ $field['id'] ]        : null;
+                                $callbackvalues                 = call_user_func( $callback, $field, $plugin_option, $option );
                                 $plugin_options[ $field['id'] ] = $callbackvalues['value'];
 
                                 if ( isset ( $callbackvalues['error'] ) ) {
@@ -3180,6 +3199,7 @@
                     $subsectionsClass = $subsections ? ' hasSubSections' : '';
                     $subsectionsClass .= ( ! isset ( $section['fields'] ) || empty ( $section['fields'] ) ) ? ' empty_section' : '';
                     $extra_icon = $subsections ? '<span class="extraIconSubsections"><i class="el el-chevron-down">&nbsp;</i></span>' : '';
+                    //var_dump($section);
                     $string .= '<li id="' . esc_attr( $k . $suffix ) . '_section_group_li" class="redux-group-tab-link-li' . esc_attr( $hide_section ) . esc_attr( $section['class'] ) . esc_attr( $subsectionsClass ) . '">';
                     $string .= '<a href="javascript:void(0);" id="' . esc_attr( $k . $suffix ) . '_section_group_li_a" class="redux-group-tab-link-a" data-key="' . esc_attr( $k ) . '" data-rel="' . esc_attr( $k . $suffix ) . '">' . $extra_icon . $icon . '<span class="group_title">' . wp_kses_post( $section['title'] ) . '</span></a>';
 
@@ -3404,7 +3424,7 @@
                     if ( class_exists( $field_class ) ) {
                         $value = isset ( $this->options[ $field['id'] ] ) ? $this->options[ $field['id'] ] : '';
 
-                        if ( $v !== null ) {
+                        if ( $v != null ) {
                             $value = $v;
                         }
 
@@ -3699,25 +3719,26 @@
                             foreach ( $parentValue as $idx => $val ) {
                                 if ( is_array( $checkValue ) ) {
                                     foreach ( $checkValue as $i => $v ) {
-                                        if ( $val == $v ) {
+                                        if ( Redux_Helpers::makeBoolStr($val) === Redux_Helpers::makeBoolStr($v) ) {
                                             $return = true;
                                         }
                                     }
                                 } else {
-                                    if ( $val == $checkValue ) {
+                                    if ( Redux_Helpers::makeBoolStr($val) === Redux_Helpers::makeBoolStr($checkValue) ) {
                                         $return = true;
                                     }
                                 }
                             }
                         } else {
+                            //var_dump($checkValue);
                             if ( is_array( $checkValue ) ) {
                                 foreach ( $checkValue as $i => $v ) {
-                                    if ( $parentValue == $v ) {
+                                    if ( Redux_Helpers::makeBoolStr($parentValue) === Redux_Helpers::makeBoolStr($v) ) {
                                         $return = true;
                                     }
                                 }
                             } else {
-                                if ( $parentValue == $checkValue ) {
+                                if ( Redux_Helpers::makeBoolStr($parentValue) === Redux_Helpers::makeBoolStr($checkValue) ) {
                                     $return = true;
                                 }
                             }
@@ -3731,12 +3752,12 @@
                             foreach ( $parentValue as $idx => $val ) {
                                 if ( is_array( $checkValue ) ) {
                                     foreach ( $checkValue as $i => $v ) {
-                                        if ( $val != $v ) {
+                                        if ( Redux_Helpers::makeBoolStr($val) !== Redux_Helpers::makeBoolStr($v) ) {
                                             $return = true;
                                         }
                                     }
                                 } else {
-                                    if ( $val != $checkValue ) {
+                                    if ( Redux_Helpers::makeBoolStr($val) !== Redux_Helpers::makeBoolStr($checkValue) ) {
                                         $return = true;
                                     }
                                 }
@@ -3744,12 +3765,12 @@
                         } else {
                             if ( is_array( $checkValue ) ) {
                                 foreach ( $checkValue as $i => $v ) {
-                                    if ( $parentValue != $v ) {
+                                    if ( Redux_Helpers::makeBoolStr($parentValue) !== Redux_Helpers::makeBoolStr($v) ) {
                                         $return = true;
                                     }
                                 }
                             } else {
-                                if ( $parentValue != $checkValue ) {
+                                if ( Redux_Helpers::makeBoolStr($parentValue) !== Redux_Helpers::makeBoolStr($checkValue) ) {
                                     $return = true;
                                 }
                             }
@@ -4029,6 +4050,198 @@
                     }
                 }
             }
+
+
+            /**
+             * Checks a nested capabilities array or string to determine if the current user meets the requirements.
+             *
+             * @since 3.6.3.4
+             *
+             * @param  string|array $capabilities Permission string or array to check. See self::user_can() for details.
+             * @param  int          $object_id    (Optional) ID of the specific object to check against if capability is a "meta" cap.
+             *                                    e.g. 'edit_post', 'edit_user', 'edit_page', etc.,
+             *
+             * @return bool Whether or not the user meets the requirements. False on invalid user.
+             */
+            public static function current_user_can( $capabilities ) {
+                $current_user = wp_get_current_user();
+
+                if ( empty( $current_user ) ) {
+                    return false;
+                }
+
+                $args = array_merge( array( $current_user ), func_get_args() );
+
+                return call_user_func_array( array( 'self', 'user_can' ), $args );
+            }
+
+
+            /**
+             * Checks a nested capabilities array or string to determine if the user meets the requirements.
+             *
+             * You can pass in a simple string like 'edit_posts' or an array of conditions.
+             *
+             * The capability 'relation' is reserved for controlling the relation mode (AND/OR), which defaults to AND.
+             *
+             * Max depth of 30 levels.  False is returned for any conditions exceeding max depth.
+             *
+             * If you want to check meta caps, you must also pass the object ID on which to check against.
+             * If you get the error: PHP Notice:  Undefined offset: 0 in /wp-includes/capabilities.php, you didn't
+             * pass the required $object_id.
+             *
+             * @since 3.6.3.4
+             *
+             * @example
+             * ::user_can( 42, 'edit_pages' );                        // Checks if user ID 42 has the 'edit_pages' cap.
+             * ::user_can( 42, 'edit_page', 17433 );                  // Checks if user ID 42 has the 'edit_page' cap for post ID 17433.
+             * ::user_can( 42, array( 'edit_pages', 'edit_posts' ) ); // Checks if user ID 42 has both the 'edit_pages' and 'edit_posts' caps.
+             *
+             * @param  int|object   $user         User ID or WP_User object to check. Defaults to the current user.
+             * @param  string|array $capabilities Capability string or array to check. The array lets you use multiple
+             *                                    conditions to determine if a user has permission.
+             *                                    Invalid conditions are skipped (conditions which aren't a string/array/bool/number(cast to bool)).
+             *   Example array where the user needs to have either the 'edit_posts' capability OR doesn't have the
+             *   'delete_pages' cap OR has the 'update_plugins' AND 'add_users' capabilities.
+             *   array(
+             *     'relation'     => 'OR',      // Optional, defaults to AND.
+             *     'edit_posts',                // Equivalent to 'edit_posts' => true,
+             *     'delete_pages' => false,     // Tests that the user DOESN'T have this capability
+             *     array(                       // Nested conditions array (up to 30 nestings)
+             *       'update_plugins',
+             *       'add_users',
+             *     ),
+             *   )
+             *
+             * @param  int          $object_id    (Optional) ID of the specific object to check against if capability is a "meta" cap.
+             *                                    e.g. 'edit_post', 'edit_user', 'edit_page', etc.,
+             *
+             * @return bool Whether or not the user meets the requirements.
+             *              Will always return false for:
+             *              - Invalid/missing user
+             *              - If the $capabilities is not a string or array
+             *              - Max nesting depth exceeded (for that level)
+             */
+            public static function user_can( $user, $capabilities, $object_id = null ) {
+                static $depth = 0;
+
+                if ( $depth >= 30 ) {
+                    return false;
+                }
+
+                if ( empty( $user ) ) {
+                    return false;
+                }
+
+                if ( !is_object( $user ) ) {
+                    $user = get_userdata( $user );
+                }
+
+                if ( is_string( $capabilities ) ) {
+                    // Simple string capability check
+                    $args = array(
+                        $user,
+                        $capabilities,
+                    );
+
+                    if ( $object_id !== null ) {
+                        $args[] = $object_id;
+                    }
+
+                    return call_user_func_array( 'user_can', $args );
+                } else {
+                    // Only strings and arrays are allowed as valid capabilities
+                    if ( !is_array( $capabilities ) ) {
+                        return false;
+                    }
+                }
+
+                // Capability array check
+                $or = false;
+
+                foreach ( $capabilities as $key => $value ) {
+                    if ( $key === 'relation' ) {
+                        if ( $value === 'OR' ) {
+                            $or = true;
+                        }
+
+                        continue;
+                    }
+
+                    /**
+                     * Rules can be in 4 different formats:
+                     * [
+                     *   [0]      => 'foobar',
+                     *   [1]      => array(...),
+                     *   'foobar' => false,
+                     *   'foobar' => array(...),
+                     * ]
+                     */
+                    if ( is_numeric( $key ) ) {
+                        // Numeric key
+                        if ( is_string( $value ) ) {
+                            // Numeric key with a string value is the capability string to check
+                            // [0] => 'foobar'
+                            $args = array( $user, $value, );
+
+                            if ( $object_id !== null ) {
+                                $args[] = $object_id;
+                            }
+
+                            $expression_result = call_user_func_array( 'user_can', $args ) === true;
+                        } elseif ( is_array( $value ) ) {
+                            // [0] => array(...)
+                            $depth++;
+
+                            $expression_result = self::user_can( $user, $value, $object_id );
+
+                            $depth--;
+                        } else {
+                            // Invalid types are skipped
+                            continue;
+                        }
+                    } else {
+                        // Non-numeric key
+                        if ( is_scalar( $value ) ) {
+                            // 'foobar' => false
+                            $args = array( $user, $key, );
+
+                            if ( $object_id !== null ) {
+                                $args[] = $object_id;
+                            }
+
+                            $expression_result = call_user_func_array( 'user_can', $args ) === (bool)$value;
+                        } elseif ( is_array( $value ) ) {
+                            // 'foobar' => array(...)
+                            $depth++;
+
+                            $expression_result = self::user_can( $user, $value, $object_id );
+
+                            $depth--;
+                        } else {
+                            // Invalid types are skipped
+                            continue;
+                        }
+                    }
+
+                    // Check after every evaluation if we know enough to return a definitive answer
+                    if ( $or ) {
+                        if ( $expression_result ) {
+                            // If the relation is OR, return on the first true expression
+                            return true;
+                        }
+                    } else {
+                        if ( !$expression_result ) {
+                            // If the relation is AND, return on the first false expression
+                            return false;
+                        }
+                    }
+                }
+
+                // If we get this far on an OR, then it failed
+                // If we get this far on an AND, then it succeeded
+                return !$or;
+            }
+
         }
 
         // ReduxFramework
