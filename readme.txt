@@ -5,8 +5,8 @@ Tags: mail, email, log, logging, debug, list, store, collect, view
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 Requires at least: 3.0
-Tested up to: 4.7.2
-Stable tag: 1.8.0
+Tested up to: 4.8.0
+Stable tag: 1.8.1
 
 Logs each email sent by WordPress.
 
@@ -50,16 +50,17 @@ The logged email has been sent by WordPress but please note this does NOT mean i
 3. The Settings
 
 == Upgrade Notice ==
-= 1.8.0 =
-- New: Error status from mail implementation is logged
-- New: Resend mail
-- New: Added translation files
-- New: Added translation for de_DE and zh_CN
-- Fix: raw mode of message renders attachments as text
-- Fix: fallback to raw mode for json mode if mail is containing html
-- Tweak: Pretty print json
+= 1.8.1 =
+- Fix: Resending mails uses proper headers now
+- Fix: Translation: Text domain
+- Fix: Prevent error if mail to set error on was not found
 
 == Changelog ==
+
+= 1.8.1, June 8, 2017 =
+- Fix: Resending mails uses proper headers now
+- Fix: Translation: Text domain
+- Fix: Prevent error if mail to set error on was not found
 
 = 1.8.0, February 15, 2017 =
 - New: Error status from mail implementation is logged
