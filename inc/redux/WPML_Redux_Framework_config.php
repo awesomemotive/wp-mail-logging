@@ -69,7 +69,7 @@ if (!class_exists('WPML_Redux_Framework_config')) {
 
             $this->ReduxFramework = new \ReduxFramework( $this->sections, $this->args );
         }
-        
+
         // Remove the demo link and the notice of integrated demo from the redux-framework plugin
         function remove_demo() {
 
@@ -214,7 +214,7 @@ if (!class_exists('WPML_Redux_Framework_config')) {
             $time_format = empty( $time_format ) ? 'g:i a' : $time_format;
             return "{$date_format} {$time_format}";
         }
-        
+
         /**
          * All the possible arguments for Redux.
          * For full documentation on arguments, please refer to: https://github.com/ReduxFramework/ReduxFramework/wiki/Arguments
@@ -332,25 +332,6 @@ if (!class_exists('WPML_Redux_Framework_config')) {
                 )
             );
 
-            // ADMIN BAR LINKS -> Setup custom links in the admin bar menu as external items.
-            $this->args['admin_bar_links'][] = array(
-                'id'    => 'redux-docs',
-                'href'   => 'http://docs.reduxframework.com/',
-                'title' => __( 'Documentation', 'redux-framework-demo' ),
-            );
-
-            $this->args['admin_bar_links'][] = array(
-                //'id'    => 'redux-support',
-                'href'   => 'https://github.com/ReduxFramework/redux-framework/issues',
-                'title' => __( 'Support', 'redux-framework-demo' ),
-            );
-
-            $this->args['admin_bar_links'][] = array(
-                'id'    => 'redux-extensions',
-                'href'   => 'reduxframework.com/extensions',
-                'title' => __( 'Extensions', 'redux-framework-demo' ),
-            );
-
             // SOCIAL ICONS -> Setup custom links in the footer for quick links in your panel footer icons.
             $this->args['share_icons'][] = array(
                 'url'   => 'https://github.com/No3x/wp-mail-logging',
@@ -363,7 +344,6 @@ if (!class_exists('WPML_Redux_Framework_config')) {
                 'title' => 'Visit us on WordPress',
                 'icon'  => 'el-icon-wordpress'
             );
-
 
             // Add content before the form.
             // $this->args['intro_text'] = __( '<p>This text is displayed above the options panel. It isn\'t required, but more info is always better! The intro_text field accepts all HTML.</p>', 'redux-framework-demo' );
