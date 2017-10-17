@@ -115,4 +115,88 @@ class WPML_Utils {
     public static function generate_attachment_icon( $file_path ) {
         return self::determine_fa_icon( $file_path );
     }
+
+    /**
+     * Do a client side reload of the current page. Particularly useful to remove action query args.
+     *
+     * Before: http://example.com/wp-admin/admin.php?page=mypage&s=hello+world&_wpnonce=35ec405ae8&action=resend&paged=1&email%5B0%5D=126&email%5B1%5D=125&action2=-1
+     * After: http://example.com/wp-admin/admin.php?page=mypage&s=hello+world
+     * @param array $invalidArgs Optional. optional args to remove from url
+     * @param array $additionalArgs Optional. args to add to the url
+     */
+    public static function clientSideReload( $invalidArgs, $additionalArgs = array() ) {
+
+        $url = self::clear_url($invalidArgs, $additionalArgs);
+
+        $string = '<script type="text/javascript">';
+        $string .= 'window.location.replace("' . $url . '")';
+        $string .= '</script>';
+        echo $string;
+        exit;
+    }
+
+    /**
+     * Do a server side reload of the current page. Particularly useful to remove action query args.
+     *
+
+     * @param array $invalidArgs Optional. optional args to remove from url
+     * @param array $additionalArgs Optional. args to add to the url
+     */
+    public static function serverSideReload( $invalidArgs = array(), $additionalArgs = array() ) {
+
+        // Args to be removed necessarily
+        $invalidArgs = array_merge($invalidArgs, array('_wp_http_referer'));
+
+        $url = self::clear_url($invalidArgs, $additionalArgs);
+        wp_safe_redirect($url);
+        exit;
+    }
+
+    /**
+     * Builds a new url by removing duplicate args. Removing passed args by key. Adds passed new args.
+     *
+     * Before: http://example.com/wp-admin/admin.php?page=mypage&s=hello+world&_wpnonce=35ec405ae8&action=resend&paged=1&email%5B0%5D=126&email%5B1%5D=125&action2=-1
+     * After: http://example.com/wp-admin/admin.php?page=mypage&s=hello+world
+     * @param array $invalidArgs Optional. optional args to remove from url
+     * @param array $additionalArgs Optional. args to add to the url
+     * @return string
+     */
+    private static function clear_url( $invalidArgs, $additionalArgs = array() ) {
+
+        $args = array();
+        $vars = explode('&', $_SERVER['QUERY_STRING']);
+        error_log(print_r($vars, true));
+        if(!empty($vars)) {
+            foreach($vars as $var) {
+                $parts = explode('=', $var);
+
+                $key = $parts[0];
+                $val = $parts[1];
+
+                // Catch "[" for url args like email[0]=x
+                if( $pos = strpos($key, "%5B") | $pos = strpos($key, "[") ) {
+                    $key = substr($key, 0, $pos);
+                    $val = array($parts[1]);
+                }
+
+                if(!array_key_exists($key, $args) && !empty($val) && !in_array($key, $invalidArgs) ) {
+                    $args[$key] = $val;
+                } else {
+                    error_log("removing key " . $key);
+                    error_log("invalidArgs " . print_r($invalidArgs, true));
+                }
+            }
+        }
+
+        // Add new args
+        $args = array_merge($args, $additionalArgs);
+
+        // Get admin base url http://example.com/wp-admin/admin.php?s= to http://example.com/wp-admin/admin.php
+        $base = mb_strstr($_SERVER['HTTP_REFERER'], '?', true);
+
+        $url = add_query_arg( $args, $base );
+
+        error_log('new ur: ' . $url);
+        return $url;
+    }
 }

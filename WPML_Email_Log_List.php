@@ -2,8 +2,8 @@
 
 namespace No3x\WPML;
 
-use No3x\WPML\Model\WPML_Mail as Mail;
 use No3x\WPML\Model\WPML_Mail;
+use No3x\WPML\Model\WPML_Mail as Mail;
 
 // Exit if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) exit;
@@ -22,7 +22,6 @@ if ( ! class_exists( 'WP_List_Table' ) ) {
  */
 class WPML_Email_Log_List extends \WP_List_Table {
 
-    const NONCE_LIST_TABLE = 'wpml-list_table';
     private $supported_formats = array();
     /** @var WPML_Email_Resender $emailResender */
     private $emailResender;
@@ -54,6 +53,7 @@ class WPML_Email_Log_List extends \WP_List_Table {
             'plural' 	=> 'emails',	// plural name of the listed records
             'ajax' 		=> false,		// does this table support ajax?
         ) );
+
     }
 
     /**
@@ -400,27 +400,30 @@ class WPML_Email_Log_List extends \WP_List_Table {
             return;
         }
 
-        if ( check_admin_referer( WPML_Email_Log_List::NONCE_LIST_TABLE, WPML_Email_Log_List::NONCE_LIST_TABLE . '_nonce' ) ) {
-            $name = $this->_args['singular'];
+        if ( !check_admin_referer('bulk-' . $this->_args['plural']) ) {
+            return;
+        }
 
-            // Detect when a bulk action is being triggered.
-            if ( 'delete' === $this->current_action() ) {
-                foreach ( $_REQUEST[$name] as $item_id ) {
-                    $mail = Mail::find_one( $item_id );
-                    if ( false !== $mail ) {
-                        $mail->delete();
-                    }
-                }
-            } else if ( 'resend' == $this->current_action() ) {
-                foreach ( $_REQUEST[$name] as $item_id ) {
-                    $mail = Mail::find_one( $item_id );
-                    if ( false !== $mail ) {
-                        $this->resend_email( $mail );
-                    }
+        $processed = array();
+        $name = $this->_args['singular'];
+        error_log(print_r($_REQUEST, true));
+
+        foreach ( $_REQUEST[$name] as $item_id ) {
+            $mail = Mail::find_one( $item_id );
+            if ( false !== $mail ) {
+                $processed[] = $mail->get_mail_id();
+                $current_action = $this->current_action();
+                if ('delete' == $current_action) {
+                    $mail->delete();
+                } elseif ('resend' == $current_action) {
+                    $this->resend_email($mail);
                 }
             }
         }
+
+        WPML_Utils::clientSideReload( array('action', 'action2', $name), array( 'status' => 'success') );
     }
+
 
     /**
      * Send logged email via wp_mail

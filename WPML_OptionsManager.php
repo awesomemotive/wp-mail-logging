@@ -337,6 +337,12 @@ class WPML_OptionsManager {
             array(&$this, 'LogSubMenuAbout') );
 
         add_action( 'contextual_help', array( &$this, 'create_settings_panel' ), 10, 3 );
+
+        if ( ! empty( $_GET['_wp_http_referer'] ) ) {
+
+            error_log(print_r($_REQUEST, true));
+            WPML_Utils::serverSideReload( array('status'));
+        }
     }
 
     public function LogSubMenuAbout() {
@@ -521,7 +527,9 @@ class WPML_OptionsManager {
             <form id="email-list" method="get">
                 <input type="hidden" name="page" value="<?php echo esc_attr( $_REQUEST['page'] ); ?>" />
                 <?php
-                wp_nonce_field( WPML_Email_Log_List::NONCE_LIST_TABLE, WPML_Email_Log_List::NONCE_LIST_TABLE . '_nonce' );
+                if(!empty($_GET['status'])) {
+                    echo $_GET['status'];
+                }
                 $search = ( isset( $_REQUEST['s'] ) ) ? $_REQUEST['s'] : false;
                 /** @var WPML_Email_Log_List $emailLogList */
                 $emailLogList = WPML_Init::getInstance()->getService('emailLogList');
