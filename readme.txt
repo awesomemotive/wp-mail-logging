@@ -5,8 +5,8 @@ Tags: mail, email, log, logging, debug, list, store, collect, view
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 Requires at least: 3.0
-Tested up to: 4.8.0
-Stable tag: 1.8.1
+Tested up to: 4.8.3
+Stable tag: 1.8.2
 
 Logs each email sent by WordPress.
 
@@ -50,12 +50,13 @@ The logged email has been sent by WordPress but please note this does NOT mean i
 3. The Settings
 
 == Upgrade Notice ==
-= 1.8.1 =
-- Fix: Resending mails uses proper headers now
-- Fix: Translation: Text domain
-- Fix: Prevent error if mail to set error on was not found
+= 1.8.2 =
+- Fix: security bug
 
 == Changelog ==
+
+= 1.8.2, November 7, 2017 =
+- Fix: security bug
 
 = 1.8.1, June 8, 2017 =
 - Fix: Resending mails uses proper headers now
