@@ -509,7 +509,8 @@ class WPML_Email_Log_List extends \WP_List_Table {
                 $mailAppend .= apply_filters( WPML_Plugin::HOOK_LOGGING_FORMAT_CONTENT . "_{$format_requested}", $mail->to_array() );
                 break;
         }
-        echo $mailAppend;
+        
+        echo $instance->sanitize_message($mailAppend);
         wp_die(); // this is required to terminate immediately and return a proper response
     }
 }
