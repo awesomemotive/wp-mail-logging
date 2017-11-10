@@ -50,10 +50,13 @@ The logged email has been sent by WordPress but please note this does NOT mean i
 3. The Settings
 
 == Upgrade Notice ==
-= 1.8.2 =
+= 1.8.3 =
 - Fix: security bug
 
 == Changelog ==
+
+= 1.8.3, November 10, 2017 =
+- Fix: another security bug
 
 = 1.8.2, November 7, 2017 =
 - Fix: security bug
