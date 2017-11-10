@@ -195,31 +195,28 @@ class WPML_Email_Log_List extends \WP_List_Table {
      * @return string The cell content
      */
     function column_default( $item, $column_name ) {
-        switch ( $column_name ) {
-            case 'mail_id':
-            case 'timestamp':
-            case 'host':
-            case 'subject':
-            case 'message':
-            case 'headers':
-            case 'attachments':
-            case 'error':
-            case 'plugin_version':
-            case 'receiver':
-                return $item[ $column_name ];
-            default:
-                // If we don't know this column maybe a hook does - if no hook extracted data (string) out of the array we can avoid the output of 'Array()' (array).
-                return ( is_array( $res = apply_filters( WPML_Plugin::HOOK_LOGGING_COLUMNS_RENDER, $item, $column_name ) ) ) ? '' : $res;
+        $column_content = '';
+
+        // colmn_message is handled called directly by the list table by naming it colmn_$name. All other columns pass this function and might be named column_overridden_$column_name for further adaptation on output.
+        if ( method_exists( $this, 'column_overridden_' . $column_name ) ) {
+            $column_content = call_user_func( array( $this, 'column_overridden_' . $column_name ), $item );
+        } elseif( array_key_exists( $column_name, $item ) ) {
+            $column_content = $item[ $column_name ];
+        } else {
+            // If we don't know this column maybe a hook does - if no hook extracted data (string) out of the array we can avoid the output of 'Array()' (array).
+            $column_content = ( is_array( $res = apply_filters( WPML_Plugin::HOOK_LOGGING_COLUMNS_RENDER, $item, $column_name ) ) ) ? '' : $res;
         }
+
+        return $this->sanitize_text($column_content);
     }
 
     /**
-     * Sanitize message to remove unsafe html.
+     * Sanitize text to remove unsafe html.
      * @since 1.5.1
-     * @param string $message unsafe message.
-     * @return string safe message.
+     * @param string $message unsafe text.
+     * @return string safe text.
      */
-    function sanitize_message( $message ) {
+    function sanitize_text( $message ) {
         $allowed_tags = wp_kses_allowed_html( 'post' );
         $allowed_tags['a']['data-message'] = true;
         $allowed_tags['style'][''] = true;
@@ -233,9 +230,6 @@ class WPML_Email_Log_List extends \WP_List_Table {
      * @return string
      */
     function column_message( $item ) {
-        if ( empty( $item['message'] ) ) {
-            return '';
-        }
         $content = $item['mail_id'];
         $message = '<a class="wp-mail-logging-view-message button button-secondary" href="#" data-mail-id="' . esc_attr( $content )  . '">View</a>';
         return $message;
@@ -247,7 +241,7 @@ class WPML_Email_Log_List extends \WP_List_Table {
      * @param array $item The current item.
      * @return string
      */
-    function column_timestamp( $item ) {
+    function column_overridden_timestamp( $item ) {
         return date_i18n( apply_filters( 'wpml_get_date_time_format', '' ), strtotime( $item['timestamp'] ) );
     }
 
@@ -284,7 +278,7 @@ class WPML_Email_Log_List extends \WP_List_Table {
      * @param array $item The current item.
      * @return string The attachment column.
      */
-    function column_attachments( $item ) {
+    function column_overridden_attachments( $item ) {
 
         if ( version_compare( trim( $item ['plugin_version'] ), '1.6.0', '<' ) ) {
             return $this->column_attachments_compat_152( $item );
@@ -318,7 +312,7 @@ class WPML_Email_Log_List extends \WP_List_Table {
      * @param $item
      * @return string
      */
-    function column_error($item ) {
+    function column_overridden_error($item ) {
         $error = $item['error'];
         if( empty($error)) return "";
         $errorMessage = is_array($error) ? join(',', $error) : $error;
@@ -509,8 +503,8 @@ class WPML_Email_Log_List extends \WP_List_Table {
                 $mailAppend .= apply_filters( WPML_Plugin::HOOK_LOGGING_FORMAT_CONTENT . "_{$format_requested}", $mail->to_array() );
                 break;
         }
-        
-        echo $instance->sanitize_message($mailAppend);
+
+        echo $instance->sanitize_text($mailAppend);
         wp_die(); // this is required to terminate immediately and return a proper response
     }
 }
