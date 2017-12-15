@@ -70,74 +70,6 @@ if (!class_exists('WPML_Redux_Framework_config')) {
             $this->ReduxFramework = new \ReduxFramework( $this->sections, $this->args );
         }
 
-        /**
-         * This is a test function that will let you see when the compiler hook occurs.
-         * It only runs if a field    set with compiler=>true is changed.
-         * */
-        function compiler_action( $options, $css, $changed_values ) {
-            echo '<h1>The compiler hook has run!</h1>';
-            echo "<pre>";
-            print_r( $changed_values ); // Values that have changed since the last save
-            echo "</pre>";
-            //print_r($options); //Option values
-            //print_r($css); // Compiler selector CSS values  compiler => array( CSS SELECTORS )
-
-            /*
-          // Demo of how to use the dynamic CSS and write your own static CSS file
-          $filename = dirname(__FILE__) . '/style' . '.css';
-          global $wp_filesystem;
-          if( empty( $wp_filesystem ) ) {
-            require_once( ABSPATH .'/wp-admin/includes/file.php' );
-          WP_Filesystem();
-          }
-
-          if( $wp_filesystem ) {
-            $wp_filesystem->put_contents(
-                $filename,
-                $css,
-                FS_CHMOD_FILE // predefined mode settings for WP files
-            );
-          }
-         */
-        }
-
-        /**
-         * Custom function for filtering the sections array. Good for child themes to override or add to the sections.
-         * Simply include this function in the child themes functions.php file.
-         * NOTE: the defined constants for URLs, and directories will NOT be available at this point in a child theme,
-         * so you must use get_template_directory_uri() if you want to use any of the built in icons
-         * */
-        function dynamic_section( $sections ) {
-            //$sections = array();
-            $sections[] = array(
-                'title'  => 'Section via hook',
-                'desc'   => '<p class="description">This is a section created by adding a filter to the sections array. Can be used by child themes to add/remove sections from the options.</p>',
-                'icon'   => 'el-icon-paper-clip',
-                // Leave this as a blank section, no options just some intro text set above.
-                'fields' => array()
-            );
-
-            return $sections;
-        }
-
-        /**
-         * Filter hook for filtering the args. Good for child themes to override or add to the args array. Can also be used in other functions.
-         * */
-        function change_arguments( $args ) {
-            //$args['dev_mode'] = true;
-
-            return $args;
-        }
-
-        /**
-         * Filter hook for filtering the default value of any given field. Very useful in development mode.
-         * */
-        function change_defaults( $defaults ) {
-            $defaults['str_replace'] = 'Testing filter hook!';
-
-            return $defaults;
-        }
-
         // Remove the demo link and the notice of integrated demo from the redux-framework plugin
         function remove_demo() {
 
@@ -154,90 +86,6 @@ if (!class_exists('WPML_Redux_Framework_config')) {
         }
 
         public function setSections() {
-
-            /**
-             * Used within different fields. Simply examples. Search for ACTUAL DECLARATION for field examples
-             * */
-            // Background Patterns Reader
-            $sample_patterns_path = \ReduxFramework::$_dir . '../sample/patterns/';
-            $sample_patterns_url  = \ReduxFramework::$_url . '../sample/patterns/';
-            $sample_patterns      = array();
-
-            if ( is_dir( $sample_patterns_path ) ) :
-
-                if ( $sample_patterns_dir = opendir( $sample_patterns_path ) ) :
-                    $sample_patterns = array();
-
-                    while ( ( $sample_patterns_file = readdir( $sample_patterns_dir ) ) !== false ) {
-
-                        if ( stristr( $sample_patterns_file, '.png' ) !== false || stristr( $sample_patterns_file, '.jpg' ) !== false ) {
-                            $name              = explode( '.', $sample_patterns_file );
-                            $name              = str_replace( '.' . end( $name ), '', $sample_patterns_file );
-                            $sample_patterns[] = array(
-                                'alt' => $name,
-                                'img' => $sample_patterns_url . $sample_patterns_file
-                            );
-                        }
-                    }
-                endif;
-            endif;
-
-            ob_start();
-
-            $ct          = wp_get_theme();
-            $this->theme = $ct;
-            $item_name   = $this->theme->get( 'Name' );
-            $tags        = $this->theme->Tags;
-            $screenshot  = $this->theme->get_screenshot();
-            $class       = $screenshot ? 'has-screenshot' : '';
-
-            $customize_title = sprintf( __( 'Customize &#8220;%s&#8221;', 'redux-framework-demo' ), $this->theme->display( 'Name' ) );
-
-            ?>
-            <div id="current-theme" class="<?php echo esc_attr( $class ); ?>">
-                <?php if ( $screenshot ) : ?>
-                    <?php if ( current_user_can( 'edit_theme_options' ) ) : ?>
-                        <a href="<?php echo wp_customize_url(); ?>" class="load-customize hide-if-no-customize"
-                           title="<?php echo esc_attr( $customize_title ); ?>">
-                            <img src="<?php echo esc_url( $screenshot ); ?>"
-                                 alt="<?php esc_attr_e( 'Current theme preview', 'redux-framework-demo' ); ?>"/>
-                        </a>
-                    <?php endif; ?>
-                    <img class="hide-if-customize" src="<?php echo esc_url( $screenshot ); ?>"
-                         alt="<?php esc_attr_e( 'Current theme preview', 'redux-framework-demo' ); ?>"/>
-                <?php endif; ?>
-
-                <h4><?php echo $this->theme->display( 'Name' ); ?></h4>
-
-                <div>
-                    <ul class="theme-info">
-                        <li><?php printf( __( 'By %s', 'redux-framework-demo' ), $this->theme->display( 'Author' ) ); ?></li>
-                        <li><?php printf( __( 'Version %s', 'redux-framework-demo' ), $this->theme->display( 'Version' ) ); ?></li>
-                        <li><?php echo '<strong>' . __( 'Tags', 'redux-framework-demo' ) . ':</strong> '; ?><?php printf( $this->theme->display( 'Tags' ) ); ?></li>
-                    </ul>
-                    <p class="theme-description"><?php echo $this->theme->display( 'Description' ); ?></p>
-                    <?php
-                    if ( $this->theme->parent() ) {
-                        printf( ' <p class="howto">' . __( 'This <a href="%1$s">child theme</a> requires its parent theme, %2$s.', 'redux-framework-demo' ) . '</p>', __( 'http://codex.wordpress.org/Child_Themes', 'redux-framework-demo' ), $this->theme->parent()->display( 'Name' ) );
-                    }
-                    ?>
-
-                </div>
-            </div>
-
-            <?php
-            $item_info = ob_get_contents();
-
-            ob_end_clean();
-
-            $sampleHTML = '';
-            if ( file_exists( dirname( __FILE__ ) . '/info-html.html' ) ) {
-                Redux_Functions::initWpFilesystem();
-
-                global $wp_filesystem;
-
-                $sampleHTML = $wp_filesystem->get_contents( dirname( __FILE__ ) . '/info-html.html' );
-            }
 
             // ACTUAL DECLARATION OF SECTIONS
             $this->sections[] = array(
@@ -367,25 +215,6 @@ if (!class_exists('WPML_Redux_Framework_config')) {
             return "{$date_format} {$time_format}";
         }
 
-        public function setHelpTabs() {
-
-            // Custom page help tabs, displayed using the help API. Tabs are shown in order of definition.
-            $this->args['help_tabs'][] = array(
-                'id'      => 'redux-help-tab-1',
-                'title'   => 'Theme Information 1',
-                'content' => '<p>This is the tab content, HTML is allowed.</p>'
-            );
-
-            $this->args['help_tabs'][] = array(
-                'id'      => 'redux-help-tab-2',
-                'title'   => 'Theme Information 2', 'redux-framework-demo',
-                'content' => '<p>This is the tab content, HTML is allowed.</p>'
-            );
-
-            // Set the help sidebar
-            $this->args['help_sidebar'] = '<p>This is the sidebar content, HTML is allowed.</p>';
-        }
-
         /**
          * All the possible arguments for Redux.
          * For full documentation on arguments, please refer to: https://github.com/ReduxFramework/ReduxFramework/wiki/Arguments
@@ -503,25 +332,6 @@ if (!class_exists('WPML_Redux_Framework_config')) {
                 )
             );
 
-            // ADMIN BAR LINKS -> Setup custom links in the admin bar menu as external items.
-            $this->args['admin_bar_links'][] = array(
-                'id'    => 'redux-docs',
-                'href'   => 'http://docs.reduxframework.com/',
-                'title' => __( 'Documentation', 'redux-framework-demo' ),
-            );
-
-            $this->args['admin_bar_links'][] = array(
-                //'id'    => 'redux-support',
-                'href'   => 'https://github.com/ReduxFramework/redux-framework/issues',
-                'title' => __( 'Support', 'redux-framework-demo' ),
-            );
-
-            $this->args['admin_bar_links'][] = array(
-                'id'    => 'redux-extensions',
-                'href'   => 'reduxframework.com/extensions',
-                'title' => __( 'Extensions', 'redux-framework-demo' ),
-            );
-
             // SOCIAL ICONS -> Setup custom links in the footer for quick links in your panel footer icons.
             $this->args['share_icons'][] = array(
                 'url'   => 'https://github.com/No3x/wp-mail-logging',
@@ -535,90 +345,15 @@ if (!class_exists('WPML_Redux_Framework_config')) {
                 'icon'  => 'el-icon-wordpress'
             );
 
-
             // Add content before the form.
             // $this->args['intro_text'] = __( '<p>This text is displayed above the options panel. It isn\'t required, but more info is always better! The intro_text field accepts all HTML.</p>', 'redux-framework-demo' );
 
             // Add content after the form.
             // $this->args['footer_text'] = __( '<p>This text is displayed below the options panel. It isn\'t required, but more info is always better! The footer_text field accepts all HTML.</p>', 'redux-framework-demo' );
         }
-
-        public function validate_callback_function( $field, $value, $existing_value ) {
-            $error = true;
-            $value = 'just testing';
-
-            /*
-          do your validation
-
-          if(something) {
-            $value = $value;
-          } elseif(something else) {
-            $error = true;
-            $value = $existing_value;
-
-          }
-         */
-
-            $return['value'] = $value;
-            $field['msg']    = 'your custom error message';
-            if ( $error == true ) {
-                $return['error'] = $field;
-            }
-
-            return $return;
-        }
-
-        public function class_field_callback( $field, $value ) {
-            print_r( $field );
-            echo '<br/>CLASS CALLBACK';
-            print_r( $value );
-        }
-
     }
 
     global $reduxConfig;
-    //$reduxConfig = new WPML_Redux_Framework_config();
 } else {
     echo "The class named Redux_Framework_sample_config has already been called. <strong>Developers, you need to prefix this class with your company name or you'll run into problems!</strong>";
 }
-
-/**
- * Custom function for the callback referenced above
- */
-if ( ! function_exists( 'redux_my_custom_field' ) ):
-    function redux_my_custom_field( $field, $value ) {
-        print_r( $field );
-        echo '<br/>';
-        print_r( $value );
-    }
-endif;
-
-/**
- * Custom function for the callback validation referenced above
- * */
-if ( ! function_exists( 'redux_validate_callback_function' ) ):
-    function redux_validate_callback_function( $field, $value, $existing_value ) {
-        $error = true;
-        $value = 'just testing';
-
-        /*
-      do your validation
-
-      if(something) {
-        $value = $value;
-      } elseif(something else) {
-        $error = true;
-        $value = $existing_value;
-
-      }
-     */
-
-        $return['value'] = $value;
-        $field['msg']    = 'your custom error message';
-        if ( $error == true ) {
-            $return['error'] = $field;
-        }
-
-        return $return;
-    }
-endif;

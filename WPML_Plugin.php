@@ -110,9 +110,17 @@ class WPML_Plugin extends WPML_LifeCycle {
                 $wpdb->query("ALTER TABLE `$tableName` CHARACTER SET utf8 COLLATE utf8_general_ci;");
             }
             if ($this->isVersionLessThan($savedVersion, '1.7')) {
-                $wpdb->query("ALTER TABLE `$tableName` ADD COLUMN `host` VARCHAR(800) NOT NULL DEFAULT '0' AFTER `timestamp`;");
+                $wpdb->query("ALTER TABLE `$tableName` ADD COLUMN `host` VARCHAR(200) NOT NULL DEFAULT '0' AFTER `timestamp`;");
             }
             if ($this->isVersionLessThan($savedVersion, '1.8')) {
+                // Due to upgrade bug upgrades from 1.6.2 to 1.7.0 failed. Redo the schema change if required
+                $results = $wpdb->get_results( $wpdb->prepare( "SHOW COLUMNS FROM `$tableName` LIKE %s", 'host' ) );
+                $column_exists = ( count( $results ) > 0 ) ? true : false;
+
+                if ( false === $column_exists && is_array( $results ) ) {
+                    $wpdb->query("ALTER TABLE `$tableName` ADD COLUMN `host` VARCHAR(200) NOT NULL DEFAULT '0' AFTER `timestamp`;");
+                }
+
                 $wpdb->query("ALTER TABLE `$tableName` ADD COLUMN `error` VARCHAR(400) NULL DEFAULT '' AFTER `attachments`;");
             }
         }
@@ -178,6 +186,7 @@ class WPML_Plugin extends WPML_LifeCycle {
         global $wpml_current_mail_id;
         if(!isset($wpml_current_mail_id)) return;
         $failed_mail = Mail::find_one($wpml_current_mail_id);
+        if( !$failed_mail ) return;
         $failed_mail->set_error($wperror->get_error_message())->save();
     }
 

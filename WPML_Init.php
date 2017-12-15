@@ -96,7 +96,13 @@ class WPML_Init {
             );
         };
         $this->container['emailLogList'] = function ($c) {
-            return new WPML_Email_Log_List( $c['emailLogList-supported-formats'] );
+            return new WPML_Email_Log_List( $c['emailLogList-supported-formats'], $c['emailResender'] );
+        };
+        $this->container['emailResender'] = function ($c) {
+            return new WPML_Email_Resender( $c['emailDispatcher'] );
+        };
+        $this->container['emailDispatcher'] = function () {
+            return new WPML_Email_Dispatcher();
         };
         $this->container['redux'] = function ($c) {
             return new WPML_Redux_Framework_config( $c['plugin-meta'] );

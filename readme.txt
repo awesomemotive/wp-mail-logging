@@ -5,8 +5,8 @@ Tags: mail, email, log, logging, debug, list, store, collect, view
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 Requires at least: 3.0
-Tested up to: 4.7
-Stable tag: 1.8.0
+Tested up to: 4.8.3
+Stable tag: 1.8.2
 
 Logs each email sent by WordPress.
 
@@ -50,16 +50,27 @@ The logged email has been sent by WordPress but please note this does NOT mean i
 3. The Settings
 
 == Upgrade Notice ==
-= 1.7.0 =
-- New: Storing host IP
-- Fix: passing search term for pagination
-- Tweak: close modal with ESC
+= 1.8.3 =
+- Fix: security bug
 
 == Changelog ==
 
-= 1.8.0, December, 2016
+= 1.8.3, November 10, 2017 =
+- Fix: another security bug
+
+= 1.8.2, November 7, 2017 =
+- Fix: security bug
+
+= 1.8.1, June 8, 2017 =
+- Fix: Resending mails uses proper headers now
+- Fix: Translation: Text domain
+- Fix: Prevent error if mail to set error on was not found
+
+= 1.8.0, February 15, 2017 =
 - New: Error status from mail implementation is logged
 - New: Resend mail
+- New: Added translation files
+- New: Added translation for de_DE and zh_CN
 - Fix: raw mode of message renders attachments as text
 - Fix: fallback to raw mode for json mode if mail is containing html
 - Tweak: Pretty print json
@@ -111,7 +122,7 @@ The logged email has been sent by WordPress but please note this does NOT mean i
 
 = 1.3, August 24, 2014  =
 - New: clean mail listing including:
-  Modal window for mail details. 
+  Modal window for mail details.
   Attachment support with appropriate icon for mime type.
 - Tweak: Performance improvement
 - Fix: screen option for mails per page
@@ -122,7 +133,7 @@ The logged email has been sent by WordPress but please note this does NOT mean i
 - Fix: deletion of mails regardless of options (on update to 1.2 your mails will be deleted hopefully this happens for the last time)
 
 = 1.1 =
-- Tweak: Modified readme. 
+- Tweak: Modified readme.
 
 = 1.0 =
 - Initial Revision

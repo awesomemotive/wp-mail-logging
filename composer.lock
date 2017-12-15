@@ -4,7 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "ee37eb475bd9146985e742d155f745b2",
+    "hash": "01534fc8f2f825a4c6ef14bd8337511d",
+    "content-hash": "16f8279649483e81a6dec3ed241646f8",
     "packages": [],
     "packages-dev": [
         {
@@ -92,6 +93,48 @@
                 "source": "https://github.com/No3x/wp-plugin-uninstall-tester/tree/master"
             },
             "time": "2015-08-22 15:46:19"
+        },
+        {
+            "name": "jdgrimes/wpppb",
+            "version": "0.2.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/JDGrimes/wpppb.git",
+                "reference": "2574c5a3fc700a30cfcec2f577c4983a4f49409a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/JDGrimes/wpppb/zipball/2574c5a3fc700a30cfcec2f577c4983a4f49409a",
+                "reference": "2574c5a3fc700a30cfcec2f577c4983a4f49409a",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.2.0"
+            },
+            "bin": [
+                "bin/wpppb-init"
+            ],
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "WPPPB_": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "J.D. Grimes",
+                    "email": "jdg@codesymphony.co",
+                    "homepage": "http://codesymphony.co",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Bootstrap for integration testing WordPress plugins with PHPUnit",
+            "homepage": "https://github.com/JDGrimes/wpppb",
+            "time": "2017-01-17 15:02:34"
         },
         {
             "name": "squizlabs/php_codesniffer",

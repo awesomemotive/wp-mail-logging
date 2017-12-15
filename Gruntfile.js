@@ -186,7 +186,7 @@ module.exports = function (grunt) {
         potomo: {
             dist: {
                 options: {
-                    poDel: true
+                    poDel: false
                 },
                 files: [{
                     expand: true,

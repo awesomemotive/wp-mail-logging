@@ -11,9 +11,9 @@
         }
     ],
     "require-dev": {
-        "jdgrimes/wp-plugin-uninstall-tester": "dev-master",
         "wp-coding-standards/wpcs": "0.6.0",
-        "bocharsky-bw/arrayzy": "v0.1.1"
+        "bocharsky-bw/arrayzy": "v0.1.1",
+        "jdgrimes/wpppb": "^0.2.3"
     },
     "license": "GPL-2.0",
     "authors": [
@@ -41,7 +41,7 @@
     "minimum-stability": "dev",
     "autoload": {
         "psr-4": {
-            "No3x\\WPML\\Tests\\": "tests",
+            "No3x\\WPML\\Tests\\": "tests/phpunit/tests",
             "No3x\\WPML\\Tests\\Helper\\": "tests/helper"
         }
     }

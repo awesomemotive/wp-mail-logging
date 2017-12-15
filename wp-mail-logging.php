@@ -3,11 +3,11 @@
    Plugin Name: WP Mail Logging
    Plugin URI: http://wordpress.org/extend/plugins/wp-mail-logging/
    Support URI: https://github.com/No3x/wp-mail-logging/issues
-   Version: 1.8.0
+   Version: 1.8.3
    Author: Christian Z&ouml;ller
    Author URI: http://no3x.de/
    Description: Logs each email sent by WordPress.
-   Text Domain: wpml
+   Text Domain: wp-mail-logging
    License: GPLv3
   */
 

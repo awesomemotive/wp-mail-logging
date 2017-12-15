@@ -113,7 +113,7 @@ if ( ! class_exists( 'ReduxFramework_spinner' ) ) {
             wp_enqueue_script(
                 'redux-field-spinner-custom-js',
                 ReduxFramework::$_url . 'inc/fields/spinner/vendor/spinner_custom.js',
-                array( 'jquery' ),
+                array( 'jquery','redux-js' ),
                 time(),
                 true
             );
@@ -153,7 +153,7 @@ if ( ! class_exists( 'ReduxFramework_spinner' ) ) {
                 }
 
                 if ( ! empty( $this->field['compiler'] ) && is_array( $this->field['compiler'] ) ) {
-                    $css = $this->parseCSS($this->value, $this->field['output']);
+                    $css = $this->parseCSS($this->value, $this->field['compiler']);
                     $this->parent->compilerCSS .= $css;
 
                 }
