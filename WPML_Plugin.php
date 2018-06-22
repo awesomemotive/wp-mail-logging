@@ -198,7 +198,8 @@ class WPML_Plugin extends WPML_LifeCycle {
         return is_array( $headers ) ? implode( ',\n', $headers ) : $headers;
     }
 
-    private function extractAttachments( $attachments ) {
+    private function extractAttachments( $mail ) {
+        $attachments = isset($mail['attachments']) ? $mail['attachments'] : array();
         $attachments = is_array( $attachments ) ? $attachments : array( $attachments );
         $attachment_urls = array();
         $uploads = wp_upload_dir();
@@ -229,7 +230,7 @@ class WPML_Plugin extends WPML_LifeCycle {
             'subject'			=> $mail['subject'],
             'message'			=> $this->extractMessage( $mail ),
             'headers'			=> $this->extractHeader( $mail['headers'] ),
-            'attachments'		=> $this->extractAttachments( $mail['attachments'] ),
+            'attachments'		=> $this->extractAttachments( $mail ),
             'plugin_version'	=> $this->getVersionSaved(),
             'timestamp'         => current_time( 'mysql' ),
             'host'              => isset( $_SERVER['SERVER_ADDR'] ) ? $_SERVER['SERVER_ADDR'] : ''
