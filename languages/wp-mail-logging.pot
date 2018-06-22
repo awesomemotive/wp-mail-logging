@@ -1,60 +1,62 @@
-# Copyright (C) 2017 Christian Z&ouml;ller
+# Copyright (C) 2018 Christian Z&ouml;ller
 # This file is distributed under the GPLv3.
+#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: WP Mail Logging 1.8.0\n"
-"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wp-mail-logging\n"
-"POT-Creation-Date: 2017-01-03 18:59:13+00:00\n"
+"Project-Id-Version: WP Mail Logging 1.8.4\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wp-mail-"
+"logging\n"
+"POT-Creation-Date: 2018-06-22 17:30+0200\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"PO-Revision-Date: 2017-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2018-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
-"X-Generator: grunt-wp-i18n 0.5.4\n"
+"X-Generator: Poedit 2.0.8\n"
 "Language: en_GB\n"
 
-#: WPML_Email_Log_List.php:59
+#: WPML_Email_Log_List.php:65
 msgid "No email found."
 msgstr ""
 
-#: WPML_Email_Log_List.php:71
+#: WPML_Email_Log_List.php:77
 msgid "ID"
 msgstr ""
 
-#: WPML_Email_Log_List.php:72 inc/redux/WPML_Redux_Framework_config.php:343
+#: WPML_Email_Log_List.php:78 inc/redux/WPML_Redux_Framework_config.php:191
 msgid "Time"
 msgstr ""
 
-#: WPML_Email_Log_List.php:73
+#: WPML_Email_Log_List.php:79
 msgid "Receiver"
 msgstr ""
 
-#: WPML_Email_Log_List.php:74
+#: WPML_Email_Log_List.php:80
 msgid "Subject"
 msgstr ""
 
-#: WPML_Email_Log_List.php:75 WPML_OptionsManager.php:497
+#: WPML_Email_Log_List.php:81 WPML_OptionsManager.php:497
 msgid "Message"
 msgstr ""
 
-#: WPML_Email_Log_List.php:76
+#: WPML_Email_Log_List.php:82
 msgid "Headers"
 msgstr ""
 
-#: WPML_Email_Log_List.php:77
+#: WPML_Email_Log_List.php:83
 msgid "Attachments"
 msgstr ""
 
-#: WPML_Email_Log_List.php:78
+#: WPML_Email_Log_List.php:84
 msgid "Error"
 msgstr ""
 
-#: WPML_Email_Log_List.php:79
+#: WPML_Email_Log_List.php:85
 msgid "Plugin Version"
 msgstr ""
 
-#: WPML_Email_Log_List.php:90
+#: WPML_Email_Log_List.php:96
 msgid "Host"
 msgstr ""
 
@@ -163,8 +165,8 @@ msgstr ""
 msgid "Show all dates"
 msgstr ""
 
-#: inc/class-wp-list-table.php:422
 #. translators: 1: month name, 2: 4-digit year
+#: inc/class-wp-list-table.php:422
 msgid "%1$s %2$d"
 msgstr ""
 
@@ -210,141 +212,100 @@ msgstr ""
 msgid "Select All"
 msgstr ""
 
-#: inc/redux/WPML_Redux_Framework_config.php:194
-msgid "Customize &#8220;%s&#8221;"
-msgstr ""
-
-#: inc/redux/WPML_Redux_Framework_config.php:203
-#: inc/redux/WPML_Redux_Framework_config.php:207
-msgid "Current theme preview"
-msgstr ""
-
-#: inc/redux/WPML_Redux_Framework_config.php:214
-msgid "By %s"
-msgstr ""
-
-#: inc/redux/WPML_Redux_Framework_config.php:215
-msgid "Version %s"
-msgstr ""
-
-#: inc/redux/WPML_Redux_Framework_config.php:216
-msgid "Tags"
-msgstr ""
-
-#: inc/redux/WPML_Redux_Framework_config.php:221
-msgid "This <a href=\"%1$s\">child theme</a> requires its parent theme, %2$s."
-msgstr ""
-
-#: inc/redux/WPML_Redux_Framework_config.php:221
-msgid "http://codex.wordpress.org/Child_Themes"
-msgstr ""
-
-#: inc/redux/WPML_Redux_Framework_config.php:244
+#: inc/redux/WPML_Redux_Framework_config.php:92
 msgid "General Settings"
 msgstr ""
 
-#: inc/redux/WPML_Redux_Framework_config.php:253
+#: inc/redux/WPML_Redux_Framework_config.php:101
 msgid "Cleanup"
 msgstr ""
 
-#: inc/redux/WPML_Redux_Framework_config.php:254
+#: inc/redux/WPML_Redux_Framework_config.php:102
 msgid "Delete all data on deactivation? (emails and settings)?"
 msgstr ""
 
-#: inc/redux/WPML_Redux_Framework_config.php:264
+#: inc/redux/WPML_Redux_Framework_config.php:112
 msgid "Can See Submission data"
 msgstr ""
 
-#: inc/redux/WPML_Redux_Framework_config.php:265
+#: inc/redux/WPML_Redux_Framework_config.php:113
 msgid "Select the minimum role."
 msgstr ""
 
-#: inc/redux/WPML_Redux_Framework_config.php:270
+#: inc/redux/WPML_Redux_Framework_config.php:118
 msgid "WordPress Date Time Format"
 msgstr ""
 
-#: inc/redux/WPML_Redux_Framework_config.php:271
+#: inc/redux/WPML_Redux_Framework_config.php:119
 msgid "Use format from WordPress settings (%s)"
 msgstr ""
 
-#: inc/redux/WPML_Redux_Framework_config.php:273
-#: inc/redux/WPML_Redux_Framework_config.php:298
-#: inc/redux/WPML_Redux_Framework_config.php:314
-#: inc/redux/WPML_Redux_Framework_config.php:336
+#: inc/redux/WPML_Redux_Framework_config.php:121
+#: inc/redux/WPML_Redux_Framework_config.php:146
+#: inc/redux/WPML_Redux_Framework_config.php:162
+#: inc/redux/WPML_Redux_Framework_config.php:184
 msgid "Enabled"
 msgstr ""
 
-#: inc/redux/WPML_Redux_Framework_config.php:274
-#: inc/redux/WPML_Redux_Framework_config.php:299
-#: inc/redux/WPML_Redux_Framework_config.php:315
-#: inc/redux/WPML_Redux_Framework_config.php:337
+#: inc/redux/WPML_Redux_Framework_config.php:122
+#: inc/redux/WPML_Redux_Framework_config.php:147
+#: inc/redux/WPML_Redux_Framework_config.php:163
+#: inc/redux/WPML_Redux_Framework_config.php:185
 msgid "Disabled"
 msgstr ""
 
-#: inc/redux/WPML_Redux_Framework_config.php:285
+#: inc/redux/WPML_Redux_Framework_config.php:133
 msgid "Default Format for Message"
 msgstr ""
 
-#: inc/redux/WPML_Redux_Framework_config.php:286
+#: inc/redux/WPML_Redux_Framework_config.php:134
 msgid "Select your preferred display format."
 msgstr ""
 
-#: inc/redux/WPML_Redux_Framework_config.php:291
+#: inc/redux/WPML_Redux_Framework_config.php:139
 msgid "Display Host"
 msgstr ""
 
-#: inc/redux/WPML_Redux_Framework_config.php:292
+#: inc/redux/WPML_Redux_Framework_config.php:140
 msgid "Display host column in list."
 msgstr ""
 
-#: inc/redux/WPML_Redux_Framework_config.php:304
+#: inc/redux/WPML_Redux_Framework_config.php:152
 msgid "Log Rotation"
 msgstr ""
 
-#: inc/redux/WPML_Redux_Framework_config.php:305
+#: inc/redux/WPML_Redux_Framework_config.php:153
 msgid "Save space by deleting logs regularly."
 msgstr ""
 
-#: inc/redux/WPML_Redux_Framework_config.php:311
+#: inc/redux/WPML_Redux_Framework_config.php:159
 msgid "Cleanup by Amount"
 msgstr ""
 
-#: inc/redux/WPML_Redux_Framework_config.php:312
-#: inc/redux/WPML_Redux_Framework_config.php:334
+#: inc/redux/WPML_Redux_Framework_config.php:160
+#: inc/redux/WPML_Redux_Framework_config.php:182
 msgid "Setup a automated cleanup routine!"
 msgstr ""
 
-#: inc/redux/WPML_Redux_Framework_config.php:321
+#: inc/redux/WPML_Redux_Framework_config.php:169
 msgid "Amount"
 msgstr ""
 
-#: inc/redux/WPML_Redux_Framework_config.php:322
-#: inc/redux/WPML_Redux_Framework_config.php:344
+#: inc/redux/WPML_Redux_Framework_config.php:170
+#: inc/redux/WPML_Redux_Framework_config.php:192
 msgid "When should mails are deleted?"
 msgstr ""
 
-#: inc/redux/WPML_Redux_Framework_config.php:323
+#: inc/redux/WPML_Redux_Framework_config.php:171
 msgid "Cleanup when the stored mails exceed..."
 msgstr ""
 
-#: inc/redux/WPML_Redux_Framework_config.php:333
+#: inc/redux/WPML_Redux_Framework_config.php:181
 msgid "Cleanup by Time"
 msgstr ""
 
-#: inc/redux/WPML_Redux_Framework_config.php:345
+#: inc/redux/WPML_Redux_Framework_config.php:193
 msgid "Delete mails older than days..."
-msgstr ""
-
-#: inc/redux/WPML_Redux_Framework_config.php:510
-msgid "Documentation"
-msgstr ""
-
-#: inc/redux/WPML_Redux_Framework_config.php:516
-msgid "Support"
-msgstr ""
-
-#: inc/redux/WPML_Redux_Framework_config.php:522
-msgid "Extensions"
 msgstr ""
 
 #: wp-mail-logging.php:48
