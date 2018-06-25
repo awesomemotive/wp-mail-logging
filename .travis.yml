@@ -2,6 +2,7 @@ sudo: false
 language: php
 
 php:
+    - 7.2
     - 7.1
     - 7.0
     - 5.6
@@ -201,8 +202,8 @@ before_script:
 
 script:
     #- mkdir -p build/logs
-    - phpunit
-    - phpunit --group=uninstall
+    - vendor/phpunit/phpunit/phpunit
+    - vendor/phpunit/phpunit/phpunit --group=uninstall
 
 notifications:
   slack:

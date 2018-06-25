@@ -6,7 +6,7 @@ When contributing please ensure you follow the guidelines below.
 
 ## Environment
 All dependencies are managed via [composer](http://getcomposer.org). 
-To install the plugin with development depencdencies run:
+To install the plugin with development dependencies run:
 
 ```composer install```
 
@@ -14,6 +14,16 @@ To get a working plugin installation run:
 
 ```composer install --no-dev --no-scripts --prefer-dist``` (perfect for making a release by zipping the resulting environment)
 
+To execute unit tests use the phpunit version downloaded by composer:
+
+```
+cd /srv/www/wordpress-develop/public_html/src/wp-content/plugins/wp-mail-logging
+vendor/phpunit/phpunit/phpunit 
+```
+If you use VVV make sure to be in the `/srv` directory instead of `/vagrant/www`. Otherwise there are errors like:
+```
+PHP Fatal error:  Cannot redeclare composerRequire553f4f88fd2d0873cede8d164ece3593() (previously declared in /vagrant/www/wordpress-develop/public_html/src/wp-content/plugins/wp-mail-logging/vendor/composer/autoload_real.php:63) in /srv/www/wordpress-develop/public_html/src/wp-content/plugins/wp-mail-logging/vendor/composer/autoload_real.php on line 70
+```
 ## IDE
 
 Please insure to be conform with the development guidelines.
