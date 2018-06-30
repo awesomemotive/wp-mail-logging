@@ -176,24 +176,24 @@ env:
 #        - WP_VERSION=0.70 WP_MULTISITE=0
 
 matrix:
-      include:
-        - php: 7.2
-          env: WP_VERSION=4.8
-        - php: 7.1
-          env: WP_VERSION=latest
-        - php: 7.0
-          env: WP_VERSION=latest
-        - php: 5.6
-          env: WP_VERSION=4.4
-        - php: 5.6
-          env: WP_VERSION=latest
-        - php: 5.6
-          env: WP_VERSION=trunk
-        - php: 5.6
-          env: WP_TRAVISCI=phpcs
-        - php: 5.3
-          env: WP_VERSION=latest
-    fast_finish: true
+  include:
+    - php: 7.2
+      env: WP_VERSION=4.8
+    - php: 7.1
+      env: WP_VERSION=latest
+    - php: 7.0
+      env: WP_VERSION=latest
+    - php: 5.6
+      env: WP_VERSION=4.4
+    - php: 5.6
+      env: WP_VERSION=latest
+    - php: 5.6
+      env: WP_VERSION=trunk
+    - php: 5.6
+      env: WP_TRAVISCI=phpcs
+    - php: 5.3
+      env: WP_VERSION=latest
+fast_finish: true
 
 before_script:
   - export PATH="$HOME/.composer/vendor/bin:$PATH"
