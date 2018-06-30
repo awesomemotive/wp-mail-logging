@@ -210,8 +210,8 @@ before_script:
 
 script:
     #- mkdir -p build/logs
-    - vendor/phpunit/phpunit/phpunit
-    - vendor/phpunit/phpunit/phpunit --group=uninstall
+    - phpunit
+    - phpunit --group=uninstall
 
 notifications:
   slack:
