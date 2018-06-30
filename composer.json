@@ -4,14 +4,7 @@
     "type": "wordpress-plugin",
     "keywords": ["mail", "email", "log", "logging", "debug", "list", "store", "collect", "view"],
     "homepage": "https://github.com/No3x/wp-mail-logging",
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/No3x/wp-plugin-uninstall-tester"
-        }
-    ],
     "require-dev": {
-        "wp-coding-standards/wpcs": "0.6.0",
         "bocharsky-bw/arrayzy": "v0.1.1"
     },
     "license": "GPL-2.0",
@@ -32,10 +25,6 @@
         "installer-paths": {
             "vendor/redux-framework/redux-framework": ["redux-framework/redux-framework"]
         }
-    },
-    "scripts": {
-        "post-install-cmd": "\"vendor/bin/phpcs\" --config-set installed_paths ../../..,../../../vendor/wp-coding-standards/wpcs",
-        "post-update-cmd": "\"vendor/bin/phpcs\" --config-set installed_paths ../../..,../../../vendor/wp-coding-standards/wpcs"
     },
     "minimum-stability": "dev",
     "autoload": {
