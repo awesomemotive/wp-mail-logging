@@ -6,6 +6,11 @@ notifications:
     on_success: never
     on_failure: change
 
+cache:
+  directories:
+    - vendor
+    - $HOME/.composer/cache
+
 php:
     - 7.2
     - 7.1
