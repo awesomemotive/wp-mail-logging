@@ -12,8 +12,7 @@
     ],
     "require-dev": {
         "wp-coding-standards/wpcs": "0.6.0",
-        "bocharsky-bw/arrayzy": "v0.1.1",
-        "jdgrimes/wpppb": "^0.3.5"
+        "bocharsky-bw/arrayzy": "v0.1.1"
     },
     "license": "GPL-2.0",
     "authors": [

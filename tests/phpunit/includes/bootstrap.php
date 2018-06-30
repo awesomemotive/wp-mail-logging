@@ -11,12 +11,6 @@ echo "Executing wp-mail-logging Test Suite" . PHP_EOL;
 
 require_once( dirname( __FILE__ ) . '/../../../vendor/autoload.php' );
 
-$loader = WPPPB_Loader::instance();
-
-echo 'Tests folder: ' . $loader->locate_wp_tests_config() . PHP_EOL;
-$loader->add_plugin( 'wp-mail-logging/wp-mail-logging.php' );
-$loader->load_wordpress();
-
 if ( ! $_tests_dir ) {
     $_tests_dir = rtrim( sys_get_temp_dir(), '/\\' ) . '/wordpress-tests-lib';
 }

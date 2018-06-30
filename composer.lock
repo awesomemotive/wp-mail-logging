@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9ac096707c37aeaae655e62d476199b7",
+    "content-hash": "dfa3128a62dba1dab971d53de9973785",
     "packages": [],
     "packages-dev": [
         {
@@ -56,48 +56,6 @@
                 "wrapper"
             ],
             "time": "2015-07-12T19:31:25+00:00"
-        },
-        {
-            "name": "jdgrimes/wpppb",
-            "version": "0.3.5",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/JDGrimes/wpppb.git",
-                "reference": "faaac99b5a187b700cdb3eb16f0989f4eee975ce"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/JDGrimes/wpppb/zipball/faaac99b5a187b700cdb3eb16f0989f4eee975ce",
-                "reference": "faaac99b5a187b700cdb3eb16f0989f4eee975ce",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.2.0"
-            },
-            "bin": [
-                "bin/wpppb-init"
-            ],
-            "type": "library",
-            "autoload": {
-                "psr-0": {
-                    "WPPPB_": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "J.D. Grimes",
-                    "email": "jdg@codesymphony.co",
-                    "homepage": "http://codesymphony.co",
-                    "role": "Developer"
-                }
-            ],
-            "description": "Bootstrap for integration testing WordPress plugins with PHPUnit",
-            "homepage": "https://github.com/JDGrimes/wpppb",
-            "time": "2018-01-03T22:31:21+00:00"
         },
         {
             "name": "squizlabs/php_codesniffer",
