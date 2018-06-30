@@ -16,17 +16,6 @@
             <directory suffix=".php">src/</directory>
         </whitelist>
     </filter>
-    <listeners>
-        <listener class="SpeedTrapListener">
-            <arguments>
-                <array>
-                    <element key="slowThreshold">
-                        <integer>150</integer>
-                    </element>
-                </array>
-            </arguments>
-        </listener>
-    </listeners>
     <logging>
         <!-- <log type="coverage-clover" target="build/logs/clover.xml"/> -->
     </logging>
