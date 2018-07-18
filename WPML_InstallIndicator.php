@@ -34,10 +34,23 @@ class WPML_InstallIndicator extends WPML_OptionsManager {
      * @return bool indicating if the plugin is installed already
      */
     public function isInstalled() {
-        global $wpdb;
-        $mails = $this->getTablename('mails');
-        $query = $wpdb->query("SHOW TABLES LIKE \"$mails\"");
-        return (bool) $query;
+        $installed = false;
+
+        // We don't use the cached value, only its presence.
+        // This is because we never cache not installed state.
+        wp_cache_get('installed', 'No3x/wpml', false, $installed);
+        if (!$installed) {
+            global $wpdb;
+
+            $mails = $this->getTablename('mails');
+            $query = $wpdb->query("SHOW TABLES LIKE \"$mails\"");
+            $installed = (bool) $query;
+
+            if ($installed) {
+                wp_cache_set('installed', true, 'No3x/wpml', 3600);
+            }
+        }
+        return $installed;
     }
 
     /**
