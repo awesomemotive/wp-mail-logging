@@ -41,7 +41,7 @@ I recommend the following plugins if you want to send mails via SMTP because the
 == Frequently Asked Questions ==
 = How do I know the mail was sent? =
 If there is no error logged chances are high the mail was sent. There are plugins that overwrite (do not customize) the default mailing mechanism of WordPress - they maybe do not inform about failure so it can't be logged by WP Mail Logging.
-= How do I know the wail was delivered? =
+= How do I know the mail was delivered? =
 The logged email has been sent by WordPress but please note this does NOT mean it has been delivered. With the given functionality of WordPress you can't determine if a mail was delivered successfully.
 
 == Screenshots ==
