@@ -69,7 +69,7 @@ class WPML_Plugin extends WPML_LifeCycle {
         $tableName = WPML_Plugin::getTablename('mails');
         $wpdb->query("DROP TABLE IF EXISTS `$tableName`");
         // Remove the cache option indicating tables are installed
-        wp_cache_delete('installed', 'No3x/wpml');
+        wp_cache_delete(parent::CACHE_INSTALLED_KEY, parent::CACHE_GROUP);
     }
 
     /**
