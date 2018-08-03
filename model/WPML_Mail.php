@@ -66,9 +66,8 @@ class WPML_Mail extends BaseModel
     protected $plugin_version;
 
     /**
-     * @var string
+     * @param array $properties
      */
-
     public function __construct(array $properties = array())
     {
         parent::__construct($properties);
