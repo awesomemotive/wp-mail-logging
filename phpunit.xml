@@ -6,6 +6,10 @@
 	convertNoticesToExceptions="true"
 	convertWarningsToExceptions="true"
 	>
+    <php>
+        <!-- Dirty hack to convince phpunit to use the right includes -->
+        <env name="WP_TESTS_DIR" value="/srv/www/wordpress-develop/public_html/tests/phpunit/" force="true" />
+    </php>
     <testsuites>
         <testsuite>
             <directory suffix=".php">tests/phpunit/tests/</directory>
