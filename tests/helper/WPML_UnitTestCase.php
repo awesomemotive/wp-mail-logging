@@ -4,6 +4,11 @@ namespace No3x\WPML\Tests\Helper;
 
 use No3x\WPML\WPML_Init;
 
+/**
+ * Class WPML_UnitTestCase
+ * @package No3x\WPML\Tests\Helper
+ * @group ignore
+ */
 class WPML_UnitTestCase extends \WP_UnitTestCase {
 
 	/** @var WPML_Plugin */
@@ -29,8 +34,4 @@ class WPML_UnitTestCase extends \WP_UnitTestCase {
 	function tearDown() {
 		parent::tearDown();
 	}
-
-	function test_fuuuuuu() {
-		// 'This test is here to avoid "No Tests found in ..." Since I was not able to exclude it.
-	}
-} 
+}
