@@ -3,7 +3,6 @@
 namespace No3x\WPML;
 
 use No3x\WPML\Model\WPML_Mail as Mail;
-use No3x\WPML\Model\WPML_Mail;
 
 // Exit if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) exit;
@@ -26,6 +25,8 @@ class WPML_Email_Log_List extends \WP_List_Table {
     private $supported_formats = array();
     /** @var WPML_Email_Resender $emailResender */
     private $emailResender;
+    /** @var WPML_MessageSanitizer $messageSanitizer */
+    private $messageSanitizer;
 
     /**
      * Initializes the List Table
@@ -36,6 +37,7 @@ class WPML_Email_Log_List extends \WP_List_Table {
     function __construct( $supported_formats = array(), $emailResender ) {
         $this->supported_formats = $supported_formats;
         $this->emailResender = $emailResender;
+        $this->messageSanitizer = new WPML_MessageSanitizer();
     }
 
     function addActionsAndFilters() {
@@ -217,10 +219,7 @@ class WPML_Email_Log_List extends \WP_List_Table {
      * @return string safe text.
      */
     function sanitize_text( $message ) {
-        $allowed_tags = wp_kses_allowed_html( 'post' );
-        $allowed_tags['a']['data-message'] = true;
-        $allowed_tags['style'][''] = true;
-        return wp_kses( $message, $allowed_tags );
+        return $this->messageSanitizer->sanitize($message);
     }
 
     /**
@@ -418,7 +417,7 @@ class WPML_Email_Log_List extends \WP_List_Table {
 
     /**
      * Send logged email via wp_mail
-     * @param WPML_Mail $mail the email object to resend
+     * @param Mail $mail the email object to resend
      * @since 1.8.0
      */
     function resend_email( $mail ) {

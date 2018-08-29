@@ -2,7 +2,7 @@
 
 namespace No3x\WPML\Tests\Helper;
 
-use No3x\WPML\WPML_Init;
+use No3x\WPML\WPML_Plugin;
 
 /**
  * Class WPML_UnitTestCase
@@ -15,7 +15,7 @@ class WPML_UnitTestCase extends \WP_UnitTestCase {
 	private $plugin;
 
 	/**
-	 * @return \No3x\WPML\WPML_Plugin
+	 * @return WPML_Plugin
 	 */
 	public function getPlugin() {
 		return $this->plugin;
