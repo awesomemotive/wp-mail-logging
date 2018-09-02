@@ -16,11 +16,23 @@
         </testsuite>
     </testsuites>
     <filter>
+        <!--<blacklist>
+            <directory>.</directory>
+            <directory>tests</directory>
+            <directory>vendor</directory>
+            <directory>lib</directory>
+            <directory>inc</directory>
+        </blacklist>-->
         <whitelist>
-            <directory suffix=".php">src/</directory>
+            <directory suffix=".php">.</directory>
+            <exclude>
+                <file>tests/phpunit/includes/bootstrap.php</file>
+                <file>tests/**/.php</file>
+            </exclude>
         </whitelist>
     </filter>
     <logging>
-        <!-- <log type="coverage-clover" target="build/logs/clover.xml"/> -->
+        <log type="coverage-clover" target="build/logs/clover.xml"/>
+        <log type="coverage-text" target="php://stdout" />
     </logging>
 </phpunit>

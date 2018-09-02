@@ -190,70 +190,24 @@ class WPML_Plugin extends WPML_LifeCycle {
         $failed_mail->set_error($wperror->get_error_message())->save();
     }
 
-    private function extractReceiver( $receiver ) {
-        return is_array( $receiver ) ? implode( ',\n', $receiver ) : $receiver;
-    }
-
-    private function extractHeader( $headers ) {
-        return is_array( $headers ) ? implode( ',\n', $headers ) : $headers;
-    }
-
-    private function extractAttachments( $mail ) {
-        $attachments = isset($mail['attachments']) ? $mail['attachments'] : array();
-        $attachments = is_array( $attachments ) ? $attachments : array( $attachments );
-        $attachment_urls = array();
-        $uploads = wp_upload_dir();
-        $basename = 'uploads';
-        $basename_needle = '/'.$basename.'/';
-        foreach ( $attachments as $attachment ) {
-            $append_url = substr( $attachment, strrpos( $attachment, $basename_needle ) + strlen($basename_needle) - 1 );
-            $attachment_urls[] = $append_url;
-        }
-        return implode( ',\n', $attachment_urls );
-    }
-
-    private function extractMessage( $mail ) {
-        if ( isset($mail['message']) ) {
-            // usually the message is stored in the message field
-            return $mail['message'];
-        } elseif ( isset($mail['html']) ) {
-            // for example Mandrill stores the message in the 'html' field (see gh-22)
-            return $mail['html'];
-        }
-        return "";
-    }
-
-
-    private function extractFields( $mail ) {
-        return array(
-            'receiver'			=> $this->extractReceiver( $mail['to'] ),
-            'subject'			=> $mail['subject'],
-            'message'			=> $this->extractMessage( $mail ),
-            'headers'			=> $this->extractHeader( $mail['headers'] ),
-            'attachments'		=> $this->extractAttachments( $mail ),
-            'plugin_version'	=> $this->getVersionSaved(),
-            'timestamp'         => current_time( 'mysql' ),
-            'host'              => isset( $_SERVER['SERVER_ADDR'] ) ? $_SERVER['SERVER_ADDR'] : ''
-        );
-    }
-
-
     /**
      * Logs mail to database.
      *
-     * @param array $mailOriginal
+     * @param array $mailArray
      * @global $wpml_current_mail_id
      * @since 1.0
      * @return array $mailOriginal
      */
-    public function log_email( $mailOriginal ) {
+    public function log_email( $mailArray ) {
         global $wpml_current_mail_id;
-        // make copy to avoid any changes on the original mail
-        $mail = $mailOriginal;
 
-        $fields = $this->extractFields( $mail );
-        $wpml_current_mail_id = Mail::create($fields)->save();
+        $mail = (new WPML_MailExtractor())->extract($mailArray);
+        $mail->set_plugin_version($this->getVersionSaved());
+        $mail->set_timestamp(current_time( 'mysql' ));
+        $mail->set_host( isset( $_SERVER['SERVER_ADDR'] ) ? $_SERVER['SERVER_ADDR'] : '');
 
-        return $mailOriginal;
+        $wpml_current_mail_id = $mail->save();
+
+        return $mailArray;
     }
 }
