@@ -73,6 +73,10 @@ class WPML_MailExtractor_Test extends WPML_UnitTestCase {
         $this->assertEquals($message, $this->mailExtractor->extract($mailArray)->get_message());
     }
 
+    /**
+     * @requires PHPUnit 5.7
+     * expectException is not present in older phpunit version.
+     */
     function test_no_messageField_throws_exception() {
         $mailArray = WPMailArrayBuilder::aMail()->buildWithoutMessage();
         $this->expectException("Exception");
