@@ -2,16 +2,19 @@
 
 namespace No3x\WPML\Tests;
 
+use No3x\WPML\Tests\Helper\WPMailArrayBuilder;
 use No3x\WPML\Tests\Helper\WPML_UnitTestCase;
 use No3x\WPML\WPML_MailExtractor;
 
+/**
+ * Class WPML_MailExtractor_Test tests the mail extraction from a WordPress mail array specified at the codex
+ * @see https://developer.wordpress.org/reference/functions/wp_mail/
+ * @package No3x\WPML\Tests
+ */
 class WPML_MailExtractor_Test extends WPML_UnitTestCase {
 
     /** @var WPML_MailExtractor */
     private $mailExtractor;
-
-    const EXAMPLE_MAIL_ADDRESS1 = 'example@example.com';
-    const EXAMPLE_MAIL_ADDRESS2 = 'example2@example.com';
 
     function setUp() {
         parent::setUp();
@@ -19,43 +22,41 @@ class WPML_MailExtractor_Test extends WPML_UnitTestCase {
     }
 
     /**
-     * The sanitizer removes evil code from the text to output.
-     * It removes unsafe html and keeps html comments.
+     * Codex: (string|array) (Required) Array or comma-separated list of email addresses to send message.
      * @dataProvider receiverProvider
-     * @param $mailArray string the message to be sanitized
+     * @param $mailArray array the mailArray
      * @param $expected string the expected output
      */
     function test_receiver($mailArray, $expected) {
         $this->assertEquals($expected, $this->mailExtractor->extract($mailArray)->get_receiver());
     }
 
-    /*
-     * (string|array) (Required) Array or comma-separated list of email addresses to send message.
-     */
     function receiverProvider() {
-        $example1And2Expected = self::EXAMPLE_MAIL_ADDRESS1 . ',\n' . self::EXAMPLE_MAIL_ADDRESS2;
+        $exampleEmail1 = 'example@example.com';
+        $exampleEmail2 = 'example2@example.com';
+        $example1And2Expected = $exampleEmail1 . ',\n' . $exampleEmail2;
         return [
             'single receiver' => [
-                WPMailArrayBuilder::aMail()->withTo(self::EXAMPLE_MAIL_ADDRESS1)->build(),
-                self::EXAMPLE_MAIL_ADDRESS1
+                WPMailArrayBuilder::aMail()->withTo($exampleEmail1)->build(),
+                $exampleEmail1
             ],
             'multiple receivers' => [
-                WPMailArrayBuilder::aMail()->withTo(self::EXAMPLE_MAIL_ADDRESS1 . ',' . self::EXAMPLE_MAIL_ADDRESS2)->build(),
+                WPMailArrayBuilder::aMail()->withTo($exampleEmail1 . ',' . $exampleEmail2)->build(),
                 $example1And2Expected
             ],
             'array with single receiver' => [
-                WPMailArrayBuilder::aMail()->withTo([self::EXAMPLE_MAIL_ADDRESS1])->build(),
-                self::EXAMPLE_MAIL_ADDRESS1
+                WPMailArrayBuilder::aMail()->withTo([$exampleEmail1])->build(),
+                $exampleEmail1
             ],
             'array with multiple receivers' => [
-                WPMailArrayBuilder::aMail()->withTo([self::EXAMPLE_MAIL_ADDRESS1, self::EXAMPLE_MAIL_ADDRESS2])->build(),
+                WPMailArrayBuilder::aMail()->withTo([$exampleEmail1, $exampleEmail2])->build(),
                 $example1And2Expected
             ],
         ];
     }
 
     /**
-     * $subject (string) (Required) Email subject
+     * Codex: $subject (string) (Required) Email subject
      */
     function test_subject() {
         $subject = "This is a subject";
@@ -64,12 +65,19 @@ class WPML_MailExtractor_Test extends WPML_UnitTestCase {
     }
 
     /**
-     * $message (string) (Required) Message contents
+     * Codex: $message (string) (Required) Message contents
      */
     function test_message() {
-        $message = "This is a subject";
+        $message = "This is a message";
         $mailArray = WPMailArrayBuilder::aMail()->withMessage($message)->build();
         $this->assertEquals($message, $this->mailExtractor->extract($mailArray)->get_message());
+    }
+
+    function test_no_messageField_throws_exception() {
+        $mailArray = WPMailArrayBuilder::aMail()->buildWithoutMessage();
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage(WPML_MailExtractor::ERROR_NO_FIELD);
+        $this->mailExtractor->extract($mailArray);
     }
 
     /**
@@ -82,10 +90,10 @@ class WPML_MailExtractor_Test extends WPML_UnitTestCase {
     }
 
     /**
-     * The sanitizer removes evil code from the text to output.
-     * It removes unsafe html and keeps html comments.
+     * Codex: $headers (string|array) (Optional) Additional headers.
+     * Default value: ''
      * @dataProvider headersProvider
-     * @param $mailArray string the message to be sanitized
+     * @param $mailArray array the mailArray
      * @param $expected string the expected output
      */
     function test_headers($mailArray, $expected) {
@@ -96,6 +104,14 @@ class WPML_MailExtractor_Test extends WPML_UnitTestCase {
         $exampleHeader = 'Content-Type: text/html; charset=UTF-8';
         $example1And2Expected = $exampleHeader . ',\n' . $exampleHeader;
         return [
+            'none header' => [
+                WPMailArrayBuilder::aMail()->buildWithoutHeaders(),
+                ''
+            ],
+            'empty header' => [
+                WPMailArrayBuilder::aMail()->but()->withNoHeaders()->build(),
+                ''
+            ],
             'single header' => [
                 WPMailArrayBuilder::aMail()->withHeaders($exampleHeader)->build(),
                 $exampleHeader
@@ -116,10 +132,10 @@ class WPML_MailExtractor_Test extends WPML_UnitTestCase {
     }
 
     /**
-     * $attachments (string|array) (Optional) Files to attach.
+     * Codex: $attachments (string|array) (Optional) Files to attach.
      * Default value: array()
      * @dataProvider attachmentsProvider
-     * @param $mailArray string the message to be sanitized
+     * @param $mailArray array the mailArray
      * @param $expected string the expected output
      */
     function test_attachments($mailArray, $expected) {
@@ -130,106 +146,34 @@ class WPML_MailExtractor_Test extends WPML_UnitTestCase {
         $exampleAttachment1 = WP_CONTENT_DIR . '/uploads/2018/05/file.pdf';
         $exampleAttachment2 = WP_CONTENT_DIR . '/uploads/2018/01/bill.pdf';
 
+        $exampleAttachment1Expected = '/2018/05/file.pdf';
+        $example1And2Expected = '/2018/05/file.pdf,\n/2018/01/bill.pdf';
+
         return [
+            'none attachments' => [
+                WPMailArrayBuilder::aMail()->buildWithoutAttachments(),
+                ''
+            ],
+            'empty attachments' => [
+                WPMailArrayBuilder::aMail()->but()->withNoAttachments()->build(),
+                ''
+            ],
             'single attachment' => [
                 WPMailArrayBuilder::aMail()->withAttachments($exampleAttachment1)->build(),
-                '/2018/05/file.pdf'
+                $exampleAttachment1Expected
             ],
             'multiple attachments' => [
                 WPMailArrayBuilder::aMail()->withAttachments($exampleAttachment1 . ',\n' . $exampleAttachment2)->build(),
-                '/2018/05/file.pdf,\n2018/01/bill.pdf'
+                $example1And2Expected
             ],
             'array with single attachment' => [
                 WPMailArrayBuilder::aMail()->withAttachments([$exampleAttachment1])->build(),
-                '/2018/05/file.pdf'
+                $exampleAttachment1Expected
             ],
             'array with multiple attachments' => [
                 WPMailArrayBuilder::aMail()->withAttachments([$exampleAttachment1, $exampleAttachment2])->build(),
-                '/2018/05/file.pdf,\n2018/01/bill.pdf'
+                $example1And2Expected
             ],
         ];
     }
-
-}
-
-class WPMailArrayBuilder {
-    private $to;
-    private $subject;
-    private $message;
-    private $headers;
-    private $attachments;
-
-    private function __construct() {
-        $this->to = 'example@exmple.com';
-        $this->subject = 'The subject';
-        $this->message = 'This is a message';
-        $this->headers = '';
-        $this->attachments = [];
-    }
-
-    public static function aMail() {
-        return new WPMailArrayBuilder();
-    }
-
-    public function withTo($to) {
-        $this->to = $to;
-        return $this;
-    }
-
-    public function withSubject($subject) {
-        $this->subject = $subject;
-        return $this;
-    }
-
-    public function withMessage($message) {
-        $this->message = $message;
-        return $this;
-    }
-
-    public function withNoHeaders() {
-        $this->headers = '';
-        return $this;
-    }
-
-    public function withHeaders($headers) {
-        $this->headers = $headers;
-        return $this;
-    }
-
-    public function withNoAttachments() {
-        $this->attachments = '';
-        return $this;
-    }
-
-    public function withAttachments($attachments) {
-        $this->attachments = $attachments;
-        return $this;
-    }
-
-    public function but() {
-        return WPMailArrayBuilder::aMail()
-                ->withTo($this->to)
-                ->withSubject($this->subject)
-                ->withMessage($this->message)
-                ->withHeaders($this->headers)
-                ->withAttachments($this->attachments);
-    }
-
-    public function build() {
-        return [
-            'to' => $this->to,
-            'subject' => $this->subject,
-            'message' => $this->message,
-            'headers' => $this->headers,
-            'attachments' => $this->attachments
-        ];
-    }
-
-    public function buildAsMandrillMail() {
-        $mandrillMail = $this->build();
-        $mandrillMail['html'] = $mandrillMail['message'];
-        unset($mandrillMail['message']);
-        return $mandrillMail;
-    }
-
 }

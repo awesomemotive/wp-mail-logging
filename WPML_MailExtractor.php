@@ -6,9 +6,9 @@ namespace No3x\WPML;
 use No3x\WPML\Model\WPML_Mail as Mail;
 
 class WPML_MailExtractor {
-    /**
-     * WPML_MailExtractor constructor.
-     */
+
+    const ERROR_NO_FIELD = "The message is not valid because it contains no message or html field.";
+
     public function __construct() {
     }
 
@@ -17,13 +17,13 @@ class WPML_MailExtractor {
             'receiver' => $this->extractReceiver($mailArray['to']),
             'subject' => $mailArray['subject'],
             'message' => $this->extractMessage($mailArray),
-            'headers' => $this->extractHeader($mailArray['headers']),
+            'headers' => $this->extractHeader($mailArray),
             'attachments' => $this->extractAttachments($mailArray),
         ]);
     }
 
     private function extractReceiver( $receiver ) {
-        return $this->convertAddressesToString($receiver);
+        return $this->convertMultipartsToString($receiver);
     }
 
     private function extractMessage( $mail ) {
@@ -34,16 +34,21 @@ class WPML_MailExtractor {
             // for example Mandrill stores the message in the 'html' field (see gh-22)
             return $mail['html'];
         }
-        return "";
+        throw new \Exception(self::ERROR_NO_FIELD);
     }
 
-    private function extractHeader( $headers ) {
-        return is_array( $headers ) ? implode( ',\n', $headers ) : $headers;
+    private function extractHeader( $mail ) {
+        $headers = isset($mail['headers']) ? $mail['headers'] : array();
+        return $this->joinMultiParts($headers);
     }
 
     private function extractAttachments( $mail ) {
         $attachments = isset($mail['attachments']) ? $mail['attachments'] : array();
-        $attachments = is_array( $attachments ) ? $attachments : array( $attachments );
+
+        if(!is_array($attachments)) {
+            $attachments = $this->splitAtComma($attachments);
+        }
+
         $attachment_urls = array();
         $basename = 'uploads';
         $basename_needle = '/'.$basename.'/';
@@ -51,28 +56,35 @@ class WPML_MailExtractor {
             $append_url = substr( $attachment, strrpos( $attachment, $basename_needle ) + strlen($basename_needle) - 1 );
             $attachment_urls[] = $append_url;
         }
-        return implode( ',\n', $attachment_urls );
-    }
 
-    private function convertAddressesToString($addresses) {
-
-        if(is_array($addresses)) {
-            $addressesArray = $addresses;
-        } else {
-            $addressesArray = $this->splitAddressesSeparatedBy($addresses);
-        }
-
-        $string = $this->joinAddressesWithCommaAndNewLine($addressesArray);
+        $string = $this->joinArrayWithCommaAndNewLine($attachment_urls);
 
         return $string;
     }
 
-    private function joinAddressesWithCommaAndNewLine(array $addresses) {
-        return implode(',\n', $addresses);
+    private function convertMultipartsToString($multiparts) {
+
+        if(is_array($multiparts)) {
+            $multiPartArray = $multiparts;
+        } else {
+            $multiPartArray = $this->splitAtComma($multiparts);
+        }
+
+        $string = $this->joinArrayWithCommaAndNewLine($multiPartArray);
+
+        return $string;
     }
 
-    private function splitAddressesSeparatedBy($addresses) {
-        $addressesArr = preg_split( "/(,|,\s)/", $addresses );
-        return $addressesArr;
+    private function splitAtComma($string) {
+        $parts = preg_split( "/(,|,\s)/", $string );
+        return $parts;
+    }
+
+    private function joinMultiParts($multiPart) {
+        return is_array($multiPart) ? $this->joinArrayWithCommaAndNewLine($multiPart) : $multiPart;
+    }
+
+    private function joinArrayWithCommaAndNewLine(array $array) {
+        return implode(',\n', $array);
     }
 }
