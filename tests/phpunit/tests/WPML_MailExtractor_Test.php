@@ -75,7 +75,7 @@ class WPML_MailExtractor_Test extends WPML_UnitTestCase {
 
     function test_no_messageField_throws_exception() {
         $mailArray = WPMailArrayBuilder::aMail()->buildWithoutMessage();
-        $this->expectException(\Exception::class);
+        $this->expectException("Exception");
         $this->expectExceptionMessage(WPML_MailExtractor::ERROR_NO_FIELD);
         $this->mailExtractor->extract($mailArray);
     }
