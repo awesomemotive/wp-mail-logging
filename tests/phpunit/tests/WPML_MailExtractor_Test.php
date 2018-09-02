@@ -118,13 +118,36 @@ class WPML_MailExtractor_Test extends WPML_UnitTestCase {
     /**
      * $attachments (string|array) (Optional) Files to attach.
      * Default value: array()
+     * @dataProvider attachmentsProvider
+     * @param $mailArray string the message to be sanitized
+     * @param $expected string the expected output
      */
-    function test_attachments() {
-        $attachments = ["file.pdf"];
-        $mailArray = WPMailArrayBuilder::aMail()->withAttachments($attachments)->build();
-        $expectedAttachment = "bla/file.pdf";
-        //TODO: mock FS
-        $this->assertEquals($expectedAttachment, $this->mailExtractor->extract($mailArray)->get_attachments());
+    function test_attachments($mailArray, $expected) {
+        $this->assertEquals($expected, $this->mailExtractor->extract($mailArray)->get_attachments());
+    }
+
+    function attachmentsProvider() {
+        $exampleAttachment1 = WP_CONTENT_DIR . '/uploads/2018/05/file.pdf';
+        $exampleAttachment2 = WP_CONTENT_DIR . '/uploads/2018/01/bill.pdf';
+
+        return [
+            'single attachment' => [
+                WPMailArrayBuilder::aMail()->withAttachments($exampleAttachment1)->build(),
+                '/2018/05/file.pdf'
+            ],
+            'multiple attachments' => [
+                WPMailArrayBuilder::aMail()->withAttachments($exampleAttachment1 . ',\n' . $exampleAttachment2)->build(),
+                '/2018/05/file.pdf,\n2018/01/bill.pdf'
+            ],
+            'array with single attachment' => [
+                WPMailArrayBuilder::aMail()->withAttachments([$exampleAttachment1])->build(),
+                '/2018/05/file.pdf'
+            ],
+            'array with multiple attachments' => [
+                WPMailArrayBuilder::aMail()->withAttachments([$exampleAttachment1, $exampleAttachment2])->build(),
+                '/2018/05/file.pdf,\n2018/01/bill.pdf'
+            ],
+        ];
     }
 
 }
