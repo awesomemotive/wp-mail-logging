@@ -52,8 +52,14 @@ class WPML_MailExtractor {
         $attachment_urls = array();
         $basename = 'uploads';
         $basename_needle = '/'.$basename.'/';
-        foreach ( $attachments as $attachment ) {
-            $append_url = substr( $attachment, strrpos( $attachment, $basename_needle ) + strlen($basename_needle) - 1 );
+        foreach ($attachments as $attachment) {
+            $posAttachmentInUploads = strrpos($attachment, $basename_needle);
+            if( false !== $posAttachmentInUploads) {
+                $append_url = substr( $attachment, $posAttachmentInUploads + strlen($basename_needle) - 1 );
+            } else {
+                // not found, save the path unmodified
+                $append_url = $attachment;
+            }
             $attachment_urls[] = $append_url;
         }
 

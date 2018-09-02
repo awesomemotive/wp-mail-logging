@@ -158,6 +158,10 @@ class WPML_MailExtractor_Test extends WPML_UnitTestCase {
                 WPMailArrayBuilder::aMail()->but()->withNoAttachments()->build(),
                 ''
             ],
+            'no wp-content in path' => [
+                WPMailArrayBuilder::aMail()->withAttachments('/tmp/0file.png')->build(),
+                '/tmp/0file.png'
+            ],
             'single attachment' => [
                 WPMailArrayBuilder::aMail()->withAttachments($exampleAttachment1)->build(),
                 $exampleAttachment1Expected
