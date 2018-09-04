@@ -20,6 +20,9 @@ matrix:
     - php: 7.2
       env: WP_VERSION=latest
     - php: 7.2
+      env: 
+        - WP_VERSION=latest CODECOV=true
+    - php: 7.2
       env: WP_VERSION=4.8
     - php: 7.1
       env: WP_VERSION=latest
@@ -39,10 +42,12 @@ fast_finish: true
 before_script:
   - export PATH="$HOME/.composer/vendor/bin:$PATH"
   - |
-    if [ -f ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/xdebug.ini ]; then
-      phpenv config-rm xdebug.ini
-    else
-      echo "xdebug.ini does not exist"
+    if [[ ! "$CODECOV" ]] ; then
+      if [ -f ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/xdebug.ini ]; then
+        phpenv config-rm xdebug.ini
+      else
+        echo "xdebug.ini does not exist"
+      fi
     fi
   - composer install
   - |
@@ -57,6 +62,10 @@ script:
       phpunit
       WP_MULTISITE=1 phpunit
     fi
+
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
+
 notifications:
   slack:
     secure: BuxbWZmhmdSIs1sXblUpG38Yw30YB+lZWTlslFtkYBi8Y0IGsgLBg5iMVg753eCWNQIIG92i/rntf1BG1ZyxiEFkd+2ZZxlPJ1Mgdp3LkWwS4qnZvr6OnpnxcGmpBsE8srnwhzziHvb9IlhBFW5G3CwCuKZJef/ftNI7wLBjRH0=
