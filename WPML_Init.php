@@ -110,6 +110,9 @@ class WPML_Init {
         $this->container['logRotation'] = function ($c) {
             return new WPML_LogRotation( $c['plugin-meta'] );
         };
+        $this->container['privacyController'] = function ($c) {
+            return new WPML_PrivacyController();
+        };
         $this->container['api'] = function ($c) {
             // Uncomment for an API Example
             // return new WPML_API_Example();
