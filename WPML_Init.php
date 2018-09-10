@@ -111,7 +111,7 @@ class WPML_Init {
             return new WPML_LogRotation( $c['plugin-meta'] );
         };
         $this->container['privacyController'] = function ($c) {
-            return new WPML_PrivacyController();
+            return new WPML_PrivacyController($c['plugin-meta']);
         };
         $this->container['api'] = function ($c) {
             // Uncomment for an API Example
