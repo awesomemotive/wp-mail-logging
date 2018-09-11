@@ -11,6 +11,8 @@ class WPML_Plugin extends WPML_LifeCycle {
 
     protected $emailLogList;
 
+    const HOOK_LOGGING_MAIL = 'log_email';
+    const HOOK_LOGGING_MAIL_PRIORITY = PHP_INT_MAX;
     const HOOK_LOGGING_COLUMNS = 'wpml_hook_mail_columns';
     const HOOK_LOGGING_COLUMNS_RENDER = 'wpml_hook_mail_columns_render';
     const HOOK_LOGGING_SUPPORTED_FORMATS = 'wpml_hook_supported_formats';
@@ -154,7 +156,7 @@ class WPML_Plugin extends WPML_LifeCycle {
         // Add Actions & Filters
         // http://plugin.michael-simpson.com/?page_id=37
         add_filter( 'plugin_action_links', array( &$this, 'registerPluginActionLinks'), 10, 5 );
-        add_filter( 'wp_mail', array( &$this, 'log_email' ), PHP_INT_MAX );
+        add_filter( 'wp_mail', array( $this, self::HOOK_LOGGING_MAIL ), self::HOOK_LOGGING_MAIL_PRIORITY );
         add_action( 'wp_mail_failed', array( &$this, 'log_email_failed' ) );
         add_filter( 'set-screen-option', array( &$this, 'save_screen_options' ), 10, 3);
         add_filter( 'wpml_get_plugin_version', array( &$this, 'getVersion' ) );
@@ -209,5 +211,9 @@ class WPML_Plugin extends WPML_LifeCycle {
         $wpml_current_mail_id = $mail->save();
 
         return $mailArray;
+    }
+
+    public static function getClass() {
+        return __CLASS__;
     }
 }

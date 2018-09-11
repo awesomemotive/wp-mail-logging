@@ -9,6 +9,7 @@ class WPML_PrivacyController {
     const WPML_PRIVACY_EXPORTER = "wp-mail-logging-exporter";
     const WPML_PRIVACY_ERASER = "wp-mail-logging-eraser";
     const PER_PAGE = 500;
+
     /**
      * WPML_PrivacyController constructor.
      */
@@ -22,6 +23,15 @@ class WPML_PrivacyController {
         add_filter( 'wp_privacy_personal_data_exporters', [$this, 'register_exporter'], 10);
         add_filter( 'wp_privacy_personal_data_erasers', [$this, 'register_eraser'], 10);
         add_action( 'admin_init', [$this, 'register_privacy_policy_content'] );
+        add_action( 'wp_privacy_personal_data_erased', [$this, 'suspendLogging'], 10 );
+    }
+
+    function suspendLogging() {
+        (new WPML_Hook_Remover())->remove_hook(
+            'wp_mail',
+            [WPML_Plugin::getClass(), WPML_Plugin::HOOK_LOGGING_MAIL],
+            WPML_Plugin::HOOK_LOGGING_MAIL_PRIORITY
+        );
     }
 
     function register_privacy_policy_content() {
