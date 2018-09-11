@@ -3,132 +3,91 @@
 namespace No3x\WPML;
 
 /**
- * Class for interacting with hooks
- * The code is from Nathan Johnson on SO but slightly modified.
- * I found that the namespace is part of the callback and there is no need to consider or remove it.
- * https://wordpress.stackexchange.com/a/258767/33141
+ * Class for removing hooks by class name
+ * https://gist.github.com/tripflex/c6518efc1753cf2392559866b4bd1a53
  */
 class WPML_Hook_Remover {
 
     /**
-     * Remove a hook from the $wp_filter global
+     * Remove Class Filter Without Access to Class Object
      *
-     * @param string   $tag      The hook which the callback is attached to
-     * @param callable $callback The callback to remove
-     * @param int      $priority The priority of the callback
+     * In order to use the core WordPress remove_filter() on a filter added with the callback
+     * to a class, you either have to have access to that class object, or it has to be a call
+     * to a static method.  This method allows you to remove filters with a callback to a class
+     * you don't have access to.
      *
-     * @access public
-     * @since 1.8.5
+     * Works with WordPress 1.2+ (4.7+ support added 9-19-2016)
+     * Updated 2-27-2017 to use internal WordPress removal for 4.7+ (to prevent PHP warnings output)
      *
-     * @return bool Whether the filter was originally in the $wp_filter global
+     * @param string $tag         Filter to remove
+     * @param string $class_name  Class name for the filter's callback
+     * @param string $method_name Method name for the filter's callback
+     * @param int    $priority    Priority of the filter (default 10)
+     *
+     * @return bool Whether the function is removed.
      */
-    public function remove_hook( $tag, $callback, $priority = 10 ) {
+    function remove_class_hook( $tag, $class_name = '', $method_name = '', $priority = 10 ) {
         global $wp_filter;
-        $tag_hooks = $wp_filter[ $tag ]->callbacks[ $priority ];
-        foreach ( $tag_hooks as $the_tag => $the_callback ) {
-            if( $this->parse_callback( $the_callback ) === $callback ) {
-                return \remove_filter( $tag, $the_callback[ 'function' ], $priority );
+        // Check that filter actually exists first
+        if ( ! isset( $wp_filter[ $tag ] ) ) {
+            return FALSE;
+        }
+        /**
+         * If filter config is an object, means we're using WordPress 4.7+ and the config is no longer
+         * a simple array, rather it is an object that implements the ArrayAccess interface.
+         *
+         * To be backwards compatible, we set $callbacks equal to the correct array as a reference (so $wp_filter is updated)
+         *
+         * @see https://make.wordpress.org/core/2016/09/08/wp_hook-next-generation-actions-and-filters/
+         */
+        if ( is_object( $wp_filter[ $tag ] ) && isset( $wp_filter[ $tag ]->callbacks ) ) {
+            // Create $fob object from filter tag, to use below
+            $fob       = $wp_filter[ $tag ];
+            $callbacks = &$wp_filter[ $tag ]->callbacks;
+        } else {
+            $callbacks = &$wp_filter[ $tag ];
+        }
+        // Exit if there aren't any callbacks for specified priority
+        if ( ! isset( $callbacks[ $priority ] ) || empty( $callbacks[ $priority ] ) ) {
+            return FALSE;
+        }
+        // Loop through each filter for the specified priority, looking for our class & method
+        foreach ( (array) $callbacks[ $priority ] as $filter_id => $filter ) {
+            // Filter should always be an array - array( $this, 'method' ), if not goto next
+            if ( ! isset( $filter['function'] ) || ! is_array( $filter['function'] ) ) {
+                continue;
+            }
+            // If first value in array is not an object, it can't be a class
+            if ( ! is_object( $filter['function'][0] ) ) {
+                continue;
+            }
+            // Method doesn't match the one we're looking for, goto next
+            if ( $filter['function'][1] !== $method_name ) {
+                continue;
+            }
+            // Method matched, now let's check the Class
+            if ( get_class( $filter['function'][0] ) === $class_name ) {
+                // WordPress 4.7+ use core remove_filter() since we found the class object
+                if ( isset( $fob ) ) {
+                    // Handles removing filter, reseting callback priority keys mid-iteration, etc.
+                    $fob->remove_filter( $tag, $filter['function'], $priority );
+                } else {
+                    // Use legacy removal process (pre 4.7)
+                    unset( $callbacks[ $priority ][ $filter_id ] );
+                    // and if it was the only filter in that priority, unset that priority
+                    if ( empty( $callbacks[ $priority ] ) ) {
+                        unset( $callbacks[ $priority ] );
+                    }
+                    // and if the only filter for that tag, set the tag to an empty array
+                    if ( empty( $callbacks ) ) {
+                        $callbacks = array();
+                    }
+                    // Remove this filter from merged_filters, which specifies if filters have been sorted
+                    unset( $GLOBALS['merged_filters'][ $tag ] );
+                }
+                return TRUE;
             }
         }
-        return \remove_filter( $tag, $callback, $priority );
-    }
-
-    /**
-     * Get the class name of an object
-     *
-     * @param object $object
-     *
-     * @access protected
-     * @since 1.8.5
-     *
-     * @return string
-     */
-    protected function get_class( $object ) {
-        return get_class( $object );
-    }
-
-    /**
-     * Return the callback object
-     *
-     * @param array $callback
-     *
-     * @access protected
-     * @since 1.8.5
-     *
-     * @return object
-     */
-    protected function callback_object( $callback ) {
-        return $callback[ 'function' ][ 0 ];
-    }
-
-    /**
-     * Return the callback method
-     *
-     * @param array $callback
-     *
-     * @access protected
-     * @since 1.8.5
-     *
-     * @return string
-     */
-    protected function callback_method( $callback ) {
-        return $callback[ 'function' ][ 1 ];
-    }
-
-    /**
-     * Return the class from the callback
-     *
-     * @param array $callback
-     *
-     * @access protected
-     * @since 1.8.5
-     *
-     * @return string
-     */
-    protected function get_class_from_callback( $callback ) {
-        return $this->get_class( $this->callback_object( $callback ) );
-    }
-
-    /**
-     * Parse the callback into an array
-     *
-     * @param array $callback
-     *
-     * @access protected
-     * @since 1.8.5
-     *
-     * @return array|bool
-     */
-    protected function parse_callback( $callback ) {
-        return is_array( $callback[ 'function' ] ) ?
-            [ $this->classFor( $callback ), $this->method( $callback ) ] : false;
-    }
-
-    /**
-     * Return the class of a callback
-     *
-     * @param array $callback
-     *
-     * @access protected
-     * @since 1.8.5
-     *
-     * @return string
-     */
-    protected function classFor( $callback ) {
-        return $this->get_class_from_callback( $callback );
-    }
-
-    /**
-     * Return the method of a callback
-     *
-     * @param array $callback
-     *
-     * @access protected
-     * @since 1.8.5
-     *
-     * @return string
-     */
-    protected function method( $callback ) {
-        return $callback[ 'function' ][ 1 ];
+        return FALSE;
     }
 }
