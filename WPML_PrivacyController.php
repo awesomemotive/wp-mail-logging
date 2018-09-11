@@ -27,9 +27,10 @@ class WPML_PrivacyController {
     }
 
     function suspendLogging() {
-        (new WPML_Hook_Remover())->remove_hook(
+        (new WPML_Hook_Remover())->remove_class_hook(
             'wp_mail',
-            [WPML_Plugin::getClass(), WPML_Plugin::HOOK_LOGGING_MAIL],
+            WPML_Plugin::getClass(),
+            WPML_Plugin::HOOK_LOGGING_MAIL,
             WPML_Plugin::HOOK_LOGGING_MAIL_PRIORITY
         );
     }
