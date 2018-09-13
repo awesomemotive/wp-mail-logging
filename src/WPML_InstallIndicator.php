@@ -93,7 +93,7 @@ class WPML_InstallIndicator extends WPML_OptionsManager {
      * @return string
      */
     protected function getPluginDir() {
-        return dirname( __FILE__ );
+        return dirname( dirname( __FILE__ ) );
     }
 
     /**

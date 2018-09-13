@@ -7,8 +7,8 @@ use No3x\WPML\Model\WPML_Mail as Mail;
 // Exit if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-require_once( ABSPATH . 'wp-admin/includes/screen.php' );
-require_once( ABSPATH . 'wp-admin/includes/class-wp-list-table.php' );
+require_once(ABSPATH . 'wp-admin/includes/screen.php');
+require_once(ABSPATH . 'wp-admin/includes/class-wp-list-table.php');
 
 if ( ! class_exists( 'WP_List_Table' ) ) {
     require_once( plugin_dir_path( __FILE__ ) . 'inc/class-wp-list-table.php' );
