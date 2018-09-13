@@ -1,12 +1,15 @@
 <?php
-use No3x\WPML\Tests\Helper\WPML_UnitTestCase;
+
+namespace No3x\WPML\Tests\Unit;
+
+use No3x\WPML\Tests\Helper\WPML_IntegrationTestCase;
 use No3x\WPML\WPML_Email_Resender;
 
 /**
  * Test resend feature.
  */
 
-class WPML_Email_Resender_Test extends WPML_UnitTestCase {
+class WPML_Email_Resender_Test extends \PHPUnit_Framework_TestCase {
 
     /** @var WPML_Email_Resender $emailResender */
     private $emailResender;

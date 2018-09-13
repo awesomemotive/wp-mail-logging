@@ -9,7 +9,7 @@ use No3x\WPML\WPML_Plugin;
  * @package No3x\WPML\Tests\Helper
  * @group ignore
  */
-class WPML_UnitTestCase extends \WP_UnitTestCase {
+class WPML_IntegrationTestCase extends \WP_UnitTestCase {
 
 	/** @var WPML_Plugin */
 	private $plugin;

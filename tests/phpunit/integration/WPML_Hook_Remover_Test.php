@@ -1,11 +1,11 @@
 <?php
 
-namespace No3x\WPML\Tests;
+namespace No3x\WPML\Tests\Integration;
 
-use No3x\WPML\Tests\Helper\WPML_UnitTestCase;
+use No3x\WPML\Tests\Helper\WPML_IntegrationTestCase;
 use No3x\WPML\WPML_Hook_Remover;
 
-class WPML_Hook_Remover_Test extends WPML_UnitTestCase {
+class WPML_Hook_Remover_Test extends WPML_IntegrationTestCase {
 
     private $tag;
     private $callable;

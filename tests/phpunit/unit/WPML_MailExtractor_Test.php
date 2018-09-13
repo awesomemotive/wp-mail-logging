@@ -1,9 +1,9 @@
 <?php
 
-namespace No3x\WPML\Tests;
+namespace No3x\WPML\Tests\Unit;
 
 use No3x\WPML\Tests\Helper\WPMailArrayBuilder;
-use No3x\WPML\Tests\Helper\WPML_UnitTestCase;
+use No3x\WPML\Tests\Helper\WPML_IntegrationTestCase;
 use No3x\WPML\WPML_MailExtractor;
 
 /**
@@ -11,7 +11,7 @@ use No3x\WPML\WPML_MailExtractor;
  * @see https://developer.wordpress.org/reference/functions/wp_mail/
  * @package No3x\WPML\Tests
  */
-class WPML_MailExtractor_Test extends WPML_UnitTestCase {
+class WPML_MailExtractor_Test extends \PHPUnit_Framework_TestCase {
 
     /** @var WPML_MailExtractor */
     private $mailExtractor;

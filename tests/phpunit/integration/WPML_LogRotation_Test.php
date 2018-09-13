@@ -1,8 +1,8 @@
 <?php
 
-namespace No3x\WPML\Tests;
+namespace No3x\WPML\Tests\Integration;
 
-use No3x\WPML\Tests\Helper\WPML_UnitTestCase;
+use No3x\WPML\Tests\Helper\WPML_IntegrationTestCase;
 use No3x\WPML\Model\WPML_Mail as Mail;
 use No3x\WPML\WPML_LogRotation;
 use Arrayzy\ImmutableArray;
@@ -14,7 +14,7 @@ use Arrayzy\ImmutableArray;
  * Tests are written in the AAA-Rule
  * There are three basic sections for our test: Arrange, Act, and Assert.
  */
-class WPML_LogRotation_Test extends WPML_UnitTestCase {
+class WPML_LogRotation_Test extends WPML_IntegrationTestCase {
 
 	private function prepareMessages( $amount ) {
 		$to = 'email@example.com';

@@ -1,9 +1,10 @@
 <?php
-use No3x\WPML\Tests\Helper\WPML_UnitTestCase;
-use No3x\WPML\WPML_Email_Resender;
+
+namespace No3x\WPML\Tests\Unit;
+
 use No3x\WPML\WPML_MessageSanitizer;
 
-class WPML_MessageSanitizer_Test extends WPML_UnitTestCase {
+class WPML_MessageSanitizer_Test extends \PHPUnit_Framework_TestCase {
 
     /** @var WPML_MessageSanitizer */
     private $messageSanitizer;

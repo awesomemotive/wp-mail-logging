@@ -1,18 +1,18 @@
 <?php
 
-namespace No3x\WPML\Tests;
+namespace No3x\WPML\Tests\Unit;
 
 use No3x\WPML\Model\WPML_Mail;
 use No3x\WPML\ORM\DefaultQueryFactory;
 use No3x\WPML\ORM\QueryFactory;
-use No3x\WPML\Tests\Helper\WPML_UnitTestCase;
+use No3x\WPML\Tests\Helper\WPML_IntegrationTestCase;
 use No3x\WPML\WPML_PrivacyController;
 
 /**
  * Class WPML_MailExtractor_Test tests the function of the privacy integration
  * @package No3x\WPML\Tests
  */
-class WPML_PrivacyController_Test extends WPML_UnitTestCase {
+class WPML_PrivacyController_Test extends \PHPUnit_Framework_TestCase {
 
     const emailAddress = 'example@example.com';
 
