@@ -55,7 +55,7 @@ class WPML_Plugin extends WPML_LifeCycle {
 				`attachments` VARCHAR(800) NOT NULL DEFAULT '0',
 				`error` VARCHAR(400) NULL DEFAULT '',
 				`plugin_version` VARCHAR(200) NOT NULL DEFAULT '0',
-				PRIMARY KEY (`mail_id`) 
+				PRIMARY KEY (`mail_id`)
 			) DEFAULT CHARACTER SET = utf8 DEFAULT COLLATE utf8_general_ci;");
     }
 
@@ -68,6 +68,8 @@ class WPML_Plugin extends WPML_LifeCycle {
         global $wpdb;
         $tableName = WPML_Plugin::getTablename('mails');
         $wpdb->query("DROP TABLE IF EXISTS `$tableName`");
+        // Remove the cache option indicating tables are installed
+        wp_cache_delete(parent::CACHE_INSTALLED_KEY, parent::CACHE_GROUP);
     }
 
     /**
