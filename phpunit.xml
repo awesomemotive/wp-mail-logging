@@ -12,7 +12,7 @@
     </php>
     <testsuites>
         <testsuite>
-            <directory suffix=".php">tests/phpunit/tests/</directory>
+            <directory suffix=".php">tests/phpunit</directory>
         </testsuite>
     </testsuites>
     <filter>
@@ -24,10 +24,9 @@
             <directory>inc</directory>
         </blacklist>-->
         <whitelist>
-            <directory suffix=".php">.</directory>
+            <directory suffix=".php">src</directory>
             <exclude>
-                <file>tests/phpunit/includes/bootstrap.php</file>
-                <file>tests/**/.php</file>
+                <directory>tests</directory>
             </exclude>
         </whitelist>
     </filter>

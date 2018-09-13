@@ -2,12 +2,10 @@
 
 namespace No3x\WPML\Tests;
 
-
-use No3x\WPML\Tests\Helper\WPML_UnitTestCase;
+use No3x\WPML\Tests\Helper\WPML_IntegrationTestCase;
 use No3x\WPML\WPML_Utils;
 
-class WPML_Utils_Test extends WPML_UnitTestCase {
-
+class WPML_Utils_Test extends \PHPUnit_Framework_TestCase {
 
     /**
      * The sanitizer removes evil code from the text to output.
