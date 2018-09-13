@@ -23,7 +23,7 @@ class WPML_PrivacyController {
         add_filter( 'wp_privacy_personal_data_exporters', [$this, 'register_exporter'], 10);
         add_filter( 'wp_privacy_personal_data_erasers', [$this, 'register_eraser'], 10);
         add_action( 'admin_init', [$this, 'register_privacy_policy_content'] );
-        add_action( 'wp_privacy_personal_data_erased', [$this, 'suspendLogging'], 10 );
+        add_action( 'wp_privacy_personal_data_erased', [$this, 'suspendLogging'], 9 );
     }
 
     function suspendLogging() {
