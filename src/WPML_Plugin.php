@@ -7,7 +7,7 @@ use No3x\WPML\Model\WPML_Mail as Mail;
 // Exit if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-class WPML_Plugin extends WPML_LifeCycle {
+class WPML_Plugin extends WPML_LifeCycle implements IHooks {
 
     protected $emailLogList;
 

@@ -4,7 +4,7 @@ namespace No3x\WPML;
 
 use No3x\WPML\Model\WPML_Mail;
 
-class WPML_PrivacyController {
+class WPML_PrivacyController implements IHooks {
 
     const WPML_PRIVACY_EXPORTER = "wp-mail-logging-exporter";
     const WPML_PRIVACY_ERASER = "wp-mail-logging-eraser";

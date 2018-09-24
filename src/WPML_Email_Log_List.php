@@ -19,7 +19,7 @@ if ( ! class_exists( 'WP_List_Table' ) ) {
  * @author No3x
  * @since 1.0
  */
-class WPML_Email_Log_List extends \WP_List_Table {
+class WPML_Email_Log_List extends \WP_List_Table implements IHooks {
 
     const NONCE_LIST_TABLE = 'wpml-list_table';
     private $supported_formats = array();
