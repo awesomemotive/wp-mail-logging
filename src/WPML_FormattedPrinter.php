@@ -76,7 +76,7 @@ class WPML_FormattedPrinter implements IHooks {
                     $mailAppend .= sprintf("<span class='info'>%s</span>", __("Fallback to raw format because html is not convertible to json.", 'wp-mail-logging' ) );
                     $mailAppend .= $instance->render_mail( $mail->to_array() );
                 } else {
-                    $mailAppend .= "<pre>" . json_encode( $mail->to_array(), JSON_PRETTY_PRINT ) . "</pre>";
+                    $mailAppend .= "<pre>" . htmlentities(json_encode( $mail->to_array(), JSON_PRETTY_PRINT))  . "</pre>";
                 }
                 break;
             }
