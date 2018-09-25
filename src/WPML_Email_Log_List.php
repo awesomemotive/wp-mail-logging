@@ -441,9 +441,7 @@ class WPML_Email_Log_List extends \WP_List_Table implements IHooks {
             'host' 	        => array( 'host', true ),
             'receiver' 		=> array( 'receiver', true ),
             'subject' 		=> array( 'subject', true ),
-            'message' 		=> array( 'message', true ),
             'headers' 		=> array( 'headers', true ),
-            'attachments' 	=> array( 'attachments', true ),
             'plugin_version'=> array( 'plugin_version', true ),
         );
     }
