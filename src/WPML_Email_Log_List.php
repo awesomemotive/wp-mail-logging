@@ -22,7 +22,6 @@ if ( ! class_exists( 'WP_List_Table' ) ) {
 class WPML_Email_Log_List extends \WP_List_Table implements IHooks {
 
     const NONCE_LIST_TABLE = 'wpml-list_table';
-    private $supported_formats = array();
     /** @var WPML_Email_Resender $emailResender */
     private $emailResender;
     /** @var WPML_MessageSanitizer $messageSanitizer */
@@ -31,21 +30,15 @@ class WPML_Email_Log_List extends \WP_List_Table implements IHooks {
     /**
      * Initializes the List Table
      * @since 1.0
-     * @param array $supported_formats
      * @param WPML_Email_Resender $emailResender
      */
-    function __construct( $supported_formats = array(), $emailResender ) {
-        $this->supported_formats = $supported_formats;
+    function __construct( $emailResender ) {
         $this->emailResender = $emailResender;
         $this->messageSanitizer = new WPML_MessageSanitizer();
     }
 
     function addActionsAndFilters() {
         add_action( 'admin_init', array( $this, 'init') );
-        add_filter( WPML_Plugin::HOOK_LOGGING_SUPPORTED_FORMATS, function() {
-            return $this->supported_formats;
-        } );
-        add_action( 'wp_ajax_wpml_email_get', __CLASS__ . '::ajax_wpml_email_get' );
     }
 
     function init() {
@@ -199,7 +192,7 @@ class WPML_Email_Log_List extends \WP_List_Table implements IHooks {
     function column_default( $item, $column_name ) {
         $column_content = '';
 
-        // colmn_message is handled called directly by the list table by naming it colmn_$name. All other columns pass this function and might be named column_overridden_$column_name for further adaptation on output.
+        // column_message is called directly by the list table by naming it column_$name. All other columns pass this function and might be named column_overridden_$column_name for further adaptation on output.
         if ( method_exists( $this, 'column_overridden_' . $column_name ) ) {
             $column_content = call_user_func( array( $this, 'column_overridden_' . $column_name ), $item );
         } elseif( array_key_exists( $column_name, $item ) ) {
@@ -311,7 +304,7 @@ class WPML_Email_Log_List extends \WP_List_Table implements IHooks {
      * @param $item
      * @return string
      */
-    function column_overridden_error($item ) {
+    function column_overridden_error($item) {
         $error = $item['error'];
         if( empty($error)) return "";
         $errorMessage = is_array($error) ? join(',', $error) : $error;
@@ -326,11 +319,10 @@ class WPML_Email_Log_List extends \WP_List_Table implements IHooks {
      */
     function render_mail( $item ) {
         $mailAppend = '';
-        foreach ( $item as $key => $value ) {
-            if ( array_key_exists( $key, $this->get_columns() ) && ! in_array( $key, $this->get_hidden_columns() ) ) {
+        foreach ( $item as $column_name => $value ) {
+            if ( array_key_exists( $column_name, $this->get_columns() ) && ! in_array( $column_name, $this->get_hidden_columns() ) ) {
                 $display = $this->get_columns();
-                $column_name = $key;
-                $title = "<span class=\"title\">{$display[$key]}: </span>";
+                $title = "<span class=\"title\">{$display[$column_name]}: </span>";
                 $content = '';
                 if ( 'message' !== $column_name  && method_exists( $this, 'column_' . $column_name ) ) {
                     if( 'error' === $column_name || 'attachments' === $column_name ) {
@@ -357,11 +349,10 @@ class WPML_Email_Log_List extends \WP_List_Table implements IHooks {
      */
     function render_mail_html( $item ) {
         $mailAppend = '';
-        foreach ( $item as $key => $value ) {
-            if ( array_key_exists( $key, $this->get_columns() ) && ! in_array( $key, $this->get_hidden_columns() ) ) {
+        foreach ( $item as $column_name => $value ) {
+            if ( array_key_exists( $column_name, $this->get_columns() ) && ! in_array( $column_name, $this->get_hidden_columns() ) ) {
                 $display = $this->get_columns();
-                $column_name = $key;
-                $mailAppend .= "<span class=\"title\">{$display[$key]}: </span>";
+                $mailAppend .= "<span class=\"title\">{$display[$column_name]}: </span>";
                 if ( 'message' !== $column_name  && method_exists( $this, 'column_' . $column_name ) ) {
                     $mailAppend .= call_user_func( array( $this, 'column_' . $column_name ), $item );
                 } else {
@@ -455,55 +446,5 @@ class WPML_Email_Log_List extends \WP_List_Table implements IHooks {
             'attachments' 	=> array( 'attachments', true ),
             'plugin_version'=> array( 'plugin_version', true ),
         );
-    }
-
-    /**
-     * Ajax function to retrieve rendered mail in certain format.
-     * @since 1.6.0
-     */
-    public static function ajax_wpml_email_get() {
-        $formats = is_array( $additional = apply_filters( WPML_Plugin::HOOK_LOGGING_SUPPORTED_FORMATS, array() ) ) ? $additional : array();
-
-        check_ajax_referer( 'wpml-modal-show', 'ajax_nonce', true );
-
-        if( ! isset( $_POST['id'] ) )
-            wp_die( "huh?" );
-        $id = intval( $_POST['id'] );
-
-        $format_requested = isset( $_POST['format'] ) ? $_POST['format'] : 'html';
-        if ( ! in_array( $format_requested, $formats ) )  {
-            echo "Unsupported Format. Using html as fallback.";
-            $format_requested = WPML_Utils::sanitize_expected_value($format_requested, $formats, 'html');
-        }
-        $mail = Mail::find_one( $id );
-        /* @var $instance WPML_Email_Log_List */
-        $instance = WPML_Init::getInstance()->getService( 'emailLogList' );
-        $mailAppend = '';
-        switch( $format_requested ) {
-            case 'html': {
-                $mailAppend .= $instance->render_mail_html( $mail->to_array() );
-                break;
-            }
-            case 'raw': {
-                $mailAppend .= $instance->render_mail( $mail->to_array() );
-                break;
-            }
-            case 'json': {
-                if( stristr( str_replace(' ', '', $mail->get_headers()),  "Content-Type:text/html")) {
-                    // Fallback to raw in case it is a html mail
-                    $mailAppend .= sprintf("<span class='info'>%s</span>", __("Fallback to raw format because html is not convertible to json.", 'wp-mail-logging' ) );
-                    $mailAppend .= $instance->render_mail( $mail->to_array() );
-                } else {
-                    $mailAppend .= "<pre>" . json_encode( $mail->to_array(), JSON_PRETTY_PRINT ) . "</pre>";
-                }
-                break;
-            }
-            default:
-                $mailAppend .= apply_filters( WPML_Plugin::HOOK_LOGGING_FORMAT_CONTENT . "_{$format_requested}", $mail->to_array() );
-                break;
-        }
-
-        echo $instance->sanitize_text($mailAppend);
-        wp_die(); // this is required to terminate immediately and return a proper response
     }
 }

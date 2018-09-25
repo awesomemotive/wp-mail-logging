@@ -21,6 +21,7 @@
 
 namespace No3x\WPML;
 
+use No3x\WPML\Model\DefaultMailService;
 use No3x\WPML\Settings\WPML_Redux_Framework_config;
 
 // Exit if accessed directly.
@@ -96,7 +97,7 @@ class WPML_Init {
             );
         };
         $this->container['emailLogList'] = function ($c) {
-            return new WPML_Email_Log_List( $c['emailLogList-supported-formats'], $c['emailResender'] );
+            return new WPML_Email_Log_List( $c['emailResender'] );
         };
         $this->container['emailResender'] = function ($c) {
             return new WPML_Email_Resender( $c['emailDispatcher'] );
@@ -112,6 +113,9 @@ class WPML_Init {
         };
         $this->container['privacyController'] = function ($c) {
             return new WPML_PrivacyController($c['plugin-meta']);
+        };
+        $this->container['formattedPrinter'] = function ($c) {
+            return new WPML_FormattedPrinter( new DefaultMailService(), $c['emailLogList-supported-formats'] );
         };
         $this->container['api'] = function ($c) {
             // Uncomment for an API Example
