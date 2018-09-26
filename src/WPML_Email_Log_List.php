@@ -3,6 +3,8 @@
 namespace No3x\WPML;
 
 use No3x\WPML\Model\WPML_Mail as Mail;
+use No3x\WPML\Printer\ColumnFormat;
+use No3x\WPML\Printer\WPML_ColumnRenderer;
 
 // Exit if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) exit;
@@ -26,6 +28,7 @@ class WPML_Email_Log_List extends \WP_List_Table implements IHooks {
     private $emailResender;
     /** @var WPML_MessageSanitizer $messageSanitizer */
     private $messageSanitizer;
+    private $columnRenderer;
 
     /**
      * Initializes the List Table
@@ -35,6 +38,7 @@ class WPML_Email_Log_List extends \WP_List_Table implements IHooks {
     function __construct( $emailResender ) {
         $this->emailResender = $emailResender;
         $this->messageSanitizer = new WPML_MessageSanitizer();
+        $this->columnRenderer = new WPML_ColumnRenderer();
     }
 
     function addActionsAndFilters() {
@@ -196,7 +200,7 @@ class WPML_Email_Log_List extends \WP_List_Table implements IHooks {
         if ( method_exists( $this, 'column_overridden_' . $column_name ) ) {
             $column_content = call_user_func( array( $this, 'column_overridden_' . $column_name ), $item );
         } elseif( array_key_exists( $column_name, $item ) ) {
-            $column_content = $item[ $column_name ];
+            $column_content = $this->columnRenderer->getColumn($column_name)->render($item, ColumnFormat::FULL);
         } else {
             // If we don't know this column maybe a hook does - if no hook extracted data (string) out of the array we can avoid the output of 'Array()' (array).
             $column_content = ( is_array( $res = apply_filters( WPML_Plugin::HOOK_LOGGING_COLUMNS_RENDER, $item, $column_name ) ) ) ? '' : $res;
@@ -228,90 +232,6 @@ class WPML_Email_Log_List extends \WP_List_Table implements IHooks {
     }
 
     /**
-     * Renders the timestamp column.
-     * @since 1.5.0
-     * @param array $item The current item.
-     * @return string
-     */
-    function column_overridden_timestamp( $item ) {
-        return date_i18n( apply_filters( 'wpml_get_date_time_format', '' ), strtotime( $item['timestamp'] ) );
-    }
-
-    /**
-     * Renders the attachment column in compbat mode for mails prior 1.6.0.
-     * @since 1.6.0
-     * @param array $item The current item.
-     * @return string The attachment column.
-     */
-    function column_attachments_compat_152( $item ) {
-        $attachment_append = '';
-        $attachments = explode( ',\n', $item['attachments'] );
-        $attachments = is_array( $attachments ) ? $attachments : array( $attachments );
-        foreach ( $attachments as $attachment ) {
-            // $attachment can be an empty string ''.
-            if ( ! empty( $attachment ) ) {
-                $filename = basename( $attachment );
-                $attachment_path = WP_CONTENT_DIR . $attachment;
-                $attachment_url = WP_CONTENT_URL . $attachment;
-                if ( is_file( $attachment_path ) ) {
-                    $attachment_append .= '<a href="' . $attachment_url . '" title="' . $filename . '">' . WPML_Utils::generate_attachment_icon( $attachment_path ) . '</a> ';
-                } else {
-                    $message = sprintf( __( 'Attachment %s is not present', 'wp-mail-logging' ), $filename );
-                    $attachment_append .= '<i class="fa fa-times" title="' . $message . '"></i>';
-                }
-            }
-        }
-        return $attachment_append;
-    }
-
-    /**
-     * Renders the attachment column.
-     * @since 1.3
-     * @param array $item The current item.
-     * @return string The attachment column.
-     */
-    function column_overridden_attachments( $item ) {
-
-        if ( version_compare( trim( $item ['plugin_version'] ), '1.6.0', '<' ) ) {
-            return $this->column_attachments_compat_152( $item );
-        }
-
-        $attachment_append = '';
-        $attachments = explode( ',\n', $item['attachments'] );
-        $attachments = is_array( $attachments ) ? $attachments : array( $attachments );
-        foreach ( $attachments as $attachment ) {
-            // $attachment can be an empty string ''.
-            if ( ! empty( $attachment ) ) {
-                $filename = basename( $attachment );
-                $basename = '/uploads';
-                $attachment_path = WP_CONTENT_DIR . $basename . $attachment;
-                $attachment_url = WP_CONTENT_URL . $basename . $attachment;
-
-                if ( is_file( $attachment_path ) ) {
-                    $attachment_append .= '<a href="' . $attachment_url . '" title="' . $filename . '">' . WPML_Utils::generate_attachment_icon( $attachment_path ) . '</a> ';
-                } else {
-                    $message = sprintf( __( 'Attachment %s is not present', 'wp-mail-logging' ), $filename );
-                    $attachment_append .= '<i class="fa fa-times" title="' . $message . '"></i>';
-                }
-            }
-        }
-        return $attachment_append;
-    }
-
-    /**
-     * Renders the error column.
-     * @since 1.8.0
-     * @param $item
-     * @return string
-     */
-    function column_overridden_error($item) {
-        $error = $item['error'];
-        if( empty($error)) return "";
-        $errorMessage = is_array($error) ? join(',', $error) : $error;
-        return "<i class='fa fa-exclamation-circle' title='{$errorMessage}' aria-hidden='true'></i>";
-    }
-
-    /**
      * Renders all components of the mail.
      * @since 1.3
      * @param array $item The current item.
@@ -325,16 +245,14 @@ class WPML_Email_Log_List extends \WP_List_Table implements IHooks {
                 $title = "<span class=\"title\">{$display[$column_name]}: </span>";
                 $content = '';
                 if ( 'message' !== $column_name  && method_exists( $this, 'column_' . $column_name ) ) {
-                    if( 'error' === $column_name || 'attachments' === $column_name ) {
-                        // don't render with icons and stuff, just plain
-                        $content .= is_array($item[$column_name]) ? join("\n", $item[$column_name]) : $item[$column_name];
-                    } else {
-                        $content .= call_user_func( array( $this, 'column_' . $column_name ), $item );
-                    }
+                    $content .= call_user_func( array( $this, 'column_' . $column_name ), $item );
                 } else {
                     $content .= $this->column_default( $item, $column_name );
                 }
-                $mailAppend .= $title . htmlentities( $content );
+                if( $column_name !== 'error' && $column_name !== 'attachments') {
+                    $content = htmlentities( $content );
+                }
+                $mailAppend .= $title . $content;
             }
         }
 
