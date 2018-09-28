@@ -182,15 +182,7 @@ class WPML_Email_Log_List extends \WP_List_Table implements IHooks {
      * @return string The cell content
      */
     function column_default( $item, $column_name ) {
-        $column_content = '';
-
-        // column_message is called directly by the list table by naming it column_$name. All other columns pass this function and might be named column_overridden_$column_name for further adaptation on output.
-        if ( method_exists( $this, 'column_overridden_' . $column_name ) ) {
-            $column_content = call_user_func( array( $this, 'column_overridden_' . $column_name ), $item );
-        } elseif( array_key_exists( $column_name, $item ) ) {
-            $column_content = $this->columnRenderer->getColumn($column_name)->render($item, ColumnFormat::FULL);
-        }
-
+        $column_content = $this->columnRenderer->getColumn($column_name)->render($item, ColumnFormat::FULL);
         return $this->sanitize_text($column_content);
     }
 
