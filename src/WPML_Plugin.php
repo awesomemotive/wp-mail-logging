@@ -9,14 +9,17 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 
 class WPML_Plugin extends WPML_LifeCycle implements IHooks {
 
-    protected $emailLogList;
-
     const HOOK_LOGGING_MAIL = 'log_email';
     const HOOK_LOGGING_MAIL_PRIORITY = PHP_INT_MAX;
-    const HOOK_LOGGING_COLUMNS = 'wpml_hook_mail_columns';
-    const HOOK_LOGGING_COLUMNS_RENDER = 'wpml_hook_mail_columns_render';
     const HOOK_LOGGING_SUPPORTED_FORMATS = 'wpml_hook_supported_formats';
-    const HOOK_LOGGING_FORMAT_CONTENT = 'wpml_hook_format_content';
+
+    /**
+     * WPML_Plugin constructor.
+     * @param $supportedMailPrinterFormats
+     */
+    public function __construct($supportedMailPrinterFormats) {
+        $this->supportedMailPrinterFormats = $supportedMailPrinterFormats;
+    }
 
     public static function getTablename( $name ) {
         global $wpdb;

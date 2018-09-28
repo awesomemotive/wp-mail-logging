@@ -25,6 +25,9 @@ namespace No3x\WPML;
 if ( ! defined( 'ABSPATH' ) ) exit;
 
 class WPML_OptionsManager {
+
+    protected $supportedMailPrinterFormats;
+
     /**
      * Is used to retrive a settings value
      * Important: This implementation understands bool for $default. (unlikely in comparision to all other settings implementation)
@@ -498,8 +501,7 @@ class WPML_OptionsManager {
                             </div>
                             <div id="wp-mail-logging-modal-content-header-format-switch">
                                 <?php
-                                $supported_formats = apply_filters( WPML_Plugin::HOOK_LOGGING_SUPPORTED_FORMATS, array('html') );
-                                foreach( $supported_formats as $key => $format ) {
+                                foreach( $this->supportedMailPrinterFormats as $key => $format ) {
                                     $checked = checked($format, $wpml_settings['preferred-mail-format'], false);
                                     echo ' <input type="radio" name="format" ' . $checked . ' id="' . esc_attr( $format ) . '"> ' . esc_html( $format ) . '</input> ';
                                 }

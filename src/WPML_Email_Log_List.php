@@ -28,6 +28,7 @@ class WPML_Email_Log_List extends \WP_List_Table implements IHooks {
     private $emailResender;
     /** @var WPML_MessageSanitizer $messageSanitizer */
     private $messageSanitizer;
+    /** @var WPML_ColumnRenderer $columnRenderer */
     private $columnRenderer;
 
     /**
@@ -97,18 +98,6 @@ class WPML_Email_Log_List extends \WP_List_Table implements IHooks {
             );
         }
 
-        // Give a plugin the chance to edit the columns.
-        $columns = apply_filters( WPML_Plugin::HOOK_LOGGING_COLUMNS, $columns );
-
-        $reserved = array( '_title', 'comment', 'media', 'name', 'title', 'username', 'blogname' );
-
-        // Show message for reserved column names.
-        foreach ( $reserved as $reserved_key ) {
-            if ( array_key_exists( $reserved_key, $columns ) ) {
-                echo "You should avoid $reserved_key as keyname since it is treated by WordPress specially: Your table would still work, but you won't be able to show/hide the columns. You can prefix your columns!";
-                break;
-            }
-        }
         return $columns;
     }
 
@@ -187,7 +176,6 @@ class WPML_Email_Log_List extends \WP_List_Table implements IHooks {
 
     /**
      * Renders the cell.
-     * Note: We can easily add filter for all columns if you want to / need to manipulate the content. (currently only additional column manipulation is supported)
      * @since 1.0
      * @param array  $item The current item.
      * @param string $column_name The current column name.
@@ -201,9 +189,6 @@ class WPML_Email_Log_List extends \WP_List_Table implements IHooks {
             $column_content = call_user_func( array( $this, 'column_overridden_' . $column_name ), $item );
         } elseif( array_key_exists( $column_name, $item ) ) {
             $column_content = $this->columnRenderer->getColumn($column_name)->render($item, ColumnFormat::FULL);
-        } else {
-            // If we don't know this column maybe a hook does - if no hook extracted data (string) out of the array we can avoid the output of 'Array()' (array).
-            $column_content = ( is_array( $res = apply_filters( WPML_Plugin::HOOK_LOGGING_COLUMNS_RENDER, $item, $column_name ) ) ) ? '' : $res;
         }
 
         return $this->sanitize_text($column_content);
