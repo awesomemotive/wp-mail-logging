@@ -5,8 +5,8 @@ namespace No3x\WPML;
 
 class WPML_MessageSanitizer {
 
-    const SAVED_COMMENT_HTMLEntity_OPEN = "savedcommenthtmldentittyopen";
-    const SAVED_COMMENT_HTMLEntity_CLOSE = "savedcommenthtmlentittclose";
+    const SAVED_COMMENT_HTMLEntity_OPEN = "savedcommenthtmlentityopen";
+    const SAVED_COMMENT_HTMLEntity_CLOSE = "savedcommenthtmlentityclose";
     const SAVED_COMMENT_HTMLCode_OPEN = "savedcommenthtmlcodeopen";
     const SAVED_COMMENT_HTMLCode_CLOSE = "savedcommenthtmlcodeclose";
 

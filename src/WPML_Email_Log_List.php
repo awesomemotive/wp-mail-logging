@@ -4,6 +4,7 @@ namespace No3x\WPML;
 
 use No3x\WPML\Model\WPML_Mail as Mail;
 use No3x\WPML\Printer\ColumnFormat;
+use No3x\WPML\Printer\SanitizedColumnDecorator;
 use No3x\WPML\Printer\WPML_ColumnRenderer;
 
 // Exit if accessed directly.
@@ -26,8 +27,6 @@ class WPML_Email_Log_List extends \WP_List_Table implements IHooks {
     const NONCE_LIST_TABLE = 'wpml-list_table';
     /** @var WPML_Email_Resender $emailResender */
     private $emailResender;
-    /** @var WPML_MessageSanitizer $messageSanitizer */
-    private $messageSanitizer;
     /** @var WPML_ColumnRenderer $columnRenderer */
     private $columnRenderer;
 
@@ -38,7 +37,6 @@ class WPML_Email_Log_List extends \WP_List_Table implements IHooks {
      */
     function __construct( $emailResender ) {
         $this->emailResender = $emailResender;
-        $this->messageSanitizer = new WPML_MessageSanitizer();
         $this->columnRenderer = new WPML_ColumnRenderer();
     }
 
@@ -182,19 +180,9 @@ class WPML_Email_Log_List extends \WP_List_Table implements IHooks {
      * @return string The cell content
      */
     function column_default( $item, $column_name ) {
-        $column_content = $this->columnRenderer->getColumn($column_name)->render($item, ColumnFormat::FULL);
-        return $this->sanitize_text($column_content);
+        return ( new SanitizedColumnDecorator($this->columnRenderer->getColumn($column_name)))->render($item, ColumnFormat::FULL);
     }
 
-    /**
-     * Sanitize text to remove unsafe html.
-     * @since 1.5.1
-     * @param string $message unsafe text.
-     * @return string safe text.
-     */
-    function sanitize_text( $message ) {
-        return $this->messageSanitizer->sanitize($message);
-    }
 
     /**
      * Renders the message column.
@@ -208,55 +196,6 @@ class WPML_Email_Log_List extends \WP_List_Table implements IHooks {
         return $message;
     }
 
-    /**
-     * Renders all components of the mail.
-     * @since 1.3
-     * @param array $item The current item.
-     * @return string The mail as html
-     */
-    function render_mail( $item ) {
-        $mailAppend = '';
-        foreach ( $item as $column_name => $value ) {
-            if ( array_key_exists( $column_name, $this->get_columns() ) && ! in_array( $column_name, $this->get_hidden_columns() ) ) {
-                $display = $this->get_columns();
-                $title = "<span class=\"title\">{$display[$column_name]}: </span>";
-                $content = '';
-                if ( 'message' !== $column_name  && method_exists( $this, 'column_' . $column_name ) ) {
-                    $content .= call_user_func( array( $this, 'column_' . $column_name ), $item );
-                } else {
-                    $content .= $this->column_default( $item, $column_name );
-                }
-                if( $column_name !== 'error' && $column_name !== 'attachments') {
-                    $content = htmlentities( $content );
-                }
-                $mailAppend .= $title . $content;
-            }
-        }
-
-        return $mailAppend;
-    }
-
-    /**
-     * Renders all components of the mail.
-     * @since 1.6.0
-     * @param array $item The current item.
-     * @return string The mail as html
-     */
-    function render_mail_html( $item ) {
-        $mailAppend = '';
-        foreach ( $item as $column_name => $value ) {
-            if ( array_key_exists( $column_name, $this->get_columns() ) && ! in_array( $column_name, $this->get_hidden_columns() ) ) {
-                $display = $this->get_columns();
-                $mailAppend .= "<span class=\"title\">{$display[$column_name]}: </span>";
-                if ( 'message' !== $column_name  && method_exists( $this, 'column_' . $column_name ) ) {
-                    $mailAppend .= call_user_func( array( $this, 'column_' . $column_name ), $item );
-                } else {
-                    $mailAppend .= $this->column_default( $item, $column_name );
-                }
-            }
-        }
-        return $mailAppend;
-    }
     /**
      * Defines available bulk actions.
      * @since 1.0

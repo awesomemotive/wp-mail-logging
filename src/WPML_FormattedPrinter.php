@@ -3,6 +3,10 @@ namespace No3x\WPML;
 
 use No3x\WPML\Model\IMailService;
 use No3x\WPML\Model\WPML_Mail as Mail;
+use No3x\WPML\Printer\ColumnFormat;
+use No3x\WPML\Printer\EscapingColumnDecorator;
+use No3x\WPML\Printer\SanitizedColumnDecorator;
+use No3x\WPML\Printer\WPML_ColumnRenderer;
 
 class WPML_FormattedPrinter implements IHooks {
 
@@ -14,6 +18,10 @@ class WPML_FormattedPrinter implements IHooks {
      * @var IMailService
      */
     private $mailService;
+    /** @var WPML_ColumnRenderer */
+    private $columnRenderer;
+    /** @var WPML_MessageSanitizer $messageSanitizer */
+    private $messageSanitizer;
 
     /**
      * WPML_FormattedPrinter constructor.
@@ -23,6 +31,8 @@ class WPML_FormattedPrinter implements IHooks {
     public function __construct(IMailService $mailService, $supported_formats = array()) {
         $this->mailService = $mailService;
         $this->supported_formats = $supported_formats;
+        $this->columnRenderer = new WPML_ColumnRenderer();
+        $this->messageSanitizer = new WPML_MessageSanitizer();
     }
 
     function addActionsAndFilters() {
@@ -53,25 +63,21 @@ class WPML_FormattedPrinter implements IHooks {
     public function print_email($id, $format) {
         /** @var Mail $mail */
         $mail = $this->mailService->find_one( $id );
-        /* @var $instance WPML_Email_Log_List */
-        $instance = WPML_Init::getInstance()->getService( 'emailLogList' );
+
         $mailAppend = '';
         switch( $format ) {
-            case 'html': {
-                $mailAppend .= $instance->render_mail_html( $mail->to_array() );
-                break;
-            }
+            case 'html':
             case 'raw': {
-                $mailAppend .= $instance->render_mail( $mail->to_array() );
+                $mailAppend .= $this->render_mail( $mail->to_array(), $format );
                 break;
             }
             case 'json': {
                 if( stristr( str_replace(' ', '', $mail->get_headers()),  "Content-Type:text/html")) {
                     // Fallback to raw in case it is a html mail
                     $mailAppend .= sprintf("<span class='info'>%s</span>", __("Fallback to raw format because html is not convertible to json.", 'wp-mail-logging' ) );
-                    $mailAppend .= $instance->render_mail( $mail->to_array() );
+                    $mailAppend .= $this->render_mail( $mail->to_array(), 'raw' );
                 } else {
-                    $mailAppend .= "<pre>" . htmlentities(json_encode( $mail->to_array(), JSON_PRETTY_PRINT))  . "</pre>";
+                    $mailAppend .= "<pre>" . json_encode( $this->render_mail( $mail->to_array(), 'json' ), JSON_PRETTY_PRINT)  . "</pre>";
                 }
                 break;
             }
@@ -79,6 +85,60 @@ class WPML_FormattedPrinter implements IHooks {
                 throw new \Exception("Unknown format.");
         }
 
-        return $instance->sanitize_text($mailAppend);
+        return $mailAppend;
+    }
+
+    /**
+     * Renders all components of the mail.
+     * @since 1.3
+     * @param array $item The current item.
+     * @param $format
+     * @return string The mail as html
+     */
+    function render_mail( $item, $format ) {
+        $ignoreColumns = ['plugin_version', 'mail_id'];
+        $mailAppend = '';
+        foreach ($item as $column_name => $value) {
+            $content = '';
+
+            $title = "<span class=\"title\">{$this->getTranslation($column_name)}: </span>";
+
+            if ('raw' === $format || 'json' === $format) {
+                $column_renderer = (new EscapingColumnDecorator($this->columnRenderer->getColumn($column_name)));
+                if ($column_name !== 'error' && $column_name !== 'attachments') {
+                    $column_format = ColumnFormat::FULL;
+                } else {
+                    $column_format = ColumnFormat::SIMPLE;
+                }
+            } elseif ('html' === $format) {
+                $column_renderer = (new SanitizedColumnDecorator($this->columnRenderer->getColumn($column_name)));
+                if ($column_name === 'headers') {
+                    $column_renderer = (new EscapingColumnDecorator($this->columnRenderer->getColumn($column_name)));
+                } else {
+                    $column_format = ColumnFormat::FULL;
+                }
+            }
+
+            $content = $column_renderer->render($item, $column_format);
+            if (!in_array($column_name, $ignoreColumns)) {
+                $mailAppend .= $title . $content;
+            }
+            if ('json' === $format) {
+                $json[$column_name] = $content;
+            }
+        }
+        if('json' === $format) {
+            return $json;
+        }
+        return $mailAppend;
+    }
+
+    private function getTranslation($column_name) {
+        //TODO
+        return $column_name;
+    }
+
+    private function sanitize_text($mailAppend) {
+        return $this->messageSanitizer->sanitize($mailAppend);
     }
 }
