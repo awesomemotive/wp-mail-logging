@@ -34,23 +34,6 @@ class WPML_Email_Log_List_Test extends \PHPUnit_Framework_TestCase {
         $this->assertEquals($expected, $this->logListTable->column_message($this->item));
     }
 
-    public function test_column_timestamp() {
-        $expected = '2018-09-24 16:02:11';
-        $this->assertEquals($expected, $this->logListTable->column_default($this->item, "timestamp"));
-    }
-
-    public function test_column_error_empty() {
-        $expected = '';
-        $this->item['error'] = "";
-        $this->assertEquals($expected, $this->logListTable->column_default($this->item, "error"));
-    }
-
-    public function test_column_error_array() {
-        $expected = '<i class="fa fa-exclamation-circle" title="a"></i>';
-        $actual = $this->logListTable->column_default($this->item, "error");
-        $this->assertEquals($expected, $actual);
-    }
-
     public function test_render_mail() {
         $expected = '<span class="title">Time: </span>2018-09-24 16:02:11<span class="title">Receiver: </span>example@exmple.com<span class="title">Subject: </span>Test<span class="title">Message: </span>&lt;b&gt;Bold&lt;/b&gt;<span class="title">Headers: </span>From: &quot;admin&quot; ,\nCc: example2@example.com,\nReply-To: admin <span class="title">Attachments: </span><span class="title">Error: </span><i class="fa fa-exclamation-circle" title="a"></i>';
         $this->assertEquals($expected, $this->logListTable->render_mail($this->item));

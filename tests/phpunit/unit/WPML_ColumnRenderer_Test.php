@@ -79,6 +79,12 @@ class WPML_ColumnRenderer_Test extends \PHPUnit_Framework_TestCase {
         $this->assertEquals($example1And2Expected, $actual);
     }
 
+    public function test_column_error_empty() {
+        $expected = '';
+        $this->item['error'] = "";
+        $this->assertEquals($expected, $this->columnRenderer->getColumn("error")->render($this->item, ColumnFormat::FULL));
+    }
+
     public function test_column_error_full() {
         $example1And2Expected = '<i class="fa fa-exclamation-circle" title="bli"></i>';
         $actual = $this->columnRenderer->getColumn("error")->render($this->item, ColumnFormat::FULL);
