@@ -96,7 +96,7 @@ class WPML_InstallIndicator extends WPML_OptionsManager {
         $match = array();
         preg_match( '/' . $key . ':\s*(.*)/', $data, $match );
         if ( count( $match ) >= 1 ) {
-            return $match[1];
+            return trim($match[1]);
         }
         return null;
     }
