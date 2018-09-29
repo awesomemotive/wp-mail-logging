@@ -47,6 +47,9 @@ class WPML_ColumnManager_Test extends \PHPUnit_Framework_TestCase {
         $this->assertEquals($columns, $this->columnManager->getColumnNames());
     }
 
+    /**
+     * @requires PHPUnit 5.2
+     */
     public function test_nonexistentdata() {
         $column_name = 'host';
         unset($this->item[$column_name]);
