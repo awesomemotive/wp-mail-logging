@@ -36,8 +36,9 @@ class WPML_MailRenderer_Test extends WPML_IntegrationTestCase {
             ->with( $this->id )
             ->andReturn( $mail );
 
-        $this->mailRenderer = new WPML_MailRenderer($this->mailServiceMock, ['json', 'html']);
+        $this->mailRenderer = new WPML_MailRenderer($this->mailServiceMock);
     }
+
     public function test_print_mail_json() {
         $expected = '<pre>{
     "mail_id": "2",
@@ -52,13 +53,13 @@ class WPML_MailRenderer_Test extends WPML_IntegrationTestCase {
     "plugin_version": "1.8.5"
 }</pre>';
 
-        $this->assertEquals($expected, $this->mailRenderer->render($this->id, 'json'));
+        $this->assertEquals($expected, $this->mailRenderer->render($this->id, WPML_MailRenderer::FORMAT_JSON));
         $this->mailServiceMock->mockery_verify();
     }
 
     public function test_print_mail_raw() {
         $expected = '<span class="title">Time: </span>2018-09-24 16:02:11<span class="title">Receiver: </span>example@exmple.com<span class="title">Subject: </span>Test<span class="title">Message: </span>&lt;b&gt;Bold&lt;/b&gt;<span class="title">Headers: </span>From: &quot;admin&quot; ,\nCc: example2@example.com,\nReply-To: admin <span class="title">Attachments: </span><span class="title">Error: </span><i class="fa fa-exclamation-circle" title="a"></i>';
-        $actual = $this->mailRenderer->render($this->id, 'raw');
+        $actual = $this->mailRenderer->render($this->id, WPML_MailRenderer::FORMAT_RAW);
         $this->assertContains('2018-09-24 16:02:11', $actual, "The timestamp should be in the rendered mail");
         $this->assertContains('Test', $actual, "The subject should be in the rendered mail");
         $this->assertContains('&lt;b&gt;Bold&lt;/b&gt;', $actual, "The rendered mail must have html tags (<b>) escaped");
@@ -68,7 +69,7 @@ class WPML_MailRenderer_Test extends WPML_IntegrationTestCase {
 
     public function test_print_mail_html() {
         $expected = '<span class="title">Time: </span>2018-09-24 16:02:11<span class="title">Receiver: </span>example@exmple.com<span class="title">Subject: </span>Test<span class="title">Message: </span><b>Bold</b><span class="title">Headers: </span>From: "admin" ,\nCc: example2@example.com,\nReply-To: admin <span class="title">Attachments: </span><span class="title">Error: </span><i class="fa fa-exclamation-circle" title="a"></i>';
-        $actual = $this->mailRenderer->render($this->id, 'html');
+        $actual = $this->mailRenderer->render($this->id, WPML_MailRenderer::FORMAT_HTML);
         $this->assertContains('2018-09-24 16:02:11', $actual, "The timestamp should be in the rendered mail");
         $this->assertContains('Test', $actual, "The subject should be in the rendered mail");
         $this->assertContains('<b>Bold</b>', $actual, "The rendered mail must have html tags (<b>) not escaped");
@@ -77,10 +78,8 @@ class WPML_MailRenderer_Test extends WPML_IntegrationTestCase {
     }
 
     /**
-     * The sanitizer removes evil code from the text to output.
-     * It removes unsafe html and keeps html comments.
-     * @dataProvider messagesProvider2
-     * @param $message string the message to be sanitized
+     * @dataProvider messagesProvider
+     * @param $message string the message to be rendered
      * @param $expected string the expected output
      */
     function test_messageSanitation($message, $expected) {
@@ -105,11 +104,11 @@ class WPML_MailRenderer_Test extends WPML_IntegrationTestCase {
             ->andReturn( $mail )
             ->andReturn( $mail2 );
 
-        $this->mailRenderer = new WPML_MailRenderer($this->mailServiceMock, ['json', 'html']);
+        $this->mailRenderer = new WPML_MailRenderer($this->mailServiceMock);
 
-        $mail1Act = $this->mailRenderer->render($this->id, 'raw');
+        $mail1Act = $this->mailRenderer->render($this->id, WPML_MailRenderer::FORMAT_RAW);
         $mail1ActAct= $this->get_string_between($mail1Act, 'Message: </span>', '<span ');
-        $mail2Act = $this->mailRenderer->render($this->id, 'html');
+        $mail2Act = $this->mailRenderer->render($this->id, WPML_MailRenderer::FORMAT_HTML);
         $mail2ActAct= $this->get_string_between($mail2Act, 'Message: </span>', '<span ');
         $this->assertEquals($expected[0], $mail1ActAct);
         $this->assertEquals($expected[1], $mail2ActAct);
@@ -124,7 +123,7 @@ class WPML_MailRenderer_Test extends WPML_IntegrationTestCase {
         return substr($string, $ini, $len);
     }
 
-    function messagesProvider2() {
+    function messagesProvider() {
         return [
             "plaintext" => [
                 "Hello World",

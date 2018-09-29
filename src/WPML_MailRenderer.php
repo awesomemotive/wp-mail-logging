@@ -62,18 +62,18 @@ class WPML_MailRenderer implements IHooks {
 
         $mailAppend = '';
         switch( $format ) {
-            case 'html':
-            case 'raw': {
+            case self::FORMAT_HTML:
+            case self::FORMAT_RAW: {
                 $mailAppend .= $this->render_mail( $mail->to_array(), $format );
                 break;
             }
-            case 'json': {
+            case self::FORMAT_JSON: {
                 if( stristr( str_replace(' ', '', $mail->get_headers()),  "Content-Type:text/html")) {
                     // Fallback to raw in case it is a html mail
                     $mailAppend .= sprintf("<span class='info'>%s</span>", __("Fallback to raw format because html is not convertible to json.", 'wp-mail-logging' ) );
-                    $mailAppend .= $this->render_mail( $mail->to_array(), 'raw' );
+                    $mailAppend .= $this->render_mail( $mail->to_array(), self::FORMAT_RAW );
                 } else {
-                    $mailAppend .= "<pre>" . json_encode( $this->render_mail( $mail->to_array(), 'json' ), JSON_PRETTY_PRINT)  . "</pre>";
+                    $mailAppend .= "<pre>" . json_encode( $this->render_mail( $mail->to_array(), self::FORMAT_JSON ), JSON_PRETTY_PRINT)  . "</pre>";
                 }
                 break;
             }
@@ -98,14 +98,14 @@ class WPML_MailRenderer implements IHooks {
 
             $title = "<span class=\"title\">{$this->getTranslation($column_name)}: </span>";
 
-            if ('raw' === $format || 'json' === $format) {
+            if (self::FORMAT_RAW === $format || self::FORMAT_JSON === $format) {
                 $column_renderer = (new EscapingColumnDecorator($this->columnManager->getColumnRenderer($column_name)));
                 if ($column_name !== WPML_ColumnManager::COLUMN_ERROR && WPML_ColumnManager::COLUMN_ATTACHMENTS) {
                     $column_format = ColumnFormat::FULL;
                 } else {
                     $column_format = ColumnFormat::SIMPLE;
                 }
-            } elseif ('html' === $format) {
+            } elseif (self::FORMAT_HTML === $format) {
                 $column_renderer = (new SanitizedColumnDecorator($this->columnManager->getColumnRenderer($column_name)));
                 if ($column_name === WPML_ColumnManager::COLUMN_HEADERS) {
                     $column_renderer = (new EscapingColumnDecorator($this->columnManager->getColumnRenderer($column_name)));
@@ -120,11 +120,11 @@ class WPML_MailRenderer implements IHooks {
             if (!in_array($column_name, $this->getIgnoredColumns())) {
                 $mailAppend .= $title . $content;
             }
-            if ('json' === $format) {
+            if (self::FORMAT_JSON === $format) {
                 $json[$column_name] = $content;
             }
         }
-        if('json' === $format) {
+        if(self::FORMAT_JSON === $format) {
             return $json;
         }
         return $mailAppend;
