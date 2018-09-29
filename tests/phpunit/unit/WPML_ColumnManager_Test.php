@@ -60,6 +60,7 @@ class WPML_ColumnManager_Test extends \PHPUnit_Framework_TestCase {
         $this->assertEquals('127.0.0.1', $actual);
     }
 
+    //TODO: need to test both time formats
     public function test_column_timestamp() {
         $actual = $this->columnManager->getColumnRenderer(WPML_ColumnManager::COLUMN_TIMESTAMP)->render($this->item, ColumnFormat::FULL);
         $this->assertEquals('2018-09-24 16:02:11', $actual);

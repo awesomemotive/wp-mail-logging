@@ -8,8 +8,7 @@ use No3x\WPML\Renderer\WPML_MailRenderer;
 use No3x\WPML\Tests\Helper\WPMailArrayBuilder;
 use No3x\WPML\WPML_MailExtractor;
 
-// TODO: after refactoring this should be a unittestcase
-class WPML_MailRenderer_Test extends WPML_IntegrationTestCase {
+class WPML_MailRenderer_Test extends \PHPUnit_Framework_TestCase {
 
     /** @var WPML_MailRenderer */
     private $mailRenderer;
