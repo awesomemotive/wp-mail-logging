@@ -9,7 +9,7 @@ cache:
 env:
     global:
         - WP_TESTS_DIR=/tmp/wordpress-tests-lib
-        - CC_TEST_REPORTER_ID=b915d4355ebcfbf7d5a2514dabf86958976d0ba62d72ee6f992335ef86497da5
+        - CC_TEST_REPORTER_ID=f6bbabaad85c1c0addfb740c367b7f8f23e7a581d2fda2ab6f091edb27e0a288
 
 matrix:
   include:
