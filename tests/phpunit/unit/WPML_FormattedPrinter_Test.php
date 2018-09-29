@@ -124,9 +124,9 @@ class WPML_FormattedPrinter_Test extends WPML_IntegrationTestCase {
         $this->formattedPrinter = new WPML_FormattedPrinter($this->mailServiceMock, ['json', 'html']);
 
         $mail1Act = $this->formattedPrinter->print_email($this->id, 'raw');
-        $mail1ActAct= $this->get_string_between($mail1Act, 'message: </span>', '<span ');
+        $mail1ActAct= $this->get_string_between($mail1Act, 'Message: </span>', '<span ');
         $mail2Act = $this->formattedPrinter->print_email($this->id, 'html');
-        $mail2ActAct= $this->get_string_between($mail2Act, 'message: </span>', '<span ');
+        $mail2ActAct= $this->get_string_between($mail2Act, 'Message: </span>', '<span ');
         $this->assertEquals($expected[0], $mail1ActAct);
         $this->assertEquals($expected[1], $mail2ActAct);
     }

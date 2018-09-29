@@ -5,7 +5,7 @@ namespace No3x\WPML;
 use No3x\WPML\Model\WPML_Mail as Mail;
 use No3x\WPML\Printer\ColumnFormat;
 use No3x\WPML\Printer\SanitizedColumnDecorator;
-use No3x\WPML\Printer\WPML_ColumnRenderer;
+use No3x\WPML\Printer\WPML_ColumnManager;
 
 // Exit if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) exit;
@@ -27,8 +27,8 @@ class WPML_Email_Log_List extends \WP_List_Table implements IHooks {
     const NONCE_LIST_TABLE = 'wpml-list_table';
     /** @var WPML_Email_Resender $emailResender */
     private $emailResender;
-    /** @var WPML_ColumnRenderer $columnRenderer */
-    private $columnRenderer;
+    /** @var WPML_ColumnManager $columnManager */
+    private $columnManager;
 
     /**
      * Initializes the List Table
@@ -37,7 +37,7 @@ class WPML_Email_Log_List extends \WP_List_Table implements IHooks {
      */
     function __construct( $emailResender ) {
         $this->emailResender = $emailResender;
-        $this->columnRenderer = new WPML_ColumnRenderer();
+        $this->columnManager = new WPML_ColumnManager();
     }
 
     function addActionsAndFilters() {
@@ -70,30 +70,15 @@ class WPML_Email_Log_List extends \WP_List_Table implements IHooks {
      * @see WP_List_Table::get_columns()
      */
     function get_columns() {
-        $columns = array(
-            'cb'				=> '<input type="checkbox" />',
-            'mail_id'			=> __( 'ID', 'wp-mail-logging' ),
-            'timestamp'			=> __( 'Time', 'wp-mail-logging' ),
-            'receiver'			=> __( 'Receiver', 'wp-mail-logging' ),
-            'subject'			=> __( 'Subject', 'wp-mail-logging' ),
-            'message'			=> __( 'Message', 'wp-mail-logging' ),
-            'headers'			=> __( 'Headers', 'wp-mail-logging' ),
-            'attachments'		=> __( 'Attachments', 'wp-mail-logging' ),
-            'error'		        => __( 'Error', 'wp-mail-logging' ),
-            'plugin_version'	=> __( 'Plugin Version', 'wp-mail-logging' ),
-        );
+
+        $columns = array_merge(['cb' => '<input type="checkbox" />'], $this->columnManager->getColumns());
 
         /* @var $instance WPML_Plugin */
         $instance = WPML_Init::getInstance()->getService( 'plugin' );
 
         $switch = $instance->getSetting('display-host', false );
-        if( true == $switch ) {
-            $posAfterTimestamp = array_search('timestamp', array_keys($columns) ) + 1;
-            $columns = array_merge(
-                array_slice( $columns, 0, $posAfterTimestamp),
-                [ 'host' =>  __( 'Host', 'wp-mail-logging' ) ],
-                array_slice( $columns, $posAfterTimestamp )
-            );
+        if( false == $switch ) {
+            unset($columns['host']);
         }
 
         return $columns;
@@ -180,7 +165,7 @@ class WPML_Email_Log_List extends \WP_List_Table implements IHooks {
      * @return string The cell content
      */
     function column_default( $item, $column_name ) {
-        return ( new SanitizedColumnDecorator($this->columnRenderer->getColumn($column_name)))->render($item, ColumnFormat::FULL);
+        return ( new SanitizedColumnDecorator($this->columnManager->getColumnRenderer($column_name)))->render($item, ColumnFormat::FULL);
     }
 
 

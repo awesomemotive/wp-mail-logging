@@ -6,22 +6,16 @@ use No3x\WPML\Model\WPML_Mail as Mail;
 use No3x\WPML\Printer\ColumnFormat;
 use No3x\WPML\Printer\EscapingColumnDecorator;
 use No3x\WPML\Printer\SanitizedColumnDecorator;
-use No3x\WPML\Printer\WPML_ColumnRenderer;
+use No3x\WPML\Printer\WPML_ColumnManager;
 
 class WPML_FormattedPrinter implements IHooks {
 
-    /**
-     * @var array
-     */
+    /** @var array */
     private $supported_formats;
-    /**
-     * @var IMailService
-     */
+    /** @var IMailService */
     private $mailService;
-    /** @var WPML_ColumnRenderer */
-    private $columnRenderer;
-    /** @var WPML_MessageSanitizer $messageSanitizer */
-    private $messageSanitizer;
+    /** @var WPML_ColumnManager */
+    private $columnManager;
 
     /**
      * WPML_FormattedPrinter constructor.
@@ -31,8 +25,7 @@ class WPML_FormattedPrinter implements IHooks {
     public function __construct(IMailService $mailService, $supported_formats = array()) {
         $this->mailService = $mailService;
         $this->supported_formats = $supported_formats;
-        $this->columnRenderer = new WPML_ColumnRenderer();
-        $this->messageSanitizer = new WPML_MessageSanitizer();
+        $this->columnManager = new WPML_ColumnManager();
     }
 
     function addActionsAndFilters() {
@@ -96,7 +89,6 @@ class WPML_FormattedPrinter implements IHooks {
      * @return string The mail as html
      */
     function render_mail( $item, $format ) {
-        $ignoreColumns = ['plugin_version', 'mail_id'];
         $mailAppend = '';
         foreach ($item as $column_name => $value) {
             $content = '';
@@ -104,23 +96,25 @@ class WPML_FormattedPrinter implements IHooks {
             $title = "<span class=\"title\">{$this->getTranslation($column_name)}: </span>";
 
             if ('raw' === $format || 'json' === $format) {
-                $column_renderer = (new EscapingColumnDecorator($this->columnRenderer->getColumn($column_name)));
-                if ($column_name !== 'error' && $column_name !== 'attachments') {
+                $column_renderer = (new EscapingColumnDecorator($this->columnManager->getColumnRenderer($column_name)));
+                if ($column_name !== WPML_ColumnManager::COLUMN_ERROR && WPML_ColumnManager::COLUMN_ATTACHMENTS) {
                     $column_format = ColumnFormat::FULL;
                 } else {
                     $column_format = ColumnFormat::SIMPLE;
                 }
             } elseif ('html' === $format) {
-                $column_renderer = (new SanitizedColumnDecorator($this->columnRenderer->getColumn($column_name)));
-                if ($column_name === 'headers') {
-                    $column_renderer = (new EscapingColumnDecorator($this->columnRenderer->getColumn($column_name)));
+                $column_renderer = (new SanitizedColumnDecorator($this->columnManager->getColumnRenderer($column_name)));
+                if ($column_name === WPML_ColumnManager::COLUMN_HEADERS) {
+                    $column_renderer = (new EscapingColumnDecorator($this->columnManager->getColumnRenderer($column_name)));
                 } else {
                     $column_format = ColumnFormat::FULL;
                 }
             }
+            if( isset($column_renderer) && isset($column_format) ) {
+                $content = $column_renderer->render($item, $column_format);
+            }
 
-            $content = $column_renderer->render($item, $column_format);
-            if (!in_array($column_name, $ignoreColumns)) {
+            if (!in_array($column_name, $this->getIgnoredColumns())) {
                 $mailAppend .= $title . $content;
             }
             if ('json' === $format) {
@@ -134,11 +128,17 @@ class WPML_FormattedPrinter implements IHooks {
     }
 
     private function getTranslation($column_name) {
-        //TODO
-        return $column_name;
+        return $this->columnManager->getTranslationForColumn($column_name);
     }
 
-    private function sanitize_text($mailAppend) {
-        return $this->messageSanitizer->sanitize($mailAppend);
+    /**
+     * @return mixed
+     */
+    private function getIgnoredColumns() {
+        return [
+            WPML_ColumnManager::COLUMN_MAIL_ID,
+            WPML_ColumnManager::COLUMN_PLUGIN_VERSION
+        ];
     }
+
 }
