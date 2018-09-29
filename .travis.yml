@@ -9,6 +9,7 @@ cache:
 env:
     global:
         - WP_TESTS_DIR=/tmp/wordpress-tests-lib
+        - CC_TEST_REPORTER_ID=b915d4355ebcfbf7d5a2514dabf86958976d0ba62d72ee6f992335ef86497da5
 
 matrix:
   include:
@@ -43,6 +44,10 @@ before_script:
       else
         echo "xdebug.ini does not exist"
       fi
+    else
+      curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+      chmod +x ./cc-test-reporter
+      ./cc-test-reporter before-build
     fi
   - composer install
   - |
@@ -60,6 +65,7 @@ script:
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
+  - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
 
 notifications:
   email:
