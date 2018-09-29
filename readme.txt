@@ -58,6 +58,11 @@ The logged email has been sent by WordPress but please note this does NOT mean i
 
 == Changelog ==
 
+= 1.9.0 =
+- Tweak: error handling
+- Tweak: rendering for all formats improved
+- Tweak: dropped support to add custom columns and renderer
+
 = 1.8.5, September 13, 2018 =
 - New: added privacy integration (erasure, export, policy content suggestion)
 - Fix: typo in readme
