@@ -33,9 +33,14 @@ jQuery(function ($) {
                 'ajax_nonce': wpml_modal.ajax_nonce,
                 'id': wpml.modal.id,
                 'format': wpml.modal.selectedFormat
-            }, function(response) {
-                wpml.modal.set(response);
-            });
+            }, wpml.modal.ajaxResponse);
+        },
+        ajaxResponse: function( response_data ) {
+            if (response_data.success) {
+                wpml.modal.set(response_data.data);
+            } else {
+                wpml.modal.set("Error (" + response_data.data.code + "): '" + response_data.data.message + "'");
+            }
         }
     };
 

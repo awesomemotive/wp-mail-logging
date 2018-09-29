@@ -14,7 +14,6 @@ class ErrorColumn extends GenericColumn {
 
     /**
      * @inheritdoc
-     * @throws Exception\ColumnDoesntExistException
      */
     public function render(array $mailArray, $format) {
         if($format == ColumnFormat::SIMPLE) {

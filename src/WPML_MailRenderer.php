@@ -36,10 +36,15 @@ class WPML_MailRenderer implements IHooks {
     }
 
     public function ajax_wpml_email_render() {
-        check_ajax_referer( 'wpml-modal-show', 'ajax_nonce', true );
+        $validNonce = check_ajax_referer( 'wpml-modal-show', 'ajax_nonce', false );
 
-        if( ! isset( $_POST['id'] ) )
-            wp_die( "huh?" );
+        if( !$validNonce) {
+            wp_send_json_error(['code' => -1, 'message' =>  'Issue with nonce.']);
+        }
+
+        if( !isset( $_POST['id'] ) ) {
+            wp_send_json_error(['code' => -2, 'message' =>  'No ID passed to render.']);
+        }
         $id = intval( $_POST['id'] );
 
         $format_requested = isset( $_POST['format'] ) ? $_POST['format'] : 'html';
@@ -48,13 +53,22 @@ class WPML_MailRenderer implements IHooks {
             $format_requested = WPML_Utils::sanitize_expected_value($format_requested, $this->supported_formats, 'html');
         }
 
-        echo $this->render($id, $format_requested);
-        wp_die(); // this is required to terminate immediately and return a proper response
+        try {
+            $rendered = $this->render($id, $format_requested);
+            wp_send_json_success($rendered);
+        } catch (\Exception $e) {
+            if( $e->getMessage() == "Unknown format.") {
+                wp_send_json_error(['code' => -3, 'message' =>  $e->getMessage()]);
+            }
+            wp_send_json_error(['code' => -4, 'message' =>  $e->getMessage()]);
+        }
+
     }
 
     /**
      * Ajax function to retrieve rendered mail in certain format.
      * @since 1.6.0
+     * @throws \Exception
      */
     public function render($id, $format) {
         /** @var Mail $mail */
@@ -90,12 +104,17 @@ class WPML_MailRenderer implements IHooks {
      * @param array $item The current item.
      * @param $format
      * @return string The mail as html
+     * @throws \Exception
      */
     function render_mail( $item, $format ) {
+
+        if(!in_array($format, $this->supported_formats)) {
+            throw new \Exception("Unknown format.");
+        }
+
         $mailAppend = '';
         foreach ($item as $column_name => $value) {
             $content = '';
-
             $title = "<span class=\"title\">{$this->getTranslation($column_name)}: </span>";
 
             if (self::FORMAT_RAW === $format || self::FORMAT_JSON === $format) {
@@ -113,6 +132,8 @@ class WPML_MailRenderer implements IHooks {
                     $column_format = ColumnFormat::FULL;
                 }
             }
+
+            /** @var IColumn $column_renderer */
             if( isset($column_renderer) && isset($column_format) ) {
                 $content = $column_renderer->render($item, $column_format);
             }

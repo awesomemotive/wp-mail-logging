@@ -14,9 +14,7 @@ class EscapingColumnDecorator implements IColumn {
     }
 
     /**
-     * @param array $mailArray
-     * @param $format
-     * @return mixed
+     * @inheritdoc
      */
     public function render(array $mailArray, $format) {
         $delegated = $this->column->render($mailArray, $format);
