@@ -4,9 +4,8 @@ namespace No3x\WPML\Tests;
 
 use Mockery;
 use No3x\WPML\Model\WPML_Mail;
+use No3x\WPML\Renderer\WPML_MailRenderer;
 use No3x\WPML\Tests\Helper\WPMailArrayBuilder;
-use No3x\WPML\Tests\Helper\WPML_IntegrationTestCase;
-use No3x\WPML\WPML_MailRenderer;
 use No3x\WPML\WPML_MailExtractor;
 
 // TODO: after refactoring this should be a unittestcase

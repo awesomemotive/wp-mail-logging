@@ -22,6 +22,7 @@
 namespace No3x\WPML;
 
 use No3x\WPML\Model\DefaultMailService;
+use No3x\WPML\Renderer\WPML_MailRenderer;
 use No3x\WPML\Settings\WPML_Redux_Framework_config;
 
 // Exit if accessed directly.

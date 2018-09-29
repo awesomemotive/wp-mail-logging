@@ -1,13 +1,13 @@
 <?php
-namespace No3x\WPML;
+namespace No3x\WPML\Renderer;
 
+use No3x\WPML\IHooks;
 use No3x\WPML\Model\IMailService;
 use No3x\WPML\Model\WPML_Mail as Mail;
 use No3x\WPML\Renderer\Column\ColumnFormat;
 use No3x\WPML\Renderer\Column\EscapingColumnDecorator;
 use No3x\WPML\Renderer\Column\IColumn;
 use No3x\WPML\Renderer\Column\SanitizedColumnDecorator;
-use No3x\WPML\Renderer\WPML_ColumnManager;
 
 class WPML_MailRenderer implements IHooks {
 
