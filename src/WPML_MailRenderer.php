@@ -10,6 +10,10 @@ use No3x\WPML\Printer\WPML_ColumnManager;
 
 class WPML_MailRenderer implements IHooks {
 
+    const FORMAT_RAW = 'raw';
+    const FORMAT_HTML = 'html';
+    const FORMAT_JSON = 'json';
+
     /** @var array */
     private $supported_formats;
     /** @var IMailService */
@@ -20,11 +24,10 @@ class WPML_MailRenderer implements IHooks {
     /**
      * WPML_MailRenderer constructor.
      * @param IMailService $mailService
-     * @param array $supported_formats
      */
-    public function __construct(IMailService $mailService, $supported_formats = array()) {
+    public function __construct(IMailService $mailService) {
         $this->mailService = $mailService;
-        $this->supported_formats = $supported_formats;
+        $this->supported_formats = [self::FORMAT_RAW, self::FORMAT_HTML, self::FORMAT_JSON];
         $this->columnManager = new WPML_ColumnManager();
     }
 
@@ -139,6 +142,10 @@ class WPML_MailRenderer implements IHooks {
             WPML_ColumnManager::COLUMN_MAIL_ID,
             WPML_ColumnManager::COLUMN_PLUGIN_VERSION
         ];
+    }
+
+    public function getSupportedFormats() {
+        return $this->supported_formats;
     }
 
 }

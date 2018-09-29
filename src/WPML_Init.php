@@ -71,7 +71,7 @@ class WPML_Init {
             return new WPML_Plugin($c['supported-mail-renderer-formats']);
         };
         $this->container['plugin-meta'] = function ($c) {
-            /* @var $plugin WPML_Plugin  */
+            /* @var $plugin WPML_Plugin */
             $plugin = $c['plugin'];
             return array(
                 'path' => realpath( plugin_dir_path( __FILE__ ) ) . DIRECTORY_SEPARATOR,
@@ -90,7 +90,9 @@ class WPML_Init {
             );
         };
         $this->container['supported-mail-renderer-formats'] = function ($c) {
-            return ['html', 'raw', 'json'];
+            /** @var WPML_MailRenderer $mailRenderer */
+            $mailRenderer = $c['mailRenderer'];
+            return $mailRenderer->getSupportedFormats();
         };
         $this->container['emailLogList'] = function ($c) {
             return new WPML_Email_Log_List( $c['emailResender'] );
@@ -111,7 +113,7 @@ class WPML_Init {
             return new WPML_PrivacyController($c['plugin-meta']);
         };
         $this->container['mailRenderer'] = function ($c) {
-            return new WPML_MailRenderer( new DefaultMailService(), $c['supported-mail-renderer-formats'] );
+            return new WPML_MailRenderer( new DefaultMailService() );
         };
         $this->container['api'] = function ($c) {
             // Uncomment for an API Example
