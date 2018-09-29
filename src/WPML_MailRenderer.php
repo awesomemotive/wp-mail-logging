@@ -100,7 +100,7 @@ class WPML_MailRenderer implements IHooks {
 
             if (self::FORMAT_RAW === $format || self::FORMAT_JSON === $format) {
                 $column_renderer = (new EscapingColumnDecorator($this->columnManager->getColumnRenderer($column_name)));
-                if ($column_name !== WPML_ColumnManager::COLUMN_ERROR && WPML_ColumnManager::COLUMN_ATTACHMENTS) {
+                if ($column_name !== WPML_ColumnManager::COLUMN_ERROR && $column_name !== WPML_ColumnManager::COLUMN_ATTACHMENTS) {
                     $column_format = ColumnFormat::FULL;
                 } else {
                     $column_format = ColumnFormat::SIMPLE;
