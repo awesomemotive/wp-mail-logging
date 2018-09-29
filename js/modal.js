@@ -29,13 +29,12 @@ jQuery(function ($) {
         setSelectedFormat: function( newFormat ) {
             wpml.modal.selectedFormat = newFormat;
             jQuery.post(ajaxurl, {
-                'action': 'wpml_email_get',
+                'action': 'wpml_email_render',
                 'ajax_nonce': wpml_modal.ajax_nonce,
                 'id': wpml.modal.id,
                 'format': wpml.modal.selectedFormat
             }, function(response) {
-                emailMessage = response;
-                wpml.modal.set(emailMessage);
+                wpml.modal.set(response);
             });
         }
     };

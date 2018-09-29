@@ -32,10 +32,10 @@ class WPML_MailRenderer implements IHooks {
     }
 
     function addActionsAndFilters() {
-        add_action( 'wp_ajax_wpml_email_get', [$this, 'ajax_wpml_email_get'] );
+        add_action( 'wp_ajax_wpml_email_render', [$this, 'ajax_wpml_email_render'] );
     }
 
-    public function ajax_wpml_email_get() {
+    public function ajax_wpml_email_render() {
         check_ajax_referer( 'wpml-modal-show', 'ajax_nonce', true );
 
         if( ! isset( $_POST['id'] ) )
