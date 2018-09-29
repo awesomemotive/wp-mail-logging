@@ -10,7 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
  * @author No3x
  * @since 1.4
  */
-class WPML_LogRotation {
+class WPML_LogRotation implements IHooks {
 
     const WPML_LOGROTATION_SCHEDULE_HOOK = 'wpml_log_rotation';
     const WPML_LOGROTATION_SCHEDULE_ACTION = 'LogRotationSchedule';

@@ -4,8 +4,12 @@
     "type": "wordpress-plugin",
     "keywords": ["mail", "email", "log", "logging", "debug", "list", "store", "collect", "view"],
     "homepage": "https://github.com/No3x/wp-mail-logging",
+    "require": {
+        "php": ">=5.4"
+    },
     "require-dev": {
-        "bocharsky-bw/arrayzy": "v0.1.1"
+        "bocharsky-bw/arrayzy": "v0.1.1",
+        "mockery/mockery": "^0.9.9"
     },
     "license": "GPL-2.0",
     "authors": [

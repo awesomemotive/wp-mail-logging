@@ -7,16 +7,19 @@ use No3x\WPML\Model\WPML_Mail as Mail;
 // Exit if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-class WPML_Plugin extends WPML_LifeCycle {
-
-    protected $emailLogList;
+class WPML_Plugin extends WPML_LifeCycle implements IHooks {
 
     const HOOK_LOGGING_MAIL = 'log_email';
     const HOOK_LOGGING_MAIL_PRIORITY = PHP_INT_MAX;
-    const HOOK_LOGGING_COLUMNS = 'wpml_hook_mail_columns';
-    const HOOK_LOGGING_COLUMNS_RENDER = 'wpml_hook_mail_columns_render';
     const HOOK_LOGGING_SUPPORTED_FORMATS = 'wpml_hook_supported_formats';
-    const HOOK_LOGGING_FORMAT_CONTENT = 'wpml_hook_format_content';
+
+    /**
+     * WPML_Plugin constructor.
+     * @param $supportedMailRendererFormats
+     */
+    public function __construct($supportedMailRendererFormats) {
+        $this->supportedMailRendererFormats = $supportedMailRendererFormats;
+    }
 
     public static function getTablename( $name ) {
         global $wpdb;

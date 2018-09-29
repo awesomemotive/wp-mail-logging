@@ -21,6 +21,8 @@
 
 namespace No3x\WPML;
 
+use No3x\WPML\Model\DefaultMailService;
+use No3x\WPML\Renderer\WPML_MailRenderer;
 use No3x\WPML\Settings\WPML_Redux_Framework_config;
 
 // Exit if accessed directly.
@@ -67,10 +69,10 @@ class WPML_Init {
     public function init( $file ) {
 
         $this->container['plugin'] = function ($c) {
-            return new WPML_Plugin();
+            return new WPML_Plugin($c['supported-mail-renderer-formats']);
         };
         $this->container['plugin-meta'] = function ($c) {
-            /* @var $plugin WPML_Plugin  */
+            /* @var $plugin WPML_Plugin */
             $plugin = $c['plugin'];
             return array(
                 'path' => realpath( plugin_dir_path( __FILE__ ) ) . DIRECTORY_SEPARATOR,
@@ -88,15 +90,13 @@ class WPML_Init {
                 'license' => $plugin->getPluginHeaderValue( 'License' ),
             );
         };
-        $this->container['emailLogList-supported-formats'] = function ($c) {
-            return array(
-                'html',
-                'raw',
-                'json'
-            );
+        $this->container['supported-mail-renderer-formats'] = function ($c) {
+            /** @var WPML_MailRenderer $mailRenderer */
+            $mailRenderer = $c['mailRenderer'];
+            return $mailRenderer->getSupportedFormats();
         };
         $this->container['emailLogList'] = function ($c) {
-            return new WPML_Email_Log_List( $c['emailLogList-supported-formats'], $c['emailResender'] );
+            return new WPML_Email_Log_List( $c['emailResender'] );
         };
         $this->container['emailResender'] = function ($c) {
             return new WPML_Email_Resender( $c['emailDispatcher'] );
@@ -112,6 +112,9 @@ class WPML_Init {
         };
         $this->container['privacyController'] = function ($c) {
             return new WPML_PrivacyController($c['plugin-meta']);
+        };
+        $this->container['mailRenderer'] = function ($c) {
+            return new WPML_MailRenderer( new DefaultMailService() );
         };
         $this->container['api'] = function ($c) {
             // Uncomment for an API Example

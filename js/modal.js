@@ -29,14 +29,18 @@ jQuery(function ($) {
         setSelectedFormat: function( newFormat ) {
             wpml.modal.selectedFormat = newFormat;
             jQuery.post(ajaxurl, {
-                'action': 'wpml_email_get',
+                'action': 'wpml_email_render',
                 'ajax_nonce': wpml_modal.ajax_nonce,
                 'id': wpml.modal.id,
                 'format': wpml.modal.selectedFormat
-            }, function(response) {
-                emailMessage = response;
-                wpml.modal.set(emailMessage);
-            });
+            }, wpml.modal.ajaxResponse);
+        },
+        ajaxResponse: function( response_data ) {
+            if (response_data.success) {
+                wpml.modal.set(response_data.data);
+            } else {
+                wpml.modal.set("Error (" + response_data.data.code + "): '" + response_data.data.message + "'");
+            }
         }
     };
 
