@@ -68,7 +68,7 @@ class WPML_Init {
     public function init( $file ) {
 
         $this->container['plugin'] = function ($c) {
-            return new WPML_Plugin($c['supported-mail-printer-formats']);
+            return new WPML_Plugin($c['supported-mail-renderer-formats']);
         };
         $this->container['plugin-meta'] = function ($c) {
             /* @var $plugin WPML_Plugin  */
@@ -89,7 +89,7 @@ class WPML_Init {
                 'license' => $plugin->getPluginHeaderValue( 'License' ),
             );
         };
-        $this->container['supported-mail-printer-formats'] = function ($c) {
+        $this->container['supported-mail-renderer-formats'] = function ($c) {
             return ['html', 'raw', 'json'];
         };
         $this->container['emailLogList'] = function ($c) {
@@ -110,8 +110,8 @@ class WPML_Init {
         $this->container['privacyController'] = function ($c) {
             return new WPML_PrivacyController($c['plugin-meta']);
         };
-        $this->container['formattedPrinter'] = function ($c) {
-            return new WPML_FormattedPrinter( new DefaultMailService(), $c['supported-mail-printer-formats'] );
+        $this->container['mailRenderer'] = function ($c) {
+            return new WPML_MailRenderer( new DefaultMailService(), $c['supported-mail-renderer-formats'] );
         };
         $this->container['api'] = function ($c) {
             // Uncomment for an API Example

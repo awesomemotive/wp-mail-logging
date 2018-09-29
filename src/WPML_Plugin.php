@@ -15,10 +15,10 @@ class WPML_Plugin extends WPML_LifeCycle implements IHooks {
 
     /**
      * WPML_Plugin constructor.
-     * @param $supportedMailPrinterFormats
+     * @param $supportedMailRendererFormats
      */
-    public function __construct($supportedMailPrinterFormats) {
-        $this->supportedMailPrinterFormats = $supportedMailPrinterFormats;
+    public function __construct($supportedMailRendererFormats) {
+        $this->supportedMailRendererFormats = $supportedMailRendererFormats;
     }
 
     public static function getTablename( $name ) {

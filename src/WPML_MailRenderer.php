@@ -8,7 +8,7 @@ use No3x\WPML\Printer\EscapingColumnDecorator;
 use No3x\WPML\Printer\SanitizedColumnDecorator;
 use No3x\WPML\Printer\WPML_ColumnManager;
 
-class WPML_FormattedPrinter implements IHooks {
+class WPML_MailRenderer implements IHooks {
 
     /** @var array */
     private $supported_formats;
@@ -18,7 +18,7 @@ class WPML_FormattedPrinter implements IHooks {
     private $columnManager;
 
     /**
-     * WPML_FormattedPrinter constructor.
+     * WPML_MailRenderer constructor.
      * @param IMailService $mailService
      * @param array $supported_formats
      */
@@ -45,7 +45,7 @@ class WPML_FormattedPrinter implements IHooks {
             $format_requested = WPML_Utils::sanitize_expected_value($format_requested, $this->supported_formats, 'html');
         }
 
-        echo $this->print_email($id, $format_requested);
+        echo $this->render($id, $format_requested);
         wp_die(); // this is required to terminate immediately and return a proper response
     }
 
@@ -53,7 +53,7 @@ class WPML_FormattedPrinter implements IHooks {
      * Ajax function to retrieve rendered mail in certain format.
      * @since 1.6.0
      */
-    public function print_email($id, $format) {
+    public function render($id, $format) {
         /** @var Mail $mail */
         $mail = $this->mailService->find_one( $id );
 

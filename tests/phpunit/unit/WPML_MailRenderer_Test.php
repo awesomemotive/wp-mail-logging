@@ -6,14 +6,14 @@ use Mockery;
 use No3x\WPML\Model\WPML_Mail;
 use No3x\WPML\Tests\Helper\WPMailArrayBuilder;
 use No3x\WPML\Tests\Helper\WPML_IntegrationTestCase;
-use No3x\WPML\WPML_FormattedPrinter;
+use No3x\WPML\WPML_MailRenderer;
 use No3x\WPML\WPML_MailExtractor;
 
 // TODO: after refactoring this should be a unittestcase
-class WPML_FormattedPrinter_Test extends WPML_IntegrationTestCase {
+class WPML_MailRenderer_Test extends WPML_IntegrationTestCase {
 
-    /** @var WPML_FormattedPrinter */
-    private $formattedPrinter;
+    /** @var WPML_MailRenderer */
+    private $mailRenderer;
 
     /** @var $mailServiceMock \No3x\WPML\Model\IMailService|\Mockery\MockInterface */
     private $mailServiceMock;
@@ -36,21 +36,10 @@ class WPML_FormattedPrinter_Test extends WPML_IntegrationTestCase {
             ->with( $this->id )
             ->andReturn( $mail );
 
-        $this->formattedPrinter = new WPML_FormattedPrinter($this->mailServiceMock, ['json', 'html']);
+        $this->mailRenderer = new WPML_MailRenderer($this->mailServiceMock, ['json', 'html']);
     }
-
-    /**
-     * @dataProvider messagesProvider
-     * @param $format string
-     * @param $expected string the expected output
-     */
-    public function test_json($format, $expected) {
-        $this->assertEquals($expected, $this->formattedPrinter->print_email($this->id, $format));
-        $this->mailServiceMock->mockery_verify();
-    }
-
-    function messagesProvider() {
-        $json = '<pre>{
+    public function test_print_mail_json() {
+        $expected = '<pre>{
     "mail_id": "2",
     "timestamp": "2018-09-24 16:02:11",
     "host": "127.0.0.1",
@@ -63,28 +52,23 @@ class WPML_FormattedPrinter_Test extends WPML_IntegrationTestCase {
     "plugin_version": "1.8.5"
 }</pre>';
 
-        return [
-            "json" => [
-                "json", 
-                $json           
-            ]
-        ];
+        $this->assertEquals($expected, $this->mailRenderer->render($this->id, 'json'));
+        $this->mailServiceMock->mockery_verify();
     }
 
-    public function test_render_mail() {
+    public function test_print_mail_raw() {
         $expected = '<span class="title">Time: </span>2018-09-24 16:02:11<span class="title">Receiver: </span>example@exmple.com<span class="title">Subject: </span>Test<span class="title">Message: </span>&lt;b&gt;Bold&lt;/b&gt;<span class="title">Headers: </span>From: &quot;admin&quot; ,\nCc: example2@example.com,\nReply-To: admin <span class="title">Attachments: </span><span class="title">Error: </span><i class="fa fa-exclamation-circle" title="a"></i>';
-        $actual = $this->formattedPrinter->print_email($this->id, 'raw');
+        $actual = $this->mailRenderer->render($this->id, 'raw');
         $this->assertContains('2018-09-24 16:02:11', $actual, "The timestamp should be in the rendered mail");
         $this->assertContains('Test', $actual, "The subject should be in the rendered mail");
         $this->assertContains('&lt;b&gt;Bold&lt;/b&gt;', $actual, "The rendered mail must have html tags (<b>) escaped");
         $this->assertNotContains('<script>alert(', $actual, "The rendered mail must strip out evil tags to protect against xss");
         $this->assertNotContains('<i class="fa fa-exclamation-circle"', $actual, "The rendered mail has no icons set because it show the error raw");
-
     }
 
-    public function test_render_mail_html() {
+    public function test_print_mail_html() {
         $expected = '<span class="title">Time: </span>2018-09-24 16:02:11<span class="title">Receiver: </span>example@exmple.com<span class="title">Subject: </span>Test<span class="title">Message: </span><b>Bold</b><span class="title">Headers: </span>From: "admin" ,\nCc: example2@example.com,\nReply-To: admin <span class="title">Attachments: </span><span class="title">Error: </span><i class="fa fa-exclamation-circle" title="a"></i>';
-        $actual = $this->formattedPrinter->print_email($this->id, 'html');
+        $actual = $this->mailRenderer->render($this->id, 'html');
         $this->assertContains('2018-09-24 16:02:11', $actual, "The timestamp should be in the rendered mail");
         $this->assertContains('Test', $actual, "The subject should be in the rendered mail");
         $this->assertContains('<b>Bold</b>', $actual, "The rendered mail must have html tags (<b>) not escaped");
@@ -121,11 +105,11 @@ class WPML_FormattedPrinter_Test extends WPML_IntegrationTestCase {
             ->andReturn( $mail )
             ->andReturn( $mail2 );
 
-        $this->formattedPrinter = new WPML_FormattedPrinter($this->mailServiceMock, ['json', 'html']);
+        $this->mailRenderer = new WPML_MailRenderer($this->mailServiceMock, ['json', 'html']);
 
-        $mail1Act = $this->formattedPrinter->print_email($this->id, 'raw');
+        $mail1Act = $this->mailRenderer->render($this->id, 'raw');
         $mail1ActAct= $this->get_string_between($mail1Act, 'Message: </span>', '<span ');
-        $mail2Act = $this->formattedPrinter->print_email($this->id, 'html');
+        $mail2Act = $this->mailRenderer->render($this->id, 'html');
         $mail2ActAct= $this->get_string_between($mail2Act, 'Message: </span>', '<span ');
         $this->assertEquals($expected[0], $mail1ActAct);
         $this->assertEquals($expected[1], $mail2ActAct);

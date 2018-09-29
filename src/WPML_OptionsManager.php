@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 
 class WPML_OptionsManager {
 
-    protected $supportedMailPrinterFormats;
+    protected $supportedMailRendererFormats;
 
     /**
      * Is used to retrive a settings value
@@ -501,7 +501,7 @@ class WPML_OptionsManager {
                             </div>
                             <div id="wp-mail-logging-modal-content-header-format-switch">
                                 <?php
-                                foreach( $this->supportedMailPrinterFormats as $key => $format ) {
+                                foreach( $this->supportedMailRendererFormats as $key => $format ) {
                                     $checked = checked($format, $wpml_settings['preferred-mail-format'], false);
                                     echo ' <input type="radio" name="format" ' . $checked . ' id="' . esc_attr( $format ) . '"> ' . esc_html( $format ) . '</input> ';
                                 }
