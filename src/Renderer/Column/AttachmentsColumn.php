@@ -1,6 +1,6 @@
 <?php
 
-namespace No3x\WPML\Printer;
+namespace No3x\WPML\Renderer\Column;
 
 
 use No3x\WPML\WPML_Utils;

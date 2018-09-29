@@ -1,12 +1,6 @@
 <?php
-/**
- * Created by IntelliJ IDEA.
- * User: noex_
- * Date: 28.09.2018
- * Time: 23:06
- */
 
-namespace No3x\WPML\Printer;
+namespace No3x\WPML\Renderer\Column;
 
 
 use No3x\WPML\WPML_MessageSanitizer;

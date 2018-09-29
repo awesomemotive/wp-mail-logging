@@ -1,8 +1,8 @@
 <?php
 
-namespace No3x\WPML\Printer;
+namespace No3x\WPML\Renderer\Column;
 
-use No3x\WPML\Printer\Exception\ColumnDoesntExistException;
+use No3x\WPML\Renderer\Exception\ColumnDoesntExistException;
 
 class GenericColumn implements IColumn {
     protected $column_name;

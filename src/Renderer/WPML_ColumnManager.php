@@ -1,6 +1,12 @@
 <?php
 
-namespace No3x\WPML\Printer;
+namespace No3x\WPML\Renderer;
+
+use No3x\WPML\Renderer\Column\AttachmentsColumn;
+use No3x\WPML\Renderer\Column\ErrorColumn;
+use No3x\WPML\Renderer\Column\GenericColumn;
+use No3x\WPML\Renderer\Column\IColumn;
+use No3x\WPML\Renderer\Column\TimestampColumn;
 
 class WPML_ColumnManager {
 

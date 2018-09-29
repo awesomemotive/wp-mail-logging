@@ -3,10 +3,11 @@ namespace No3x\WPML;
 
 use No3x\WPML\Model\IMailService;
 use No3x\WPML\Model\WPML_Mail as Mail;
-use No3x\WPML\Printer\ColumnFormat;
-use No3x\WPML\Printer\EscapingColumnDecorator;
-use No3x\WPML\Printer\SanitizedColumnDecorator;
-use No3x\WPML\Printer\WPML_ColumnManager;
+use No3x\WPML\Renderer\Column\ColumnFormat;
+use No3x\WPML\Renderer\Column\EscapingColumnDecorator;
+use No3x\WPML\Renderer\Column\IColumn;
+use No3x\WPML\Renderer\Column\SanitizedColumnDecorator;
+use No3x\WPML\Renderer\WPML_ColumnManager;
 
 class WPML_MailRenderer implements IHooks {
 

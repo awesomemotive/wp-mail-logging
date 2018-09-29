@@ -3,9 +3,9 @@
 namespace No3x\WPML;
 
 use No3x\WPML\Model\WPML_Mail as Mail;
-use No3x\WPML\Printer\ColumnFormat;
-use No3x\WPML\Printer\SanitizedColumnDecorator;
-use No3x\WPML\Printer\WPML_ColumnManager;
+use No3x\WPML\Renderer\Column\ColumnFormat;
+use No3x\WPML\Renderer\Column\SanitizedColumnDecorator;
+use No3x\WPML\Renderer\WPML_ColumnManager;
 
 // Exit if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) exit;

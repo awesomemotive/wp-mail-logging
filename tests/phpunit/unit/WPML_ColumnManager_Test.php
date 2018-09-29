@@ -4,9 +4,9 @@ namespace No3x\WPML\Tests;
 
 
 use No3x\WPML\Model\WPML_Mail;
-use No3x\WPML\Printer\ColumnFormat;
-use No3x\WPML\Printer\Exception\ColumnDoesntExistException;
-use No3x\WPML\Printer\WPML_ColumnManager;
+use No3x\WPML\Renderer\ColumnFormat;
+use No3x\WPML\Renderer\Exception\ColumnDoesntExistException;
+use No3x\WPML\Renderer\WPML_ColumnManager;
 use No3x\WPML\Tests\Helper\WPMailArrayBuilder;
 use No3x\WPML\WPML_MailExtractor;
 

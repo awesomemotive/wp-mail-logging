@@ -1,6 +1,6 @@
 <?php
 
-namespace No3x\WPML\Printer\Exception;
+namespace No3x\WPML\Renderer\Exception;
 
 use Exception;
 

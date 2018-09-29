@@ -1,5 +1,6 @@
 <?php
-namespace No3x\WPML\Printer;
+
+namespace No3x\WPML\Renderer\Column;
 
 
 abstract class ColumnFormat {
