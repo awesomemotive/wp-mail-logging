@@ -87,42 +87,55 @@ class WPML_MailRenderer_Test extends \PHPUnit_Framework_TestCase {
      * @param $message string the message to be rendered
      * @param $expected string the expected output
      */
-    function test_messageSanitation($message, $expected) {
+    function test_messageSanitationOnMessageAndSubject($message, $expected) {
 
         $this->mailServiceMock = Mockery::mock('No3x\WPML\Model\IMailService');
 
-        /** @var $mail WPML_Mail */
-        $mail = (new WPML_MailExtractor())->extract(WPMailArrayBuilder::aMail()->withSubject("Test")->withTo("example@exmple.com")->withHeaders("From: \"admin\" <admin@local.test>\r\n,\nCc: example2@example.com,\nReply-To: admin <admin@local.test>\r\n")->withMessage($expected[0])->build());
-        $mail->set_mail_id($this->id);
-        $mail->set_plugin_version('1.8.5');
-        $mail->set_timestamp('2018-09-24 16:02:11');
-        $mail->set_host('127.0.0.1');
-        $mail->set_error('a');
+        /** @var $mail_raw WPML_Mail */
+        $mail_raw = (new WPML_MailExtractor())->extract(WPMailArrayBuilder::aMail()
+            ->withSubject($message)
+            ->withTo("example@exmple.com")
+            ->withHeaders("From: \"admin\" <admin@local.test>\r\n,\nCc: example2@example.com,\nReply-To: admin <admin@local.test>\r\n")
+            ->withMessage($message)
+            ->build())
+        ;
+        $mail_raw->set_mail_id($this->id);
+        $mail_raw->set_plugin_version('1.8.5');
+        $mail_raw->set_timestamp('2018-09-24 16:02:11');
+        $mail_raw->set_host('127.0.0.1');
+        $mail_raw->set_error('a');
 
-        /** @var $mail WPML_Mail */
-        $mail2 = WPML_Mail::create($mail->to_array());
-        $mail2->set_message($message);
+        /** @var $mail_html WPML_Mail */
+        $mail_html = WPML_Mail::create($mail_raw->to_array());
+        $mail_html->set_subject($message);
+        $mail_html->set_message($message);
 
         $this->mailServiceMock->shouldReceive('find_one')
             ->times(1)
             ->with( $this->id )
-            ->andReturn( $mail )
-            ->andReturn( $mail2 );
+            ->andReturn( $mail_raw )
+            // And then return $mail_html
+            ->andReturn( $mail_html )
+        ;
 
         $this->mailRenderer = new WPML_MailRenderer($this->mailServiceMock);
 
-        $mail1Act = $this->mailRenderer->render($this->id, WPML_MailRenderer::FORMAT_RAW);
-        $mail1ActAct= $this->get_string_between($mail1Act, 'Message: </span>', '<span ');
-        $mail2Act = $this->mailRenderer->render($this->id, WPML_MailRenderer::FORMAT_HTML);
-        $mail2ActAct= $this->get_string_between($mail2Act, 'Message: </span>', '<span ');
-        $this->assertEquals($expected[0], $mail1ActAct);
-        $this->assertEquals($expected[1], $mail2ActAct);
+        $this->assertMessageAndTitleEqual($expected[0], WPML_MailRenderer::FORMAT_RAW);
+        $this->assertMessageAndTitleEqual($expected[1], WPML_MailRenderer::FORMAT_HTML);
     }
 
-    function get_string_between($string, $start, $end){
+    private function assertMessageAndTitleEqual($expected, $format) {
+        $mail = $this->mailRenderer->render($this->id, $format);
+        $mail_message = $this->get_string_between($mail, 'Message: </span>', '<span ');
+        $mail_subject = $this->get_string_between($mail, 'Subject: </span>', '<span ');
+        $this->assertEquals($expected, $mail_message);
+        $this->assertEquals($expected, $mail_subject);
+    }
+
+    private function get_string_between($string, $start, $end){
         $string = ' ' . $string;
         $ini = strpos($string, $start);
-        if ($ini == 0) return '';
+        if ($ini == 0) return "Could not find '{$start}' in the string";
         $ini += strlen($start);
         $len = strpos($string, $end, $ini) - $ini;
         return substr($string, $ini, $len);
@@ -154,7 +167,7 @@ class WPML_MailRenderer_Test extends \PHPUnit_Framework_TestCase {
             "script alert()" => [
                 "<script>alert('XSS hacking!');</script>",
                 [
-                    "alert('XSS hacking!');",
+                    "&lt;script&gt;alert('XSS hacking!');&lt;/script&gt;",
                     "alert('XSS hacking!');",
                 ]
             ],
@@ -181,4 +194,5 @@ class WPML_MailRenderer_Test extends \PHPUnit_Framework_TestCase {
             ],
         ];
     }
+
 }
