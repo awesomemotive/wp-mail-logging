@@ -5,6 +5,7 @@ use No3x\WPML\IHooks;
 use No3x\WPML\Model\IMailService;
 use No3x\WPML\Model\WPML_Mail as Mail;
 use No3x\WPML\Model\WPML_Mail;
+use No3x\WPML\Renderer\Format\MailRendererFactory;
 use No3x\WPML\WPML_Utils;
 
 use Exception;

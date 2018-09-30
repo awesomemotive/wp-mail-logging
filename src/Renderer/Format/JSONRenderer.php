@@ -1,10 +1,11 @@
 <?php
 
-namespace No3x\WPML\Renderer;
+namespace No3x\WPML\Renderer\Format;
 
 
 use No3x\WPML\Renderer\Column\ColumnFormat;
 use No3x\WPML\Renderer\Column\EscapingColumnDecorator;
+use No3x\WPML\Renderer\WPML_ColumnManager;
 
 class JSONRenderer extends BaseRenderer {
 

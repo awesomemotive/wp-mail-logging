@@ -1,6 +1,6 @@
 <?php
 
-namespace No3x\WPML\Renderer;
+namespace No3x\WPML\Renderer\Format;
 
 abstract class HeadingsRenderer extends BaseRenderer {
 
