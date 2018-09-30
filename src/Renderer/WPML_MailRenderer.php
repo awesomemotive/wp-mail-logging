@@ -8,6 +8,7 @@ use No3x\WPML\Renderer\Column\ColumnFormat;
 use No3x\WPML\Renderer\Column\EscapingColumnDecorator;
 use No3x\WPML\Renderer\Column\IColumn;
 use No3x\WPML\Renderer\Column\SanitizedColumnDecorator;
+use No3x\WPML\WPML_Utils;
 
 class WPML_MailRenderer implements IHooks {
 
@@ -50,7 +51,6 @@ class WPML_MailRenderer implements IHooks {
 
         $format_requested = isset( $_POST['format'] ) ? $_POST['format'] : 'html';
         if ( ! in_array( $format_requested, $this->supported_formats ) )  {
-            echo "Unsupported Format. Using html as fallback.";
             $format_requested = WPML_Utils::sanitize_expected_value($format_requested, $this->supported_formats, 'html');
         }
 
@@ -108,66 +108,13 @@ class WPML_MailRenderer implements IHooks {
      * @throws \Exception
      */
     function render_mail( $item, $format ) {
-
-        if(!in_array($format, $this->supported_formats)) {
-            throw new \Exception("Unknown format.");
-        }
-
-        $mailAppend = '';
-        foreach ($item as $column_name => $value) {
-            $content = '';
-            $title = "<span class=\"title\">{$this->getTranslation($column_name)}: </span>";
-
-            if (self::FORMAT_RAW === $format || self::FORMAT_JSON === $format) {
-                $column_renderer = (new EscapingColumnDecorator($this->columnManager->getColumnRenderer($column_name)));
-                if ($column_name !== WPML_ColumnManager::COLUMN_ERROR && $column_name !== WPML_ColumnManager::COLUMN_ATTACHMENTS) {
-                    $column_format = ColumnFormat::FULL;
-                } else {
-                    $column_format = ColumnFormat::SIMPLE;
-                }
-            } elseif (self::FORMAT_HTML === $format) {
-                $column_renderer = (new SanitizedColumnDecorator($this->columnManager->getColumnRenderer($column_name)));
-                if ($column_name === WPML_ColumnManager::COLUMN_HEADERS) {
-                    $column_renderer = (new EscapingColumnDecorator($this->columnManager->getColumnRenderer($column_name)));
-                } else {
-                    $column_format = ColumnFormat::FULL;
-                }
-            }
-
-            /** @var IColumn $column_renderer */
-            if( isset($column_renderer) && isset($column_format) ) {
-                $content = $column_renderer->render($item, $column_format);
-            }
-
-            if (!in_array($column_name, $this->getIgnoredColumns())) {
-                $mailAppend .= $title . $content;
-            }
-            if (self::FORMAT_JSON === $format) {
-                $json[$column_name] = $content;
-            }
-        }
-        if(self::FORMAT_JSON === $format) {
-            return $json;
-        }
-        return $mailAppend;
-    }
-
-    private function getTranslation($column_name) {
-        return $this->columnManager->getTranslationForColumn($column_name);
-    }
-
-    /**
-     * @return mixed
-     */
-    private function getIgnoredColumns() {
-        return [
-            WPML_ColumnManager::COLUMN_MAIL_ID,
-            WPML_ColumnManager::COLUMN_PLUGIN_VERSION
-        ];
+        $renderer = MailRendererFactory::factory($format);
+        return $renderer->render($item);
     }
 
     public function getSupportedFormats() {
         return $this->supported_formats;
     }
+
 
 }
