@@ -83,20 +83,20 @@ class WPML_MailRenderer_Test extends \PHPUnit_Framework_TestCase {
     }
 
     /**
-     * @dataProvider messagesProvider
-     * @param $message string the message to be rendered
+     * @dataProvider evilTextProvider
+     * @param $evilText string the message to be rendered
      * @param $expected string the expected output
      */
-    function test_messageSanitationOnMessageAndSubject($message, $expected) {
+    function test_messageSanitationOnMessageAndSubject($evilText, $expected) {
 
         $this->mailServiceMock = Mockery::mock('No3x\WPML\Model\IMailService');
 
         /** @var $mail_raw WPML_Mail */
         $mail_raw = (new WPML_MailExtractor())->extract(WPMailArrayBuilder::aMail()
-            ->withSubject($message)
+            ->withSubject($evilText)
             ->withTo("example@exmple.com")
             ->withHeaders("From: \"admin\" <admin@local.test>\r\n,\nCc: example2@example.com,\nReply-To: admin <admin@local.test>\r\n")
-            ->withMessage($message)
+            ->withMessage($evilText)
             ->build())
         ;
         $mail_raw->set_mail_id($this->id);
@@ -107,8 +107,8 @@ class WPML_MailRenderer_Test extends \PHPUnit_Framework_TestCase {
 
         /** @var $mail_html WPML_Mail */
         $mail_html = WPML_Mail::create($mail_raw->to_array());
-        $mail_html->set_subject($message);
-        $mail_html->set_message($message);
+        $mail_html->set_subject($evilText);
+        $mail_html->set_message($evilText);
 
         $this->mailServiceMock->shouldReceive('find_one')
             ->times(1)
@@ -141,7 +141,7 @@ class WPML_MailRenderer_Test extends \PHPUnit_Framework_TestCase {
         return substr($string, $ini, $len);
     }
 
-    function messagesProvider() {
+    function evilTextProvider() {
         return [
             "plaintext" => [
                 "Hello World",
