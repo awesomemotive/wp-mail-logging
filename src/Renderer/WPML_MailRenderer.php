@@ -20,8 +20,6 @@ class WPML_MailRenderer implements IHooks {
     private $supported_formats;
     /** @var IMailService */
     private $mailService;
-    /** @var WPML_ColumnManager */
-    private $columnManager;
 
     /**
      * WPML_MailRenderer constructor.
@@ -30,7 +28,6 @@ class WPML_MailRenderer implements IHooks {
     public function __construct(IMailService $mailService) {
         $this->mailService = $mailService;
         $this->supported_formats = [self::FORMAT_RAW, self::FORMAT_HTML, self::FORMAT_JSON];
-        $this->columnManager = new WPML_ColumnManager();
     }
 
     function addActionsAndFilters() {
