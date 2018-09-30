@@ -74,6 +74,9 @@ class WPML_MailRenderer implements IHooks {
     public function render($id, $format) {
         /** @var Mail $mail */
         $mail = $this->mailService->find_one( $id );
+        if(!$mail) {
+            throw new \Exception("Requested mail not found in database.");
+        }
 
         $mailAppend = '';
         switch( $format ) {
