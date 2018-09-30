@@ -23,6 +23,7 @@ namespace No3x\WPML;
 
 use No3x\WPML\Model\DefaultMailService;
 use No3x\WPML\Renderer\WPML_MailRenderer;
+use No3x\WPML\Renderer\WPML_MailRenderer_AJAX_Handler;
 use No3x\WPML\Settings\WPML_Redux_Framework_config;
 
 // Exit if accessed directly.
@@ -112,6 +113,9 @@ class WPML_Init {
         };
         $this->container['privacyController'] = function ($c) {
             return new WPML_PrivacyController($c['plugin-meta']);
+        };
+        $this->container['mailRendererAjaxHandler'] = function ($c) {
+            return new WPML_MailRenderer_AJAX_Handler( $c['mailRenderer'] );
         };
         $this->container['mailRenderer'] = function ($c) {
             return new WPML_MailRenderer( new DefaultMailService() );

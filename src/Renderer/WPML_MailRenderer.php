@@ -1,16 +1,14 @@
 <?php
 namespace No3x\WPML\Renderer;
 
-use No3x\WPML\IHooks;
 use No3x\WPML\Model\IMailService;
 use No3x\WPML\Model\WPML_Mail as Mail;
 use No3x\WPML\Model\WPML_Mail;
 use No3x\WPML\Renderer\Format\MailRendererFactory;
-use No3x\WPML\WPML_Utils;
 
-use Exception;
+use \Exception;
 
-class WPML_MailRenderer implements IHooks {
+class WPML_MailRenderer {
 
     const FORMAT_RAW = 'raw';
     const FORMAT_HTML = 'html';
@@ -28,48 +26,6 @@ class WPML_MailRenderer implements IHooks {
     public function __construct(IMailService $mailService) {
         $this->mailService = $mailService;
         $this->supported_formats = [self::FORMAT_RAW, self::FORMAT_HTML, self::FORMAT_JSON];
-    }
-
-    function addActionsAndFilters() {
-        add_action( 'wp_ajax_wpml_email_render', [$this, 'ajax_wpml_email_render'] );
-    }
-
-    public function ajax_wpml_email_render() {
-        $this->checkNonce();
-        $id = $this->checkAndGetId();
-        $format = $this->checkAndGetFormat();
-
-        try {
-            $rendered = $this->render($id, $format);
-            wp_send_json_success($rendered);
-        } catch (Exception $e) {
-            if( $e->getMessage() == "Unknown format.") {
-                wp_send_json_error(['code' => -3, 'message' =>  $e->getMessage()]);
-            }
-            wp_send_json_error(['code' => -4, 'message' =>  $e->getMessage()]);
-        }
-
-    }
-
-    private function checkNonce() {
-        $validNonce = check_ajax_referer('wpml-modal-show', 'ajax_nonce', false);
-
-        if (!$validNonce) {
-            wp_send_json_error(['code' => -1, 'message' => 'Issue with nonce.']);
-        }
-    }
-
-    private function checkAndGetId() {
-        if (!isset($_POST['id'])) {
-            wp_send_json_error(['code' => -2, 'message' => 'No ID passed to render.']);
-        }
-        return intval( $_POST['id'] );
-    }
-
-    private function checkAndGetFormat() {
-        $format_requested = isset($_POST['format']) ? $_POST['format'] : self::FORMAT_HTML;
-        $format_requested = WPML_Utils::sanitize_expected_value($format_requested, $this->supported_formats, self::FORMAT_HTML);
-        return $format_requested;
     }
 
     /**

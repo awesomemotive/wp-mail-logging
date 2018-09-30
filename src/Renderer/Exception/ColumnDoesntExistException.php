@@ -2,7 +2,7 @@
 
 namespace No3x\WPML\Renderer\Exception;
 
-use Exception;
+use \Exception;
 
 class ColumnDoesntExistException extends Exception {
 
