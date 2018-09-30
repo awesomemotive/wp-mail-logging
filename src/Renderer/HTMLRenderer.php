@@ -26,6 +26,6 @@ class HTMLRenderer extends HeadingsRenderer {
      * @return bool true if column prints html itself
      */
     protected function outputIsHTMLItselfAndCantBeEncodedTherefore($column_name) {
-        return WPML_ColumnManager::COLUMN_MESSAGE === $column_name || WPML_ColumnManager::COLUMN_HEADERS === $column_name || WPML_ColumnManager::COLUMN_ATTACHMENTS === $column_name;
+        return WPML_ColumnManager::COLUMN_MESSAGE === $column_name || WPML_ColumnManager::COLUMN_SUBJECT === $column_name || WPML_ColumnManager::COLUMN_ERROR === $column_name || WPML_ColumnManager::COLUMN_ATTACHMENTS === $column_name;
     }
 }
