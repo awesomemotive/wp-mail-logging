@@ -101,7 +101,7 @@ class WPML_MailRenderer_Test extends \PHPUnit_Framework_TestCase {
 
         /** @var $mail WPML_Mail */
         $mail2 = WPML_Mail::create($mail->to_array());
-        $mail2->set_message($expected[1]);
+        $mail2->set_message($message);
 
         $this->mailServiceMock->shouldReceive('find_one')
             ->times(1)
