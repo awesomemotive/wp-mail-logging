@@ -4,11 +4,10 @@ namespace No3x\WPML\Renderer;
 use No3x\WPML\IHooks;
 use No3x\WPML\Model\IMailService;
 use No3x\WPML\Model\WPML_Mail as Mail;
-use No3x\WPML\Renderer\Column\ColumnFormat;
-use No3x\WPML\Renderer\Column\EscapingColumnDecorator;
-use No3x\WPML\Renderer\Column\IColumn;
-use No3x\WPML\Renderer\Column\SanitizedColumnDecorator;
+use No3x\WPML\Model\WPML_Mail;
 use No3x\WPML\WPML_Utils;
+
+use Exception;
 
 class WPML_MailRenderer implements IHooks {
 
@@ -57,7 +56,7 @@ class WPML_MailRenderer implements IHooks {
         try {
             $rendered = $this->render($id, $format_requested);
             wp_send_json_success($rendered);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             if( $e->getMessage() == "Unknown format.") {
                 wp_send_json_error(['code' => -3, 'message' =>  $e->getMessage()]);
             }
@@ -69,37 +68,56 @@ class WPML_MailRenderer implements IHooks {
     /**
      * Ajax function to retrieve rendered mail in certain format.
      * @since 1.6.0
-     * @throws \Exception
+     * @param $id
+     * @param $format
+     * @return string
+     * @throws Exception
      */
     public function render($id, $format) {
         /** @var Mail $mail */
         $mail = $this->mailService->find_one( $id );
         if(!$mail) {
-            throw new \Exception("Requested mail not found in database.");
+            throw new Exception("Requested mail not found in database.");
         }
 
+        return $this->renderMail($mail, $format);
+    }
+
+    /**
+     * @param $format
+     * @param WPML_Mail $mail
+     * @return string
+     * @throws Exception
+     */
+    protected function renderMail($mail, $format) {
         $mailAppend = '';
-        switch( $format ) {
+        switch ($format) {
             case self::FORMAT_HTML:
-            case self::FORMAT_RAW: {
-                $mailAppend .= $this->render_mail( $mail->to_array(), $format );
+            case self::FORMAT_RAW:
+                $mailAppend .= $this->render_mail($mail->to_array(), $format);
                 break;
-            }
-            case self::FORMAT_JSON: {
-                if( stristr( str_replace(' ', '', $mail->get_headers()),  "Content-Type:text/html")) {
+            case self::FORMAT_JSON:
+                if ($this->isHtmlMail($mail)) {
                     // Fallback to raw in case it is a html mail
-                    $mailAppend .= sprintf("<span class='info'>%s</span>", __("Fallback to raw format because html is not convertible to json.", 'wp-mail-logging' ) );
-                    $mailAppend .= $this->render_mail( $mail->to_array(), self::FORMAT_RAW );
+                    $mailAppend .= sprintf("<span class='info'>%s</span>", __("Fallback to raw format because html is not convertible to json.", 'wp-mail-logging'));
+                    $mailAppend .= $this->render_mail($mail->to_array(), self::FORMAT_RAW);
                 } else {
-                    $mailAppend .= "<pre>" . json_encode( $this->render_mail( $mail->to_array(), self::FORMAT_JSON ), JSON_PRETTY_PRINT)  . "</pre>";
+                    $mailAppend .= "<pre>" . json_encode($this->render_mail($mail->to_array(), self::FORMAT_JSON), JSON_PRETTY_PRINT) . "</pre>";
                 }
                 break;
-            }
             default:
-                throw new \Exception("Unknown format.");
+                throw new Exception("Unknown format.");
         }
 
         return $mailAppend;
+    }
+
+    /**
+     * @param WPML_Mail $mail
+     * @return string
+     */
+    private function isHtmlMail($mail) {
+        return stristr(str_replace(' ', '', $mail->get_headers()), "Content-Type:text/html");
     }
 
     /**
@@ -108,7 +126,7 @@ class WPML_MailRenderer implements IHooks {
      * @param array $item The current item.
      * @param $format
      * @return string The mail as html
-     * @throws \Exception
+     * @throws Exception
      */
     function render_mail( $item, $format ) {
         $renderer = MailRendererFactory::factory($format);
@@ -118,6 +136,5 @@ class WPML_MailRenderer implements IHooks {
     public function getSupportedFormats() {
         return $this->supported_formats;
     }
-
 
 }
