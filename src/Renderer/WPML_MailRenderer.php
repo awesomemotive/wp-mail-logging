@@ -46,10 +46,8 @@ class WPML_MailRenderer implements IHooks {
         }
         $id = intval( $_POST['id'] );
 
-        $format_requested = isset( $_POST['format'] ) ? $_POST['format'] : 'html';
-        if ( ! in_array( $format_requested, $this->supported_formats ) )  {
-            $format_requested = WPML_Utils::sanitize_expected_value($format_requested, $this->supported_formats, 'html');
-        }
+        $format_requested = isset( $_POST['format'] ) ? $_POST['format'] : self::FORMAT_HTML;
+        $format_requested = WPML_Utils::sanitize_expected_value($format_requested, $this->supported_formats, self::FORMAT_HTML);
 
         try {
             $rendered = $this->render($id, $format_requested);
