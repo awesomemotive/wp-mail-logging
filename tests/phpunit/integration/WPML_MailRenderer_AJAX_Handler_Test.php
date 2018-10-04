@@ -32,6 +32,25 @@ class WPML_MailRenderer_AJAX_Handler_Test extends \WP_Ajax_UnitTestCase {
     /**
      * Test that the callback saves the value for administrators.
      */
+    public function test_nonce_invalid() {
+        $_POST['_wpnonce'] = $this->mailRendererAjaxHandler->get_ajax_data()["nonce"] . "invalid";
+
+        try {
+            $this->_handleAjax( WPML_MailRenderer_AJAX_Handler::ACTION );
+            $this->fail( 'Expected exception: WPAjaxDieContinueException' );
+        } catch ( WPAjaxDieContinueException $e ) {
+            // We expected this, do nothing.
+        }//end try
+
+        $this->checkJsonMessage();
+        $response = json_decode($this->_last_response, true);
+        $this->assertEquals(WPML_MailRenderer_AJAX_Handler::ERROR_NONCE_CODE, $response['data']['code']);
+        $this->assertEquals(WPML_MailRenderer_AJAX_Handler::ERROR_NONCE_MESSAGE, $response['data']['message']);
+    }
+
+    /**
+     * Test that the callback saves the value for administrators.
+     */
     public function test_id_not_passed() {
         $_POST['_wpnonce'] = $this->mailRendererAjaxHandler->get_ajax_data()["nonce"];
 
