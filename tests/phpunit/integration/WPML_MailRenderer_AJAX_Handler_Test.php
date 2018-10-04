@@ -88,7 +88,6 @@ class WPML_MailRenderer_AJAX_Handler_Test extends \WP_Ajax_UnitTestCase {
             // We expected this, do nothing.
         }//end try
 
-        print_r($this->_last_response);
         $this->checkJsonMessage();
         $response = json_decode($this->_last_response, true);
         $this->assertEquals(WPML_MailRenderer_AJAX_Handler::ERROR_OTHER_CODE, $response['data']['code']);
@@ -115,7 +114,6 @@ class WPML_MailRenderer_AJAX_Handler_Test extends \WP_Ajax_UnitTestCase {
             // We expected this, do nothing.
         }//end try
 
-        print_r($this->_last_response);
         $this->checkJsonMessage();
         $response = json_decode($this->_last_response, true);
         $this->assertEquals(WPML_MailRenderer_AJAX_Handler::ERROR_UNKNOWN_FORMAT_CODE, $response['data']['code']);
@@ -142,7 +140,6 @@ class WPML_MailRenderer_AJAX_Handler_Test extends \WP_Ajax_UnitTestCase {
             // We expected this, do nothing.
         }//end try
 
-        print_r($this->_last_response);
         $this->checkJsonMessage(true);
         $response = json_decode($this->_last_response, true);
         $this->mailRendererMock->mockery_verify();
