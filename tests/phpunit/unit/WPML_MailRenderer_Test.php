@@ -61,6 +61,10 @@ class WPML_MailRenderer_Test extends \PHPUnit_Framework_TestCase {
         $this->mailServiceMock->mockery_verify();
     }
 
+    public function test_supported_formats() {
+        $this->assertEquals(['raw', 'html', 'json'], $this->mailRenderer->getSupportedFormats());
+    }
+
     public function test_print_mail_json_fallback_to_raw() {
         $this->mailServiceMock = Mockery::mock('No3x\WPML\Model\IMailService');
 
