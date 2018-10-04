@@ -61,6 +61,32 @@ class WPML_MailRenderer_Test extends \PHPUnit_Framework_TestCase {
         $this->mailServiceMock->mockery_verify();
     }
 
+    public function test_print_mail_json_fallback_to_raw() {
+        $this->mailServiceMock = Mockery::mock('No3x\WPML\Model\IMailService');
+
+        /** @var $mail WPML_Mail */
+        $mail = (new WPML_MailExtractor())->extract(WPMailArrayBuilder::aMail()
+            ->withSubject("Test")
+            ->withTo("example@exmple.com")
+            ->withHeaders("Content-Type: text/html")
+            ->withMessage("Message")
+            ->build());
+        $mail->set_mail_id($this->id);
+        $mail->set_plugin_version('1.8.5');
+        $mail->set_timestamp('2018-09-24 16:02:11');
+        $mail->set_host('127.0.0.1');
+        $mail->set_error('a');
+
+        $this->mailServiceMock->shouldReceive('find_one')
+            ->times(1)
+            ->with( $this->id )
+            ->andReturn( $mail );
+
+        $this->mailRenderer = new WPML_MailRenderer($this->mailServiceMock);
+        $this->assertContains("Fallback", $this->mailRenderer->render($this->id, WPML_MailRenderer::FORMAT_JSON));
+        $this->mailServiceMock->mockery_verify();
+    }
+
     public function test_print_mail_raw() {
         $expected = '<span class="title">Time: </span>2018-09-24 16:02:11<span class="title">Receiver: </span>example@exmple.com<span class="title">Subject: </span>Test<span class="title">Message: </span>&lt;b&gt;Bold&lt;/b&gt;<span class="title">Headers: </span>From: &quot;admin&quot; ,\nCc: example2@example.com,\nReply-To: admin <span class="title">Attachments: </span><span class="title">Error: </span><i class="fa fa-exclamation-circle" title="a"></i>';
         $actual = $this->mailRenderer->render($this->id, WPML_MailRenderer::FORMAT_RAW);
