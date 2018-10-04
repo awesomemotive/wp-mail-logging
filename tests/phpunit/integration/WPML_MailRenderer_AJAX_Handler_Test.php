@@ -146,7 +146,7 @@ class WPML_MailRenderer_AJAX_Handler_Test extends \WP_Ajax_UnitTestCase {
         $this->checkJsonMessage(true);
         $response = json_decode($this->_last_response, true);
         $this->mailRendererMock->mockery_verify();
-        //$this->assertEquals(WPML_MailRenderer_AJAX_Handler::ERROR_UNKNOWN_FORMAT_CODE, $response['data']);
+        $this->assertEquals("rendered", $response['data']);
     }
 
     private function checkJsonMessage($success_expected = false) {
