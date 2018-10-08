@@ -120,10 +120,6 @@ class WPML_Init {
         $this->container['mailRenderer'] = function ($c) {
             return new WPML_MailRenderer( new DefaultMailService() );
         };
-        $this->container['api'] = function ($c) {
-            // Uncomment for an API Example
-            // return new WPML_API_Example();
-        };
         $this->container->addActionsAndFilters();
 
         add_filter( 'wpml_get_di_container', function() {
