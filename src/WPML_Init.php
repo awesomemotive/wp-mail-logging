@@ -75,7 +75,7 @@ class WPML_Init {
         $this->container['plugin-meta'] = function ($c) {
             /* @var $plugin WPML_Plugin */
             $plugin = $c['plugin'];
-            return array(
+            return [
                 'path' => realpath( plugin_dir_path( __FILE__ ) ) . DIRECTORY_SEPARATOR,
                 'uri' => plugin_dir_url( __FILE__ ),
                 'display_name' => $plugin->getPluginDisplayName(),
@@ -89,7 +89,7 @@ class WPML_Init {
                 'wp_uri' => $plugin->getPluginHeaderValue( 'Plugin URI' ),
                 'support_uri' => $plugin->getPluginHeaderValue( 'Support URI' ),
                 'license' => $plugin->getPluginHeaderValue( 'License' ),
-            );
+            ];
         };
         $this->container['supported-mail-renderer-formats'] = function ($c) {
             /** @var WPML_MailRenderer $mailRenderer */
