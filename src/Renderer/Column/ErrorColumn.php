@@ -19,7 +19,7 @@ class ErrorColumn extends GenericColumn {
         if($format == ColumnFormat::SIMPLE) {
             return parent::render($mailArray, $format);
         } elseif ($format == ColumnFormat::FULL) {
-            return $this->column_overridden_error($mailArray);
+            return $this->error_column($mailArray);
         }
         throw new \Exception("Unknown Format");
     }
@@ -30,7 +30,7 @@ class ErrorColumn extends GenericColumn {
      * @param $item
      * @return string
      */
-    function column_overridden_error($item) {
+    function error_column($item) {
         $error = $item['error'];
         if( empty($error)) return "";
         return '<i class="fa fa-exclamation-circle" title="' . esc_attr( $error ) . '"></i>';
