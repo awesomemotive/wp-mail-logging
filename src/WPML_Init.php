@@ -75,12 +75,14 @@ class WPML_Init {
         $this->container['plugin-meta'] = function ($c) use ($file) {
             /* @var $plugin WPML_Plugin */
             $plugin = $c['plugin'];
+            $path = trailingslashit(realpath( plugin_dir_path( $file ) ) );
             return [
-                'path' => realpath( plugin_dir_path( $file ) ) . DIRECTORY_SEPARATOR,
+                'path' => $path,
                 'uri' => plugin_dir_url( $file ),
                 'display_name' => $plugin->getPluginDisplayName(),
                 'slug' => $plugin->getPluginSlug(),
                 'main_file' => $plugin->getMainPluginFileName(),
+                'main_file_path' => $path . $plugin->getMainPluginFileName(),
                 'description' => $plugin->getPluginHeaderValue( 'Description' ),
                 'version' => $plugin->getVersion(),
                 'version_installed' => $plugin->getVersionSaved(),
