@@ -83,17 +83,16 @@ class WPML_LogRotation implements IHooks {
         if ( $wpml_settings['log-rotation-limit-amout'] == true) {
             $keep = $wpml_settings['log-rotation-limit-amout-keep'];
             if ( $keep > 0 ) {
-                $wpdb->query(
-                    "DELETE p
+                $wpdb->query($wpdb->prepare("DELETE p
 						FROM
-						$tableName AS p
+						`$tableName` AS p
 						JOIN
 						( SELECT mail_id
-						FROM $tableName
+						FROM `$tableName`
 						ORDER BY mail_id DESC
-						LIMIT 1 OFFSET $keep
-				) AS lim
-						ON p.mail_id <= lim.mail_id;"
+						LIMIT 1 OFFSET %d
+				        ) AS lim
+						ON p.mail_id <= lim.mail_id;", $keep)
                 );
             }
         }
@@ -115,7 +114,7 @@ class WPML_LogRotation implements IHooks {
         if ( $wpml_settings['log-rotation-delete-time'] == true) {
             $days = $wpml_settings['log-rotation-delete-time-days'];
             if ( $days > 0 ) {
-                $wpdb->query( "DELETE FROM `$tableName` WHERE DATEDIFF( NOW(), `timestamp` ) >= $days" );
+                $wpdb->query($wpdb->prepare("DELETE FROM `$tableName` WHERE DATEDIFF( NOW(), `timestamp` ) >= %d", $days));
             }
         }
     }
