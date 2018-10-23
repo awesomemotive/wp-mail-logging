@@ -72,12 +72,12 @@ class WPML_Init {
         $this->container['plugin'] = function ($c) {
             return new WPML_Plugin($c['supported-mail-renderer-formats']);
         };
-        $this->container['plugin-meta'] = function ($c) {
+        $this->container['plugin-meta'] = function ($c) use ($file) {
             /* @var $plugin WPML_Plugin */
             $plugin = $c['plugin'];
             return [
-                'path' => realpath( plugin_dir_path( __FILE__ ) ) . DIRECTORY_SEPARATOR,
-                'uri' => plugin_dir_url( __FILE__ ),
+                'path' => realpath( plugin_dir_path( $file ) ) . DIRECTORY_SEPARATOR,
+                'uri' => plugin_dir_url( $file ),
                 'display_name' => $plugin->getPluginDisplayName(),
                 'slug' => $plugin->getPluginSlug(),
                 'main_file' => $plugin->getMainPluginFileName(),
@@ -145,14 +145,13 @@ class WPML_Init {
             $this->container['plugin']->upgrade();
         }
 
-        if ( ! $file ) {
-            $file = __FILE__;
-        }
-        // Register the Plugin Activation Hook.
-        register_activation_hook( $file, array( &$this->container['plugin'], 'activate' ) );
+        if ( $file ) {
+            // Register the Plugin Activation Hook.
+            register_activation_hook( $file, array( &$this->container['plugin'], 'activate' ) );
 
-        // Register the Plugin Deactivation Hook.
-        register_deactivation_hook( $file, array( &$this->container['plugin'], 'deactivate' ) );
+            // Register the Plugin Deactivation Hook.
+            register_deactivation_hook( $file, array( &$this->container['plugin'], 'deactivate' ) );
+        }
     }
 
     public function getService( $key ) {
