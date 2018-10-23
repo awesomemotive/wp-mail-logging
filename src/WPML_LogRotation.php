@@ -27,7 +27,7 @@ class WPML_LogRotation implements IHooks {
     public function addActionsAndFilters() {
         add_action( 'plugins_loaded', array( $this, 'init') );
         add_action( self::WPML_LOGROTATION_SCHEDULE_HOOK , array( __CLASS__, self::WPML_LOGROTATION_SCHEDULE_ACTION) );
-        register_deactivation_hook( plugin_dir_path( __FILE__ ) . $this->plugin_meta['main_file'], array( $this, 'unschedule' ) );
+        register_deactivation_hook( $this->plugin_meta['main_file_path'], array( $this, 'unschedule' ) );
     }
 
     /**
