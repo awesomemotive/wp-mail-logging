@@ -52,7 +52,7 @@ class WPML_Email_Resender_Test extends \PHPUnit_Framework_TestCase {
 
         $this->dispatcherMock->expects(self::once())
             ->method('dispatch')
-            ->with($this->mailMock->get_receiver(), $this->mailMock->get_subject(), $this->mailMock->get_message(), $expectedHeaders, $this->mailMock->get_attachments())
+            ->with($this->anything(), $this->anything(), $this->anything(), $expectedHeaders, $this->anything())
         ;
 
         $this->emailResender->resendMail($this->mailMock);

@@ -43,24 +43,16 @@ class WPML_MailExtractor {
     }
 
     private function extractAttachments( $mail ) {
-        $attachments = isset($mail['attachments']) ? $mail['attachments'] : array();
+        $attachmentAbsPaths = isset($mail['attachments']) ? $mail['attachments'] : array();
 
-        if(!is_array($attachments)) {
-            $attachments = $this->splitAtComma($attachments);
+        if(!is_array($attachmentAbsPaths)) {
+            $attachmentAbsPaths = $this->splitAtComma($attachmentAbsPaths);
         }
 
-        $attachment_urls = array();
-        $basename = 'uploads';
-        $basename_needle = '/'.$basename.'/';
-        foreach ($attachments as $attachment) {
-            $posAttachmentInUploads = strrpos($attachment, $basename_needle);
-            if( false !== $posAttachmentInUploads) {
-                $append_url = substr( $attachment, $posAttachmentInUploads + strlen($basename_needle) - 1 );
-            } else {
-                // not found, save the path unmodified
-                $append_url = $attachment;
-            }
-            $attachment_urls[] = $append_url;
+        $attachment_urls = [];
+        foreach ($attachmentAbsPaths as $attachmentAbsPath) {
+            $attachment = WPML_Attachment::fromAbsPath($attachmentAbsPath);
+            $attachment_urls[] = $attachment->toRelPath();
         }
 
         $string = $this->joinArrayWithCommaAndNewLine($attachment_urls);

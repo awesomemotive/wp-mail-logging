@@ -3,6 +3,7 @@
 namespace No3x\WPML\Renderer\Column;
 
 
+use No3x\WPML\WPML_Attachment;
 use No3x\WPML\WPML_Utils;
 
 class AttachmentsColumn extends GenericColumn {
@@ -21,7 +22,7 @@ class AttachmentsColumn extends GenericColumn {
         if($format == ColumnFormat::SIMPLE) {
             return parent::render($mailArray, $format);
         } elseif ($format == ColumnFormat::FULL) {
-            return $this->column_overridden_attachments($mailArray);
+            return $this->column_attachments($mailArray);
         }
         throw new \Exception("Unknown Format");
     }
@@ -52,38 +53,35 @@ class AttachmentsColumn extends GenericColumn {
         }
         return $attachment_append;
     }
-
     /**
      * Renders the attachment column.
      * @since 1.3
      * @param array $item The current item.
      * @return string The attachment column.
      */
-    function column_overridden_attachments( $item ) {
+    function column_attachments( $item ) {
 
         if ( version_compare( trim( $item ['plugin_version'] ), '1.6.0', '<' ) ) {
             return $this->column_attachments_compat_152( $item );
         }
 
         $attachment_append = '';
-        $attachments = explode( ',\n', $item['attachments'] );
-        $attachments = is_array( $attachments ) ? $attachments : array( $attachments );
-        foreach ( $attachments as $attachment ) {
-            // $attachment can be an empty string ''.
-            if ( ! empty( $attachment ) ) {
-                $filename = basename( $attachment );
-                $basename = '/uploads';
-                $attachment_path = WP_CONTENT_DIR . $basename . $attachment;
-                $attachment_url = WP_CONTENT_URL . $basename . $attachment;
+        $attachmentRelPaths = explode( ',\n', $item['attachments'] );
+        $attachmentRelPaths = is_array( $attachmentRelPaths ) ? $attachmentRelPaths : array( $attachmentRelPaths );
+        $attachmentRelPaths = array_filter($attachmentRelPaths);
 
-                if ( is_file( $attachment_path ) ) {
-                    $attachment_append .= '<a href="' . $attachment_url . '" title="' . $filename . '">' . WPML_Utils::generate_attachment_icon( $attachment_path ) . '</a> ';
-                } else {
-                    $message = sprintf( __( 'Attachment %s is not present', 'wp-mail-logging' ), $filename );
-                    $attachment_append .= '<i class="fa fa-times" title="' . $message . '"></i>';
-                }
+        foreach ( $attachmentRelPaths as $attachmentRelPath ) {
+
+            $attachment = WPML_Attachment::fromRelPath($attachmentRelPath);
+
+            if ( !$attachment->isGone() ) {
+                $attachment_append .= '<a href="' . $attachment->getUrl() . '" title="' . $attachment->getFileName() . '">' . WPML_Utils::generate_attachment_icon( $attachment ) . '</a> ';
+            } else {
+                $message = sprintf( __( 'Attachment %s is not present', 'wp-mail-logging' ), $attachment->getFileName() );
+                $attachment_append .= '<i class="fa fa-times" title="' . $message . '"></i>';
             }
         }
+
         return $attachment_append;
     }
 

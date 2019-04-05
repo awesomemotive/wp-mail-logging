@@ -49,70 +49,22 @@ class WPML_Utils {
     }
 
     /**
-     * Determines appropriate fa icon for a file
-     * @sine 1.3
-     * @param string $file_path path to file.
-     * @return string returns the most suitable icon or generic one if not possible.
+     * Determines appropriate fa icon for a given icon class
+     * @since 1.9.0
+     * @param string $iconClass icon class.
+     * @return string returns the most suitable fa icon or generic one if not possible.
      */
-    public static function determine_fa_icon( $file_path ) {
-        $default_icon = '<i class="fa fa-file-o"></i>';
-        $supported = array(
-            'archive' => array(
-                'application/zip',
-                'application/x-rar-compressed',
-                'application/x-rar',
-                'application/x-gzip',
-                'application/x-msdownload',
-                'application/x-msdownload',
-                'application/vnd.ms-cab-compressed',
-            ),
-            'audio',
-            'code' => array(
-                'text/x-c',
-                'text/x-c++',
-            ),
-            'excel' => array( 'application/vnd.ms-excel'
-            ),
-            'image', 'text', 'movie', 'pdf', 'photo', 'picture',
-            'powerpoint' => array(
-                'application/vnd.ms-powerpoint'
-            ), 'sound', 'video', 'word' => array(
-                'application/msword'
-            ), 'zip'
-        );
-
-        if( !function_exists('mime_content_type') ) {
-            return $default_icon;
-        }
-
-        $mime = mime_content_type( $file_path );
-        $mime_parts = explode( '/', $mime );
-        $attribute = $mime_parts[0];
-        $type = $mime_parts[1];
-
-        $fa_icon = false;
-        if ( ($key = self::recursive_array_search( $mime, $supported ) ) !== false ) {
-            // Use specific icon for mime first.
-            $fa_icon = $key;
-        } elseif ( in_array( $attribute, $supported ) ) {
-            // Use generic file icon.
-            $fa_icon = $attribute;
-        }
-
-        if ( false === $fa_icon  ) {
-            return $default_icon;
-        } else {
-            return '<i class="fa fa-file-' . $fa_icon . '-o"></i>';
-        }
+    public static function determine_fa_icon( $iconClass ) {
+        return '<i class="fa fa-file-' . esc_attr($iconClass) . '-o"></i>';
     }
 
     /**
      * Find appropriate fa icon from file path
-     * @since 1.3
-     * @param string $file_path path to file.
+     * @since 1.9.0
+     * @param WPML_Attachment $attachment attachment.
      * @return string
      */
-    public static function generate_attachment_icon( $file_path ) {
-        return self::determine_fa_icon( $file_path );
+    public static function generate_attachment_icon( $attachment ) {
+        return self::determine_fa_icon( $attachment->getIconClass() );
     }
 }
