@@ -47,10 +47,6 @@
                 $this->check_version();
             }
             update_option( 'redux_version_upgraded_from', ReduxFramework::$_version );
-            /* WPML Patch: gh-73. This line is removed in the master and I assume it will
-             * also be in the next release when I do an update of this redux files:
-             * set_transient( '_redux_activation_redirect', true, 30 );
-            */
         }
 
 
