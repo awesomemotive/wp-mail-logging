@@ -29,7 +29,7 @@ class WPML_Email_Resender_Test extends \PHPUnit_Framework_TestCase {
         $this->emailResender = new WPML_Email_Resender($this->dispatcherMock);
         $this->mailMock = self::getMockBuilder('No3x\WPML\Model\WPML_Mail')
             ->disableOriginalConstructor()
-            ->setMethods( array('get_headers', 'get_attachments') )
+            ->setMethods( array('get_headers', 'get_attachments', 'get_receiver') )
             ->getMock()
         ;
     }
@@ -56,6 +56,25 @@ class WPML_Email_Resender_Test extends \PHPUnit_Framework_TestCase {
         ;
 
         $this->emailResender->resendMail($this->mailMock);
+    }
+
+    function test_multiple_receivers() {
+
+        $receivers_array = ['recipient1@example.com', 'recipient2@foo.example.com'];
+        $receivers = $receivers_array[0] . '\n' . $receivers_array[1];
+
+        $this->mailMock->expects(self::once())
+            ->method('get_receiver')
+            ->willReturn($receivers)
+        ;
+
+        $this->dispatcherMock->expects(self::once())
+            ->method('dispatch')
+            ->with($this->equalTo($receivers_array), $this->mailMock->get_subject(), $this->mailMock->get_message(), $this->anything(), $this->anything())
+        ;
+
+        $this->emailResender->resendMail($this->mailMock);
+
     }
 
     function headersProvider() {

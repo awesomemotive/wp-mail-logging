@@ -18,12 +18,25 @@ class WPML_Email_Resender {
      * @param WPML_Mail $mail
      */
     public function resendMail($mail) {
+        $receivers = explode( "\\n", str_replace( "\\r\\n", "\\n", $mail->get_receiver() ) );
+        $receivers = array_map(function ($receiver) {
+            return rtrim($receiver, ",");
+        }, $receivers);
+
+        $attachments = explode( "\\n", str_replace( "\\r\\n", "\\n", $mail->get_attachments() ) );
+        $attachments = array_map(function ($attachments) {
+            return rtrim($attachments, ",");
+        }, $attachments);
+        $attachments = array_map(function ($attachments) {
+            return WPML_Attachment::fromRelPath($attachments)->getPath();
+        }, $attachments);
+
         $headers = explode( "\\n", str_replace( "\\r\\n", "\\n", $mail->get_headers() ) );
         $headers = array_map(function ($header) {
             return rtrim($header, ",");
         }, $headers);
 
-        $this->dispatcher->dispatch($mail->get_receiver(), $mail->get_subject(), $mail->get_message(), $headers, $mail->get_attachments() );
+        $this->dispatcher->dispatch($receivers, $mail->get_subject(), $mail->get_message(), $headers, $attachments );
     }
 
 }
