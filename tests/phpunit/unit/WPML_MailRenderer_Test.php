@@ -61,6 +61,36 @@ class WPML_MailRenderer_Test extends \PHPUnit_Framework_TestCase {
         $this->mailServiceMock->mockery_verify();
     }
 
+    public function test_supported_formats() {
+        $this->assertEquals(['raw', 'html', 'json'], $this->mailRenderer->getSupportedFormats());
+    }
+
+    public function test_print_mail_json_fallback_to_raw() {
+        $this->mailServiceMock = Mockery::mock('No3x\WPML\Model\IMailService');
+
+        /** @var $mail WPML_Mail */
+        $mail = (new WPML_MailExtractor())->extract(WPMailArrayBuilder::aMail()
+            ->withSubject("Test")
+            ->withTo("example@exmple.com")
+            ->withHeaders("Content-Type: text/html")
+            ->withMessage("Message")
+            ->build());
+        $mail->set_mail_id($this->id);
+        $mail->set_plugin_version('1.8.5');
+        $mail->set_timestamp('2018-09-24 16:02:11');
+        $mail->set_host('127.0.0.1');
+        $mail->set_error('a');
+
+        $this->mailServiceMock->shouldReceive('find_one')
+            ->times(1)
+            ->with( $this->id )
+            ->andReturn( $mail );
+
+        $this->mailRenderer = new WPML_MailRenderer($this->mailServiceMock);
+        $this->assertContains("Fallback", $this->mailRenderer->render($this->id, WPML_MailRenderer::FORMAT_JSON));
+        $this->mailServiceMock->mockery_verify();
+    }
+
     public function test_print_mail_raw() {
         $expected = '<span class="title">Time: </span>2018-09-24 16:02:11<span class="title">Receiver: </span>example@exmple.com<span class="title">Subject: </span>Test<span class="title">Message: </span>&lt;b&gt;Bold&lt;/b&gt;<span class="title">Headers: </span>From: &quot;admin&quot; ,\nCc: example2@example.com,\nReply-To: admin <span class="title">Attachments: </span><span class="title">Error: </span><i class="fa fa-exclamation-circle" title="a"></i>';
         $actual = $this->mailRenderer->render($this->id, WPML_MailRenderer::FORMAT_RAW);
@@ -83,52 +113,65 @@ class WPML_MailRenderer_Test extends \PHPUnit_Framework_TestCase {
     }
 
     /**
-     * @dataProvider messagesProvider
-     * @param $message string the message to be rendered
+     * @dataProvider evilTextProvider
+     * @param $evilText string the message to be rendered
      * @param $expected string the expected output
      */
-    function test_messageSanitation($message, $expected) {
+    function test_messageSanitationOnMessageAndSubject($evilText, $expected) {
 
         $this->mailServiceMock = Mockery::mock('No3x\WPML\Model\IMailService');
 
-        /** @var $mail WPML_Mail */
-        $mail = (new WPML_MailExtractor())->extract(WPMailArrayBuilder::aMail()->withSubject("Test")->withTo("example@exmple.com")->withHeaders("From: \"admin\" <admin@local.test>\r\n,\nCc: example2@example.com,\nReply-To: admin <admin@local.test>\r\n")->withMessage($expected[0])->build());
-        $mail->set_mail_id($this->id);
-        $mail->set_plugin_version('1.8.5');
-        $mail->set_timestamp('2018-09-24 16:02:11');
-        $mail->set_host('127.0.0.1');
-        $mail->set_error('a');
+        /** @var $mail_raw WPML_Mail */
+        $mail_raw = (new WPML_MailExtractor())->extract(WPMailArrayBuilder::aMail()
+            ->withSubject($evilText)
+            ->withTo("example@exmple.com")
+            ->withHeaders("From: \"admin\" <admin@local.test>\r\n,\nCc: example2@example.com,\nReply-To: admin <admin@local.test>\r\n")
+            ->withMessage($evilText)
+            ->build())
+        ;
+        $mail_raw->set_mail_id($this->id);
+        $mail_raw->set_plugin_version('1.8.5');
+        $mail_raw->set_timestamp('2018-09-24 16:02:11');
+        $mail_raw->set_host('127.0.0.1');
+        $mail_raw->set_error('a');
 
-        /** @var $mail WPML_Mail */
-        $mail2 = WPML_Mail::create($mail->to_array());
-        $mail2->set_message($expected[1]);
+        /** @var $mail_html WPML_Mail */
+        $mail_html = WPML_Mail::create($mail_raw->to_array());
+        $mail_html->set_subject($evilText);
+        $mail_html->set_message($evilText);
 
         $this->mailServiceMock->shouldReceive('find_one')
             ->times(1)
             ->with( $this->id )
-            ->andReturn( $mail )
-            ->andReturn( $mail2 );
+            ->andReturn( $mail_raw )
+            // And then return $mail_html
+            ->andReturn( $mail_html )
+        ;
 
         $this->mailRenderer = new WPML_MailRenderer($this->mailServiceMock);
 
-        $mail1Act = $this->mailRenderer->render($this->id, WPML_MailRenderer::FORMAT_RAW);
-        $mail1ActAct= $this->get_string_between($mail1Act, 'Message: </span>', '<span ');
-        $mail2Act = $this->mailRenderer->render($this->id, WPML_MailRenderer::FORMAT_HTML);
-        $mail2ActAct= $this->get_string_between($mail2Act, 'Message: </span>', '<span ');
-        $this->assertEquals($expected[0], $mail1ActAct);
-        $this->assertEquals($expected[1], $mail2ActAct);
+        $this->assertMessageAndTitleEqual($expected[0], WPML_MailRenderer::FORMAT_RAW);
+        $this->assertMessageAndTitleEqual($expected[1], WPML_MailRenderer::FORMAT_HTML);
     }
 
-    function get_string_between($string, $start, $end){
+    private function assertMessageAndTitleEqual($expected, $format) {
+        $mail = $this->mailRenderer->render($this->id, $format);
+        $mail_message = $this->get_string_between($mail, 'Message: </span>', '<span ');
+        $mail_subject = $this->get_string_between($mail, 'Subject: </span>', '<span ');
+        $this->assertEquals($expected, $mail_message);
+        $this->assertEquals($expected, $mail_subject);
+    }
+
+    private function get_string_between($string, $start, $end){
         $string = ' ' . $string;
         $ini = strpos($string, $start);
-        if ($ini == 0) return '';
+        if ($ini == 0) return "Could not find '{$start}' in the string";
         $ini += strlen($start);
         $len = strpos($string, $end, $ini) - $ini;
         return substr($string, $ini, $len);
     }
 
-    function messagesProvider() {
+    function evilTextProvider() {
         return [
             "plaintext" => [
                 "Hello World",
@@ -154,7 +197,7 @@ class WPML_MailRenderer_Test extends \PHPUnit_Framework_TestCase {
             "script alert()" => [
                 "<script>alert('XSS hacking!');</script>",
                 [
-                    "alert('XSS hacking!');",
+                    "&lt;script&gt;alert('XSS hacking!');&lt;/script&gt;",
                     "alert('XSS hacking!');",
                 ]
             ],
@@ -181,4 +224,5 @@ class WPML_MailRenderer_Test extends \PHPUnit_Framework_TestCase {
             ],
         ];
     }
+
 }

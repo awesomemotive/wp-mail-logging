@@ -379,8 +379,6 @@ class WPML_OptionsManager {
             return;
 
         // Enqueue Styles and Scripts if we're on the list page
-        wp_enqueue_script( 'wp-logging-modal', untrailingslashit( plugin_dir_url( __FILE__ ) ) . '/../js/modal.js', array( 'jquery' ), '1.0.0', true );
-        wp_localize_script( 'wp-logging-modal', 'wpml_modal', array('ajax_nonce' => wp_create_nonce( 'wpml-modal-show' ) ) );
         wp_enqueue_style( 'wp-logging-modal', untrailingslashit( plugin_dir_url( __FILE__ ) ) . '/../css/modal.css', array(), '1.0.0' );
         wp_enqueue_style( 'wp-logging-icons', untrailingslashit( plugin_dir_url( __FILE__ ) ) . '/../lib/font-awesome/css/font-awesome.min.css', array(), '4.1.0' );
         wp_enqueue_script( 'icheck', untrailingslashit( plugin_dir_url( __FILE__ ) ) . '/../lib/icheck/icheck.min.js', array(), '1.0.2' );
