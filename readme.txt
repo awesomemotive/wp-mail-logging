@@ -5,8 +5,8 @@ Tags: mail, email, log, logging, debug, list, store, collect, view
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 Requires at least: 3.0
-Tested up to: 4.9.8
-Stable tag: 1.8.5
+Tested up to: 5.1
+Stable tag: 1.9.0
 
 Logs each email sent by WordPress.
 
@@ -49,16 +49,12 @@ The logged email has been sent by WordPress but please note this does NOT mean i
 2. The Detail View
 3. The Settings
 
-== Upgrade Notice ==
-= 1.8.5 =
-- New: added privacy integration (erasure, export, policy content suggestion)
-- Fix: typo in readme
-- Fix: output of html comments in emails
-- Tweak: performance (duplicate queries of installation state)
-
 == Changelog ==
 
-= 1.9.0 =
+= 1.9.0, April 7, 2019 =
+- Fix: PHP Notice: Undefined index: REMOTE_ADDR
+- Fix: Resend for multiple receivers
+- Fix: Resend for attachments
 - Tweak: error handling
 - Tweak: rendering for all formats improved
 - Tweak: dropped support to add custom columns and renderer
