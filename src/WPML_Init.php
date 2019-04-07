@@ -117,7 +117,7 @@ class WPML_Init {
             return new WPML_PrivacyController($c['plugin-meta']);
         };
         $this->container['mailRendererAjaxHandler'] = function ($c) {
-            return new WPML_MailRenderer_AJAX_Handler( $c['mailRenderer'] );
+            return new WPML_MailRenderer_AJAX_Handler($c['mailRenderer'], $c['plugin-meta']);
         };
         $this->container['mailRenderer'] = function ($c) {
             return new WPML_MailRenderer( new DefaultMailService() );

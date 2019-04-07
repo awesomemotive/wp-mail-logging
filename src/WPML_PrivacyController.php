@@ -10,11 +10,11 @@ class WPML_PrivacyController implements IHooks {
     const WPML_PRIVACY_ERASER = "wp-mail-logging-eraser";
     const PER_PAGE = 500;
 
+    private $plugin_meta;
+
     /**
      * WPML_PrivacyController constructor.
      */
-    private $plugin_meta;
-
     function __construct( $plugin_meta ) {
         $this->plugin_meta = $plugin_meta;
     }

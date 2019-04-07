@@ -26,7 +26,7 @@ class WPML_MailRenderer_AJAX_Handler_Test extends \WP_Ajax_UnitTestCase {
         $this->mailRendererMock->shouldReceive('getSupportedFormats')
             ->andReturn(['raw', 'html']);
 
-        $this->mailRendererAjaxHandler = new WPML_MailRenderer_AJAX_Handler($this->mailRendererMock);
+        $this->mailRendererAjaxHandler = new WPML_MailRenderer_AJAX_Handler($this->mailRendererMock, []);
     }
 
     /**
