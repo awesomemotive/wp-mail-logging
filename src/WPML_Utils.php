@@ -55,9 +55,19 @@ class WPML_Utils {
      * @return string returns the most suitable fa icon or generic one if not possible.
      */
     public static function determine_fa_icon( $iconClass ) {
-        return '<i class="fa fa-file-' . esc_attr($iconClass) . '-o"></i>';
+        return '<i class="fa ' . esc_attr( self::determine_fa_icon_css_class( $iconClass ) ) . '"></i>';
     }
 
+     /**
+     * Determines appropriate fa icon CSS class for a given icon class
+     * @since 1.9.1
+     * @param string $iconClass icon class.
+     * @return string fa icon CSS class.
+     */
+    public static function determine_fa_icon_css_class( $iconClass ) {
+        return ( $iconClass == "file" ) ? "fa-file-o" : "fa-file-{$iconClass}-o";
+    }
+    
     /**
      * Find appropriate fa icon from file path
      * @since 1.9.0
