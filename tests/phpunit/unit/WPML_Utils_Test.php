@@ -7,6 +7,13 @@ use No3x\WPML\WPML_Utils;
 
 class WPML_Utils_Test extends \PHPUnit_Framework_TestCase {
 
+    public function test_determine_fa_icon() {
+        // test file icon rendered properly (gh-90)
+        $this->assertNotSame('<i class="fa fa-file-file-o"></i>', WPML_Utils::determine_fa_icon("file"));
+        $this->assertSame('<i class="fa fa-file-o"></i>', WPML_Utils::determine_fa_icon("file"));
+        $this->assertSame('<i class="fa fa-file-archive-o"></i>', WPML_Utils::determine_fa_icon("archive"));
+    }
+
     /**
      * The sanitizer removes evil code from the text to output.
      * It removes unsafe html and keeps html comments.
