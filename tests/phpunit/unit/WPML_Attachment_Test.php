@@ -40,7 +40,7 @@ class WPML_Attachment_Test extends \PHPUnit_Framework_TestCase {
 
         $attachment = WPML_Attachment::fromRelPath($path);
         $this->assertFalse($attachment->isGone());
-        $this->assertEquals("image", $attachment->getIconClass());
+        $this->assertEquals("fa-file-image-o", $attachment->getIconClass());
         $this->assertEquals(WP_CONTENT_DIR . '/uploads' . $path, $attachment->getPath());
     }
 
@@ -60,7 +60,7 @@ class WPML_Attachment_Test extends \PHPUnit_Framework_TestCase {
 
         $attachment = WPML_Attachment::fromRelPath($path);
         $this->assertTrue($attachment->isGone());
-        $this->assertEquals("file", $attachment->getIconClass());
+        $this->assertEquals("fa-file-o", $attachment->getIconClass());
         $this->assertEquals("/invalid", $attachment->getPath());
     }
 
@@ -80,7 +80,7 @@ class WPML_Attachment_Test extends \PHPUnit_Framework_TestCase {
 
         $attachment = WPML_Attachment::fromAbsPath($path);
         $this->assertFalse($attachment->isGone());
-        $this->assertEquals("image", $attachment->getIconClass());
+        $this->assertEquals("fa-file-image-o", $attachment->getIconClass());
         $this->assertEquals($path, $attachment->getPath());
 
     }
@@ -101,7 +101,7 @@ class WPML_Attachment_Test extends \PHPUnit_Framework_TestCase {
         $path = WP_CONTENT_DIR . '../../else.png';
 
         $attachment = WPML_Attachment::fromAbsPath($path);
-        $this->assertEquals("file", $attachment->getIconClass());
+        $this->assertEquals("fa-file-o", $attachment->getIconClass());
         $this->assertEquals($path, $attachment->getPath());
         $this->assertEquals("else.png", $attachment->toRelPath());
 

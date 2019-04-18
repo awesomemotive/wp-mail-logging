@@ -62,7 +62,8 @@ class WPML_Attachment {
      */
     public function getIconClass() {
         if ($this->iconClass === null) {
-            $this->iconClass = $this->determine_mime_icon_class($this->getPath());
+            $mimeIconType = $this->determine_mime_icon_type($this->getPath());
+            $this->iconClass = ( $mimeIconType == "file" ) ? "fa-file-o" : "fa-file-{$mimeIconType}-o";
         }
 
         return $this->iconClass;
@@ -122,11 +123,11 @@ class WPML_Attachment {
         return new WPML_Attachment($path, $url, $gone);
     }
 
-    private function determine_mime_icon_class( $file_path ) {
-        $defaultIconClass = 'file';
+    private function determine_mime_icon_type( $file_path ) {
+        $defaultIconType = 'file';
 
         if($this->gone) {
-            return $defaultIconClass;
+            return $defaultIconType;
         }
 
         $supported = array(
@@ -155,31 +156,31 @@ class WPML_Attachment {
         );
 
         if( !function_exists('mime_content_type') ) {
-            return $defaultIconClass;
+            return $defaultIconType;
         }
 
         $mime = self::getFS()->mime_content_type( $file_path );
 
         if(false === $mime) {
-            return $defaultIconClass;
+            return $defaultIconType;
         }
         $mime_parts = explode( '/', $mime );
         $attribute = $mime_parts[0];
         $type = $mime_parts[1];
 
-        $iconClass = false;
+        $iconType = false;
         if ( ($key = WPML_Utils::recursive_array_search( $mime, $supported ) ) !== false ) {
-            // Use specific icon class for mime first.
-            $iconClass = $key;
+            // Use specific icon type for mime first.
+            $iconType = $key;
         } elseif ( in_array( $attribute, $supported ) ) {
-            // Use generic icon class.
-            $iconClass = $attribute;
+            // Use generic icon type.
+            $iconType = $attribute;
         }
 
-        if ( false === $iconClass  ) {
-            return $defaultIconClass;
+        if ( false === $iconType  ) {
+            return $defaultIconType;
         } else {
-            return $iconClass;
+            return $iconType;
         }
     }
 }
