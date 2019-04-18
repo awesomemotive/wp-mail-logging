@@ -5,8 +5,8 @@ Tags: mail, email, log, logging, debug, list, store, collect, view
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 Requires at least: 3.0
-Tested up to: 5.1
-Stable tag: 1.9.0
+Tested up to: 5.1.1
+Stable tag: 1.9.1
 
 Logs each email sent by WordPress.
 
@@ -50,6 +50,10 @@ The logged email has been sent by WordPress but please note this does NOT mean i
 3. The Settings
 
 == Changelog ==
+
+= 1.9.1, April 18, 2019 =
+- Fix: log-view resources loaded on each page (performance issue)
+- Fix: attachment icon is not displayed (e.g. if mime-type is unsupported)
 
 = 1.9.0, April 7, 2019 =
 - Fix: PHP Notice: Undefined index: REMOTE_ADDR

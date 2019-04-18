@@ -2,9 +2,9 @@
 # This file is distributed under the GPLv3.
 msgid ""
 msgstr ""
-"Project-Id-Version: WP Mail Logging 1.9.0\n"
+"Project-Id-Version: WP Mail Logging 1.9.1\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wp-mail-logging\n"
-"POT-Creation-Date: 2019-04-07 15:23:09+00:00\n"
+"POT-Creation-Date: 2019-04-18 13:01:12+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -40,7 +40,7 @@ msgstr ""
 msgid "Subject"
 msgstr ""
 
-#: src/Renderer/WPML_ColumnManager.php:36 src/WPML_OptionsManager.php:498
+#: src/Renderer/WPML_ColumnManager.php:36 src/WPML_OptionsManager.php:504
 msgid "Message"
 msgstr ""
 
@@ -72,80 +72,80 @@ msgstr ""
 msgid "Settings"
 msgstr ""
 
-#: src/WPML_OptionsManager.php:324 src/WPML_OptionsManager.php:325
+#: src/WPML_OptionsManager.php:328 src/WPML_OptionsManager.php:329
 msgid "WP Mail Log"
 msgstr ""
 
-#: src/WPML_OptionsManager.php:336 src/WPML_OptionsManager.php:337
-#: src/WPML_OptionsManager.php:348
+#: src/WPML_OptionsManager.php:340 src/WPML_OptionsManager.php:341
+#: src/WPML_OptionsManager.php:352
 msgid "About"
 msgstr ""
 
-#: src/WPML_OptionsManager.php:423
+#: src/WPML_OptionsManager.php:429
 msgid "About Plugin"
 msgstr ""
 
-#: src/WPML_OptionsManager.php:432
+#: src/WPML_OptionsManager.php:438
 msgid "More information"
 msgstr ""
 
-#: src/WPML_OptionsManager.php:433
+#: src/WPML_OptionsManager.php:439
 msgid "Plugin Homepage/support"
 msgstr ""
 
-#: src/WPML_OptionsManager.php:434
+#: src/WPML_OptionsManager.php:440
 msgid "Plugin author's blog"
 msgstr ""
 
-#: src/WPML_OptionsManager.php:441
+#: src/WPML_OptionsManager.php:447
 msgid "Entries per page"
 msgstr ""
 
-#: src/WPML_OptionsManager.php:463
+#: src/WPML_OptionsManager.php:469
 msgid "You do not have sufficient permissions to access this page."
 msgstr ""
 
-#: src/WPML_OptionsManager.php:472
+#: src/WPML_OptionsManager.php:478
 msgid "Log"
 msgstr ""
 
-#: src/WPML_OptionsManager.php:515
+#: src/WPML_OptionsManager.php:521
 msgid "Close"
 msgstr ""
 
-#: src/WPML_OptionsManager.php:529
+#: src/WPML_OptionsManager.php:535
 msgid "Search"
 msgstr ""
 
-#: src/WPML_OptionsManager.php:554
+#: src/WPML_OptionsManager.php:560
 msgid "true"
 msgstr ""
 
-#: src/WPML_OptionsManager.php:556
+#: src/WPML_OptionsManager.php:562
 msgid "false"
 msgstr ""
 
-#: src/WPML_OptionsManager.php:559
+#: src/WPML_OptionsManager.php:565
 msgid "Administrator"
 msgstr ""
 
-#: src/WPML_OptionsManager.php:561
+#: src/WPML_OptionsManager.php:567
 msgid "Editor"
 msgstr ""
 
-#: src/WPML_OptionsManager.php:563
+#: src/WPML_OptionsManager.php:569
 msgid "Author"
 msgstr ""
 
-#: src/WPML_OptionsManager.php:565
+#: src/WPML_OptionsManager.php:571
 msgid "Contributor"
 msgstr ""
 
-#: src/WPML_OptionsManager.php:567
+#: src/WPML_OptionsManager.php:573
 msgid "Subscriber"
 msgstr ""
 
-#: src/WPML_OptionsManager.php:569
+#: src/WPML_OptionsManager.php:575
 msgid "Anyone"
 msgstr ""
 
