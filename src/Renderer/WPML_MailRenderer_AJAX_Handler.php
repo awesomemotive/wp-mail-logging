@@ -37,7 +37,6 @@ class WPML_MailRenderer_AJAX_Handler implements IHooks {
      * @var WPML_MailRenderer
      */
     private $mailRenderer;
-    private $plugin_meta;
 
     /**
      * @param WPML_MailRenderer $mailRenderer
@@ -50,12 +49,11 @@ class WPML_MailRenderer_AJAX_Handler implements IHooks {
         self::getInstance()->plugin_meta = $plugin_meta;
     }
 
-    public function __construct(WPML_MailRenderer $mailRenderer, $plugin_meta) {
+    public function __construct(WPML_MailRenderer $mailRenderer) {
         if( null == self::$handler ) {
             self::$handler = $this;
         }
         self::getInstance()->setMailRenderer($mailRenderer);
-        self::getInstance()->setPluginMeta($plugin_meta);
     }
 
     public static function getInstance() {
@@ -67,16 +65,6 @@ class WPML_MailRenderer_AJAX_Handler implements IHooks {
      */
     function addActionsAndFilters() {
         add_action('wp_ajax_' . self::ACTION, array(self::$handler, 'handle'));
-        add_action('wp_loaded', array(self::$handler, 'register_script'));
-    }
-
-    /**
-     * Register our AJAX JavaScript.
-     */
-    public function register_script() {
-        wp_register_script('wp-mail-logging-modal', untrailingslashit( plugin_dir_url( __FILE__ ) ) . '/../../js/modal.js', array( 'jquery' ), $this->plugin_meta['version'], true);
-        wp_localize_script('wp-mail-logging-modal', 'wpml_modal_ajax', $this->get_ajax_data());
-        wp_enqueue_script('wp-mail-logging-modal');
     }
 
     /**

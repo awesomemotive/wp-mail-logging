@@ -3,6 +3,7 @@
 namespace No3x\WPML;
 
 use No3x\WPML\Model\WPML_Mail as Mail;
+use No3x\WPML\Renderer\WPML_MailRenderer_AJAX_Handler;
 
 // Exit if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) exit;
@@ -16,9 +17,11 @@ class WPML_Plugin extends WPML_LifeCycle implements IHooks {
     /**
      * WPML_Plugin constructor.
      * @param $supportedMailRendererFormats
+     * @param WPML_MailRenderer_AJAX_Handler $mailRendererAJAXHandler
      */
-    public function __construct($supportedMailRendererFormats) {
+    public function __construct($supportedMailRendererFormats, $mailRendererAJAXHandler) {
         $this->supportedMailRendererFormats = $supportedMailRendererFormats;
+        $this->mailRendererAJAXHandler = $mailRendererAJAXHandler;
     }
 
     public static function getTablename( $name ) {

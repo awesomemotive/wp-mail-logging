@@ -70,7 +70,7 @@ class WPML_Init {
     public function init( $file ) {
 
         $this->container['plugin'] = function ($c) {
-            return new WPML_Plugin($c['supported-mail-renderer-formats']);
+            return new WPML_Plugin($c['supported-mail-renderer-formats'], $c['mailRendererAjaxHandler']);
         };
         $this->container['plugin-meta'] = function ($c) use ($file) {
             /* @var $plugin WPML_Plugin */
@@ -117,7 +117,7 @@ class WPML_Init {
             return new WPML_PrivacyController($c['plugin-meta']);
         };
         $this->container['mailRendererAjaxHandler'] = function ($c) {
-            return new WPML_MailRenderer_AJAX_Handler($c['mailRenderer'], $c['plugin-meta']);
+            return new WPML_MailRenderer_AJAX_Handler($c['mailRenderer']);
         };
         $this->container['mailRenderer'] = function ($c) {
             return new WPML_MailRenderer( new DefaultMailService() );

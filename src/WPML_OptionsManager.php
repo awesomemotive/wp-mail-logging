@@ -22,11 +22,15 @@
 namespace No3x\WPML;
 
 // Exit if accessed directly.
+use No3x\WPML\Renderer\WPML_MailRenderer_AJAX_Handler;
+
 if ( ! defined( 'ABSPATH' ) ) exit;
 
 class WPML_OptionsManager {
 
     protected $supportedMailRendererFormats;
+    /** @var WPML_MailRenderer_AJAX_Handler */
+    protected $mailRendererAJAXHandler;
 
     /**
      * Is used to retrive a settings value
@@ -378,9 +382,11 @@ class WPML_OptionsManager {
         if ( $screen->id != $wp_logging_list_page )
             return;
 
-        // Enqueue Styles and Scripts if we're on the list page
-        wp_enqueue_style( 'wp-logging-modal', untrailingslashit( plugin_dir_url( __FILE__ ) ) . '/../css/modal.css', array(), '1.0.0' );
-        wp_enqueue_style( 'wp-logging-icons', untrailingslashit( plugin_dir_url( __FILE__ ) ) . '/../lib/font-awesome/css/font-awesome.min.css', array(), '4.1.0' );
+        // Enqueue styles and scripts if we're on the list page
+        wp_enqueue_style( 'wp-mail-logging-modal', untrailingslashit( plugin_dir_url( __FILE__ ) ) . '/../css/modal.css', array(), $this->getVersion() );
+        wp_enqueue_script('wp-mail-logging-modal', untrailingslashit( plugin_dir_url( __FILE__ ) ) . '/../js/modal.js', array( 'jquery' ), $this->getVersion(), true);
+        wp_localize_script('wp-mail-logging-modal', 'wpml_modal_ajax', $this->mailRendererAJAXHandler->get_ajax_data());
+        wp_enqueue_style( 'wp-mail-logging-icons', untrailingslashit( plugin_dir_url( __FILE__ ) ) . '/../lib/font-awesome/css/font-awesome.min.css', array(), '4.1.0' );
         wp_enqueue_script( 'icheck', untrailingslashit( plugin_dir_url( __FILE__ ) ) . '/../lib/icheck/icheck.min.js', array(), '1.0.2' );
         wp_enqueue_style( 'icheck-square', untrailingslashit( plugin_dir_url( __FILE__ ) ) . '/../lib/icheck/square/blue.css', array(), '1.0.2' );
     }
