@@ -146,7 +146,11 @@ class WPML_Attachment {
             ),
             'excel' => array( 'application/vnd.ms-excel'
             ),
-            'image', 'text', 'movie', 'pdf', 'photo', 'picture',
+            'image', 'text', 'movie',
+            'pdf' => array(
+                'application/pdf',
+            ),
+            'photo', 'picture',
             'powerpoint' => array(
                 'application/vnd.ms-powerpoint'
             ), 'sound', 'video', 'word' => array(
