@@ -1,48 +1,116 @@
-=== WP Mail Logging ===
-Contributors: No3x, tripflex
-Donate link: http://no3x.de/web/donate
-Tags: mail, email, log, logging, debug, list, store, collect, view
+=== WP Mail Logging by MailPoet ===
+Contributors: MailPoet, No3x, tripflex
+Tags: mail, email, log, logging, email log, debug, smtp, spam, deliverability
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
-Requires at least: 3.0
-Tested up to: 5.1.1
+Requires at least: 5.0
+Tested up to: 5.2
 Stable tag: 1.9.1
 
-Logs each email sent by WordPress.
+Log every single email sent by WordPress. Zero configuration. Entirely free.
 
 == Description ==
 
-Logs each email sent by WordPress. This can be useful if you don't want to lose such mail contents. It can also be useful for debugging purposes while development.
+### Why log emails sent from WordPress or WooCommerce?
 
-Features of the plugin include:
+Because it's useful to know which emails your WordPress sends for debugging purposes or out of curiosity.
 
- * Complete list of sent mails - view and search through the mails.
- * Error status from mail implementation is logged
- * Zero-configuration - just install and enjoy.
- * Log rotation - decide which emails you want to keep.
- * DevOP: IP of server sent the mail
- * Developer: Boost your development performance by keeping track of sent mails.
- * Developer: Filters are provided to extend the columns.
+By default, WordPress and your web host do not log, store or keep track of emails sent from your website.
 
-[youtube https://www.youtube.com/watch?v=mQK6VPSV2-E]
+### What email information is logged?
 
-**Follow this plugin on [GitHub](https://github.com/No3x/wp-mail-logging)**
+The default emails WordPress sends are logged:
 
-**If you find an issue, let us know in the [Tracker](https://github.com/No3x/wp-mail-logging/issues?state=open)**
+* password reset emails
+* new account email notification emails
+* new comment email notification
+* WordPress version updates notification
 
-**Provide feedback and suggestions on [enhancements](https://github.com/No3x/wp-mail-logging/issues?direction=desc&labels=Enhancement%2Cenhancement&page=1&sort=created&state=open)**
+These emails will be logged like this:
 
-== Installation ==
-Just install and activate wp-mail-logging. The plugin will do the work for you! You can list all logged mails on the plugin site.
-I recommend the following plugins if you want to send mails via SMTP because they are technically well integrated into WordPress and provide error messages on failure.:
-- [WP Mail SMTP](https://de.wordpress.org/plugins/wp-mail-smtp/)
-- [SMTP Mailer](https://de.wordpress.org/plugins/smtp-mailer/)
+* Complete list of sent mails, and searchable
+* Contents of the email
+* Headers of the email
+* Error statuses
+* IP address of originating server
+* Feature: decide which emails you want to keep
+* Developer: filters are provided to extend the columns
+
+For most websites, this represents just a couple of emails per week. If your website has a lot of visitors or you have a large membership website, the number of emails will increase.
+
+### Why are my logged emails still not delivered to the inbox?
+
+When WordPress sends emails, there's no guarantee it will be delivered.
+
+This is the lifecycle of a WordPress email:
+* WordPress or plugin creates an email
+* WordPress passes the email to the host and email gets logged by this plugin
+* The host takes the email and sends it (SMTP or Mail Transfer Agent)
+* Recipient receives or blocks the email
+* If the email is accepted, the spam filter decides which inbox it goes into
+* Recipients see the email and might open it.
+
+This plugin does not track delivery after step 2.
+
+### How do I know if my WordPress' emails are delivered to an inbox then?
+
+You need to send an email from your WordPress to an inbox that has no spam filter:
+
+1. Install the plugin <a href="https://wordpress.org/plugins/check-email/">Check Email</a>
+2. In a new tab, go to <a href="https://www.mail-tester.com">mail-tester.com</a>. Copy the email address there.
+3. In your WordPress admin, go to Tools > Check Email
+4. Send an email to the address you copied from mail-tester
+5. Return to the mail-tester, and click on "Check your score". Wait until mail-tester gets the email.
+
+If mail-tester never receives your email, there's a problem with your host's sending method. Contact your host to let them know.
+
+### What to do if the emails are not delivered to my personal inbox?
+
+If mail-tester receives your emails (see point above), but your own address doesn't receive it:
+
+* Check your inbox spam folder
+* If the email is not there, your email provider is blocking the email before it even reaches the spambox. This is common.
+
+We recommend in this case send your WordPress email with a service provider, like Sendgrid. <a href="https://www.mailpoet.com/blog/top-three-smtp-plugins-for-wordpress/>See our guide on free plugins and options to send with an SMTP plugin.</a>
+
+### Which emails does WooCommerce send?
+
+* Cancelled order
+* Failed order
+* Order on-hold
+* Processing order
+* Completed order
+* Refunded order
+* Customer invoice / Order details
+* Customer note
+* Reset password
+* New account
+
+### Which popular plugins send emails?
+
+* The Event Calendar
+* Gravity Forms
+* Ninja Forms
+* Contact Form 7
+* Wordfence
+* ... and many more.
+
+### What next?
+
+
+### Credits
+
+This plugin is maintained by <a href="https://www.mailpoet.com/">MailPoet, the most popular email plugin for WordPress</a>.
+
+The plugin was created and launched in 2014 by <a href="https://no3x.de/">Christian Zöller</a>.
 
 == Frequently Asked Questions ==
-= How do I know the mail was sent? =
-If there is no error logged chances are high the mail was sent. There are plugins that overwrite (do not customize) the default mailing mechanism of WordPress - they maybe do not inform about failure so it can't be logged by WP Mail Logging.
-= How do I know the mail was delivered? =
-The logged email has been sent by WordPress but please note this does NOT mean it has been delivered. With the given functionality of WordPress you can't determine if a mail was delivered successfully.
+= I need help! =
+We answer in the forums, but only occasionally.
+= Where can I report a bug? =
+You can do so in the support forums. We'll be happy to review them.
+= Can I submit changes to the plugin? =
+Yes, directly on <a href="https://github.com/mailpoet/wp-mail-logging" rel="nofollow">GitHub</a>.
 
 == Screenshots ==
 1. The List
@@ -51,107 +119,12 @@ The logged email has been sent by WordPress but please note this does NOT mean i
 
 == Changelog ==
 
-= 1.9.1, April 18, 2019 =
+= 1.9.1 - 2019-08-20 =
+- MailPoet has claimed ownership. We're grateful to Christian for all the work committed to this project over the years.
+
+= 1.9.1, 2019-04-18 =
 - Fix: log-view resources loaded on each page (performance issue)
 - Fix: attachment icon is not displayed (e.g. if mime-type is unsupported)
 
-= 1.9.0, April 7, 2019 =
-- Fix: PHP Notice: Undefined index: REMOTE_ADDR
-- Fix: Resend for multiple receivers
-- Fix: Resend for attachments
-- Tweak: error handling
-- Tweak: rendering for all formats improved
-- Tweak: dropped support to add custom columns and renderer
-
-= 1.8.5, September 13, 2018 =
-- New: added privacy integration (erasure, export, policy content suggestion)
-- Fix: typo in readme
-- Fix: output of html comments in emails
-- Tweak: performance (duplicate queries of installation state)
-
-= 1.8.4, June 22, 2018 =
-- Fix: transient bug
-- Fix: notice when attachments not set
-
-= 1.8.3, November 10, 2017 =
-- Fix: another security bug
-
-= 1.8.2, November 7, 2017 =
-- Fix: security bug
-
-= 1.8.1, June 8, 2017 =
-- Fix: Resending mails uses proper headers now
-- Fix: Translation: Text domain
-- Fix: Prevent error if mail to set error on was not found
-
-= 1.8.0, February 15, 2017 =
-- New: Error status from mail implementation is logged
-- New: Resend mail
-- New: Added translation files
-- New: Added translation for de_DE and zh_CN
-- Fix: raw mode of message renders attachments as text
-- Fix: fallback to raw mode for json mode if mail is containing html
-- Tweak: Pretty print json
-
-= 1.7.0, November 6, 2016 =
-- New: logging host IP
-- Fix: passing search term for pagination
-- Tweak: close modal with ESC
-
-= 1.6.2, August 7, 2016  =
-- Fix: search mails
-
-= 1.6.1, August 1, 2016  =
-- Fix: delete mails
-
-= 1.6.0, July 31, 2016  =
-- New: Improved modal, added view types
-- Tweak: Proper date if none set in WordPress settings
-- Tweak: Updated libraries
-- Tweak: Added wp_mail hook to very last priority
-
-= 1.5.1, October 11, 2015  =
-- Tweak: Fixed security issues
-
-= 1.5.0, June 4, 2015  =
-- New: Setting for date time format
-- Tweak: Removed admin bar menu
-- Fix: repetitive cron schedule
-
-= 1.4.2, April 4, 2015  =
-- Tweak: Library updated - settings load speed improved.
-
-= 1.4.1, March 28, 2015  =
-- Fix: Restrict submission data works now.
-- Fix: Granularity of cleanup by time slider changed to 7.
-
-= 1.4.0, December 22, 2014  =
-- New: Log Rotation
-- New: Search
-- Tweak: Settings
-- Fix: international characters are supported now
-- Fix: Mandrill support
-
-= 1.3.2, September 21, 2014  =
-- Fix: HTML mails broken in previous version.
-
-= 1.3.1, September 12, 2014  =
-- Fix: angle brackets notation support (e.g. John Doe <john.doe@example.org>).
-
-= 1.3, August 24, 2014  =
-- New: clean mail listing including:
-  Modal window for mail details.
-  Attachment support with appropriate icon for mime type.
-- Tweak: Performance improvement
-- Fix: screen option for mails per page
-
-= 1.2, August 12, 2014  =
-- New: video
-- Tweak: Improved help & stability
-- Fix: deletion of mails regardless of options (on update to 1.2 your mails will be deleted hopefully this happens for the last time)
-
-= 1.1 =
-- Tweak: Modified readme.
-
-= 1.0 =
-- Initial Revision
+= 1.0, 2014 =
+- Hello matrix
