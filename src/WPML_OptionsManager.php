@@ -324,13 +324,12 @@ class WPML_OptionsManager {
         $pluginNameSlug = $this->getPluginSlug();
         $capability = $this->getSetting( 'can-see-submission-data', 'manage_options' );
 
-        //create new top-level menu
-        $wp_logging_list_page = add_menu_page(__('WP Mail Log', 'wp-mail-logging'),
-            __('WP Mail Log', 'wp-mail-logging'),
+        //create submenu in the tools menu item
+        $wp_logging_list_page = add_submenu_page( 'tools.php', __( 'WP Mail Log', 'wp-mail-logging' ),
+            __( 'WP Mail Log', 'wp-mail-logging' ),
             $capability,
             $pluginNameSlug . '_log',
-            array(&$this, 'LogMenu'),
-            $pluginIcon
+            array( &$this, 'LogMenu' )
         );
 
         // Add Action to load assets when page is loaded
@@ -475,6 +474,8 @@ class WPML_OptionsManager {
             require_once ( plugin_dir_path( __FILE__ ) . 'WPML_Email_Log_List.php' );
         }
 
+        $tab = isset( $_GET['tab'] ) ? $_GET['tab'] : null;
+
         ?>
         <div class="wrap">
             <h2><?php echo $this->getPluginDisplayName(); echo ' '; _e('Log', 'wp-mail-logging'); ?></h2>
@@ -487,6 +488,57 @@ class WPML_OptionsManager {
                     });
                 });
             </script>
+            <nav style="margin-bottom: 20px" class="nav-tab-wrapper wp-clearfix">
+                <a href="<?php echo admin_url( 'admin.php?page=wpml_plugin_log' ) ?>"
+                    class="nav-tab <?php echo $tab == null ? 'nav-tab-active' : null ?>"
+                    aria-current="page">
+                        <?php _e( 'Email log', 'wp-mail-logging' ); ?>
+                </a>
+                <a href="<?php echo add_query_arg( 'tab', 'settings', admin_url( 'admin.php?page=wpml_plugin_log' ) ) ?>"
+                    class="nav-tab <?php echo $tab == 'settings' ? 'nav-tab-active' : null ?>">
+                        <?php _e( 'Settings', 'wp-mail-logging' ) ?>
+                </a>
+            </nav>
+            <?php switch ( $tab ) {
+                case 'settings':
+                    $redux = WPML_Init::getInstance()->getService( 'redux' );
+                    $framework = $redux->ReduxFramework;
+                    if ( ! class_exists( 'reduxCorePanel' ) ) {
+                        $path = dirname( __DIR__ ) . '/lib/vendor/redux-framework/core/panel.php';
+                        require_once $path;
+                    }
+                    if ( ! class_exists( 'reduxCoreEnqueue' ) ) {
+                        $path = dirname( __DIR__ ) . '/lib/vendor/redux-framework/core/enqueue.php';
+                        require_once $path;
+                    }
+                    $enqueue = new \reduxCoreEnqueue ( $framework );
+                    $enqueue->init();
+
+                    $panel = new \reduxCorePanel ( $framework );
+                    $panel->init();
+                    break;
+                default:
+                    $this->_LogMenu();
+                    break;
+            }
+            ?>
+        </div>
+        <?php
+            }
+
+            public function _LogMenu() {
+                global $wp_version, $wpml_settings;
+
+                if ( ! current_user_can( $this->getSetting( 'can-see-submission-data', 'manage_options' ) ) ) {
+                    wp_die( __( 'You do not have sufficient permissions to access this page.', 'wp-mail-logging' ) );
+                }
+
+                if ( ! class_exists( 'Email_Log_List_Table' ) ) {
+                    require_once( plugin_dir_path( __FILE__ ) . 'WPML_Email_Log_List.php' );
+                }
+
+                ?>
+
             <div id="wp-mail-logging-modal-wrap">
                 <div id="wp-mail-logging-modal-backdrop"></div>
                 <div id="wp-mail-logging-modal-content-wrap">
