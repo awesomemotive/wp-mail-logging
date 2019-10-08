@@ -641,7 +641,7 @@ class WPML_OptionsManager {
     private function displayMP3BannerVersionB() {
         ?>
         <p>
-            <?php _e( 'Create beautiful email campaigns and reach your audience in a breeze with the MailPoet  plugin. MailPoet is used by over 300,000 website owners making it the most popular email marketing solution in WordPress. Send beautiful newsletters, notify your readers about last articles and increase your WooCommerce sales!', 'wp-mail-logging' );?>
+            <?php _e( 'Create beautiful email campaigns and reach your audience in a breeze with the MailPoet  plugin. MailPoet is used by over 300,000 website owners making it the most popular email marketing solution in WordPress. Send beautiful newsletter, notify your readers about last articles and increase your WooCommerce sales!', 'wp-mail-logging' );?>
         </p>
         <p>
             <a href="?page=wpml_plugin_log&redirect=free-plan&ref=wml_2" target="_blank" class="button button-primary">
