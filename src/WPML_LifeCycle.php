@@ -202,7 +202,7 @@ class WPML_LifeCycle extends WPML_InstallIndicator {
 
     public function registerPluginActionLinks( $actions, $plugin_file ) {
         if ($this->getMainPluginFileName() == basename($plugin_file)) {
-            $settings = array('settings' => '<a href="admin.php?page=wpml_plugin_settings">' . __('Settings', 'General') . '</a>');
+            $settings = array('settings' => '<a href="' . admin_url( 'tools.php?page=wpml_plugin_log&tab=settings' ) . '">' . __( 'Settings', 'General' ) . '</a>' );
             $actions = array_merge($settings, $actions);
         }
         return $actions;
