@@ -231,12 +231,12 @@ if (!class_exists('WPML_Redux_Framework_config')) {
                 // Name that appears at the top of your panel
                 'display_version'      => $this->plugin_meta['version_installed'],
                 // Version that appears at the top of your panel
-                'menu_type'            => 'submenu',
+                'menu_type'            => 'hidden',
                 //Specify if the admin menu should appear or not. Options: menu or submenu (Under appearance only)
-                'allow_sub_menu'       => true,
+                'allow_sub_menu'       => false,
                 // Show the sections below the admin menu item or not
-                'menu_title'           => 'Settings',
-                'page_title'           => $this->plugin_meta['display_name'],
+                //'menu_title'           => 'Settings',
+                //'page_title'           => $this->plugin_meta['display_name'],
                 // You will need to generate a Google API key to use this feature.
                 // Please visit: https://developers.google.com/fonts/docs/developer_api#Auth
                 'google_api_key'       => '',
