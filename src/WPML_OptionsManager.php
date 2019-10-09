@@ -560,8 +560,8 @@ class WPML_OptionsManager {
 
     private function displayMP3BannerVersionA() {
         ?>
-            <ul style="list-style-type:disc">
                 <li><?php _e( '50 email templates to chose from', 'wp-mail-logging' );?></li>
+            <ul style="list-style-type:disc;list-style-position: inside">
                 <li><?php _e( 'Fun email designer', 'wp-mail-logging' );?></li>
                 <li><?php _e( 'Automated email marketing', 'wp-mail-logging' );?></li>
                 <li><?php _e( 'WooCommerce emails', 'wp-mail-logging' );?></li>
