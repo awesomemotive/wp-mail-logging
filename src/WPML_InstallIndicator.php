@@ -45,7 +45,7 @@ class WPML_InstallIndicator extends WPML_OptionsManager {
             global $wpdb;
 
             $mails = $this->getTablename('mails');
-            $query = $wpdb->query("SHOW TABLES LIKE \"$mails\"");
+            $query = $wpdb->query("SHOW TABLES LIKE '{$mails}'");
             $installed = (bool) $query;
 
             if ($installed) {
