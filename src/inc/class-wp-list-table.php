@@ -382,7 +382,7 @@ class WP_List_Table {
         global $wpdb, $wp_locale;
 
         $months = $wpdb->get_results( $wpdb->prepare( "
-			SELECT DISTINCT YEAR( post_date ) AS year, MONTH( post_date ) AS month
+			SELECT DISTINCT YEAR( post_date ) AS year, MONTH( post_date ) AS month, post_date
 			FROM $wpdb->posts
 			WHERE post_type = %s
 			ORDER BY post_date DESC
