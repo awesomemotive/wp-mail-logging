@@ -596,11 +596,16 @@ class WPML_OptionsManager {
     }
 
     private function displayMP3Banner() {
+        $option = (int)get_option('wpml_banner_version');
+        if (!$option) {
+            $option = rand(1, 2);
+            add_option('wpml_banner_version', $option);
+        }
         ?>
-        <div style="background: #fff;border-left: 4px solid #fff;border-radius: 10px;box-shadow: 0 4px 35px rgba(195, 65, 2, .2);clear: both;margin-bottom: 15px;padding: 20px;position: relative;">
+        <div style="background: #fff;border-left: 4px solid #fff;border-radius: 10px;box-shadow: 0 4px 35px rgba(195, 65, 2, .2);clear: both;margin-bottom: 15px;margin-top: 15px;padding: 20px;">
             <h3><?php _e( 'Reliable and beautiful emails by MailPoet!', 'wp-mail-logging' );?></h3>
             <?php
-              if (rand(1, 2) === 1) {
+              if ($option === 1) {
                     $this->displayMP3BannerVersionA();
               } else {
                     $this->displayMP3BannerVersionB();
