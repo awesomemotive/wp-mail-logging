@@ -591,7 +591,6 @@ class WPML_OptionsManager {
                 ?>
             </form>
             <?php $this->displayMP3Banner() ?>
-        </div>
         <?php
     }
 
