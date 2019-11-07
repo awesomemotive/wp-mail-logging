@@ -71,7 +71,7 @@ If mail-tester receives your emails (see point above), but your own address does
 * Check your inbox spam folder
 * If the email is not there, your email provider is blocking the email before it even reaches the spambox. This is common.
 
-We recommend in this case send your WordPress email with a service provider, like Sendgrid. <a href="https://www.mailpoet.com/blog/top-three-smtp-plugins-for-wordpress/>See our guide on free plugins and options to send with an SMTP plugin.</a>
+We recommend in this case send your WordPress email with a service provider, like Sendgrid. <a href="https://www.mailpoet.com/blog/top-three-smtp-plugins-for-wordpress/">See our guide on free plugins and options to send with an SMTP plugin.</a>
 
 ### Which emails does WooCommerce send?
 
