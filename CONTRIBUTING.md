@@ -5,7 +5,7 @@ Community made patches, localisations, bug reports and contributions are always 
 When contributing please ensure you follow the guidelines below.
 
 ## Environment
-All dependencies are managed via [composer](http://getcomposer.org). 
+All dependencies are managed via [composer](http://getcomposer.org).
 To install the plugin with development dependencies run:
 
 ```composer install```
@@ -18,7 +18,7 @@ To execute unit tests use the phpunit version downloaded by composer:
 
 ```
 cd /srv/www/wordpress-develop/public_html/src/wp-content/plugins/wp-mail-logging
-vendor/phpunit/phpunit/phpunit 
+vendor/phpunit/phpunit/phpunit
 ```
 If you use VVV make sure to be in the `/srv` directory instead of `/vagrant/www`. Otherwise there are errors like:
 ```
@@ -32,7 +32,7 @@ Please insure to be conform with the development guidelines.
 ## Getting Started
 
 * Submit a ticket for your issue, assuming one does not already exist or fix an issue
-  * Raise it on our [Issue Tracker](https://github.com/No3x/wp-mail-logging/issues)
+  * Raise it on our [Issue Tracker](https://github.com/mailpoet/wp-mail-logging/issues)
   * Clearly describe the issue including steps to reproduce the bug.
   * Make sure you fill in the earliest version that you know has the issue as well as the version of WordPress you're using.
 

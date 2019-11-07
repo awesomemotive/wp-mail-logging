@@ -2,7 +2,7 @@
 /*
    Plugin Name: WP Mail Logging
    Plugin URI: http://wordpress.org/extend/plugins/wp-mail-logging/
-   Support URI: https://github.com/No3x/wp-mail-logging/issues
+   Support URI: https://github.com/mailpoet/wp-mail-logging/issues
    Version: 1.9.4
    Author: MailPoet
    Author URI: https://www.mailpoet.com/
