@@ -3,7 +3,7 @@
    Plugin Name: WP Mail Logging
    Plugin URI: http://wordpress.org/extend/plugins/wp-mail-logging/
    Support URI: https://github.com/mailpoet/wp-mail-logging/issues
-   Version: 1.9.4
+   Version: 1.9.5
    Author: MailPoet
    Author URI: https://www.mailpoet.com/
    Description: Logs each email sent by WordPress.
