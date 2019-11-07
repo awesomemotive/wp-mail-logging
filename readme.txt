@@ -5,7 +5,7 @@ License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 Requires at least: 5.0
 Tested up to: 5.2
-Stable tag: 1.9.1
+Stable tag: 1.9.2
 
 Log every single email sent by WordPress. Zero configuration. Entirely free.
 
@@ -118,6 +118,11 @@ Yes, directly on <a href="https://github.com/mailpoet/wp-mail-logging" rel="nofo
 3. The Settings
 
 == Changelog ==
+
+= 1.9.2 - 2019-11-07 =
+- Added: MailPoet banner;
+- Updated: assets;
+- Improved: menu position is now under wp-admin > tools.
 
 = 1.9.1 - 2019-08-20 =
 - MailPoet has claimed ownership. We're grateful to Christian for all the work committed to this project over the years.
