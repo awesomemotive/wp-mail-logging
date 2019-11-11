@@ -56,7 +56,7 @@
 
 	<?php $list_table->views() ?>
 
-	<form id="posts-filter" action="admin.php" method="get">
+	<form id="posts-filter" action="tools.php" method="get">
 		<input type="hidden" name="page" value="<?= esc_attr($_GET['page']) ?>">
 		<?php $list_table->search_box('Search', 'post') ?>
 

@@ -489,12 +489,12 @@ class WPML_OptionsManager {
                 });
             </script>
             <nav style="margin-bottom: 20px" class="nav-tab-wrapper wp-clearfix">
-                <a href="<?php echo admin_url( 'admin.php?page=wpml_plugin_log' ) ?>"
+                <a href="<?php echo admin_url( 'tools.php?page=wpml_plugin_log' ) ?>"
                     class="nav-tab <?php echo $tab == null ? 'nav-tab-active' : null ?>"
                     aria-current="page">
                         <?php _e( 'Email log', 'wp-mail-logging' ); ?>
                 </a>
-                <a href="<?php echo add_query_arg( 'tab', 'settings', admin_url( 'admin.php?page=wpml_plugin_log' ) ) ?>"
+                <a href="<?php echo add_query_arg( 'tab', 'settings', admin_url( 'tools.php?page=wpml_plugin_log' ) ) ?>"
                     class="nav-tab <?php echo $tab == 'settings' ? 'nav-tab-active' : null ?>">
                         <?php _e( 'Settings', 'wp-mail-logging' ) ?>
                 </a>
