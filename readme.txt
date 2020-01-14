@@ -11,6 +11,8 @@ Log every single email sent by WordPress. Zero configuration. Entirely free.
 
 == Description ==
 
+WP Mail Logging is the most popular plugin to log emails sent by WordPress or WooCommerce. Simply activate it and it will work immediately, no configuration necessary.
+
 ### Why log emails sent from WordPress or WooCommerce?
 
 Because it's useful to know which emails your WordPress sends for debugging purposes or out of curiosity.
@@ -36,19 +38,19 @@ These emails will be logged like this:
 * Feature: decide which emails you want to keep
 * Developer: filters are provided to extend the columns
 
-For most websites, this represents just a couple of emails per week. If your website has a lot of visitors or you have a large membership website, the number of emails will increase.
+For most websites, this represents just a couple of emails per week. If your website is high traffic, is a membership website or is a WooCommerce store, the number of emails will increase and will be critical.
 
 ### Why are my logged emails still not delivered to the inbox?
 
 When WordPress sends emails, there's no guarantee it will be delivered.
 
 This is the lifecycle of a WordPress email:
-* WordPress or plugin creates an email
-* WordPress passes the email to the host and email gets logged by this plugin
-* The host takes the email and sends it (SMTP or Mail Transfer Agent)
-* Recipient receives or blocks the email
-* If the email is accepted, the spam filter decides which inbox it goes into
-* Recipients see the email and might open it.
+1. WordPress or plugin creates an email
+2. WordPress passes the email to the host and email gets logged by this plugin
+3. The host takes the email and sends it (SMTP or Mail Transfer Agent)
+4. Recipient receives or blocks the email
+5. If the email is accepted, the spam filter decides which inbox it goes into
+6. Recipients see the email and might open it.
 
 This plugin does not track delivery after step 2.
 
@@ -71,7 +73,7 @@ If mail-tester receives your emails (see point above), but your own address does
 * Check your inbox spam folder
 * If the email is not there, your email provider is blocking the email before it even reaches the spambox. This is common.
 
-We recommend in this case send your WordPress email with a service provider, like Sendgrid. <a href="https://www.mailpoet.com/blog/top-three-smtp-plugins-for-wordpress/">See our guide on free plugins and options to send with an SMTP plugin.</a>
+We recommend in this case to send your WordPress email with a service provider, like MailPoet or Sendgrid. <a href="https://www.mailpoet.com/blog/top-three-smtp-plugins-for-wordpress/">See our guide on free plugins and options to send with an SMTP plugin.</a>
 
 ### Which emails does WooCommerce send?
 
@@ -94,9 +96,6 @@ We recommend in this case send your WordPress email with a service provider, lik
 * Contact Form 7
 * Wordfence
 * ... and many more.
-
-### What next?
-
 
 ### Credits
 
