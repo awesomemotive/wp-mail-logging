@@ -342,7 +342,7 @@ class WPML_OptionsManager {
             $pluginNameSlug . '_about',
             array(&$this, 'LogSubMenuAbout') );
 
-        add_action( 'contextual_help', array( &$this, 'create_settings_panel' ), 10, 3 );
+        add_action( 'add_help_tab', array( &$this, 'create_settings_panel' ), 10, 3 );
     }
 
     public function LogSubMenuAbout() {
