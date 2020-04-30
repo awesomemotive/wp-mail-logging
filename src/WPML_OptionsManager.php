@@ -342,7 +342,16 @@ class WPML_OptionsManager {
             $pluginNameSlug . '_about',
             array(&$this, 'LogSubMenuAbout') );
 
-        add_action( 'contextual_help', array( &$this, 'create_settings_panel' ), 10, 3 );
+        add_action( 'load-' . $wp_logging_list_page, function() {
+            add_screen_option(
+                'per_page',
+                array(
+                    'label' => __('Entries per page', 'wp-mail-logging'),
+                    'default' => 25,
+                    'option' => 'per_page'
+                )
+            );
+        });
     }
 
     public function LogSubMenuAbout() {
@@ -388,68 +397,6 @@ class WPML_OptionsManager {
         wp_enqueue_style( 'wp-mail-logging-icons', untrailingslashit( plugin_dir_url( __FILE__ ) ) . '/../lib/font-awesome/css/font-awesome.min.css', array(), '4.1.0' );
         wp_enqueue_script( 'icheck', untrailingslashit( plugin_dir_url( __FILE__ ) ) . '/../lib/icheck/icheck.min.js', array(), '1.0.2' );
         wp_enqueue_style( 'icheck-square', untrailingslashit( plugin_dir_url( __FILE__ ) ) . '/../lib/icheck/square/blue.css', array(), '1.0.2' );
-    }
-
-    /**
-     * Add settings Panel
-     */
-    function create_settings_panel($contextual_help, $screen_id, $screen) {
-
-        global $hook_suffix;
-
-        // Just add if we are at the plugin page
-        if ( strpos($hook_suffix, $this->getPluginSlug() . '_log' ) == false )
-            return $contextual_help;
-
-        // The add_help_tab function for screen was introduced in WordPress 3.3.
-        if ( ! method_exists( $screen, 'add_help_tab' ) )
-            return $contextual_help;
-
-
-        // List screen properties
-        $left = '<div style="width:50%;float:left;">'
-            . '<h4>About this plugin</h4>'
-            . '<p>This plugin is open source.</p>'
-            . '</div>';
-
-
-        $right = '<div style="width:50%;float:right;">'
-            . '<h4>Donate</h4>'
-            . '<p>If you like the plugin please consider to make a donation. More information are provided on my <a href="http://no3x.de/web/donate">website</a>.</p>'
-            . '</div>';
-
-        $help_content = $left . $right;
-
-        /**
-         * Content specified inline
-         */
-        $screen->add_help_tab(
-            array(
-                'title'    => __('About Plugin', 'wp-mail-logging'),
-                'id'       => 'about_tab',
-                'content'  => '<p>' . __( "{$this->getPluginDisplayName()}, logs each email sent by WordPress.", 'wp-mail-logging') . '</p>' . $help_content,
-                'callback' => false
-            )
-        );
-
-        // Add help sidebar
-        $screen->set_help_sidebar(
-            '<p><strong>' . __('More information', 'wp-mail-logging') . '</strong></p>' .
-            '<p><a href = "http://wordpress.org/extend/plugins/wp-mail-logging/">' . __('Plugin Homepage/support', 'wp-mail-logging') . '</a></p>' .
-            '<p><a href = "http://no3x.de/">' . __("Plugin author's blog", 'wp-mail-logging') . '</a></p>'
-        );
-
-        // Add screen options
-        $screen->add_option(
-            'per_page',
-            array(
-                'label' => __('Entries per page', 'wp-mail-logging'),
-                'default' => 25,
-                'option' => 'per_page'
-            )
-        );
-
-        return $contextual_help;
     }
 
     /**
