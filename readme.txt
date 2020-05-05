@@ -5,7 +5,7 @@ License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 Requires at least: 5.0
 Tested up to: 5.2
-Stable tag: 1.9.5
+Stable tag: 1.9.6
 
 Log every single email sent by WordPress. Zero configuration. Entirely free.
 
@@ -117,6 +117,9 @@ Yes, directly on <a href="https://github.com/mailpoet/wp-mail-logging" rel="nofo
 3. The Settings
 
 == Changelog ==
+
+= 1.9.6 - 2020-05-05 =
+- Removed: contextual help tab.
 
 = 1.9.5 - 2019-11-07 =
 - Updated: plugin author.
