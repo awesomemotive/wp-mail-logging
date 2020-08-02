@@ -537,7 +537,26 @@ class WPML_OptionsManager {
                 $emailLogList->display();
                 ?>
             </form>
-            <?php $this->displayMP3Banner() ?>
+            <?php
+            $banner = false;
+            ob_start();
+            $this->displayMP3Banner();
+            $banner = ob_get_contents();            
+            ob_end_clean();
+            /**
+            * Allows the banner to be customized or de-activated.
+            *
+            * @since 1.9.7
+            *
+            * @param boolean|string $banner The default banner content
+            * 
+            * @return boolean|string
+            */
+            $banner = apply_filters('wpml_display_banner', $banner );
+            if ( $banner ) {
+                echo $banner;
+            }
+            ?>
         <?php
     }
 
