@@ -544,16 +544,17 @@ class WPML_OptionsManager {
             $banner = ob_get_contents();            
             ob_end_clean();
             /**
-            * Allows the banner to be customized or de-activated.
+            * Control whether the banner is displayed or not
             *
             * @since 1.9.7
             *
-            * @param boolean|string $banner The default banner content
+            * @param boolean $display Whether the banner should be displayed. (default: true)
+            * @param string  $banner  The default banner content
             * 
-            * @return boolean|string
+            * @return boolean
             */
-            $banner = apply_filters('wpml_display_banner', $banner );
-            if ( $banner ) {
+            $display = apply_filters('wpml_banner_display', true, $banner );
+            if ( $display ) {
                 echo $banner;
             }
             ?>
