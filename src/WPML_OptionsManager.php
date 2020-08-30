@@ -537,21 +537,19 @@ class WPML_OptionsManager {
                 $emailLogList->display();
                 ?>
             </form>
-			<?php
-			$banner = $this->displayMP3Banner();
+            <?php
             /**
             * Control whether the banner is displayed or not
             *
             * @since 1.9.7
             *
             * @param boolean $display Whether the banner should be displayed. (default: true)
-            * @param string  $banner  The default banner content
             * 
             * @return boolean
             */
-            $display = apply_filters('wpml_banner_display', true, $banner );
+            $display = apply_filters('wpml_banner_display', true);
             if ( $display ) {
-                echo $banner;
+                $this->displayMP3Banner();
             }
             ?>
         <?php
@@ -563,55 +561,59 @@ class WPML_OptionsManager {
             $option = rand(1, 2);
             add_option('wpml_banner_version', $option);
         }
-
-        $banner = '<div style="background: #fff;border-left: 4px solid #fff;border-radius: 10px;box-shadow: 0 4px 35px rgba(195, 65, 2, .2);clear: both;margin-bottom: 15px;margin-top: 15px;padding: 20px;">';
-        $banner .= sprintf('<h3>%s</h3>', __( 'Reliable and beautiful emails by MailPoet!', 'wp-mail-logging' ) );
-
-        if ($option === 1) {
-            $banner .= $this->displayMP3BannerVersionA();
-		} else {
-			$banner .= $this->displayMP3BannerVersionB();
-		}
-		
-		$banner .= '</div>';
-
-		return $banner;
+        ?>
+        <div style="background: #fff;border-left: 4px solid #fff;border-radius: 10px;box-shadow: 0 4px 35px rgba(195, 65, 2, .2);clear: both;margin-bottom: 15px;margin-top: 15px;padding: 20px;">
+            <h3><?php _e( 'Reliable and beautiful emails by MailPoet!', 'wp-mail-logging' );?></h3>
+            <?php
+              if ($option === 1) {
+                    $this->displayMP3BannerVersionA();
+              } else {
+                    $this->displayMP3BannerVersionB();
+              }
+            ?>
+        </div>
+        <?php
     }
 
     private function displayMP3BannerVersionA() {
-		$banner = '<ul style="list-style-type:disc;list-style-position: inside">';
-		$banner .= sprintf( '<li>%s</li>', __( '50 email templates to choose from', 'wp-mail-logging' ) );
-		$banner .= sprintf( '<li>%s</li>', __( 'Fun email designer', 'wp-mail-logging' ) );
-		$banner .= sprintf( '<li>%s</li>', __( 'Automated email marketing', 'wp-mail-logging' ) );
-		$banner .= sprintf( '<li>%s</li>', __( 'WooCommerce emails', 'wp-mail-logging' ) );
-		$banner .= sprintf( '<li>%s</li>', __( '99.1% success email deliverability', 'wp-mail-logging' ) );
-		$banner .= sprintf( '<li>%s</li>', __( 'Fast and friendly support', 'wp-mail-logging' ) );
-		$banner .= sprintf( '<li>%s</li>', __( 'Over 100,000 active users', 'wp-mail-logging' ) );
-		$banner .= '</ul>';
-		$banner .= sprintf( '<a class="button button-primary" href="%s" target="_blank">%s</a>',
-			'?page=wpml_plugin_log&redirect=free-plan&ref=wml_1',
-			__( 'Try MailPoet for free', 'wp-mail-logging' )
-		);
-		$banner .= sprintf( '<p>%s: <i>%s</i> %s</p>',
-			__( 'Testimonial', 'wp-mail-logging' ),
-			__( 'Thanks for this awesome plugin, love love love how it integrates with WordPress. I seriously spent days if not weeks on Mailchimp, and still haven’t been able to do what I did on MailPoet in 1 hour!', 'wp-mail-logging' ),
-			__( '— Kida Shey', 'wp-mail-logging' )
-		);
-
-		return $banner;
+        ?>
+            <ul style="list-style-type:disc;list-style-position: inside">
+                <li><?php _e( '50 email templates to choose from', 'wp-mail-logging' );?></li>
+                <li><?php _e( 'Fun email designer', 'wp-mail-logging' );?></li>
+                <li><?php _e( 'Automated email marketing', 'wp-mail-logging' );?></li>
+                <li><?php _e( 'WooCommerce emails', 'wp-mail-logging' );?></li>
+                <li><?php _e( '99.1% success email deliverability', 'wp-mail-logging' );?></li>
+                <li><?php _e( 'Fast and friendly support', 'wp-mail-logging' );?></li>
+                <li><?php _e( 'Over 100,000 active users', 'wp-mail-logging' );?></li>
+            </ul>
+            <a
+                class="button button-primary"
+                href="?page=wpml_plugin_log&redirect=free-plan&ref=wml_1"
+                target="_blank"
+            >
+                <?php _e( 'Try MailPoet for free', 'wp-mail-logging' );?>
+            </a>
+            <p>
+                <?php _e( 'Testimonial', 'wp-mail-logging' );?>:
+                <i>
+                    <?php _e( 'Thanks for this awesome plugin, love love love how it integrates with WordPress. I seriously spent days if not weeks on Mailchimp, and still haven’t been able to do what I did on MailPoet in 1 hour!', 'wp-mail-logging' );?>
+                </i>
+                — Kida Shey
+            </p>
+        <?php
     }
 
     private function displayMP3BannerVersionB() {
-		$banner = sprintf( '<p>%s</p>', 
-			__( 'Create beautiful email campaigns and reach your audience in a breeze with the MailPoet  plugin. MailPoet is used by over 300,000 website owners making it the most popular email marketing solution in WordPress. Send beautiful newsletter, notify your readers about last articles and increase your WooCommerce sales!', 'wp-mail-logging' )
-		);
-		
-		$banner .= sprintf( '<p><a href="%s" target="_blank" class="button button-primary">%s</a></p>',
-            '?page=wpml_plugin_log&redirect=free-plan&ref=wml_2',
-			__( 'Discover MailPoet for free', 'wp-mail-logging' )
-		);
-
-		return $banner;
+        ?>
+        <p>
+            <?php _e( 'Create beautiful email campaigns and reach your audience in a breeze with the MailPoet  plugin. MailPoet is used by over 300,000 website owners making it the most popular email marketing solution in WordPress. Send beautiful newsletter, notify your readers about last articles and increase your WooCommerce sales!', 'wp-mail-logging' );?>
+        </p>
+        <p>
+            <a href="?page=wpml_plugin_log&redirect=free-plan&ref=wml_2" target="_blank" class="button button-primary">
+                <?php _e( 'Discover MailPoet for free', 'wp-mail-logging' );?>
+            </a>
+        </p>
+        <?php
     }
 
     private function redirectToFreePlan() {
