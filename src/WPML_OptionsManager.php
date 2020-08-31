@@ -537,7 +537,21 @@ class WPML_OptionsManager {
                 $emailLogList->display();
                 ?>
             </form>
-            <?php $this->displayMP3Banner() ?>
+            <?php
+            /**
+            * Control whether the banner is displayed or not
+            *
+            * @since 1.9.7
+            *
+            * @param boolean $display Whether the banner should be displayed. (default: true)
+            * 
+            * @return boolean
+            */
+            $display = apply_filters('wpml_banner_display', true);
+            if ( $display ) {
+                $this->displayMP3Banner();
+            }
+            ?>
         <?php
     }
 
