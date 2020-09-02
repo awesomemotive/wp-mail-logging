@@ -2,7 +2,7 @@
 # This file is distributed under the GPLv3.
 msgid ""
 msgstr ""
-"Project-Id-Version: WP Mail Logging 1.9.6\n"
+"Project-Id-Version: WP Mail Logging 1.9.7\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wp-mail-logging\n"
 "POT-Creation-Date: 2019-04-18 13:01:12+00:00\n"
 "MIME-Version: 1.0\n"

@@ -5,7 +5,7 @@ License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 Requires at least: 5.0
 Tested up to: 5.5
-Stable tag: 1.9.6
+Stable tag: 1.9.7
 
 Log every single email sent by WordPress. Zero configuration. Entirely free.
 
@@ -117,6 +117,10 @@ Yes, directly on <a href="https://github.com/mailpoet/wp-mail-logging" rel="nofo
 3. The Settings
 
 == Changelog ==
+
+= 1.9.7 - 2020-09-02 =
+- Added: wpml_banner_display filter to hide MailPoet banner;
+- Updated: support for WordPress 5.5.
 
 = 1.9.6 - 2020-05-05 =
 - Removed: contextual help tab.
