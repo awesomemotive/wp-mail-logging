@@ -10,8 +10,8 @@ use No3x\WPML\Renderer\WPML_ColumnManager;
 // Exit if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-require_once(ABSPATH . 'wp-admin/includes/screen.php');
-require_once(ABSPATH . 'wp-admin/includes/class-wp-list-table.php');
+require_once( ABSPATH . 'wp-admin/includes/screen.php' );
+require_once( ABSPATH . 'wp-admin/includes/class-wp-list-table.php' );
 
 if ( ! class_exists( 'WP_List_Table' ) ) {
     require_once( plugin_dir_path( __FILE__ ) . 'inc/class-wp-list-table.php' );
@@ -41,16 +41,16 @@ class WPML_Email_Log_List extends \WP_List_Table implements IHooks {
     }
 
     function addActionsAndFilters() {
-        add_action( 'admin_init', array( $this, 'init') );
+        add_action( 'admin_init', array( $this, 'init' ) );
     }
 
     function init() {
         global $status, $page, $hook_suffix;
 
         parent::__construct( array(
-            'singular' 	=> 'email', 	// singular name of the listed records
-            'plural' 	=> 'emails',	// plural name of the listed records
-            'ajax' 		=> false,		// does this table support ajax?
+            'singular' => 'email',  // singular name of the listed records
+            'plural'   => 'emails', // plural name of the listed records
+            'ajax'     => false,    // does this table support ajax?
         ) );
     }
 
@@ -71,14 +71,14 @@ class WPML_Email_Log_List extends \WP_List_Table implements IHooks {
      */
     function get_columns() {
 
-        $columns = array_merge(['cb' => '<input type="checkbox" />'], $this->columnManager->getColumns());
+        $columns = array_merge( ['cb' => '<input type="checkbox" />'], $this->columnManager->getColumns() );
 
         /* @var $instance WPML_Plugin */
         $instance = WPML_Init::getInstance()->getService( 'plugin' );
 
-        $switch = $instance->getSetting('display-host', false );
-        if( false == $switch ) {
-            unset($columns['host']);
+        $switch = $instance->getSetting( 'display-host', false );
+        if ( false == $switch ) {
+            unset( $columns['host'] );
         }
 
         return $columns;
@@ -120,19 +120,19 @@ class WPML_Email_Log_List extends \WP_List_Table implements IHooks {
      * @see WP_List_Table::prepare_items()
      */
     function prepare_items( $search = false ) {
-        $orderby = $this->sanitize_orderby();
-        $order = $this->sanitize_order();
-
-        $columns = $this->get_columns();
-        $hidden = $this->get_hidden_columns();
+        $orderby  = $this->sanitize_orderby();
+        $order    = $this->sanitize_order();
+        $columns  = $this->get_columns();
+        $hidden   = $this->get_hidden_columns();
         $sortable = $this->get_sortable_columns();
+
         $this->_column_headers = array( $columns, $hidden, $sortable );
 
         $this->process_bulk_action();
 
-        $per_page = $this->get_items_per_page( 'per_page', 25 );
+        $per_page     = $this->get_items_per_page( 'per_page', 25 );
         $current_page = $this->get_pagenum();
-        $offset = ( $current_page - 1 ) * $per_page;
+        $offset       = ( $current_page - 1 ) * $per_page;
 
         $total_items = Mail::query()
             ->search( $search )
@@ -165,7 +165,7 @@ class WPML_Email_Log_List extends \WP_List_Table implements IHooks {
      * @return string The cell content
      */
     function column_default( $item, $column_name ) {
-        return ( new SanitizedColumnDecorator($this->columnManager->getColumnRenderer($column_name)))->render($item, ColumnFormat::FULL);
+        return ( new SanitizedColumnDecorator( $this->columnManager->getColumnRenderer( $column_name ) ) )->render( $item, ColumnFormat::FULL );
     }
 
 
@@ -188,8 +188,8 @@ class WPML_Email_Log_List extends \WP_List_Table implements IHooks {
      */
     function get_bulk_actions() {
         $actions = array(
-            'delete'    => 'Delete',
-            'resend'	=> 'Resend'
+            'delete' => __( 'Delete', 'wp-mail-logging' ),
+            'resend' => __( 'Resend', 'wp-mail-logging' )
         );
         return $actions;
     }
@@ -240,7 +240,7 @@ class WPML_Email_Log_List extends \WP_List_Table implements IHooks {
      * @param array $item The current item.
      * @return string the rendered cb cell content
      */
-    function column_cb($item) {
+    function column_cb( $item ) {
         $name = $this->_args['singular'];
         return sprintf(
             '<input type="checkbox" name="%1$s[]" value="%2$s" />', $name, $item['mail_id']
@@ -255,13 +255,13 @@ class WPML_Email_Log_List extends \WP_List_Table implements IHooks {
     function get_sortable_columns() {
         return array(
             // Description: column_name => array( 'display_name', true[asc] | false[desc] ).
-            'mail_id'  		=> array( 'mail_id', false ),
-            'timestamp' 	=> array( 'timestamp', true ),
-            'host' 	        => array( 'host', true ),
-            'receiver' 		=> array( 'receiver', true ),
-            'subject' 		=> array( 'subject', true ),
-            'headers' 		=> array( 'headers', true ),
-            'plugin_version'=> array( 'plugin_version', true ),
+            'mail_id'        => array( 'mail_id', false ),
+            'timestamp'      => array( 'timestamp', true ),
+            'host'           => array( 'host', true ),
+            'receiver'       => array( 'receiver', true ),
+            'subject'        => array( 'subject', true ),
+            'headers'        => array( 'headers', true ),
+            'plugin_version' => array( 'plugin_version', true ),
         );
     }
 }

@@ -40,13 +40,13 @@ class WPML_OptionsManager {
      * @param mixed $default (null) The value to return if option not set.
      * @return ambigous <string, mixed> the options value or $default if not found.
      */
-    public function getSetting($settingName, $default = null) {
+    public function getSetting( $settingName, $default = null ) {
         global $wpml_settings;
 
-        if ( array_key_exists($settingName, $wpml_settings)) {
+        if ( array_key_exists( $settingName, $wpml_settings ) ) {
             $retVal = $wpml_settings[$settingName];
         }
-        if (!isset($retVal) && $default !== null) {
+        if ( ! isset( $retVal ) && null !== $default ) {
             $retVal = $default;
         }
         return $retVal;
@@ -59,15 +59,15 @@ class WPML_OptionsManager {
      */
     public function getDateTimeFormatString() {
         // default database like format
-        $format = 'Y-m-d G:i:s';
+        $format      = 'Y-m-d G:i:s';
         $date_format = get_option( 'date_format' );
         $time_format = get_option( 'time_format' );
         // get option or change to user friendly format as the options maybe not set at all
         $date_format = empty( $date_format ) ? 'F j, Y' : $date_format;
         $time_format = empty( $time_format ) ? 'g:i a' : $time_format;
-        if ( $this->getSetting( 'datetimeformat-use-wordpress', false) == true )
+        if ( true == $this->getSetting( 'datetimeformat-use-wordpress', false ) )
             // Overwrite with defined values or default
-            $format = $date_format . " " . $time_format;
+            $format = $date_format . ' ' . $time_format;
         return $format;
     }
 
@@ -99,7 +99,7 @@ class WPML_OptionsManager {
      * @return array of string name of options
      */
     public function getOptionNames() {
-        return array_keys($this->getOptionMetaData());
+        return array_keys( $this->getOptionMetaData() );
     }
 
     /**
@@ -115,10 +115,10 @@ class WPML_OptionsManager {
      */
     protected function deleteSavedOptions() {
         $optionMetaData = $this->getOptionMetaData();
-        if (is_array($optionMetaData)) {
-            foreach ($optionMetaData as $aOptionKey => $aOptionMeta) {
-                $prefixedOptionName = $this->prefix($aOptionKey); // how it is stored in DB
-                delete_option($prefixedOptionName);
+        if ( is_array( $optionMetaData ) ) {
+            foreach ( $optionMetaData as $aOptionKey => $aOptionMeta ) {
+                $prefixedOptionName = $this->prefix( $aOptionKey ); // how it is stored in DB
+                delete_option( $prefixedOptionName );
             }
         }
     }
@@ -154,9 +154,9 @@ class WPML_OptionsManager {
      * @link http://php.net/manual/de/function.get-class.php#114568
      */
     private function getClassnameWithoutNamespace() {
-        $classname = get_class($this);
-        if ($pos = strrpos( $classname, '\\')) {
-            return substr($classname, $pos + 1);
+        $classname = get_class( $this );
+        if ( $pos = strrpos( $classname, '\\' ) ) {
+            return substr( $classname, $pos + 1 );
         }
         return $classname;
     }
@@ -167,9 +167,9 @@ class WPML_OptionsManager {
      * @param  $name string option name to prefix. Defined in settings.php and set as keys of $this->optionMetaData
      * @return string
      */
-    public function prefix($name) {
+    public function prefix( $name ) {
         $optionNamePrefix = $this->getOptionNamePrefix();
-        if (strpos($name, $optionNamePrefix) === 0) { // 0 but not false
+        if ( 0 === strpos( $name, $optionNamePrefix ) ) { // 0 but not false
             return $name; // already prefixed
         }
         return $optionNamePrefix . $name;
@@ -181,10 +181,10 @@ class WPML_OptionsManager {
      * @param  $name string
      * @return string $optionName without the prefix.
      */
-    public function &unPrefix($name) {
+    public function &unPrefix( $name ) {
         $optionNamePrefix = $this->getOptionNamePrefix();
-        if (strpos($name, $optionNamePrefix) === 0) {
-            return substr($name, strlen($optionNamePrefix));
+        if ( 0 === strpos( $name, $optionNamePrefix ) ) {
+            return substr( $name, strlen( $optionNamePrefix ) );
         }
         return $name;
     }
@@ -197,10 +197,10 @@ class WPML_OptionsManager {
      * @return string the value from delegated call to get_option(), or optional default value
      * if option is not set.
      */
-    public function getOption($optionName, $default = null) {
-        $prefixedOptionName = $this->prefix($optionName); // how it is stored in DB
-        $retVal = get_option($prefixedOptionName);
-        if (!$retVal && $default) {
+    public function getOption( $optionName, $default = null ) {
+        $prefixedOptionName = $this->prefix( $optionName ); // how it is stored in DB
+        $retVal             = get_option( $prefixedOptionName );
+        if ( ! $retVal && $default ) {
             $retVal = $default;
         }
         return $retVal;
@@ -212,9 +212,9 @@ class WPML_OptionsManager {
      * @param  $optionName string defined in settings.php and set as keys of $this->optionMetaData
      * @return bool from delegated call to delete_option()
      */
-    public function deleteOption($optionName) {
-        $prefixedOptionName = $this->prefix($optionName); // how it is stored in DB
-        return delete_option($prefixedOptionName);
+    public function deleteOption( $optionName ) {
+        $prefixedOptionName = $this->prefix( $optionName ); // how it is stored in DB
+        return delete_option( $prefixedOptionName );
     }
 
     /**
@@ -224,9 +224,9 @@ class WPML_OptionsManager {
      * @param  $value mixed the new value
      * @return null from delegated call to delete_option()
      */
-    public function addOption($optionName, $value) {
-        $prefixedOptionName = $this->prefix($optionName); // how it is stored in DB
-        return add_option($prefixedOptionName, $value);
+    public function addOption( $optionName, $value ) {
+        $prefixedOptionName = $this->prefix( $optionName ); // how it is stored in DB
+        return add_option( $prefixedOptionName, $value );
     }
 
     /**
@@ -236,9 +236,9 @@ class WPML_OptionsManager {
      * @param  $value mixed the new value
      * @return null from delegated call to delete_option()
      */
-    public function updateOption($optionName, $value) {
-        $prefixedOptionName = $this->prefix($optionName); // how it is stored in DB
-        return update_option($prefixedOptionName, $value);
+    public function updateOption( $optionName, $value ) {
+        $prefixedOptionName = $this->prefix( $optionName ); // how it is stored in DB
+        return update_option( $prefixedOptionName, $value );
     }
 
     /**
@@ -251,9 +251,9 @@ class WPML_OptionsManager {
      * @param  $optionName
      * @return string role name
      */
-    public function getRoleOption($optionName) {
-        $roleAllowed = $this->getOption($optionName);
-        if (!$roleAllowed || $roleAllowed == '') {
+    public function getRoleOption( $optionName ) {
+        $roleAllowed = $this->getOption( $optionName );
+        if ( ! $roleAllowed || '' == $roleAllowed ) {
             $roleAllowed = 'Administrator';
         }
         return $roleAllowed;
@@ -265,7 +265,7 @@ class WPML_OptionsManager {
      * @param  $roleName
      * @return string a WP capability or '' if unknown input role
      */
-    protected function roleToCapability($roleName) {
+    protected function roleToCapability( $roleName ) {
         switch ( ucfirst( $roleName ) ) {
             case 'Super Admin':
                 return 'manage_options';
@@ -289,24 +289,24 @@ class WPML_OptionsManager {
      * @param $roleName string a standard WP role name like 'Administrator'
      * @return bool
      */
-    public function isUserRoleEqualOrBetterThan($roleName) {
-        if ('Anyone' == $roleName) {
+    public function isUserRoleEqualOrBetterThan( $roleName ) {
+        if ( 'Anyone' == $roleName ) {
             return true;
         }
-        $capability = $this->roleToCapability($roleName);
-        return current_user_can($capability);
+        $capability = $this->roleToCapability( $roleName );
+        return current_user_can( $capability );
     }
 
     /**
      * @param  $optionName string name of a Role option (see comments in getRoleOption())
      * @return bool indicates if the user has adequate permissions
      */
-    public function canUserDoRoleOption($optionName) {
-        $roleAllowed = $this->getRoleOption($optionName);
-        if ('Anyone' == $roleAllowed) {
+    public function canUserDoRoleOption( $optionName ) {
+        $roleAllowed = $this->getRoleOption( $optionName );
+        if ( 'Anyone' == $roleAllowed ) {
             return true;
         }
-        return $this->isUserRoleEqualOrBetterThan($roleAllowed);
+        return $this->isUserRoleEqualOrBetterThan( $roleAllowed );
     }
 
     /**
@@ -322,7 +322,7 @@ class WPML_OptionsManager {
         if ( $wp_version >= 3.8 ) $pluginIcon = 'dashicons-email-alt';
 
         $pluginNameSlug = $this->getPluginSlug();
-        $capability = $this->getSetting( 'can-see-submission-data', 'manage_options' );
+        $capability     = $this->getSetting( 'can-see-submission-data', 'manage_options' );
 
         //create submenu in the tools menu item
         $wp_logging_list_page = add_submenu_page( 'tools.php', __( 'WP Mail Log', 'wp-mail-logging' ),
@@ -336,19 +336,19 @@ class WPML_OptionsManager {
         add_action( 'load-' . $wp_logging_list_page, array( $this, 'load_assets' ) );
 
         add_submenu_page($pluginNameSlug . '_log',
-            __('About', 'wp-mail-logging'),
-            __('About', 'wp-mail-logging'),
+            __( 'About', 'wp-mail-logging' ),
+            __( 'About', 'wp-mail-logging' ),
             $capability,
             $pluginNameSlug . '_about',
-            array(&$this, 'LogSubMenuAbout') );
+            array( &$this, 'LogSubMenuAbout' ) );
 
         add_action( 'load-' . $wp_logging_list_page, function() {
             add_screen_option(
                 'per_page',
                 array(
-                    'label' => __('Entries per page', 'wp-mail-logging'),
+                    'label'   => __( 'Entries per page', 'wp-mail-logging' ),
                     'default' => 25,
-                    'option' => 'per_page'
+                    'option'  => 'per_page'
                 )
             );
         });
@@ -357,7 +357,7 @@ class WPML_OptionsManager {
     public function LogSubMenuAbout() {
         ?>
         <div class="wrap">
-            <h2><?php echo $this->getPluginDisplayName(); echo ' '; _e('About', 'wp-mail-logging'); ?></h2>
+            <h2><?php echo $this->getPluginDisplayName() . ' ' . __( 'About', 'wp-mail-logging' ); ?></h2>
             <h3>Why use?</h3>
             <p>Sometimes you may ask yourself if a mail was actually sent by WordPress - with
                 <strong>With <?php echo $this->getPluginDisplayName(); ?>, you can:</strong></p>
@@ -392,8 +392,8 @@ class WPML_OptionsManager {
 
         // Enqueue styles and scripts if we're on the list page
         wp_enqueue_style( 'wp-mail-logging-modal', untrailingslashit( plugin_dir_url( __FILE__ ) ) . '/../css/modal.css', array(), $this->getVersion() );
-        wp_enqueue_script('wp-mail-logging-modal', untrailingslashit( plugin_dir_url( __FILE__ ) ) . '/../js/modal.js', array( 'jquery' ), $this->getVersion(), true);
-        wp_localize_script('wp-mail-logging-modal', 'wpml_modal_ajax', $this->mailRendererAJAXHandler->get_ajax_data());
+        wp_enqueue_script( 'wp-mail-logging-modal', untrailingslashit( plugin_dir_url( __FILE__ ) ) . '/../js/modal.js', array( 'jquery' ), $this->getVersion(), true );
+        wp_localize_script( 'wp-mail-logging-modal', 'wpml_modal_ajax', $this->mailRendererAJAXHandler->get_ajax_data() );
         wp_enqueue_style( 'wp-mail-logging-icons', untrailingslashit( plugin_dir_url( __FILE__ ) ) . '/../lib/font-awesome/css/font-awesome.min.css', array(), '4.1.0' );
         wp_enqueue_script( 'icheck', untrailingslashit( plugin_dir_url( __FILE__ ) ) . '/../lib/icheck/icheck.min.js', array(), '1.0.2' );
         wp_enqueue_style( 'icheck-square', untrailingslashit( plugin_dir_url( __FILE__ ) ) . '/../lib/icheck/square/blue.css', array(), '1.0.2' );
@@ -411,13 +411,13 @@ class WPML_OptionsManager {
     public function LogMenu() {
         global $wp_version, $wpml_settings;
 
-        if ( !current_user_can( $this->getSetting( 'can-see-submission-data', 'manage_options' ) ) ) {
-            wp_die(__('You do not have sufficient permissions to access this page.', 'wp-mail-logging'));
+        if ( ! current_user_can( $this->getSetting( 'can-see-submission-data', 'manage_options' ) ) ) {
+            wp_die( __( 'You do not have sufficient permissions to access this page.', 'wp-mail-logging' ) );
         }
 
         $this->redirectToFreePlan();
 
-        if (!class_exists( 'Email_Log_List_Table' ) ) {
+        if ( ! class_exists( 'Email_Log_List_Table' ) ) {
             require_once ( plugin_dir_path( __FILE__ ) . 'WPML_Email_Log_List.php' );
         }
 
@@ -425,7 +425,7 @@ class WPML_OptionsManager {
 
         ?>
         <div class="wrap">
-            <h2><?php echo $this->getPluginDisplayName(); echo ' '; _e('Log', 'wp-mail-logging'); ?></h2>
+            <h2><?php echo $this->getPluginDisplayName() . ' ' . __( 'Log', 'wp-mail-logging' ); ?></h2>
             <script>
                 jQuery(document).ready(function($) {
                     $('#wp-mail-logging-modal-content-header-format-switch input').iCheck({
@@ -448,7 +448,7 @@ class WPML_OptionsManager {
             </nav>
             <?php switch ( $tab ) {
                 case 'settings':
-                    $redux = WPML_Init::getInstance()->getService( 'redux' );
+                    $redux     = WPML_Init::getInstance()->getService( 'redux' );
                     $framework = $redux->ReduxFramework;
                     if ( ! class_exists( 'reduxCorePanel' ) ) {
                         $path = dirname( __DIR__ ) . '/lib/vendor/redux-framework/core/panel.php';
@@ -507,7 +507,7 @@ class WPML_OptionsManager {
                             <div id="wp-mail-logging-modal-content-header-format-switch">
                                 <?php
                                 foreach( $this->supportedMailRendererFormats as $key => $format ) {
-                                    $checked = checked($format, $wpml_settings['preferred-mail-format'], false);
+                                    $checked = checked( $format, $wpml_settings['preferred-mail-format'], false );
                                     echo ' <input type="radio" name="format" ' . $checked . ' id="' . esc_attr( $format ) . '"> ' . esc_html( $format ) . '</input> ';
                                 }
                                 ?>
@@ -531,9 +531,9 @@ class WPML_OptionsManager {
                 wp_nonce_field( WPML_Email_Log_List::NONCE_LIST_TABLE, WPML_Email_Log_List::NONCE_LIST_TABLE . '_nonce' );
                 $search = ( isset( $_REQUEST['s'] ) ) ? $_REQUEST['s'] : false;
                 /** @var WPML_Email_Log_List $emailLogList */
-                $emailLogList = WPML_Init::getInstance()->getService('emailLogList');
+                $emailLogList = WPML_Init::getInstance()->getService( 'emailLogList' );
                 $emailLogList->prepare_items( $search );
-                $emailLogList->search_box( __( 'Search' ), 's' );
+                $emailLogList->search_box( __( 'Search', 'wp-mail-logging' ), 's' );
                 $emailLogList->display();
                 ?>
             </form>
@@ -547,7 +547,7 @@ class WPML_OptionsManager {
             * 
             * @return boolean
             */
-            $display = apply_filters('wpml_banner_display', true);
+            $display = apply_filters( 'wpml_banner_display', true );
             if ( $display ) {
                 $this->displayMP3Banner();
             }
@@ -557,19 +557,19 @@ class WPML_OptionsManager {
 
     private function displayMP3Banner() {
         $option = (int)get_option('wpml_banner_version');
-        if (!$option) {
-            $option = rand(1, 2);
-            add_option('wpml_banner_version', $option);
+        if ( ! $option ) {
+            $option = rand( 1, 2 );
+            add_option( 'wpml_banner_version', $option );
         }
         ?>
         <div style="background: #fff;border-left: 4px solid #fff;border-radius: 10px;box-shadow: 0 4px 35px rgba(195, 65, 2, .2);clear: both;margin-bottom: 15px;margin-top: 15px;padding: 20px;">
             <h3><?php _e( 'Reliable and beautiful emails by MailPoet!', 'wp-mail-logging' );?></h3>
             <?php
-              if ($option === 1) {
-                    $this->displayMP3BannerVersionA();
-              } else {
-                    $this->displayMP3BannerVersionB();
-              }
+            if ( 1 === $option ) {
+                $this->displayMP3BannerVersionA();
+            } else {
+                $this->displayMP3BannerVersionB();
+            }
             ?>
         </div>
         <?php
@@ -618,12 +618,12 @@ class WPML_OptionsManager {
 
     private function redirectToFreePlan() {
         if (
-            is_array($_GET)
-            && array_key_exists('redirect', $_GET)
-            && array_key_exists('ref', $_GET)
-            && $_GET['redirect'] === 'free-plan'
+            is_array( $_GET )
+            && array_key_exists( 'redirect', $_GET )
+            && array_key_exists( 'ref', $_GET )
+            && 'free-plan' === $_GET['redirect']
         ) {
-            add_option('MAILPOET_REFERRAL_ID', 'wml');
+            add_option( 'MAILPOET_REFERRAL_ID', 'wml' );
             wp_redirect( 'https://www.mailpoet.com/free-plan?ref=' . $_GET['ref'] );
             exit;
         }
@@ -643,25 +643,25 @@ class WPML_OptionsManager {
      * @param  $optionValue string
      * @return string __($optionValue) if it is listed in this method, otherwise just returns $optionValue
      */
-    protected function getOptionValueI18nString($optionValue) {
-        switch ($optionValue) {
+    protected function getOptionValueI18nString( $optionValue ) {
+        switch ( $optionValue ) {
             case 'true':
-                return __('true', 'wp-mail-logging');
+                return __( 'true', 'wp-mail-logging' );
             case 'false':
-                return __('false', 'wp-mail-logging');
+                return __( 'false', 'wp-mail-logging' );
 
             case 'Administrator':
-                return __('Administrator', 'wp-mail-logging');
+                return __( 'Administrator', 'wp-mail-logging' );
             case 'Editor':
-                return __('Editor', 'wp-mail-logging');
+                return __( 'Editor', 'wp-mail-logging' );
             case 'Author':
-                return __('Author', 'wp-mail-logging');
+                return __( 'Author', 'wp-mail-logging' );
             case 'Contributor':
-                return __('Contributor', 'wp-mail-logging');
+                return __( 'Contributor', 'wp-mail-logging' );
             case 'Subscriber':
-                return __('Subscriber', 'wp-mail-logging');
+                return __( 'Subscriber', 'wp-mail-logging' );
             case 'Anyone':
-                return __('Anyone', 'wp-mail-logging');
+                return __( 'Anyone', 'wp-mail-logging' );
         }
         return $optionValue;
     }
@@ -672,8 +672,8 @@ class WPML_OptionsManager {
      */
     protected function getMySqlVersion() {
         global $wpdb;
-        $rows = $wpdb->get_results('select version() as mysqlversion');
-        if (!empty($rows)) {
+        $rows = $wpdb->get_results( 'select version() as mysqlversion' );
+        if ( ! empty( $rows ) ) {
             return $rows[0]->mysqlversion;
         }
         return false;
@@ -689,11 +689,10 @@ class WPML_OptionsManager {
      */
     public function getEmailDomain() {
         // Get the site domain and get rid of www.
-        $sitename = strtolower($_SERVER['SERVER_NAME']);
-        if (substr($sitename, 0, 4) == 'www.') {
-            $sitename = substr($sitename, 4);
+        $sitename = strtolower( $_SERVER['SERVER_NAME'] );
+        if ( 'www.' == substr( $sitename, 0, 4 ) ) {
+            $sitename = substr( $sitename, 4 );
         }
         return $sitename;
     }
 }
-

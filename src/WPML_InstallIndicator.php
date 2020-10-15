@@ -26,9 +26,9 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 
 class WPML_InstallIndicator extends WPML_OptionsManager {
 
-    const optionInstalled = '_installed';
-    const optionVersion = '_version';
-    const CACHE_GROUP = 'wp_mail_logging';
+    const optionInstalled     = '_installed';
+    const optionVersion       = '_version';
+    const CACHE_GROUP         = 'wp_mail_logging';
     const CACHE_INSTALLED_KEY = 'installed';
 
     /**
@@ -40,16 +40,16 @@ class WPML_InstallIndicator extends WPML_OptionsManager {
 
         // We don't use the cached value, only its presence.
         // This is because we never cache not installed state.
-        wp_cache_get(self::CACHE_INSTALLED_KEY, self::CACHE_GROUP, false, $installed);
-        if (!$installed) {
+        wp_cache_get( self::CACHE_INSTALLED_KEY, self::CACHE_GROUP, false, $installed );
+        if ( ! $installed ) {
             global $wpdb;
 
-            $mails = $this->getTablename('mails');
-            $query = $wpdb->query("SHOW TABLES LIKE \"$mails\"");
+            $mails     = $this->getTablename( 'mails' );
+            $query     = $wpdb->query( "SHOW TABLES LIKE \"$mails\"" );
             $installed = (bool) $query;
 
-            if ($installed) {
-                wp_cache_set(self::CACHE_INSTALLED_KEY, true, self::CACHE_GROUP, 3600);
+            if ( $installed ) {
+                wp_cache_set( self::CACHE_INSTALLED_KEY, true, self::CACHE_GROUP, 3600 );
             }
         }
         return $installed;
@@ -90,13 +90,13 @@ class WPML_InstallIndicator extends WPML_OptionsManager {
      * @param $key string plugin header key
      * @return string if found, otherwise null
      */
-    public function getPluginHeaderValue($key) {
+    public function getPluginHeaderValue( $key ) {
         // Read the string from the comment header of the main plugin file.
-        $data = file_get_contents( $this->getPluginDir() . DIRECTORY_SEPARATOR . $this->getMainPluginFileName() );
+        $data  = file_get_contents( $this->getPluginDir() . DIRECTORY_SEPARATOR . $this->getMainPluginFileName() );
         $match = array();
         preg_match( '/' . $key . ':\s*(.*)/', $data, $match );
         if ( count( $match ) >= 1 ) {
-            return trim($match[1]);
+            return trim( $match[1] );
         }
         return null;
     }

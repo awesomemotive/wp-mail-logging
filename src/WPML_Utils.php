@@ -20,7 +20,7 @@ class WPML_Utils {
      * @return mixed
      */
     public static function sanitize_expected_value( $value, $allowed_values, $default_value = null ) {
-        $allowed_values = (is_array( $allowed_values ) ) ? $allowed_values : array( $allowed_values );
+        $allowed_values = ( is_array( $allowed_values ) ) ? $allowed_values : array( $allowed_values );
         if ( $value && in_array( $value, $allowed_values ) ) {
             return $value;
         }
@@ -41,7 +41,7 @@ class WPML_Utils {
     public static function recursive_array_search( $needle, $haystack ) {
         foreach ( $haystack as $key => $value ) {
             $current_key = $key;
-            if ( $needle === $value or ( is_array( $value ) && self::recursive_array_search( $needle, $value ) !== false ) ) {
+            if ( $needle === $value or ( is_array( $value ) && false !== self::recursive_array_search( $needle, $value ) ) ) {
                 return $current_key;
             }
         }
@@ -55,7 +55,7 @@ class WPML_Utils {
      * @return string returns fa icon.
      */
     public static function determine_fa_icon( $iconClass ) {
-        return '<i class="fa ' . esc_attr($iconClass == "file" ? "fa-file-o" : "fa-file-{$iconClass}-o") . '"></i>';
+        return '<i class="fa ' . esc_attr( $iconClass == "file" ? "fa-file-o" : "fa-file-{$iconClass}-o" ) . '"></i>';
     }
 
     /**

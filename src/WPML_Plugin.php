@@ -19,9 +19,9 @@ class WPML_Plugin extends WPML_LifeCycle implements IHooks {
      * @param $supportedMailRendererFormats
      * @param WPML_MailRenderer_AJAX_Handler $mailRendererAJAXHandler
      */
-    public function __construct($supportedMailRendererFormats, $mailRendererAJAXHandler) {
+    public function __construct( $supportedMailRendererFormats, $mailRendererAJAXHandler ) {
         $this->supportedMailRendererFormats = $supportedMailRendererFormats;
-        $this->mailRendererAJAXHandler = $mailRendererAJAXHandler;
+        $this->mailRendererAJAXHandler      = $mailRendererAJAXHandler;
     }
 
     public static function getTablename( $name ) {
@@ -51,7 +51,7 @@ class WPML_Plugin extends WPML_LifeCycle implements IHooks {
      */
     protected function installDatabaseTables() {
         global $wpdb;
-        $tableName = WPML_Plugin::getTablename('mails');
+        $tableName = WPML_Plugin::getTablename( 'mails' );
         $wpdb->query("CREATE TABLE IF NOT EXISTS `$tableName` (
 				`mail_id` INT NOT NULL AUTO_INCREMENT,
 				`timestamp` TIMESTAMP NOT NULL,
@@ -74,10 +74,10 @@ class WPML_Plugin extends WPML_LifeCycle implements IHooks {
      */
     protected function unInstallDatabaseTables() {
         global $wpdb;
-        $tableName = WPML_Plugin::getTablename('mails');
-        $wpdb->query("DROP TABLE IF EXISTS `$tableName`");
+        $tableName = WPML_Plugin::getTablename( 'mails' );
+        $wpdb->query( "DROP TABLE IF EXISTS `$tableName`" );
         // Remove the cache option indicating tables are installed
-        wp_cache_delete(parent::CACHE_INSTALLED_KEY, parent::CACHE_GROUP);
+        wp_cache_delete( parent::CACHE_INSTALLED_KEY, parent::CACHE_GROUP );
     }
 
     /**
@@ -89,15 +89,15 @@ class WPML_Plugin extends WPML_LifeCycle implements IHooks {
         global $wpdb;
 
         $savedVersion = $this->getVersionSaved();
-        if(! $this->isInstalled() || empty( $savedVersion ) ) {
+        if (! $this->isInstalled() || empty( $savedVersion ) ) {
             // The plugin must be installed before any upgrades
             return;
         }
 
-        $upgradeOk = true;
+        $upgradeOk    = true;
         $savedVersion = $this->getVersionSaved();
-        $codeVersion = $this->getVersion();
-        $tableName = $this->getTablename('mails');
+        $codeVersion  = $this->getVersion();
+        $tableName    = $this->getTablename( 'mails' );
 
         /* check for downgrade or beta
         if( $this->isVersionLessThan($codeVersion, $savedVersion)
@@ -109,33 +109,33 @@ class WPML_Plugin extends WPML_LifeCycle implements IHooks {
             }
         }*/
 
-        if ($this->isVersionLessThan($savedVersion, '2.0')) {
-            if ($this->isVersionLessThan($savedVersion, '1.2')) {
-                $wpdb->query("ALTER TABLE `$tableName` CHANGE COLUMN `to` `receiver` VARCHAR(200)");
+        if ( $this->isVersionLessThan( $savedVersion, '2.0' ) ) {
+            if ( $this->isVersionLessThan( $savedVersion, '1.2' ) ) {
+                $wpdb->query( "ALTER TABLE `$tableName` CHANGE COLUMN `to` `receiver` VARCHAR(200)");
             }
-            if ($this->isVersionLessThan($savedVersion, '1.3')) {
-                $wpdb->query("ALTER TABLE `$tableName` MODIFY COLUMN `attachments` VARCHAR(800) NOT NULL DEFAULT '0'");
+            if ( $this->isVersionLessThan( $savedVersion, '1.3' ) ) {
+                $wpdb->query( "ALTER TABLE `$tableName` MODIFY COLUMN `attachments` VARCHAR(800) NOT NULL DEFAULT '0'");
             }
-            if ($this->isVersionLessThan($savedVersion, '1.4')) {
-                $wpdb->query("ALTER TABLE `$tableName` CHARACTER SET utf8 COLLATE utf8_general_ci;");
+            if ( $this->isVersionLessThan($savedVersion, '1.4' ) ) {
+                $wpdb->query( "ALTER TABLE `$tableName` CHARACTER SET utf8 COLLATE utf8_general_ci;");
             }
-            if ($this->isVersionLessThan($savedVersion, '1.7')) {
-                $wpdb->query("ALTER TABLE `$tableName` ADD COLUMN `host` VARCHAR(200) NOT NULL DEFAULT '0' AFTER `timestamp`;");
+            if ( $this->isVersionLessThan( $savedVersion, '1.7' ) ) {
+                $wpdb->query( "ALTER TABLE `$tableName` ADD COLUMN `host` VARCHAR(200) NOT NULL DEFAULT '0' AFTER `timestamp`;");
             }
-            if ($this->isVersionLessThan($savedVersion, '1.8')) {
+            if ( $this->isVersionLessThan( $savedVersion, '1.8' ) ) {
                 // Due to upgrade bug upgrades from 1.6.2 to 1.7.0 failed. Redo the schema change if required
-                $results = $wpdb->get_results( $wpdb->prepare( "SHOW COLUMNS FROM `$tableName` LIKE %s", 'host' ) );
+                $results       = $wpdb->get_results( $wpdb->prepare( "SHOW COLUMNS FROM `$tableName` LIKE %s", 'host' ) );
                 $column_exists = ( count( $results ) > 0 ) ? true : false;
 
                 if ( false === $column_exists && is_array( $results ) ) {
-                    $wpdb->query("ALTER TABLE `$tableName` ADD COLUMN `host` VARCHAR(200) NOT NULL DEFAULT '0' AFTER `timestamp`;");
+                    $wpdb->query( "ALTER TABLE `$tableName` ADD COLUMN `host` VARCHAR(200) NOT NULL DEFAULT '0' AFTER `timestamp`;" );
                 }
 
-                $wpdb->query("ALTER TABLE `$tableName` ADD COLUMN `error` VARCHAR(400) NULL DEFAULT '' AFTER `attachments`;");
+                $wpdb->query( "ALTER TABLE `$tableName` ADD COLUMN `error` VARCHAR(400) NULL DEFAULT '' AFTER `attachments`;" );
             }
         }
 
-        if ( !empty( $wpdb->last_error ) ) {
+        if ( ! empty( $wpdb->last_error ) ) {
             $upgradeOk = false;
             if ( is_admin() ) {
                 echo "There was at least one error while upgrading the database schema. Please report the following error: {$wpdb->last_error}";
@@ -143,7 +143,7 @@ class WPML_Plugin extends WPML_LifeCycle implements IHooks {
         }
 
         // Post-upgrade, set the current version in the options
-        if ($upgradeOk && $savedVersion != $codeVersion) {
+        if ( $upgradeOk && $savedVersion != $codeVersion) {
             $this->saveInstalledVersion();
         }
     }
@@ -194,10 +194,10 @@ class WPML_Plugin extends WPML_LifeCycle implements IHooks {
      */
     public function log_email_failed( $wperror ) {
         global $wpml_current_mail_id;
-        if(!isset($wpml_current_mail_id)) return;
-        $failed_mail = Mail::find_one($wpml_current_mail_id);
-        if( !$failed_mail ) return;
-        $failed_mail->set_error($wperror->get_error_message())->save();
+        if ( ! isset( $wpml_current_mail_id ) ) return;
+        $failed_mail = Mail::find_one( $wpml_current_mail_id );
+        if ( ! $failed_mail ) return;
+        $failed_mail->set_error( $wperror->get_error_message() )->save();
     }
 
     /**
@@ -211,9 +211,9 @@ class WPML_Plugin extends WPML_LifeCycle implements IHooks {
     public function log_email( $mailArray ) {
         global $wpml_current_mail_id;
 
-        $mail = (new WPML_MailExtractor())->extract($mailArray);
-        $mail->set_plugin_version($this->getVersionSaved());
-        $mail->set_timestamp(current_time( 'mysql' ));
+        $mail = ( new WPML_MailExtractor() )->extract( $mailArray );
+        $mail->set_plugin_version( $this->getVersionSaved() );
+        $mail->set_timestamp( current_time( 'mysql' ) );
         $mail->set_host( isset( $_SERVER['SERVER_ADDR'] ) ? $_SERVER['SERVER_ADDR'] : '');
 
         $wpml_current_mail_id = $mail->save();

@@ -8,11 +8,10 @@
 
 namespace No3x\WPML;
 
-
 class WPML_Email_Dispatcher {
 
     public function dispatch( $to, $subject, $message, $headers = '', $attachments = array() )
     {
-        wp_mail( $to, $subject, $message, $headers, $attachments);
+        wp_mail( $to, $subject, $message, $headers, $attachments );
     }
 }

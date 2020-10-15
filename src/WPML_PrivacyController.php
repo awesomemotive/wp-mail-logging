@@ -7,8 +7,8 @@ use No3x\WPML\Model\WPML_Mail;
 class WPML_PrivacyController implements IHooks {
 
     const WPML_PRIVACY_EXPORTER = "wp-mail-logging-exporter";
-    const WPML_PRIVACY_ERASER = "wp-mail-logging-eraser";
-    const PER_PAGE = 500;
+    const WPML_PRIVACY_ERASER   = "wp-mail-logging-eraser";
+    const PER_PAGE              = 500;
 
     private $plugin_meta;
 
@@ -20,14 +20,14 @@ class WPML_PrivacyController implements IHooks {
     }
 
     public function addActionsAndFilters() {
-        add_filter( 'wp_privacy_personal_data_exporters', [$this, 'register_exporter'], 10);
-        add_filter( 'wp_privacy_personal_data_erasers', [$this, 'register_eraser'], 10);
+        add_filter( 'wp_privacy_personal_data_exporters', [$this, 'register_exporter'], 10 );
+        add_filter( 'wp_privacy_personal_data_erasers', [$this, 'register_eraser'], 10 );
         add_action( 'admin_init', [$this, 'register_privacy_policy_content'] );
         add_action( 'wp_privacy_personal_data_erased', [$this, 'suspendLogging'], 9 );
     }
 
     function suspendLogging() {
-        (new WPML_Hook_Remover())->remove_class_hook(
+        ( new WPML_Hook_Remover() )->remove_class_hook(
             'wp_mail',
             WPML_Plugin::getClass(),
             WPML_Plugin::HOOK_LOGGING_MAIL,
@@ -70,7 +70,7 @@ class WPML_PrivacyController implements IHooks {
      * @param $current_page
      * @return array|WPML_Mail[]
      */
-    private function queryMails($email_address, $current_page) {
+    private function queryMails( $email_address, $current_page ) {
         $offset = ( $current_page - 1 ) * self::PER_PAGE;
         return WPML_Mail::query()
             ->search( $email_address )
@@ -79,11 +79,11 @@ class WPML_PrivacyController implements IHooks {
             ->find();
     }
 
-    public function export($email_address, $page = 1) {
-        $mails = $this->queryMails($email_address, $page);
+    public function export( $email_address, $page = 1 ) {
+        $mails = $this->queryMails( $email_address, $page );
 
         $export_items = [];
-        foreach ($mails as $mail) {
+        foreach ( $mails as $mail ) {
             // Most item IDs should look like postType-postID
             // If you don't have a post, comment or other ID to work with,
             // use a unique value to avoid having this item's export
@@ -103,46 +103,47 @@ class WPML_PrivacyController implements IHooks {
             // Plugins can add as many items in the item data array as they want
             $mail_as_array = $mail->to_array();
             $data = [];
-            foreach ($mail_as_array as $name => $value) {
+            foreach ( $mail_as_array as $name => $value ) {
                  $data[] = [
-                    'name' => $name, //TODO: translate function
+                    'name'  => $name, //TODO: translate function
                     'value' => $value
                 ];
             }
 
             $export_items[] = array(
-                'group_id' => $group_id,
+                'group_id'    => $group_id,
                 'group_label' => $group_label,
-                'item_id' => $item_id,
-                'data' => $data,
+                'item_id'     => $item_id,
+                'data'        => $data,
             );
         }
 
         return array(
             'data' => $export_items,
-            'done' => $this->isDone($mails),
+            'done' => $this->isDone( $mails ),
         );
     }
 
     function erase( $email_address, $page = 1 ) {
-        $mails = $this->queryMails($email_address, $page);
+        $mails = $this->queryMails( $email_address, $page );
 
-        $items_removed = false;
+        $items_removed  = false;
         $items_retained = false;
-        $messages = [];
-        foreach ($mails as $mail) {
-            if($mail->delete()) {
+        $messages       = [];
+        foreach ( $mails as $mail ) {
+            if ( $mail->delete() ) {
                 $items_removed = true;
             } else {
-                $messages[] = sprintf( __( 'A mail with the id %d was unable to be removed at this time.', 'wp-mail-logging'), $mail->get_mail_id());
+                $messages[] = sprintf( __( 'A mail with the id %d was unable to be removed at this time.', 'wp-mail-logging' ), $mail->get_mail_id() );
                 $items_retained = true;
             }
         }
 
-        return array( 'items_removed' => $items_removed,
+        return array(
+            'items_removed'  => $items_removed,
             'items_retained' => $items_retained, // always false in this example
-            'messages' => $messages, // no messages in this example
-            'done' => $this->isDone($mails),
+            'messages'       => $messages, // no messages in this example
+            'done'           => $this->isDone( $mails ),
         );
     }
 
@@ -151,7 +152,7 @@ class WPML_PrivacyController implements IHooks {
      * @param $mails
      * @return bool
      */
-    private function isDone($mails) {
-        return count($mails) < self::PER_PAGE;
+    private function isDone( $mails ) {
+        return count( $mails ) < self::PER_PAGE;
     }
 }

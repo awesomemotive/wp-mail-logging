@@ -36,7 +36,7 @@ namespace No3x\WPML;
 // Exit if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-define('WPML_PHP_MIN_VERSION', '5.4');
+define( 'WPML_PHP_MIN_VERSION', '5.4' );
 
 /**
  * Check the PHP version and give a useful error message if the user's version is less than the required version
@@ -70,7 +70,7 @@ function WPML_PhpVersionCheck() {
  */
 function WPML_i18n_init() {
     $pluginDir = dirname(plugin_basename(__FILE__));
-    load_plugin_textdomain('wp-mail-logging', false, $pluginDir . '/languages/');
+    load_plugin_textdomain( 'wp-mail-logging', false, $pluginDir . '/languages/' );
 }
 
 
@@ -84,7 +84,7 @@ WPML_i18n_init();
 
 // Next, run the version check.
 // If it is successful, continue with initialization for this plugin
-if (WPML_PhpVersionCheck()) {
+if ( WPML_PhpVersionCheck() ) {
     // Only init and run the init function if we know PHP version can parse it
     require __DIR__ . '/autoload.php';
 
@@ -96,11 +96,11 @@ if (WPML_PhpVersionCheck()) {
 
     // Add our namespace and the folder it maps to
     require_once __DIR__ . '/src/inc/redux/admin-init.php';
-    $loader->addNamespace('No3x\\WPML\\', __DIR__ . '/src' );
-    $loader->addNamespace('No3x\\WPML\\Settings\\', __DIR__ . '/src/inc/redux');
-    $loader->addNamespace('No3x\\WPML\\ORM\\', __DIR__ . '/lib/vendor/brandonwamboldt/wp-orm/src');
-    $loader->addNamespace('No3x\\WPML\\Pimple\\', __DIR__ . '/lib/vendor/pimple/pimple/src');
-    if( file_exists( __DIR__ . '/vendor/autoload.php' ) ) {
+    $loader->addNamespace( 'No3x\\WPML\\', __DIR__ . '/src' );
+    $loader->addNamespace( 'No3x\\WPML\\Settings\\', __DIR__ . '/src/inc/redux' );
+    $loader->addNamespace( 'No3x\\WPML\\ORM\\', __DIR__ . '/lib/vendor/brandonwamboldt/wp-orm/src' );
+    $loader->addNamespace( 'No3x\\WPML\\Pimple\\', __DIR__ . '/lib/vendor/pimple/pimple/src' );
+    if ( file_exists( __DIR__ . '/vendor/autoload.php' ) ) {
         require_once __DIR__ . '/vendor/autoload.php';
     }
     WPML_Init::getInstance()->init( __FILE__ );

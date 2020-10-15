@@ -22,7 +22,7 @@ class WPML_MessageSanitizer {
         ];
     }
 
-    public function sanitize($message) {
+    public function sanitize( $message ) {
         $this->buffer = $message;
 
         $this->saveComments();
@@ -33,26 +33,26 @@ class WPML_MessageSanitizer {
     }
 
     private function saveComments() {
-        $this->swapCommentsInStringWithMapping($this->mapping);
+        $this->swapCommentsInStringWithMapping( $this->mapping );
     }
 
     private function recoverComments() {
-        $this->swapCommentsInStringWithMapping(array_flip($this->mapping));
+        $this->swapCommentsInStringWithMapping( array_flip( $this->mapping ) );
     }
 
-    private function swapCommentsInStringWithMapping($mapping) {
-        foreach ($mapping as $from => $to) {
-            $this->buffer = str_replace($from, $to , $this->buffer);
+    private function swapCommentsInStringWithMapping( $mapping ) {
+        foreach ( $mapping as $from => $to ) {
+            $this->buffer = str_replace( $from, $to, $this->buffer );
         }
     }
 
     private function stripEvilCode() {
         $allowed_tags = wp_kses_allowed_html( 'post' );
         $allowed_tags['style'][''] = true;
-        $allowed_tags[self::SAVED_COMMENT_HTMLEntity_OPEN][''] = true;
+        $allowed_tags[self::SAVED_COMMENT_HTMLEntity_OPEN]['']  = true;
         $allowed_tags[self::SAVED_COMMENT_HTMLEntity_CLOSE][''] = true;
-        $allowed_tags[self::SAVED_COMMENT_HTMLCode_OPEN][''] = true;
-        $allowed_tags[self::SAVED_COMMENT_HTMLCode_CLOSE][''] = true;
+        $allowed_tags[self::SAVED_COMMENT_HTMLCode_OPEN]['']    = true;
+        $allowed_tags[self::SAVED_COMMENT_HTMLCode_CLOSE]['']   = true;
 
         $this->buffer = wp_kses( $this->buffer, $allowed_tags );
     }

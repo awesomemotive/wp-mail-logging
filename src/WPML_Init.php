@@ -46,7 +46,7 @@ class WPML_Init {
      * @return WPML_Init The *Singleton* instance.
      */
     public static function getInstance() {
-        if (null === static::$instance) {
+        if ( null === static::$instance ) {
             static::$instance = new static();
         }
 
@@ -62,64 +62,64 @@ class WPML_Init {
     }
 
     public function getClosure() {
-        return function ($prop) {
+        return function ( $prop ) {
             return $this->$prop;
         };
     }
 
     public function init( $file ) {
 
-        $this->container['plugin'] = function ($c) {
-            return new WPML_Plugin($c['supported-mail-renderer-formats'], $c['mailRendererAjaxHandler']);
+        $this->container['plugin'] = function ( $c ) {
+            return new WPML_Plugin( $c['supported-mail-renderer-formats'], $c['mailRendererAjaxHandler'] );
         };
-        $this->container['plugin-meta'] = function ($c) use ($file) {
+        $this->container['plugin-meta'] = function ( $c ) use ( $file ) {
             /* @var $plugin WPML_Plugin */
             $plugin = $c['plugin'];
-            $path = trailingslashit(realpath( plugin_dir_path( $file ) ) );
+            $path   = trailingslashit(realpath( plugin_dir_path( $file ) ) );
             return [
-                'path' => $path,
-                'uri' => plugin_dir_url( $file ),
-                'display_name' => $plugin->getPluginDisplayName(),
-                'slug' => $plugin->getPluginSlug(),
-                'main_file' => $plugin->getMainPluginFileName(),
-                'main_file_path' => $path . $plugin->getMainPluginFileName(),
-                'description' => $plugin->getPluginHeaderValue( 'Description' ),
-                'version' => $plugin->getVersion(),
+                'path'              => $path,
+                'uri'               => plugin_dir_url( $file ),
+                'display_name'      => $plugin->getPluginDisplayName(),
+                'slug'              => $plugin->getPluginSlug(),
+                'main_file'         => $plugin->getMainPluginFileName(),
+                'main_file_path'    => $path . $plugin->getMainPluginFileName(),
+                'description'       => $plugin->getPluginHeaderValue( 'Description' ),
+                'version'           => $plugin->getVersion(),
                 'version_installed' => $plugin->getVersionSaved(),
-                'author_name' => $plugin->getPluginHeaderValue( 'Author' ),
-                'author_uri' => $plugin->getPluginHeaderValue( 'Author URI' ),
-                'wp_uri' => $plugin->getPluginHeaderValue( 'Plugin URI' ),
-                'support_uri' => $plugin->getPluginHeaderValue( 'Support URI' ),
-                'license' => $plugin->getPluginHeaderValue( 'License' ),
+                'author_name'       => $plugin->getPluginHeaderValue( 'Author' ),
+                'author_uri'        => $plugin->getPluginHeaderValue( 'Author URI' ),
+                'wp_uri'            => $plugin->getPluginHeaderValue( 'Plugin URI' ),
+                'support_uri'       => $plugin->getPluginHeaderValue( 'Support URI' ),
+                'license'           => $plugin->getPluginHeaderValue( 'License' ),
             ];
         };
-        $this->container['supported-mail-renderer-formats'] = function ($c) {
+        $this->container['supported-mail-renderer-formats'] = function ( $c ) {
             /** @var WPML_MailRenderer $mailRenderer */
             $mailRenderer = $c['mailRenderer'];
             return $mailRenderer->getSupportedFormats();
         };
-        $this->container['emailLogList'] = function ($c) {
+        $this->container['emailLogList'] = function ( $c ) {
             return new WPML_Email_Log_List( $c['emailResender'] );
         };
-        $this->container['emailResender'] = function ($c) {
+        $this->container['emailResender'] = function ( $c ) {
             return new WPML_Email_Resender( $c['emailDispatcher'] );
         };
         $this->container['emailDispatcher'] = function () {
             return new WPML_Email_Dispatcher();
         };
-        $this->container['redux'] = function ($c) {
+        $this->container['redux'] = function ( $c ) {
             return new WPML_Redux_Framework_config( $c['plugin-meta'] );
         };
-        $this->container['logRotation'] = function ($c) {
+        $this->container['logRotation'] = function ( $c ) {
             return new WPML_LogRotation( $c['plugin-meta'] );
         };
-        $this->container['privacyController'] = function ($c) {
+        $this->container['privacyController'] = function ( $c ) {
             return new WPML_PrivacyController($c['plugin-meta']);
         };
-        $this->container['mailRendererAjaxHandler'] = function ($c) {
+        $this->container['mailRendererAjaxHandler'] = function ( $c ) {
             return new WPML_MailRenderer_AJAX_Handler($c['mailRenderer']);
         };
-        $this->container['mailRenderer'] = function ($c) {
+        $this->container['mailRenderer'] = function ( $c ) {
             return new WPML_MailRenderer( new DefaultMailService() );
         };
         $this->container->addActionsAndFilters();
@@ -157,7 +157,7 @@ class WPML_Init {
     }
 
     public function getService( $key ) {
-        if( in_array( $key, $this->container->keys() ) ) {
+        if ( in_array( $key, $this->container->keys() ) ) {
             return $this->container[ $key ];
         }
         throw new \Exception("Service '{$key}' is not registered");

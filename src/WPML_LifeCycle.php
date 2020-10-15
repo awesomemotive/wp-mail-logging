@@ -45,7 +45,7 @@ class WPML_LifeCycle extends WPML_InstallIndicator {
     public function uninstall() {
         $this->otherUninstall();
 
-        if ( $this->getSetting('delete-on-deactivation', false) == true ) {
+        if ( true == $this->getSetting( 'delete-on-deactivation', false ) ) {
             //TOOD: is multi site?
             $this->unInstallDatabaseTables();
             $this->deleteSavedOptions();
@@ -133,8 +133,8 @@ class WPML_LifeCycle extends WPML_InstallIndicator {
 
 
     protected function requireExtraPluginFiles() {
-        require_once(ABSPATH . 'wp-includes/pluggable.php');
-        require_once(ABSPATH . 'wp-admin/includes/plugin.php');
+        require_once( ABSPATH . 'wp-includes/pluggable.php' );
+        require_once( ABSPATH . 'wp-admin/includes/plugin.php' );
     }
 
     /**
@@ -142,29 +142,28 @@ class WPML_LifeCycle extends WPML_InstallIndicator {
      * (i.e. the page for setting options)
      */
     protected function getSettingsSlug() {
-        return get_class($this) . 'Settings';
+        return get_class( $this ) . 'Settings';
     }
 
     protected function addSettingsSubMenuPageToPluginsMenu() {
         $this->requireExtraPluginFiles();
         $displayName = $this->getPluginDisplayName();
-        add_submenu_page('plugins.php',
+        add_submenu_page( 'plugins.php',
             $displayName,
             $displayName,
             'manage_options',
             $this->getSettingsSlug(),
-            array(&$this, 'settingsPage'));
+            array( &$this, 'settingsPage' ) );
     }
-
 
     protected function addSettingsSubMenuPageToSettingsMenu() {
         $this->requireExtraPluginFiles();
         $displayName = $this->getPluginDisplayName();
-        add_options_page($displayName,
+        add_options_page( $displayName,
             $displayName,
             'manage_options',
             $this->getSettingsSlug(),
-            array(&$this, 'settingsPage'));
+            array( &$this, 'settingsPage' ) );
     }
 
     /**
@@ -174,11 +173,10 @@ class WPML_LifeCycle extends WPML_InstallIndicator {
      * The plugin prefix is lower-cases as a best practice that all DB table names are lower case to
      * avoid issues on some platforms
      */
-    protected function prefixTableName($name) {
+    protected function prefixTableName( $name ) {
         global $wpdb;
-        return $wpdb->prefix .  strtolower($this->prefix($name));
+        return $wpdb->prefix .  strtolower( $this->prefix( $name ) );
     }
-
 
     /**
      * Convenience function for creating AJAX URLs.
@@ -196,14 +194,14 @@ class WPML_LifeCycle extends WPML_InstallIndicator {
      *
      * @return string URL that can be used in a web page to make an Ajax call to $this->functionName
      */
-    public function getAjaxUrl($actionName) {
-        return admin_url('admin-ajax.php') . '?action=' . $actionName;
+    public function getAjaxUrl( $actionName ) {
+        return admin_url( 'admin-ajax.php' ) . '?action=' . $actionName;
     }
 
     public function registerPluginActionLinks( $actions, $plugin_file ) {
-        if ($this->getMainPluginFileName() == basename($plugin_file)) {
-            $settings = array('settings' => '<a href="' . admin_url( 'tools.php?page=wpml_plugin_log&tab=settings' ) . '">' . __( 'Settings', 'General' ) . '</a>' );
-            $actions = array_merge($settings, $actions);
+        if ( $this->getMainPluginFileName() == basename( $plugin_file ) ) {
+            $settings = array( 'settings' => '<a href="' . admin_url( 'tools.php?page=wpml_plugin_log&tab=settings' ) . '">' . __( 'Settings', 'wp-mail-logging' ) . '</a>' );
+            $actions  = array_merge( $settings, $actions );
         }
         return $actions;
     }
