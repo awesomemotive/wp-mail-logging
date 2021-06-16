@@ -1,5 +1,5 @@
-=== WP Mail Logging by MailPoet ===
-Contributors: MailPoet, No3x, tripflex
+=== WP Mail Logging ===
+Contributors: Wysija, MailPoet, No3x, tripflex
 Tags: mail, email, log, logging, email log, debug, smtp, spam, deliverability
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
@@ -99,8 +99,6 @@ We recommend in this case to send your WordPress email with a service provider, 
 
 ### Credits
 
-This plugin is maintained by <a href="https://www.mailpoet.com/">MailPoet, the most popular email plugin for WordPress</a>.
-
 The plugin was created and launched in 2014 by <a href="https://no3x.de/">Christian Zöller</a>.
 
 == Frequently Asked Questions ==
@@ -109,7 +107,7 @@ We answer in the forums, but only occasionally.
 = Where can I report a bug? =
 You can do so in the support forums. We'll be happy to review them.
 = Can I submit changes to the plugin? =
-Yes, directly on <a href="https://github.com/mailpoet/wp-mail-logging" rel="nofollow">GitHub</a>.
+Yes, directly on <a href="https://github.com/kgjerstad/wp-mail-logging/" rel="nofollow">GitHub</a>.
 
 == Screenshots ==
 1. The List
@@ -117,6 +115,9 @@ Yes, directly on <a href="https://github.com/mailpoet/wp-mail-logging" rel="nofo
 3. The Settings
 
 == Changelog ==
+
+= 1.9.8 - 2021-06-18 =
+- Changed ownership!
 
 = 1.9.7 - 2020-09-02 =
 - Added: wpml_banner_display filter to hide MailPoet banner;
