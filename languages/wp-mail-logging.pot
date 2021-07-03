@@ -1,14 +1,14 @@
-# Copyright (C) 2019 Christian Z&ouml;ller
+# Copyright (C) 2021 Wysija
 # This file is distributed under the GPLv3.
 msgid ""
 msgstr ""
-"Project-Id-Version: WP Mail Logging 1.9.7\n"
+"Project-Id-Version: WP Mail Logging 1.9.8\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wp-mail-logging\n"
-"POT-Creation-Date: 2019-04-18 13:01:12+00:00\n"
+"POT-Creation-Date: 2021-07-03 13:37:23+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"PO-Revision-Date: 2019-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2021-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "X-Generator: grunt-wp-i18n 0.5.4\n"
@@ -40,7 +40,7 @@ msgstr ""
 msgid "Subject"
 msgstr ""
 
-#: src/Renderer/WPML_ColumnManager.php:36 src/WPML_OptionsManager.php:504
+#: src/Renderer/WPML_ColumnManager.php:36 src/WPML_OptionsManager.php:503
 msgid "Message"
 msgstr ""
 
@@ -68,7 +68,7 @@ msgstr ""
 msgid "No email found."
 msgstr ""
 
-#: src/WPML_LifeCycle.php:205
+#: src/WPML_LifeCycle.php:205 src/WPML_OptionsManager.php:444
 msgid "Settings"
 msgstr ""
 
@@ -76,76 +76,64 @@ msgstr ""
 msgid "WP Mail Log"
 msgstr ""
 
-#: src/WPML_OptionsManager.php:340 src/WPML_OptionsManager.php:341
-#: src/WPML_OptionsManager.php:352
+#: src/WPML_OptionsManager.php:339 src/WPML_OptionsManager.php:340
+#: src/WPML_OptionsManager.php:360
 msgid "About"
 msgstr ""
 
-#: src/WPML_OptionsManager.php:429
-msgid "About Plugin"
-msgstr ""
-
-#: src/WPML_OptionsManager.php:438
-msgid "More information"
-msgstr ""
-
-#: src/WPML_OptionsManager.php:439
-msgid "Plugin Homepage/support"
-msgstr ""
-
-#: src/WPML_OptionsManager.php:440
-msgid "Plugin author's blog"
-msgstr ""
-
-#: src/WPML_OptionsManager.php:447
+#: src/WPML_OptionsManager.php:349
 msgid "Entries per page"
 msgstr ""
 
-#: src/WPML_OptionsManager.php:469
+#: src/WPML_OptionsManager.php:415 src/WPML_OptionsManager.php:478
 msgid "You do not have sufficient permissions to access this page."
 msgstr ""
 
-#: src/WPML_OptionsManager.php:478
+#: src/WPML_OptionsManager.php:426
 msgid "Log"
 msgstr ""
 
-#: src/WPML_OptionsManager.php:521
+#: src/WPML_OptionsManager.php:440
+msgid "Email log"
+msgstr ""
+
+#: src/WPML_OptionsManager.php:520
 msgid "Close"
 msgstr ""
 
-#: src/WPML_OptionsManager.php:535
+#: src/WPML_OptionsManager.php:534
 msgid "Search"
 msgstr ""
 
-#: src/WPML_OptionsManager.php:560
+#: src/WPML_OptionsManager.php:558
 msgid "true"
 msgstr ""
 
-#: src/WPML_OptionsManager.php:562
+#: src/WPML_OptionsManager.php:560
 msgid "false"
 msgstr ""
 
-#: src/WPML_OptionsManager.php:565
+#: src/WPML_OptionsManager.php:563
 msgid "Administrator"
 msgstr ""
 
-#: src/WPML_OptionsManager.php:567
+#: src/WPML_OptionsManager.php:565
 msgid "Editor"
 msgstr ""
 
-#: src/WPML_OptionsManager.php:569
+#: src/WPML_OptionsManager.php:567
 msgid "Author"
 msgstr ""
 
-#: src/WPML_OptionsManager.php:571
+#: src/WPML_OptionsManager.php:569
 msgid "Contributor"
 msgstr ""
 
-#: src/WPML_OptionsManager.php:573
+#: src/WPML_OptionsManager.php:571
 msgid "Subscriber"
 msgstr ""
 
-#: src/WPML_OptionsManager.php:575
+#: src/WPML_OptionsManager.php:573
 msgid "Anyone"
 msgstr ""
 

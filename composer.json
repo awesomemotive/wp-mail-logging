@@ -3,7 +3,7 @@
     "description": "WordPress plugin that logs each email sent by WordPress.",
     "type": "wordpress-plugin",
     "keywords": ["mail", "email", "log", "logging", "debug", "list", "store", "collect", "view"],
-    "homepage": "https://github.com/mailpoet/wp-mail-logging",
+    "homepage": "https://github.com/kgjerstad/wp-mail-logging",
     "require": {
         "php": ">=5.4"
     },
@@ -21,8 +21,8 @@
         }
     ],
     "support": {
-        "issues": "https://github.com/mailpoet/wp-mail-logging/issues",
-        "source": "https://github.com/mailpoet/wp-mail-logging/releases"
+        "issues": "https://github.com/kgjerstad/wp-mail-logging/issues",
+        "source": "https://github.com/kgjerstad/wp-mail-logging/releases"
 
     },
     "extra": {

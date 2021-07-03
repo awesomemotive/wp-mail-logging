@@ -32,7 +32,7 @@ Please insure to be conform with the development guidelines.
 ## Getting Started
 
 * Submit a ticket for your issue, assuming one does not already exist or fix an issue
-  * Raise it on our [Issue Tracker](https://github.com/mailpoet/wp-mail-logging/issues)
+  * Raise it on our [Issue Tracker](https://github.com/kgjerstad/wp-mail-logging/issues)
   * Clearly describe the issue including steps to reproduce the bug.
   * Make sure you fill in the earliest version that you know has the issue as well as the version of WordPress you're using.
 

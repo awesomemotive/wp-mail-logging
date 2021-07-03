@@ -415,8 +415,6 @@ class WPML_OptionsManager {
             wp_die(__('You do not have sufficient permissions to access this page.', 'wp-mail-logging'));
         }
 
-        $this->redirectToFreePlan();
-
         if (!class_exists( 'Email_Log_List_Table' ) ) {
             require_once ( plugin_dir_path( __FILE__ ) . 'WPML_Email_Log_List.php' );
         }
@@ -537,96 +535,7 @@ class WPML_OptionsManager {
                 $emailLogList->display();
                 ?>
             </form>
-            <?php
-            /**
-            * Control whether the banner is displayed or not
-            *
-            * @since 1.9.7
-            *
-            * @param boolean $display Whether the banner should be displayed. (default: true)
-            * 
-            * @return boolean
-            */
-            $display = apply_filters('wpml_banner_display', true);
-            if ( $display ) {
-                $this->displayMP3Banner();
-            }
-            ?>
         <?php
-    }
-
-    private function displayMP3Banner() {
-        $option = (int)get_option('wpml_banner_version');
-        if (!$option) {
-            $option = rand(1, 2);
-            add_option('wpml_banner_version', $option);
-        }
-        ?>
-        <div style="background: #fff;border-left: 4px solid #fff;border-radius: 10px;box-shadow: 0 4px 35px rgba(195, 65, 2, .2);clear: both;margin-bottom: 15px;margin-top: 15px;padding: 20px;">
-            <h3><?php _e( 'Reliable and beautiful emails by MailPoet!', 'wp-mail-logging' );?></h3>
-            <?php
-              if ($option === 1) {
-                    $this->displayMP3BannerVersionA();
-              } else {
-                    $this->displayMP3BannerVersionB();
-              }
-            ?>
-        </div>
-        <?php
-    }
-
-    private function displayMP3BannerVersionA() {
-        ?>
-            <ul style="list-style-type:disc;list-style-position: inside">
-                <li><?php _e( '50 email templates to choose from', 'wp-mail-logging' );?></li>
-                <li><?php _e( 'Fun email designer', 'wp-mail-logging' );?></li>
-                <li><?php _e( 'Automated email marketing', 'wp-mail-logging' );?></li>
-                <li><?php _e( 'WooCommerce emails', 'wp-mail-logging' );?></li>
-                <li><?php _e( '99.1% success email deliverability', 'wp-mail-logging' );?></li>
-                <li><?php _e( 'Fast and friendly support', 'wp-mail-logging' );?></li>
-                <li><?php _e( 'Over 100,000 active users', 'wp-mail-logging' );?></li>
-            </ul>
-            <a
-                class="button button-primary"
-                href="?page=wpml_plugin_log&redirect=free-plan&ref=wml_1"
-                target="_blank"
-            >
-                <?php _e( 'Try MailPoet for free', 'wp-mail-logging' );?>
-            </a>
-            <p>
-                <?php _e( 'Testimonial', 'wp-mail-logging' );?>:
-                <i>
-                    <?php _e( 'Thanks for this awesome plugin, love love love how it integrates with WordPress. I seriously spent days if not weeks on Mailchimp, and still haven’t been able to do what I did on MailPoet in 1 hour!', 'wp-mail-logging' );?>
-                </i>
-                — Kida Shey
-            </p>
-        <?php
-    }
-
-    private function displayMP3BannerVersionB() {
-        ?>
-        <p>
-            <?php _e( 'Create beautiful email campaigns and reach your audience in a breeze with the MailPoet  plugin. MailPoet is used by over 300,000 website owners making it the most popular email marketing solution in WordPress. Send beautiful newsletter, notify your readers about last articles and increase your WooCommerce sales!', 'wp-mail-logging' );?>
-        </p>
-        <p>
-            <a href="?page=wpml_plugin_log&redirect=free-plan&ref=wml_2" target="_blank" class="button button-primary">
-                <?php _e( 'Discover MailPoet for free', 'wp-mail-logging' );?>
-            </a>
-        </p>
-        <?php
-    }
-
-    private function redirectToFreePlan() {
-        if (
-            is_array($_GET)
-            && array_key_exists('redirect', $_GET)
-            && array_key_exists('ref', $_GET)
-            && $_GET['redirect'] === 'free-plan'
-        ) {
-            add_option('MAILPOET_REFERRAL_ID', 'wml');
-            wp_redirect( 'https://www.mailpoet.com/free-plan?ref=' . $_GET['ref'] );
-            exit;
-        }
     }
 
     /**

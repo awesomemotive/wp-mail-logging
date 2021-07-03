@@ -334,7 +334,7 @@ if (!class_exists('WPML_Redux_Framework_config')) {
 
             // SOCIAL ICONS -> Setup custom links in the footer for quick links in your panel footer icons.
             $this->args['share_icons'][] = array(
-                'url'   => 'https://github.com/mailpoet/wp-mail-logging',
+                'url'   => 'https://github.com/kgjerstad/wp-mail-logging',
                 'title' => 'Visit us on GitHub',
                 'icon'  => 'el-icon-github'
                 //'img'   => '', // You can use icon OR img. IMG needs to be a full URL.
