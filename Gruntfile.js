@@ -4,7 +4,7 @@ module.exports = function (grunt) {
         pkg: grunt.file.readJSON('package.json'),
         shell: {
             composer: {
-                command: './composer install --no-dev --no-scripts --prefer-dist'
+                command: 'composer install --no-dev --no-scripts --prefer-dist'
             },
             git_checkout: {
                 command: 'git checkout-index -a -f --prefix=build/'
@@ -24,7 +24,7 @@ module.exports = function (grunt) {
         },
         run: {
             tool: {
-                cmd: './composer'
+                cmd: 'composer'
             }
         },
         copyto: {
