@@ -65,12 +65,18 @@
                 }
             }
 
+            /**
+             * Disable admin notifications
+             */
             public static function isLocalHost() {
-                return ( isset($_SERVER['REMOTE_ADDR']) && ($_SERVER['REMOTE_ADDR'] === '127.0.0.1' || $_SERVER['REMOTE_ADDR'] === 'localhost' )) ? 1 : 0;
+                return false;
             }
 
+            /**
+             * Disable admin notifications
+             */
             public static function isWpDebug() {
-                return ( defined( 'WP_DEBUG' ) && WP_DEBUG == true );
+                return false;
             }
 
             public static function getTrackingObject() {
