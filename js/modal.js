@@ -28,15 +28,28 @@ jQuery(function ($) {
         },
         setSelectedFormat: function( newFormat ) {
             wpml.modal.selectedFormat = newFormat;
-            jQuery.post(ajaxurl, {
-                'action': 'wpml_email_get',
-                'ajax_nonce': wpml_modal.ajax_nonce,
-                'id': wpml.modal.id,
-                'format': wpml.modal.selectedFormat
-            }, function(response) {
-                emailMessage = response;
-                wpml.modal.set(emailMessage);
+                jQuery.ajax({
+                type: 'POST',
+                url: ajaxurl,
+                data: {
+                    'action': wpml_modal_ajax.action,
+                    '_ajax_nonce': wpml_modal_ajax.nonce,
+                    'id': wpml.modal.id,
+                    'format': wpml.modal.selectedFormat
+                },
+                success: wpml.modal.ajaxResponse,
+                error: wpml.modal.ajaxError
             });
+        },
+        ajaxResponse: function( response_data, textStatus, XMLHttpRequest ) {
+            if (response_data.success) {
+                wpml.modal.set(response_data.data);
+            } else {
+                wpml.modal.set("Error (" + response_data.data.code + "): '" + response_data.data.message + "'");
+            }
+        },
+        ajaxError: function (XMLHttpRequest, textStatus, errorThrown) {
+            wpml.modal.set(errorThrown);
         }
     };
 

@@ -1,209 +1,79 @@
 sudo: false
 language: php
 
-php:
-    - 7.1
-    - 7.0
-    - 5.6
-    - 5.5
-    - 5.4
-    - hhvm
+cache:
+  directories:
+    - vendor
+    - $HOME/.composer/cache
 
 env:
     global:
         - WP_TESTS_DIR=/tmp/wordpress-tests-lib
-    matrix:
-        - WP_VERSION=latest WP_MULTISITE=1
-        - WP_VERSION=latest WP_MULTISITE=0
-        - WP_VERSION=4.8 WP_MULTISITE=0
-#        - WP_VERSION=4.7.5 WP_MULTISITE=0
-#        - WP_VERSION=4.7.4 WP_MULTISITE=0
-#        - WP_VERSION=4.7.3 WP_MULTISITE=0
-#        - WP_VERSION=4.7.2 WP_MULTISITE=0
-#        - WP_VERSION=4.7.1 WP_MULTISITE=0
-        - WP_VERSION=4.7 WP_MULTISITE=0
-#        - WP_VERSION=4.6.1 WP_MULTISITE=0
-        - WP_VERSION=4.6 WP_MULTISITE=0
-#        - WP_VERSION=4.5.4 WP_MULTISITE=0
-#        - WP_VERSION=4.5.3 WP_MULTISITE=0
-#        - WP_VERSION=4.5.2 WP_MULTISITE=0
-#        - WP_VERSION=4.5.1 WP_MULTISITE=0
-        - WP_VERSION=4.5 WP_MULTISITE=0
-#        - WP_VERSION=4.4.5 WP_MULTISITE=0
-#        - WP_VERSION=4.4.4 WP_MULTISITE=0
-#        - WP_VERSION=4.4.3 WP_MULTISITE=0
-#        - WP_VERSION=4.4.2 WP_MULTISITE=0
-#        - WP_VERSION=4.4.1 WP_MULTISITE=0
-        - WP_VERSION=4.4 WP_MULTISITE=0
-#        - WP_VERSION=4.3.6 WP_MULTISITE=0
-#        - WP_VERSION=4.3.5 WP_MULTISITE=0
-#        - WP_VERSION=4.3.4 WP_MULTISITE=0
-#        - WP_VERSION=4.3.3 WP_MULTISITE=0
-#        - WP_VERSION=4.3.2 WP_MULTISITE=0
-#        - WP_VERSION=4.3.1 WP_MULTISITE=0
-        - WP_VERSION=4.3 WP_MULTISITE=0
-#        - WP_VERSION=4.2.4 WP_MULTISITE=0
-#        - WP_VERSION=4.2.3 WP_MULTISITE=0
-#        - WP_VERSION=4.2.2 WP_MULTISITE=0
-#        - WP_VERSION=4.2.1 WP_MULTISITE=0
-        - WP_VERSION=4.2 WP_MULTISITE=0
-#        - WP_VERSION=4.1.7 WP_MULTISITE=0
-#        - WP_VERSION=4.1.6 WP_MULTISITE=0
-#        - WP_VERSION=4.1.5 WP_MULTISITE=0
-#        - WP_VERSION=4.1.4 WP_MULTISITE=0
-#        - WP_VERSION=4.1.3 WP_MULTISITE=0
-#        - WP_VERSION=4.1.2 WP_MULTISITE=0
-#        - WP_VERSION=4.1.1 WP_MULTISITE=0
-        - WP_VERSION=4.1 WP_MULTISITE=0
-#        - WP_VERSION=4.0.7 WP_MULTISITE=0
-#        - WP_VERSION=4.0.6 WP_MULTISITE=0
-#        - WP_VERSION=4.0.5 WP_MULTISITE=0
-#        - WP_VERSION=4.0.4 WP_MULTISITE=0
-#        - WP_VERSION=4.0.3 WP_MULTISITE=0
-#        - WP_VERSION=4.0.2 WP_MULTISITE=0
-#        - WP_VERSION=4.0.1 WP_MULTISITE=0
-        - WP_VERSION=4.0 WP_MULTISITE=0
-#        - WP_VERSION=3.9.8 WP_MULTISITE=0
-#        - WP_VERSION=3.9.7 WP_MULTISITE=0
-#        - WP_VERSION=3.9.6 WP_MULTISITE=0
-#        - WP_VERSION=3.9.5 WP_MULTISITE=0
-#        - WP_VERSION=3.9.4 WP_MULTISITE=0
-#        - WP_VERSION=3.9.3 WP_MULTISITE=0
-#        - WP_VERSION=3.9.2 WP_MULTISITE=0
-#        - WP_VERSION=3.9.1 WP_MULTISITE=0
-        - WP_VERSION=3.9 WP_MULTISITE=0
-#        - WP_VERSION=3.8.3 WP_MULTISITE=0
-#        - WP_VERSION=3.8.2 WP_MULTISITE=0
-#        - WP_VERSION=3.8.1 WP_MULTISITE=0
-        - WP_VERSION=3.8 WP_MULTISITE=0
-#        - WP_VERSION=3.7.3 WP_MULTISITE=0
-#        - WP_VERSION=3.7.2 WP_MULTISITE=0
-#        - WP_VERSION=3.7.1 WP_MULTISITE=0
-        - WP_VERSION=3.7 WP_MULTISITE=0
-#        - WP_VERSION=3.6.1 WP_MULTISITE=0
-        - WP_VERSION=3.6 WP_MULTISITE=0
-#       - WP_VERSION=3.5.2 WP_MULTISITE=0
-#       - WP_VERSION=3.5.1 WP_MULTISITE=0
-#       - WP_VERSION=3.5 WP_MULTISITE=0
-#       - WP_VERSION=3.4.2 WP_MULTISITE=0
-#       - WP_VERSION=3.4.1 WP_MULTISITE=0
-#       - WP_VERSION=3.4 WP_MULTISITE=0
-#       - WP_VERSION=3.3.3 WP_MULTISITE=0
-#       - WP_VERSION=3.3.2 WP_MULTISITE=0
-#       - WP_VERSION=3.3.1 WP_MULTISITE=0
-#       - WP_VERSION=3.3 WP_MULTISITE=0
-#        - WP_VERSION=3.2.1 WP_MULTISITE=0
-#        - WP_VERSION=3.2 WP_MULTISITE=0
-#        - WP_VERSION=3.1.4 WP_MULTISITE=0
-#        - WP_VERSION=3.1.3 WP_MULTISITE=0
-#        - WP_VERSION=3.1.2 WP_MULTISITE=0
-#        - WP_VERSION=3.1.1 WP_MULTISITE=0
-#        - WP_VERSION=3.1 WP_MULTISITE=0
-#        - WP_VERSION=3.0.6 WP_MULTISITE=0
-#        - WP_VERSION=3.0.5 WP_MULTISITE=0
-#        - WP_VERSION=3.0.4 WP_MULTISITE=0
-#        - WP_VERSION=3.0.3 WP_MULTISITE=0
-#        - WP_VERSION=3.0.2 WP_MULTISITE=0
-#        - WP_VERSION=3.0.1 WP_MULTISITE=0
-#        - WP_VERSION=3.0 WP_MULTISITE=0 #errror
-#        - WP_VERSION=2.9.2 WP_MULTISITE=0
-#        - WP_VERSION=2.9.1 WP_MULTISITE=0
-#        - WP_VERSION=2.9 WP_MULTISITE=0
-#        - WP_VERSION=2.8.6 WP_MULTISITE=0
-#        - WP_VERSION=2.8.5 WP_MULTISITE=0
-#        - WP_VERSION=2.8.4 WP_MULTISITE=0
-#        - WP_VERSION=2.8.3 WP_MULTISITE=0
-#        - WP_VERSION=2.8.2 WP_MULTISITE=0
-#        - WP_VERSION=2.8.1 WP_MULTISITE=0
-#        - WP_VERSION=2.8 WP_MULTISITE=0
-#        - WP_VERSION=2.7.1 WP_MULTISITE=0
-#        - WP_VERSION=2.7 WP_MULTISITE=0
-#        - WP_VERSION=2.6.5 WP_MULTISITE=0
-#        - WP_VERSION=2.6.3 WP_MULTISITE=0
-#        - WP_VERSION=2.6.2 WP_MULTISITE=0
-#        - WP_VERSION=2.6.1 WP_MULTISITE=0
-#        - WP_VERSION=2.6 WP_MULTISITE=0
-#        - WP_VERSION=2.5.1 WP_MULTISITE=0
-#        - WP_VERSION=2.5 WP_MULTISITE=0
-#        - WP_VERSION=2.3.3 WP_MULTISITE=0
-#        - WP_VERSION=2.3.2 WP_MULTISITE=0
-#        - WP_VERSION=2.3.1 WP_MULTISITE=0
-#        - WP_VERSION=2.3 WP_MULTISITE=0
-#        - WP_VERSION=2.2.3 WP_MULTISITE=0
-#        - WP_VERSION=2.2.2 WP_MULTISITE=0
-#        - WP_VERSION=2.2.1 WP_MULTISITE=0
-#        - WP_VERSION=2.2 WP_MULTISITE=0
-#        - WP_VERSION=2.1.3 WP_MULTISITE=0
-#        - WP_VERSION=2.1.2 WP_MULTISITE=0
-#        - WP_VERSION=2.1.1 WP_MULTISITE=0
-#        - WP_VERSION=2.1 WP_MULTISITE=0
-#        - WP_VERSION=2.0.11 WP_MULTISITE=0
-#        - WP_VERSION=2.0.10 WP_MULTISITE=0
-#        - WP_VERSION=2.0.9 WP_MULTISITE=0
-#        - WP_VERSION=2.0.8 WP_MULTISITE=0
-#        - WP_VERSION=2.0.7 WP_MULTISITE=0
-#        - WP_VERSION=2.0.6 WP_MULTISITE=0
-#        - WP_VERSION=2.0.5 WP_MULTISITE=0
-#        - WP_VERSION=2.0.4 WP_MULTISITE=0
-#        - WP_VERSION=2.0.3 WP_MULTISITE=0
-#        - WP_VERSION=2.0.2 WP_MULTISITE=0
-#        - WP_VERSION=2.0.1 WP_MULTISITE=0
-#        - WP_VERSION=2.0 WP_MULTISITE=0
-#        - WP_VERSION=1.5.2 WP_MULTISITE=0
-#        - WP_VERSION=1.5.1.3 WP_MULTISITE=0
-#        - WP_VERSION=1.5.1.2 WP_MULTISITE=0
-#        - WP_VERSION=1.5.1 WP_MULTISITE=0
-#        - WP_VERSION=1.5 WP_MULTISITE=0
-#        - WP_VERSION=1.2.2 WP_MULTISITE=0
-#        - WP_VERSION=1.2.1 WP_MULTISITE=0
-#        - WP_VERSION=1.2 WP_MULTISITE=0
-#        - WP_VERSION=1.0.2 WP_MULTISITE=0
-#        - WP_VERSION=1.0.1 WP_MULTISITE=0
-#        - WP_VERSION=1.0 WP_MULTISITE=0
-#        - WP_VERSION=0.72 WP_MULTISITE=0
-#        - WP_VERSION=0.711 WP_MULTISITE=0
-#        - WP_VERSION=0.71 WP_MULTISITE=0
-#        - WP_VERSION=0.70 WP_MULTISITE=0
+        - CC_TEST_REPORTER_ID=9f73723e3648ba2a830bd1449ec2c21033771ca7f5d8c159bf27ebca41f4d20d
 
 matrix:
-    exclude:
-        - php: 7.1
-          env: "WP_VERSION=3.8 WP_MULTISITE=0"
-        - php: 7.1
-          env: "WP_VERSION=3.7 WP_MULTISITE=0"
-        - php: 7.1
-          env: "WP_VERSION=3.6 WP_MULTISITE=0"
-        - php: 7.0
-          env: "WP_VERSION=3.8 WP_MULTISITE=0"
-        - php: 7.0
-          env: "WP_VERSION=3.7 WP_MULTISITE=0"
-        - php: 7.0
-          env: "WP_VERSION=3.6 WP_MULTISITE=0"
-        - php: 5.6
-          env: "WP_VERSION=3.7 WP_MULTISITE=0"
-        - php: 5.6
-          env: "WP_VERSION=3.6 WP_MULTISITE=0"
-        - php: 5.5
-          env: "WP_VERSION=3.7 WP_MULTISITE=0"
-        - php: 5.5
-          env: "WP_VERSION=3.6 WP_MULTISITE=0"
-        - php: 5.4
-          env: "WP_VERSION=3.7 WP_MULTISITE=0"
-        - php: 5.4
-          env: "WP_VERSION=3.6 WP_MULTISITE=0"
-    allow_failures:
-        - php: hhvm
-    fast_finish: true
+  include:
+    - php: 7.2
+      env: WP_VERSION=latest
+      dist: trusty
+    - php: 7.2
+      env: "WP_VERSION=latest CODECOV=true"
+      dist: trusty
+    - php: 7.2
+      env: WP_VERSION=4.8
+      dist: trusty
+    - php: 7.1
+      env: WP_VERSION=latest
+      dist: trusty
+    - php: 7.0
+      env: WP_VERSION=latest
+      dist: trusty
+    - php: 5.6
+      env: WP_VERSION=4.4
+      dist: trusty
+    - php: 5.6
+      env: WP_VERSION=latest
+      dist: trusty
+    - php: 5.6
+      env: WP_VERSION=trunk
+      dist: trusty
+fast_finish: true
 
 before_script:
-    - composer install
-    - bash bin/install-wp-tests.sh wordpress_test root '' localhost $WP_VERSION
+  - export PATH="$HOME/.composer/vendor/bin:$PATH"
+  - |
+    if [[ ! "$CODECOV" ]] ; then
+      if [ -f ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/xdebug.ini ]; then
+        phpenv config-rm xdebug.ini
+      else
+        echo "xdebug.ini does not exist"
+      fi
+    else
+      curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+      chmod +x ./cc-test-reporter
+      ./cc-test-reporter before-build
+    fi
+  - composer install
+  - |
+    if [[ ! -z "$WP_VERSION" ]] ; then
+      bash bin/install-wp-tests.sh wordpress_test root '' localhost $WP_VERSION
+      composer global require "phpunit/phpunit=4.8.*|5.7.*"
+    fi
 
 script:
-    #- mkdir -p build/logs
-    - phpunit
-    - phpunit --group=uninstall
+  - |
+    if [[ ! -z "$WP_VERSION" ]] ; then
+      phpunit
+      WP_MULTISITE=1 phpunit
+    fi
+
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
+  - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
 
 notifications:
+  email:
+    on_success: never
+    on_failure: change
   slack:
     secure: BuxbWZmhmdSIs1sXblUpG38Yw30YB+lZWTlslFtkYBi8Y0IGsgLBg5iMVg753eCWNQIIG92i/rntf1BG1ZyxiEFkd+2ZZxlPJ1Mgdp3LkWwS4qnZvr6OnpnxcGmpBsE8srnwhzziHvb9IlhBFW5G3CwCuKZJef/ftNI7wLBjRH0=

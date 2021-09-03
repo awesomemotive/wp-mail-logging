@@ -6,32 +6,32 @@
 	convertNoticesToExceptions="true"
 	convertWarningsToExceptions="true"
 	>
-	<php>
-		<const name="AUTH_KEY" value="(m+%rCB/5}=M:#zR{dIffWo0CTCAM6KfEBuSf.bf^o+0jPJSJ_Li-b^vkFkX/0(q"/>
-		<const name="SECURE_AUTH_KEY" value="uL)+/}vexI*^J{#I-~|NAlTd0`4oYM4f#uFU/Y?eJfl~L$;MR#WULP7D_lWz,_Wx"/>
-	</php>
+    <php>
+        <!-- Dirty hack to convince phpunit to use the right includes -->
+        <env name="WP_TESTS_DIR" value="/srv/www/wordpress-develop/public_html/tests/phpunit/" force="true" />
+    </php>
     <testsuites>
         <testsuite>
-            <directory suffix=".php">tests/phpunit/tests/</directory>
+            <directory suffix=".php">tests/phpunit</directory>
         </testsuite>
     </testsuites>
     <filter>
+        <!--<blacklist>
+            <directory>.</directory>
+            <directory>tests</directory>
+            <directory>vendor</directory>
+            <directory>lib</directory>
+            <directory>inc</directory>
+        </blacklist>-->
         <whitelist>
-            <directory suffix=".php">src/</directory>
+            <directory suffix=".php">src</directory>
+            <exclude>
+                <directory>tests</directory>
+            </exclude>
         </whitelist>
     </filter>
-    <listeners>
-        <listener class="SpeedTrapListener">
-            <arguments>
-                <array>
-                    <element key="slowThreshold">
-                        <integer>150</integer>
-                    </element>
-                </array>
-            </arguments>
-        </listener>
-    </listeners>
     <logging>
-        <!-- <log type="coverage-clover" target="build/logs/clover.xml"/> -->
+        <log type="coverage-clover" target="build/logs/clover.xml"/>
+        <log type="coverage-text" target="php://stdout" />
     </logging>
 </phpunit>

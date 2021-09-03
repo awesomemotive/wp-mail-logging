@@ -1,11 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "hash": "01534fc8f2f825a4c6ef14bd8337511d",
-    "content-hash": "16f8279649483e81a6dec3ed241646f8",
+    "content-hash": "5112a4988dade121d66ea3f9730fb3d9",
     "packages": [],
     "packages-dev": [
         {
@@ -56,141 +55,91 @@
                 "utility",
                 "wrapper"
             ],
-            "time": "2015-07-12 19:31:25"
+            "time": "2015-07-12T19:31:25+00:00"
         },
         {
-            "name": "jdgrimes/wp-plugin-uninstall-tester",
-            "version": "dev-master",
+            "name": "hamcrest/hamcrest-php",
+            "version": "1.2.x-dev",
             "source": {
                 "type": "git",
-                "url": "https://github.com/No3x/wp-plugin-uninstall-tester.git",
-                "reference": "af69f37079075ab6b384fe0362ab856d707439cd"
+                "url": "https://github.com/hamcrest/hamcrest-php.git",
+                "reference": "26968e9810ff0d1aa48f6d67a862559d92a51884"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/No3x/wp-plugin-uninstall-tester/zipball/af69f37079075ab6b384fe0362ab856d707439cd",
-                "reference": "af69f37079075ab6b384fe0362ab856d707439cd",
+                "url": "https://api.github.com/repos/hamcrest/hamcrest-php/zipball/26968e9810ff0d1aa48f6d67a862559d92a51884",
+                "reference": "26968e9810ff0d1aa48f6d67a862559d92a51884",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.2.0"
+                "php": "^5.3|^7.0"
             },
-            "type": "library",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "J.D. Grimes",
-                    "email": "jdg@codesymphony.co",
-                    "homepage": "http://codesymphony.co",
-                    "role": "Developer"
-                }
-            ],
-            "description": "Utilities for testing WordPress plugin install/uninstall with PHPUnit",
-            "homepage": "https://github.com/JDGrimes/wp-plugin-uninstall-tester",
-            "support": {
-                "source": "https://github.com/No3x/wp-plugin-uninstall-tester/tree/master"
+            "replace": {
+                "cordoval/hamcrest-php": "*",
+                "davedevelopment/hamcrest-php": "*",
+                "kodova/hamcrest-php": "*"
             },
-            "time": "2015-08-22 15:46:19"
-        },
-        {
-            "name": "jdgrimes/wpppb",
-            "version": "0.2.3",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/JDGrimes/wpppb.git",
-                "reference": "2574c5a3fc700a30cfcec2f577c4983a4f49409a"
+            "require-dev": {
+                "phpunit/php-file-iterator": "1.3.3",
+                "phpunit/phpunit": "~4.0",
+                "satooshi/php-coveralls": "^1.0"
             },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/JDGrimes/wpppb/zipball/2574c5a3fc700a30cfcec2f577c4983a4f49409a",
-                "reference": "2574c5a3fc700a30cfcec2f577c4983a4f49409a",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.2.0"
-            },
-            "bin": [
-                "bin/wpppb-init"
-            ],
-            "type": "library",
-            "autoload": {
-                "psr-0": {
-                    "WPPPB_": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "J.D. Grimes",
-                    "email": "jdg@codesymphony.co",
-                    "homepage": "http://codesymphony.co",
-                    "role": "Developer"
-                }
-            ],
-            "description": "Bootstrap for integration testing WordPress plugins with PHPUnit",
-            "homepage": "https://github.com/JDGrimes/wpppb",
-            "time": "2017-01-17 15:02:34"
-        },
-        {
-            "name": "squizlabs/php_codesniffer",
-            "version": "2.3.4",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/squizlabs/PHP_CodeSniffer.git",
-                "reference": "11a2545c44a5915f883e2e5ec12e14ed345e3ab2"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/squizlabs/PHP_CodeSniffer/zipball/11a2545c44a5915f883e2e5ec12e14ed345e3ab2",
-                "reference": "11a2545c44a5915f883e2e5ec12e14ed345e3ab2",
-                "shasum": ""
-            },
-            "require": {
-                "ext-tokenizer": "*",
-                "ext-xmlwriter": "*",
-                "php": ">=5.1.2"
-            },
-            "bin": [
-                "scripts/phpcs",
-                "scripts/phpcbf"
-            ],
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.0.x-dev"
+                    "dev-master": "1.2-dev"
                 }
             },
             "autoload": {
                 "classmap": [
-                    "CodeSniffer.php",
-                    "CodeSniffer/CLI.php",
-                    "CodeSniffer/Exception.php",
-                    "CodeSniffer/File.php",
-                    "CodeSniffer/Fixer.php",
-                    "CodeSniffer/Report.php",
-                    "CodeSniffer/Reporting.php",
-                    "CodeSniffer/Sniff.php",
-                    "CodeSniffer/Tokens.php",
-                    "CodeSniffer/Reports/",
-                    "CodeSniffer/Tokenizers/",
-                    "CodeSniffer/DocGenerators/",
-                    "CodeSniffer/Standards/AbstractPatternSniff.php",
-                    "CodeSniffer/Standards/AbstractScopeSniff.php",
-                    "CodeSniffer/Standards/AbstractVariableSniff.php",
-                    "CodeSniffer/Standards/IncorrectPatternException.php",
-                    "CodeSniffer/Standards/Generic/Sniffs/",
-                    "CodeSniffer/Standards/MySource/Sniffs/",
-                    "CodeSniffer/Standards/PEAR/Sniffs/",
-                    "CodeSniffer/Standards/PSR1/Sniffs/",
-                    "CodeSniffer/Standards/PSR2/Sniffs/",
-                    "CodeSniffer/Standards/Squiz/Sniffs/",
-                    "CodeSniffer/Standards/Zend/Sniffs/"
+                    "hamcrest"
+                ],
+                "files": [
+                    "hamcrest/Hamcrest.php"
                 ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "description": "This is the PHP port of Hamcrest Matchers",
+            "keywords": [
+                "test"
+            ],
+            "time": "2018-02-19T09:04:07+00:00"
+        },
+        {
+            "name": "mockery/mockery",
+            "version": "0.9.x-dev",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mockery/mockery.git",
+                "reference": "e206aa48a851b95a91eeb61bfcce536d51b7cd96"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mockery/mockery/zipball/e206aa48a851b95a91eeb61bfcce536d51b7cd96",
+                "reference": "e206aa48a851b95a91eeb61bfcce536d51b7cd96",
+                "shasum": ""
+            },
+            "require": {
+                "hamcrest/hamcrest-php": "~1.1",
+                "lib-pcre": ">=7.0",
+                "php": ">=5.3.2"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~4.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "0.9.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Mockery": "library/"
+                }
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -198,62 +147,40 @@
             ],
             "authors": [
                 {
-                    "name": "Greg Sherwood",
-                    "role": "lead"
-                }
-            ],
-            "description": "PHP_CodeSniffer tokenizes PHP, JavaScript and CSS files and detects violations of a defined set of coding standards.",
-            "homepage": "http://www.squizlabs.com/php-codesniffer",
-            "keywords": [
-                "phpcs",
-                "standards"
-            ],
-            "time": "2015-09-09 00:18:50"
-        },
-        {
-            "name": "wp-coding-standards/wpcs",
-            "version": "0.6.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards.git",
-                "reference": "2e27757829cde21bca916b11cfcfa867c42b255e"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/WordPress-Coding-Standards/WordPress-Coding-Standards/zipball/2e27757829cde21bca916b11cfcfa867c42b255e",
-                "reference": "2e27757829cde21bca916b11cfcfa867c42b255e",
-                "shasum": ""
-            },
-            "require": {
-                "squizlabs/php_codesniffer": "~2.2"
-            },
-            "type": "library",
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
+                    "name": "Pádraic Brady",
+                    "email": "padraic.brady@gmail.com",
+                    "homepage": "http://blog.astrumfutura.com"
+                },
                 {
-                    "name": "Contributors",
-                    "homepage": "https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/graphs/contributors"
+                    "name": "Dave Marshall",
+                    "email": "dave.marshall@atstsolutions.co.uk",
+                    "homepage": "http://davedevelopment.co.uk"
                 }
             ],
-            "description": "PHP_CodeSniffer rules (sniffs) to enforce WordPress coding conventions",
+            "description": "Mockery is a simple yet flexible PHP mock object framework for use in unit testing with PHPUnit, PHPSpec or any other testing framework. Its core goal is to offer a test double framework with a succinct API capable of clearly defining all possible object operations and interactions using a human readable Domain Specific Language (DSL). Designed as a drop in alternative to PHPUnit's phpunit-mock-objects library, Mockery is easy to integrate with PHPUnit and can operate alongside phpunit-mock-objects without the World ending.",
+            "homepage": "http://github.com/padraic/mockery",
             "keywords": [
-                "phpcs",
-                "standards",
-                "wordpress"
+                "BDD",
+                "TDD",
+                "library",
+                "mock",
+                "mock objects",
+                "mockery",
+                "stub",
+                "test",
+                "test double",
+                "testing"
             ],
-            "time": "2015-06-30 21:54:21"
+            "time": "2018-02-02T16:28:49+00:00"
         }
     ],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": {
-        "jdgrimes/wp-plugin-uninstall-tester": 20
-    },
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
-    "platform": [],
+    "platform": {
+        "php": ">=5.4"
+    },
     "platform-dev": []
 }

@@ -9,6 +9,12 @@ namespace No3x\WPML\ORM;
  */
 abstract class BaseModel implements ModelInterface
 {
+
+    /**
+     * @var QueryFactory
+     */
+    private static $queryFactory;
+
     /**
      * Get the column used as the primary key, defaults to 'id'.
      *
@@ -211,11 +217,22 @@ abstract class BaseModel implements ModelInterface
      */
     public static function query()
     {
-        $query = new Query(get_called_class());
+        $query = self::getQueryFactory()->buildQuery(get_called_class());
         $query->set_searchable_fields(static::get_searchable_fields());
         $query->set_primary_key(static::get_primary_key());
 
         return $query;
+    }
+
+    public static function getQueryFactory() {
+        if (!isset(self::$queryFactory)) {
+            self::$queryFactory = new DefaultQueryFactory();
+        }
+        return self::$queryFactory;
+    }
+
+    public static function setQueryFactory(QueryFactory $queryFactory) {
+        self::$queryFactory = $queryFactory;
     }
 
     /**

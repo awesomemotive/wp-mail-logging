@@ -125,7 +125,7 @@ module.exports = function (grunt) {
         },
         'github-release': {
             options: {
-                repository: 'No3x/wp-mail-logging', // Path to repository
+                repository: 'kgjerstad/wp-mail-logging', // Path to repository
                 auth: grunt.file.readJSON('credentials.json'),
                 release: {
                     tag_name: 'release/<%= pkg.version %>',

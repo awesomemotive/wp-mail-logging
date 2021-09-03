@@ -3,17 +3,13 @@
     "description": "WordPress plugin that logs each email sent by WordPress.",
     "type": "wordpress-plugin",
     "keywords": ["mail", "email", "log", "logging", "debug", "list", "store", "collect", "view"],
-    "homepage": "https://github.com/No3x/wp-mail-logging",
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/No3x/wp-plugin-uninstall-tester"
-        }
-    ],
+    "homepage": "https://github.com/kgjerstad/wp-mail-logging",
+    "require": {
+        "php": ">=5.4"
+    },
     "require-dev": {
-        "wp-coding-standards/wpcs": "0.6.0",
         "bocharsky-bw/arrayzy": "v0.1.1",
-        "jdgrimes/wpppb": "^0.2.3"
+        "mockery/mockery": "^0.9.9"
     },
     "license": "GPL-2.0",
     "authors": [
@@ -25,18 +21,14 @@
         }
     ],
     "support": {
-        "issues": "https://github.com/No3x/wp-mail-logging/issues",
-        "source": "https://github.com/No3x/wp-mail-logging/releases"
+        "issues": "https://github.com/kgjerstad/wp-mail-logging/issues",
+        "source": "https://github.com/kgjerstad/wp-mail-logging/releases"
 
     },
     "extra": {
         "installer-paths": {
             "vendor/redux-framework/redux-framework": ["redux-framework/redux-framework"]
         }
-    },
-    "scripts": {
-        "post-install-cmd": "\"vendor/bin/phpcs\" --config-set installed_paths ../../..,../../../vendor/wp-coding-standards/wpcs",
-        "post-update-cmd": "\"vendor/bin/phpcs\" --config-set installed_paths ../../..,../../../vendor/wp-coding-standards/wpcs"
     },
     "minimum-stability": "dev",
     "autoload": {

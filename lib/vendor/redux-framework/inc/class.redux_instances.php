@@ -24,6 +24,12 @@
          */
         private static $instances;
 
+        
+        /**
+         * @var array
+         */
+        private $options = array();        
+        
         /**
          * Get Instance
          * Get ReduxFrameworkInstances instance
@@ -105,6 +111,8 @@
             header( 'Pragma: no-cache' );
             $instances = ReduxFrameworkInstances::get_all_instances();
 
+            $array = array();
+            
             if ( isset( $_REQUEST['i'] ) && ! empty( $_REQUEST['i'] ) ) {
                 if ( is_array( $instances ) && ! empty( $instances ) ) {
                     foreach ( $instances as $opt_name => $data ) {
@@ -119,8 +127,8 @@
                 if ( isset( $array ) ) {
                     if ( isset( $array->extensions ) && is_array( $array->extensions ) && ! empty( $array->extensions ) ) {
                         foreach ( $array->extensions as $key => $extension ) {
-                            if ( isset( $extension->$version ) ) {
-                                $array->extensions[ $key ] = $extension->$version;
+                            if ( isset( $extension->version ) ) {
+                                $array->extensions[ $key ] = $extension->version;
                             } else {
                                 $array->extensions[ $key ] = true;
                             }

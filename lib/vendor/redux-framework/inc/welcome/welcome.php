@@ -47,8 +47,6 @@
                 $this->check_version();
             }
             update_option( 'redux_version_upgraded_from', ReduxFramework::$_version );
-            set_transient( '_redux_activation_redirect', true, 30 );
-
         }
 
 
@@ -132,7 +130,7 @@
             $post_data = serialize( $post_data );
 
             if ( isset( $generate_hash ) && $generate_hash ) {
-                
+
                 $data['check']      = $newHash;
                 $data['identifier'] = "";
                 $response           = wp_remote_post( 'http://support.redux.io/v1/', array(
@@ -249,7 +247,7 @@
                 )
             );
 
-            //remove_submenu_page( 'tools.php', 'redux-about' );
+            remove_submenu_page( 'tools.php', 'redux-about' );
             remove_submenu_page( 'tools.php', 'redux-status' );
             remove_submenu_page( 'tools.php', 'redux-changelog' );
             remove_submenu_page( 'tools.php', 'redux-getting-started' );

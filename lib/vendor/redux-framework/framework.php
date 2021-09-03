@@ -69,7 +69,7 @@
             // Please update the build number with each push, no matter how small.
             // This will make for easier support when we ask users what version they are using.
 
-            public static $_version = '3.6.5';
+            public static $_version = '3.6.12';
             public static $_dir;
             public static $_url;
             public static $_upload_dir;
@@ -178,7 +178,9 @@
             public $reload_fields = array();
             public $omit_share_icons = false;
             public $omit_admin_items = false;
-
+            public $apiHasRun = false;
+            public $transients;
+            
             /**
              * Class Constructor. Defines the args for the theme options class
              *
@@ -195,7 +197,7 @@
                 if ( isset ( $_POST ) && isset ( $_POST['action'] ) && $_POST['action'] == 'heartbeat' ) {
 
                     // Hook, for purists.
-                    if ( ! has_action( 'redux/ajax/heartbeat' ) ) {
+                    if ( has_action( 'redux/ajax/heartbeat' ) ) {
                         do_action( 'redux/ajax/heartbeat', $this );
                     }
 
@@ -206,7 +208,6 @@
                 // Pass parent pointer to function helper.
                 Redux_Functions::$_parent     = $this;
                 Redux_CDN::$_parent           = $this;
-                Redux_Admin_Notices::$_parent = $this;
 
                 // Set values
                 $this->set_default_args();
@@ -253,8 +254,6 @@
                     $this->args['save_defaults'] = false;
                 }
 
-                $this->change_demo_defaults();
-
                 if ( ! empty ( $this->args['opt_name'] ) ) {
                     /**
                      * SHIM SECTION
@@ -276,6 +275,21 @@
                         unset ( $this->args['page_type'] );
                     }
 
+                    // Auto create the page_slug appropriately
+                    if ( empty( $this->args['page_slug'] ) ) {
+                        if ( ! empty( $this->args['display_name'] ) ) {
+                            $this->args['page_slug'] = sanitize_html_class( $this->args['display_name'] );
+                        } else if ( ! empty( $this->args['page_title'] ) ) {
+                            $this->args['page_slug'] = sanitize_html_class( $this->args['page_title'] );
+                        } else if ( ! empty( $this->args['menu_title'] ) ) {
+                            $this->args['page_slug'] = sanitize_html_class( $this->args['menu_title'] );
+                        } else {
+                            $this->args['page_slug'] = str_replace( '-', '_', $this->args['opt_name'] );
+                        }
+                    }
+                    
+                    $this->change_demo_defaults();
+                    
                     // Get rid of extra_tabs! Not needed.
                     if ( is_array( $extra_tabs ) && ! empty ( $extra_tabs ) ) {
                         foreach ( $extra_tabs as $tab ) {
@@ -410,7 +424,7 @@
                         require_once 'core/dashboard.php';
                         new reduxDashboardWidget( $this );
 
-                        if ( ! isset ( $GLOBALS['redux_notice_check'] ) ) {
+                        if ( ! isset ( $GLOBALS['redux_notice_check'] ) || $GLOBALS['redux_notice_check'] == 0 ) {
                             require_once 'core/newsflash.php';
 
                             $params = array(
@@ -596,13 +610,13 @@
             public function _update_check() {
                 // Only one notice per instance please
                 if ( ! isset ( $GLOBALS['redux_update_check'] ) ) {
-                    Redux_Functions::updateCheck( self::$_version );
+                    Redux_Functions::updateCheck($this, self::$_version );
                     $GLOBALS['redux_update_check'] = 1;
                 }
             }
 
             public function _admin_notices() {
-                Redux_Admin_Notices::adminNotices( $this->admin_notices );
+                Redux_Admin_Notices::adminNotices($this, $this->admin_notices );
             }
 
             public function _dismiss_admin_notice() {
@@ -1291,19 +1305,6 @@
 //                    }
                 }
 
-                // Auto create the page_slug appropriately
-                if ( empty( $this->args['page_slug'] ) ) {
-                    if ( ! empty( $this->args['display_name'] ) ) {
-                        $this->args['page_slug'] = sanitize_html_class( $this->args['display_name'] );
-                    } else if ( ! empty( $this->args['page_title'] ) ) {
-                        $this->args['page_slug'] = sanitize_html_class( $this->args['page_title'] );
-                    } else if ( ! empty( $this->args['menu_title'] ) ) {
-                        $this->args['page_slug'] = sanitize_html_class( $this->args['menu_title'] );
-                    } else {
-                        $this->args['page_slug'] = str_replace( '-', '_', $this->args['opt_name'] );
-                    }
-                }
-
                 if ( isset( $this->args['customizer_only'] ) && $this->args['customizer_only'] == true ) {
                     $this->args['menu_type']      = 'hidden';
                     $this->args['customizer']     = true;
@@ -1442,39 +1443,30 @@
                     );
 
                     if ( true === $this->args['allow_sub_menu'] ) {
-                        if ( ! isset ( $section['type'] ) || $section['type'] != 'divide' ) {
-                            foreach ( $this->sections as $k => $section ) {
-                                $canBeSubSection = ( $k > 0 && ( ! isset ( $this->sections[ ( $k ) ]['type'] ) || $this->sections[ ( $k ) ]['type'] != "divide" ) ) ? true : false;
-
-                                if ( ! isset ( $section['title'] ) || ( $canBeSubSection && ( isset ( $section['subsection'] ) && $section['subsection'] == true ) ) ) {
-                                    continue;
-                                }
-
-                                if ( isset ( $section['submenu'] ) && $section['submenu'] == false ) {
-                                    continue;
-                                }
-
-                                if ( isset ( $section['customizer_only'] ) && $section['customizer_only'] == true ) {
-                                    continue;
-                                }
-
-                                if ( isset ( $section['hidden'] ) && $section['hidden'] == true ) {
-                                    continue;
-                                }
-
-                                if ( isset( $section['permissions'] ) && ! self::current_user_can( $section['permissions'] ) ) {
-                                    continue;
-                                }
-
-                                // ONLY for non-wp.org themes OR plugins. Theme-Check alert shown if used and IS theme.
-                                call_user_func( 'add_submenu_page', $this->args['page_slug'], $section['title'], $section['title'], $this->args['page_permissions'], $this->args['page_slug'] . '&tab=' . $k,
-                                    //create_function( '$a', "return null;" )
-                                    '__return_null' );
+                        foreach ( $this->sections as $k => $section ) {
+                            $canBeSubSection = ( $k > 0 && ( ! isset ( $this->sections[ ( $k ) ]['type'] ) || $this->sections[ ( $k ) ]['type'] != "divide" ) ) ? true : false;
+                            if ( ! isset ( $section['title'] ) || ( $canBeSubSection && ( isset ( $section['subsection'] ) && $section['subsection'] == true ) ) ) {
+                                continue;
                             }
-
-                            // Remove parent submenu item instead of adding null item.
-                            remove_submenu_page( $this->args['page_slug'], $this->args['page_slug'] );
+                            if ( isset ( $section['submenu'] ) && $section['submenu'] == false ) {
+                                continue;
+                            }
+                            if ( isset ( $section['customizer_only'] ) && $section['customizer_only'] == true ) {
+                                continue;
+                            }
+                            if ( isset ( $section['hidden'] ) && $section['hidden'] == true ) {
+                                continue;
+                            }
+                            if ( isset( $section['permissions'] ) && ! self::current_user_can( $section['permissions'] ) ) {
+                                continue;
+                            }
+                            // ONLY for non-wp.org themes OR plugins. Theme-Check alert shown if used and IS theme.
+                            call_user_func( 'add_submenu_page', $this->args['page_slug'], $section['title'], $section['title'], $this->args['page_permissions'], $this->args['page_slug'] . '&tab=' . $k,
+                                //create_function( '$a', "return null;" )
+                                '__return_null' );
                         }
+                        // Remove parent submenu item instead of adding null item.
+                        remove_submenu_page( $this->args['page_slug'], $this->args['page_slug'] );
                     }
                 }
 
@@ -1492,9 +1484,6 @@
              */
             public function _admin_bar_menu() {
                 global $menu, $submenu, $wp_admin_bar;
-
-                $ct         = wp_get_theme();
-                $theme_data = $ct;
 
                 if ( ! is_super_admin() || ! is_admin_bar_showing() || ! $this->args['admin_bar'] || $this->args['menu_type'] == 'hidden' ) {
                     return;
@@ -1570,7 +1559,6 @@
                     $nodeargs = array(
                         'id'    => $this->args["page_slug"],
                         'title' => $title,
-                        // $theme_data->get( 'Name' ) . " " . __( 'Options', 'redux-framework-demo' ),
                         'href'  => admin_url( 'admin.php?page=' . $this->args["page_slug"] ),
                         'meta'  => array()
                     );
@@ -2764,7 +2752,7 @@
                         }
                     }
                 }
-                
+
                 unset ( $plugin_options['defaults'], $plugin_options['defaults_section'], $plugin_options['import'], $plugin_options['import_code'], $plugin_options['import_link'], $plugin_options['compiler'], $plugin_options['redux-section'] );
                 if ( $this->args['database'] == 'transient' || $this->args['database'] == 'theme_mods' || $this->args['database'] == 'theme_mods_expanded' ) {
                     $this->set_options( $plugin_options );
@@ -2783,7 +2771,7 @@
                     //exit();
                 }
 
-                $this->set_transients( $this->transients );
+                $this->set_transients();
 
                 return $plugin_options;
             }
@@ -3619,7 +3607,7 @@
                 if ( ! empty ( $field['required'] ) ) {
                     if ( isset ( $field['required'][0] ) ) {
                         if ( ! is_array( $field['required'][0] ) && count( $field['required'] ) == 3 ) {
-                            $parentValue = $GLOBALS[ $this->args['global_variable'] ][ $field['required'][0] ];
+                            $parentValue = isset($GLOBALS[ $this->args['global_variable'] ][ $field['required'][0] ]) ? $GLOBALS[ $this->args['global_variable'] ][ $field['required'][0] ] : '';
                             $checkValue  = $field['required'][2];
                             $operation   = $field['required'][1];
                             $return      = $this->compareValueDependencies( $parentValue, $checkValue, $operation );
@@ -4014,39 +4002,47 @@
                         foreach ( $this->args['share_icons'] as $idx => $arr ) {
                             if ( is_array( $arr ) && ! empty( $arr ) ) {
                                 foreach ( $arr as $x => $y ) {
-                                    if ( strpos( strtolower( $y ), 'redux' ) !== false ) {
-                                        $msg = __( '<strong>Redux Framework Notice: </strong>There are references to the Redux Framework support site in your config\'s <code>share_icons</code> argument.  This is sample data.  Please change or remove this data before shipping your product.', 'redux-framework' );
-                                        $this->display_arg_change_notice( 'share', $msg );
-                                        $this->omit_share_icons = true;
+                                    if (!$this->omit_share_icons) {
+                                        if ( strpos( strtolower( $y ), 'redux' ) !== false ) {
+                                            $msg = __( '<strong>Redux Framework Notice: </strong>There are references to the Redux Framework support site in your config\'s <code>share_icons</code> argument.  This is sample data.  Please change or remove this data before shipping your product.', 'redux-framework' );
+                                            $this->display_arg_change_notice( 'share', $msg );
+                                            $this->omit_share_icons = true;
+                                            continue;
+                                        }
                                     }
                                 }
                             }
                         }
                     }
-
                 }
             }
 
             private function display_arg_change_notice( $mode, $msg = '' ) {
                 if ( $mode == 'admin' ) {
                     if ( ! $this->omit_admin_items ) {
-                        $this->admin_notices[] = array(
-                            'type'    => 'error',
-                            'msg'     => $msg,
-                            'id'      => 'admin_config',
-                            'dismiss' => true,
+                        $data = array(
+                            'parent'    => $this,
+                            'type'      => 'error',
+                            'msg'       => $msg,
+                            'id'        => 'admin_config',
+                            'dismiss'   => true
                         );
+                        
+                        Redux_Admin_Notices::set_notice($data);
                     }
                 }
 
                 if ( $mode == 'share' ) {
                     if ( ! $this->omit_share_icons ) {
-                        $this->admin_notices[] = array(
-                            'type'    => 'error',
-                            'msg'     => $msg,
-                            'id'      => 'share_config',
-                            'dismiss' => true,
+                        $data = array(
+                            'parent'    => $this,
+                            'type'      => 'error',
+                            'msg'       => $msg,
+                            'id'        => 'share_config',
+                            'dismiss'   => true
                         );
+                        
+                        Redux_Admin_Notices::set_notice($data);
                     }
                 }
             }
@@ -4070,7 +4066,8 @@
                     return false;
                 }
 
-                $args = array_merge( array( $current_user ), func_get_args() );
+                $name_arr=func_get_args();
+                $args = array_merge( array( $current_user ),$name_arr );
 
                 return call_user_func_array( array( 'self', 'user_can' ), $args );
             }
@@ -4123,7 +4120,7 @@
              */
             public static function user_can( $user, $capabilities, $object_id = null ) {
                 static $depth = 0;
-
+                
                 if ( $depth >= 30 ) {
                     return false;
                 }
@@ -4251,5 +4248,7 @@
          *
          * @param null
          */
-        do_action( 'redux/init', ReduxFramework::init() );
+        ReduxFramework::init();
+        do_action( 'redux/init' );
+        
     } // class_exists('ReduxFramework')

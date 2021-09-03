@@ -1,7 +1,6 @@
 <?php
 
 
-
     if ( ! defined( 'ABSPATH' ) ) {
         exit;
     }
@@ -24,15 +23,6 @@
             public $fs_object = null;
 
             public $parent = null;
-
-            public function __construct() {
-                $this->parent->admin_notices[] = array(
-                    'type'    => 'error',
-                    'msg'     => '<strong>' . __( 'File Permission Issues', 'redux-framework' ) . '</strong><br/>' . sprintf( __( 'We were unable to modify required files. Please check your permissions, or modify your wp-config.php file to contain your FTP login credentials as <a href="%s" target="_blank">outlined here</a>.', 'redux-framework' ), 'https://codex.wordpress.org/Editing_wp-config.php#WordPress_Upgrade_Constants' ),
-                    'id'      => 'redux-wp-login',
-                    'dismiss' => false,
-                );
-            }
 
             /**
              * Return an instance of this class.
@@ -100,7 +90,6 @@
                 return true;
             }
 
-
             public static function load_direct() {
                 if ( self::$direct === null ) {
                     require_once ABSPATH . '/wp-admin/includes/class-wp-filesystem-base.php';
@@ -119,14 +108,9 @@
                     extract( $params );
                 }
 
-                if ( ! is_dir( ReduxFramework::$_upload_dir ) ) {
-                    wp_mkdir_p( ReduxFramework::$_upload_dir );
-                }
-
                 // Setup the filesystem with creds
                 require_once ABSPATH . '/wp-admin/includes/template.php';
-               
-		require_once ABSPATH . '/wp-includes/pluggable.php';
+                require_once ABSPATH . '/wp-includes/pluggable.php';
                 require_once ABSPATH . '/wp-admin/includes/file.php';
 
                 if ( $this->parent->args['menu_type'] == 'submenu' ) {
@@ -139,6 +123,32 @@
                 $url = wp_nonce_url( $base, 'redux-options' );
 
                 $this->filesystem_init( $url, 'direct', dirname( $file ) );
+
+                if ( ! file_exists( ReduxFramework::$_upload_dir ) ) {
+                    $this->do_action( 'mkdir', ReduxFramework::$_upload_dir );
+                }
+
+                $hash_path = trailingslashit( ReduxFramework::$_upload_dir ) . 'hash';
+                if ( ! file_exists( $hash_path ) ) {
+                    $this->do_action( 'put_contents', $hash_path, array(
+                            'content' => md5( network_site_url() . '-' . $_SERVER['REMOTE_ADDR'] )
+                        )
+                    );
+                }
+                $version_path = trailingslashit( ReduxFramework::$_upload_dir ) . 'version';
+                if ( ! file_exists( $version_path ) ) {
+                    $this->do_action( 'put_contents', $version_path, array(
+                            'content' => ReduxFramework::$_version
+                        )
+                    );
+                }
+
+                $index_path = trailingslashit( ReduxFramework::$_upload_dir ) . 'index.php';
+                if ( ! file_exists( $index_path ) ) {
+                    $this->do_action( 'put_contents', $index_path, array(
+                        'content' => '<?php' . PHP_EOL . '// Silence is golden.'
+                    ) );
+                }
 
                 return $this->do_action( $action, $file, $params );
             }
@@ -182,6 +192,14 @@
                             mkdir( $file, $chmod, true );
                             $res = file_exists( $file );
                         }
+                    }
+                    $index_path = trailingslashit( $file ) . 'index.php';
+                    if ( ! file_exists( $index_path ) ) {
+                        $wp_filesystem->put_contents(
+                            $index_path,
+                            '<?php' . PHP_EOL . '// Silence is golden.',
+                            FS_CHMOD_FILE // predefined mode settings for WP files
+                        );
                     }
                 } elseif ( $action == 'rmdir' ) {
                     $res = $wp_filesystem->rmdir( $file, $recursive );
@@ -250,33 +268,35 @@
                 }
 
                 if ( ! $res ) {
-                    if ($action == 'dirlist') {
-			if (empty($res) || $res == false || $res == '' ) {
-                            return;
-			}
-                        
-                        if (is_array($res) && empty($res)) {
+                    if ( $action == 'dirlist' ) {
+                        if ( empty( $res ) || $res == false || $res == '' ) {
                             return;
                         }
-                        
-                        if (!is_array($res)) {
-                            if (count(glob("$file*")) == 0) {
+
+                        if ( is_array( $res ) && empty( $res ) ) {
+                            return;
+                        }
+
+                        if ( ! is_array( $res ) ) {
+                            if ( count( glob( "$file*" ) ) == 0 ) {
                                 return;
                             }
                         }
                     }
-                    
+
                     $this->killswitch              = true;
-                    $this->parent->admin_notices[] = array(
-                        'type'    => 'error',
-                        'msg'     => '<strong>' . __( 'File Permission Issues', 'redux-framework' ) . '</strong><br/>' . sprintf( __( 'We were unable to modify required files. Please ensure that <code>%1s</code> has the proper read-write permissions, or modify your wp-config.php file to contain your FTP login credentials as <a href="%2s" target="_blank">outlined here</a>.', 'redux-framework' ), Redux_Helpers::cleanFilePath( trailingslashit( WP_CONTENT_DIR ) ) . '/uploads/', 'https://codex.wordpress.org/Editing_wp-config.php#WordPress_Upgrade_Constants' ),
-                        'id'      => 'redux-wp-login',
-                        'dismiss' => false,
+
+                    $msg = '<strong>' . __( 'File Permission Issues', 'redux-framework' ) . '</strong><br/>' . sprintf( __( 'We were unable to modify required files. Please ensure that <code>%1s</code> has the proper read-write permissions, or modify your wp-config.php file to contain your FTP login credentials as <a href="%2s" target="_blank">outlined here</a>.', 'redux-framework' ), Redux_Helpers::cleanFilePath( trailingslashit( WP_CONTENT_DIR ) ) . '/uploads/', 'https://codex.wordpress.org/Editing_wp-config.php#WordPress_Upgrade_Constants' );
+
+                    $data = array(
+                        'parent'    => self::$instance->parent,
+                        'type'      => 'error',
+                        'msg'       => $msg,
+                        'id'        => 'redux-wp-login',
+                        'dismiss'   => false
                     );
-                    //add_action( "redux/page/{$this->parent->args['opt_name']}/form/before", array(
-                    //    $this,
-                    //    'ftp_form'
-                    //) );
+
+                    Redux_Admin_Notices::set_notice($data);
                 }
 
                 return $res;
