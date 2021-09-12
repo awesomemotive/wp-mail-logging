@@ -1,5 +1,5 @@
 {
-    "name": "no3x/wp-mail-logging",
+    "name": "kgjerstad/wp-mail-logging",
     "description": "WordPress plugin that logs each email sent by WordPress.",
     "type": "wordpress-plugin",
     "keywords": ["mail", "email", "log", "logging", "debug", "list", "store", "collect", "view"],
