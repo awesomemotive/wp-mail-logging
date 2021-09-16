@@ -5,14 +5,14 @@ msgstr ""
 "Project-Id-Version: WP Mail Logging 1.8.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wp-mail-logging\n"
 "POT-Creation-Date: 2019-04-18 12:48:29+00:00\n"
-"PO-Revision-Date: 2019-04-18 14:49+0200\n"
+"PO-Revision-Date: 2021-09-16 16:43+0800\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.1.1\n"
+"X-Generator: Poedit 3.0\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #: src/Renderer/Column/AttachmentsColumn.php:49
@@ -158,14 +158,17 @@ msgid ""
 "performed. These emails are stored and accessible to the site management as "
 "log."
 msgstr ""
+"当您使用这个网站时，一些操作（如评论）会触发电子邮件的发送。它们包含与您的电"
+"子邮件相关的个人信息。具体信息取决于您的相应设定。这些电子邮件记录将作为日志"
+"存储，并供站点管理人员维护检查时访问。"
 
 #: src/WPML_PrivacyController.php:101
 msgid "Mails"
-msgstr ""
+msgstr "Mails"
 
 #: src/WPML_PrivacyController.php:137
 msgid "A mail with the id %d was unable to be removed at this time."
-msgstr ""
+msgstr "此时无法删除 id %d 的邮件。"
 
 #: src/inc/class-wp-list-table.php:191
 msgid "No items found."
@@ -239,7 +242,7 @@ msgstr "清理"
 
 #: src/inc/redux/WPML_Redux_Framework_config.php:102
 msgid "Delete all data on deactivation? (emails and settings)?"
-msgstr "删除所有停用的数据吗？（电子邮件和设置）？"
+msgstr "禁用插件时，删除所有数据吗？（邮件记录和个性化设置）"
 
 #: src/inc/redux/WPML_Redux_Framework_config.php:112
 msgid "Can See Submission data"
@@ -315,7 +318,7 @@ msgstr "邮件何时被删除？"
 
 #: src/inc/redux/WPML_Redux_Framework_config.php:171
 msgid "Cleanup when the stored mails exceed..."
-msgstr "当存储的邮件超过上述数量时开始清理邮件..."
+msgstr "当存储的邮件超过上述设定数量时，开始清理邮件..."
 
 #: src/inc/redux/WPML_Redux_Framework_config.php:181
 msgid "Cleanup by Time"
@@ -323,7 +326,7 @@ msgstr "按时间清理"
 
 #: src/inc/redux/WPML_Redux_Framework_config.php:193
 msgid "Delete mails older than days..."
-msgstr "删除超过上述天数的邮件..."
+msgstr "删除超过上述设定天数的邮件..."
 
 #: wp-mail-logging.php:48
 msgid ""
