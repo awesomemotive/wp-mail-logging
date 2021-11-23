@@ -5,7 +5,7 @@
     "keywords": ["mail", "email", "log", "logging", "debug", "list", "store", "collect", "view"],
     "homepage": "https://github.com/kgjerstad/wp-mail-logging",
     "require": {
-        "php": ">=5.4"
+        "php": ">=7.1"
     },
     "require-dev": {
         "bocharsky-bw/arrayzy": "v0.1.1",

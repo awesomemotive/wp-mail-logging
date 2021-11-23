@@ -43,7 +43,8 @@ class WPML_OptionsManager {
     public function getSetting($settingName, $default = null) {
         global $wpml_settings;
 
-        if ( array_key_exists($settingName, $wpml_settings)) {
+        $retVal = null;
+        if (is_array($wpml_settings) && array_key_exists($settingName, $wpml_settings)) {
             $retVal = $wpml_settings[$settingName];
         }
         if (!isset($retVal) && $default !== null) {
@@ -448,18 +449,11 @@ class WPML_OptionsManager {
                 case 'settings':
                     $redux = WPML_Init::getInstance()->getService( 'redux' );
                     $framework = $redux->ReduxFramework;
-                    if ( ! class_exists( 'reduxCorePanel' ) ) {
-                        $path = dirname( __DIR__ ) . '/lib/vendor/redux-framework/core/panel.php';
-                        require_once $path;
-                    }
-                    if ( ! class_exists( 'reduxCoreEnqueue' ) ) {
-                        $path = dirname( __DIR__ ) . '/lib/vendor/redux-framework/core/enqueue.php';
-                        require_once $path;
-                    }
-                    $enqueue = new \reduxCoreEnqueue ( $framework );
+
+                    $enqueue = new \Redux_Enqueue ( $framework );
                     $enqueue->init();
 
-                    $panel = new \reduxCorePanel ( $framework );
+                    $panel = new \Redux_Panel ( $framework );
                     $panel->init();
                     break;
                 default:
@@ -505,7 +499,7 @@ class WPML_OptionsManager {
                             <div id="wp-mail-logging-modal-content-header-format-switch">
                                 <?php
                                 foreach( $this->supportedMailRendererFormats as $key => $format ) {
-                                    $checked = checked($format, $wpml_settings['preferred-mail-format'], false);
+                                    $checked = checked($format, $this->getSetting('preferred-mail-format'), false);
                                     echo ' <input type="radio" name="format" ' . $checked . ' id="' . esc_attr( $format ) . '"> ' . esc_html( $format ) . '</input> ';
                                 }
                                 ?>

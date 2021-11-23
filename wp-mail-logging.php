@@ -3,7 +3,7 @@
    Plugin Name: WP Mail Logging
    Plugin URI: https://wordpress.org/plugins/wp-mail-logging/
    Support URI: https://github.com/kgjerstad/wp-mail-logging/issues
-   Version: 1.9.9
+   Version: 1.10.0
    Author: Wysija
    Author URI: https://profiles.wordpress.org/wysija/
    Description: Logs each email sent by WordPress.
@@ -36,7 +36,7 @@ namespace No3x\WPML;
 // Exit if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-define('WPML_PHP_MIN_VERSION', '5.4');
+define('WPML_PHP_MIN_VERSION', '7.1');
 
 /**
  * Check the PHP version and give a useful error message if the user's version is less than the required version
