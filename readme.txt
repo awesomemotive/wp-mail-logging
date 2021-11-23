@@ -116,6 +116,9 @@ Yes, directly on <a href="https://github.com/kgjerstad/wp-mail-logging/" rel="no
 
 == Changelog ==
 
+= 1.10.0 - 2021-1-23 =
+- Updated: Redux framework to 4.3.3.
+
 = 1.9.9 - 2021-09-12 =
 - Updated: support for WordPress 5.8.
 
