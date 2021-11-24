@@ -2,9 +2,9 @@
 # This file is distributed under the GPLv3.
 msgid ""
 msgstr ""
-"Project-Id-Version: WP Mail Logging 1.10.0\n"
+"Project-Id-Version: WP Mail Logging 1.10.1\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wp-mail-logging\n"
-"POT-Creation-Date: 2021-11-23 20:56:24+00:00\n"
+"POT-Creation-Date: 2021-11-24 18:35:08+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -24,7 +24,7 @@ msgid "ID"
 msgstr ""
 
 #: src/Renderer/WPML_ColumnManager.php:32
-#: src/inc/redux/WPML_Redux_Framework_config.php:191
+#: src/inc/redux/WPML_Redux_Framework_config.php:194
 msgid "Time"
 msgstr ""
 
@@ -217,99 +217,99 @@ msgstr ""
 msgid "Select All"
 msgstr ""
 
-#: src/inc/redux/WPML_Redux_Framework_config.php:92
+#: src/inc/redux/WPML_Redux_Framework_config.php:95
 msgid "General Settings"
 msgstr ""
 
-#: src/inc/redux/WPML_Redux_Framework_config.php:101
+#: src/inc/redux/WPML_Redux_Framework_config.php:104
 msgid "Cleanup"
 msgstr ""
 
-#: src/inc/redux/WPML_Redux_Framework_config.php:102
+#: src/inc/redux/WPML_Redux_Framework_config.php:105
 msgid "Delete all data on deactivation? (emails and settings)?"
 msgstr ""
 
-#: src/inc/redux/WPML_Redux_Framework_config.php:112
+#: src/inc/redux/WPML_Redux_Framework_config.php:115
 msgid "Can See Submission data"
 msgstr ""
 
-#: src/inc/redux/WPML_Redux_Framework_config.php:113
+#: src/inc/redux/WPML_Redux_Framework_config.php:116
 msgid "Select the minimum role."
 msgstr ""
 
-#: src/inc/redux/WPML_Redux_Framework_config.php:118
+#: src/inc/redux/WPML_Redux_Framework_config.php:121
 msgid "WordPress Date Time Format"
 msgstr ""
 
-#: src/inc/redux/WPML_Redux_Framework_config.php:119
+#: src/inc/redux/WPML_Redux_Framework_config.php:122
 msgid "Use format from WordPress settings (%s)"
 msgstr ""
 
-#: src/inc/redux/WPML_Redux_Framework_config.php:121
-#: src/inc/redux/WPML_Redux_Framework_config.php:146
-#: src/inc/redux/WPML_Redux_Framework_config.php:162
-#: src/inc/redux/WPML_Redux_Framework_config.php:184
+#: src/inc/redux/WPML_Redux_Framework_config.php:124
+#: src/inc/redux/WPML_Redux_Framework_config.php:149
+#: src/inc/redux/WPML_Redux_Framework_config.php:165
+#: src/inc/redux/WPML_Redux_Framework_config.php:187
 msgid "Enabled"
 msgstr ""
 
-#: src/inc/redux/WPML_Redux_Framework_config.php:122
-#: src/inc/redux/WPML_Redux_Framework_config.php:147
-#: src/inc/redux/WPML_Redux_Framework_config.php:163
-#: src/inc/redux/WPML_Redux_Framework_config.php:185
+#: src/inc/redux/WPML_Redux_Framework_config.php:125
+#: src/inc/redux/WPML_Redux_Framework_config.php:150
+#: src/inc/redux/WPML_Redux_Framework_config.php:166
+#: src/inc/redux/WPML_Redux_Framework_config.php:188
 msgid "Disabled"
 msgstr ""
 
-#: src/inc/redux/WPML_Redux_Framework_config.php:133
+#: src/inc/redux/WPML_Redux_Framework_config.php:136
 msgid "Default Format for Message"
 msgstr ""
 
-#: src/inc/redux/WPML_Redux_Framework_config.php:134
+#: src/inc/redux/WPML_Redux_Framework_config.php:137
 msgid "Select your preferred display format."
 msgstr ""
 
-#: src/inc/redux/WPML_Redux_Framework_config.php:139
+#: src/inc/redux/WPML_Redux_Framework_config.php:142
 msgid "Display Host"
 msgstr ""
 
-#: src/inc/redux/WPML_Redux_Framework_config.php:140
+#: src/inc/redux/WPML_Redux_Framework_config.php:143
 msgid "Display host column in list."
 msgstr ""
 
-#: src/inc/redux/WPML_Redux_Framework_config.php:152
+#: src/inc/redux/WPML_Redux_Framework_config.php:155
 msgid "Log Rotation"
 msgstr ""
 
-#: src/inc/redux/WPML_Redux_Framework_config.php:153
+#: src/inc/redux/WPML_Redux_Framework_config.php:156
 msgid "Save space by deleting logs regularly."
 msgstr ""
 
-#: src/inc/redux/WPML_Redux_Framework_config.php:159
+#: src/inc/redux/WPML_Redux_Framework_config.php:162
 msgid "Cleanup by Amount"
 msgstr ""
 
-#: src/inc/redux/WPML_Redux_Framework_config.php:160
-#: src/inc/redux/WPML_Redux_Framework_config.php:182
+#: src/inc/redux/WPML_Redux_Framework_config.php:163
+#: src/inc/redux/WPML_Redux_Framework_config.php:185
 msgid "Setup a automated cleanup routine!"
 msgstr ""
 
-#: src/inc/redux/WPML_Redux_Framework_config.php:169
+#: src/inc/redux/WPML_Redux_Framework_config.php:172
 msgid "Amount"
 msgstr ""
 
-#: src/inc/redux/WPML_Redux_Framework_config.php:170
-#: src/inc/redux/WPML_Redux_Framework_config.php:192
+#: src/inc/redux/WPML_Redux_Framework_config.php:173
+#: src/inc/redux/WPML_Redux_Framework_config.php:195
 msgid "When should mails are deleted?"
 msgstr ""
 
-#: src/inc/redux/WPML_Redux_Framework_config.php:171
+#: src/inc/redux/WPML_Redux_Framework_config.php:174
 msgid "Cleanup when the stored mails exceed..."
 msgstr ""
 
-#: src/inc/redux/WPML_Redux_Framework_config.php:181
+#: src/inc/redux/WPML_Redux_Framework_config.php:184
 msgid "Cleanup by Time"
 msgstr ""
 
-#: src/inc/redux/WPML_Redux_Framework_config.php:193
+#: src/inc/redux/WPML_Redux_Framework_config.php:196
 msgid "Delete mails older than days..."
 msgstr ""
 
