@@ -630,7 +630,7 @@ if ( ! class_exists( 'Redux_Core', false ) ) {
 		 * Display the connection banner.
 		 */
 		public function admin_init() {
-			Redux_Connection_Banner::init();
+			//Redux_Connection_Banner::init();
 		}
 
 		/**

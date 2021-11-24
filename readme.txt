@@ -116,6 +116,10 @@ Yes, directly on <a href="https://github.com/kgjerstad/wp-mail-logging/" rel="no
 
 == Changelog ==
 
+= 1.10.1 - 2021-1-24 =
+- Removed: Redux Framework connection notice. Thanks Jesse!
+- Fixed: is_theme PHP error. Thanks @max3322!
+
 = 1.10.0 - 2021-1-23 =
 - Updated: Redux framework to 4.3.3.
 

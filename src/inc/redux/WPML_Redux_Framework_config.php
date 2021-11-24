@@ -25,7 +25,7 @@ if (!class_exists('WPML_Redux_Framework_config')) {
             }
 
             // This is needed. Bah WordPress bugs.  ;)
-            if ( true == \Redux_Helpers::is_theme( __FILE__ ) ) {
+            if ( true == \Redux_Helpers::isTheme( __FILE__ ) ) {
                 $this->initSettings();
             } else {
                 add_action( 'plugins_loaded', array( $this, 'initSettings' ), 10 );
@@ -68,6 +68,9 @@ if (!class_exists('WPML_Redux_Framework_config')) {
             //add_filter('redux/options/' . $this->args['opt_name'] . '/sections', array($this, 'dynamic_section'));
 
             $this->ReduxFramework = new \ReduxFramework( $this->sections, $this->args );
+
+            // Disable the Redux demo
+            \Redux::disable_demo();
         }
 
         // Remove the demo link and the notice of integrated demo from the redux-framework plugin
