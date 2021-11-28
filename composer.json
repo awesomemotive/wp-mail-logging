@@ -26,6 +26,11 @@
         "source": "https://github.com/kgjerstad/wp-mail-logging/releases"
 
     },
+    "extra": {
+        "installer-paths": {
+            "vendor/redux-framework/redux-framework": ["redux-framework/redux-framework"]
+        }
+    },
     "minimum-stability": "dev",
     "autoload": {
         "psr-4": {
