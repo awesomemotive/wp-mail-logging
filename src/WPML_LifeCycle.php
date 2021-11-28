@@ -58,6 +58,7 @@ class WPML_LifeCycle extends WPML_InstallIndicator {
      * @return void
      */
     public function upgrade() {
+        $this->disableReduxFunctionality();
     }
 
     /**
@@ -65,6 +66,7 @@ class WPML_LifeCycle extends WPML_InstallIndicator {
      * @return void
      */
     public function activate() {
+        $this->disableReduxFunctionality();
     }
 
     /**
@@ -208,4 +210,13 @@ class WPML_LifeCycle extends WPML_InstallIndicator {
         return $actions;
     }
 
+    // Disable unnecessary Redux Framework functionality
+    public function disableReduxFunctionality() {
+        // Disable the default Redux and Extendify Gutenberg block library
+        update_option( 'use_redux_templates', '' );
+        update_option( 'use_extendify_templates', '' );
+
+        // Disable the Redux activation banner
+        update_option( 'redux-framework_tracking_notice', 'hide' );
+    }
 }

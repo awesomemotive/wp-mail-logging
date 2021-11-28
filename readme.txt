@@ -120,7 +120,7 @@ Yes, directly on <a href="https://github.com/kgjerstad/wp-mail-logging/" rel="no
 - Updated: Redux framework version to 4.3.4.
 - Fixed: "disable_demo" PHP error. Thanks @Mike00mike!
 - Fixed: changelog date typos. Thanks @Spreeuw!
-- Removed: the Redux framework Gutenberg Library blocks and the Settings page. Thanks @Helenel!
+- Removed: the Redux framework Gutenberg Library blocks. Thanks @Helenel!
 
 = 1.10.1 - 2021-11-24 =
 - Removed: Redux Framework connection notice. Thanks Jesse!
