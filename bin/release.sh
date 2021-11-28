@@ -179,9 +179,9 @@ if [ "$PROCEED" != "y" ]; then echo "Aborting..."; exit 1; fi
 echo "Changing directory to SVN and committing to trunk"
 cd $SVNPATH/trunk/
 # Delete all files that should not now be added.
-svn status | grep -v "^.[ \t]*\..*" | grep "^\!" | awk '{print $2}' | xargs -n1 svn del
+svn status | grep -v "^.[ \t]*\..*" | grep "^\!" | awk '{print $2}' | xargs svn del
 # Add all new files that are not set to be ignored
-svn status | grep -v "^.[ \t]*\..*" | grep "^?" | awk '{print $2}' | xargs -n1 svn add
+svn status | grep -v "^.[ \t]*\..*" | grep "^?" | awk '{print $2}' | xargs svn add
 svn commit --username=$SVNUSER -m "Preparing for $NEWVERSION1 release"
 
 echo "Updating WordPress plugin repo assets and committing"
