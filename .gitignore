@@ -3,3 +3,4 @@
 /releases
 /node_modules
 /build
+lib/vendor/redux-framework

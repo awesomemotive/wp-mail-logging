@@ -28,7 +28,7 @@
     },
     "extra": {
         "installer-paths": {
-            "vendor/redux-framework/redux-framework": ["redux-framework/redux-framework"]
+            "lib/vendor/redux-framework/redux-framework": ["redux-framework/redux-framework"]
         }
     },
     "minimum-stability": "dev",
