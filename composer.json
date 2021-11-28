@@ -5,7 +5,8 @@
     "keywords": ["mail", "email", "log", "logging", "debug", "list", "store", "collect", "view"],
     "homepage": "https://github.com/kgjerstad/wp-mail-logging",
     "require": {
-        "php": ">=7.1"
+        "php": ">=7.1",
+        "redux-framework/redux-framework": "4.3.4"
     },
     "require-dev": {
         "bocharsky-bw/arrayzy": "v0.1.1",
@@ -24,11 +25,6 @@
         "issues": "https://github.com/kgjerstad/wp-mail-logging/issues",
         "source": "https://github.com/kgjerstad/wp-mail-logging/releases"
 
-    },
-    "extra": {
-        "installer-paths": {
-            "vendor/redux-framework/redux-framework": ["redux-framework/redux-framework"]
-        }
     },
     "minimum-stability": "dev",
     "autoload": {

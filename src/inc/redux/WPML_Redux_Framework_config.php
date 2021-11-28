@@ -70,7 +70,20 @@ if (!class_exists('WPML_Redux_Framework_config')) {
             $this->ReduxFramework = new \ReduxFramework( $this->sections, $this->args );
 
             // Disable the Redux demo
-            \Redux::disable_demo();
+            if ( method_exists( "Redux", "disable_demo" ) ) {
+                \Redux::disable_demo();
+            }
+
+            // Disable the default Redux and Extendify Gutenberg block library
+            if ( class_exists( "Redux_Core" ) && property_exists( "Redux_Core", "redux_templates_enabled" ) ) {
+                \Redux_Core::$redux_templates_enabled = false;
+            }
+            if ( class_exists( "Redux_Core" ) && property_exists( "Redux_Core", "extendify_templates_enabled" ) ) {
+                \Redux_Core::$extendify_templates_enabled = false;
+            }
+
+            // Disable the Redux activation banner
+            update_option( 'redux-framework_tracking_notice', 'hide' );
         }
 
         // Remove the demo link and the notice of integrated demo from the redux-framework plugin

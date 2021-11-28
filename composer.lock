@@ -4,8 +4,211 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5112a4988dade121d66ea3f9730fb3d9",
-    "packages": [],
+    "content-hash": "7083fbe944f04e66c220613ebfe6d673",
+    "packages": [
+        {
+            "name": "composer/installers",
+            "version": "1.x-dev",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/composer/installers.git",
+                "reference": "d20a64ed3c94748397ff5973488761b22f6d3f19"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/composer/installers/zipball/d20a64ed3c94748397ff5973488761b22f6d3f19",
+                "reference": "d20a64ed3c94748397ff5973488761b22f6d3f19",
+                "shasum": ""
+            },
+            "require": {
+                "composer-plugin-api": "^1.0 || ^2.0"
+            },
+            "replace": {
+                "roundcube/plugin-installer": "*",
+                "shama/baton": "*"
+            },
+            "require-dev": {
+                "composer/composer": "1.6.* || ^2.0",
+                "composer/semver": "^1 || ^3",
+                "phpstan/phpstan": "^0.12.55",
+                "phpstan/phpstan-phpunit": "^0.12.16",
+                "symfony/phpunit-bridge": "^4.2 || ^5",
+                "symfony/process": "^2.3"
+            },
+            "type": "composer-plugin",
+            "extra": {
+                "class": "Composer\\Installers\\Plugin",
+                "branch-alias": {
+                    "dev-main": "1.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Composer\\Installers\\": "src/Composer/Installers"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Kyle Robinson Young",
+                    "email": "kyle@dontkry.com",
+                    "homepage": "https://github.com/shama"
+                }
+            ],
+            "description": "A multi-framework Composer library installer",
+            "homepage": "https://composer.github.io/installers/",
+            "keywords": [
+                "Craft",
+                "Dolibarr",
+                "Eliasis",
+                "Hurad",
+                "ImageCMS",
+                "Kanboard",
+                "Lan Management System",
+                "MODX Evo",
+                "MantisBT",
+                "Mautic",
+                "Maya",
+                "OXID",
+                "Plentymarkets",
+                "Porto",
+                "RadPHP",
+                "SMF",
+                "Starbug",
+                "Thelia",
+                "Whmcs",
+                "WolfCMS",
+                "agl",
+                "aimeos",
+                "annotatecms",
+                "attogram",
+                "bitrix",
+                "cakephp",
+                "chef",
+                "cockpit",
+                "codeigniter",
+                "concrete5",
+                "croogo",
+                "dokuwiki",
+                "drupal",
+                "eZ Platform",
+                "elgg",
+                "expressionengine",
+                "fuelphp",
+                "grav",
+                "installer",
+                "itop",
+                "joomla",
+                "known",
+                "kohana",
+                "laravel",
+                "lavalite",
+                "lithium",
+                "magento",
+                "majima",
+                "mako",
+                "mediawiki",
+                "miaoxing",
+                "modulework",
+                "modx",
+                "moodle",
+                "osclass",
+                "pantheon",
+                "phpbb",
+                "piwik",
+                "ppi",
+                "processwire",
+                "puppet",
+                "pxcms",
+                "reindex",
+                "roundcube",
+                "shopware",
+                "silverstripe",
+                "sydes",
+                "sylius",
+                "symfony",
+                "tastyigniter",
+                "typo3",
+                "wordpress",
+                "yawik",
+                "zend",
+                "zikula"
+            ],
+            "support": {
+                "issues": "https://github.com/composer/installers/issues",
+                "source": "https://github.com/composer/installers/tree/v1.12.0"
+            },
+            "funding": [
+                {
+                    "url": "https://packagist.com",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/composer",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/composer/composer",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2021-09-13T08:19:44+00:00"
+        },
+        {
+            "name": "redux-framework/redux-framework",
+            "version": "4.3.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/reduxframework/redux-framework.git",
+                "reference": "f5676033744caa1fe8d98f165901e53090421129"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/reduxframework/redux-framework/zipball/f5676033744caa1fe8d98f165901e53090421129",
+                "reference": "f5676033744caa1fe8d98f165901e53090421129",
+                "shasum": ""
+            },
+            "require": {
+                "composer/installers": "~1.0",
+                "php": ">=7.1.0"
+            },
+            "type": "wordpress-plugin",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-3.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Redux.io",
+                    "email": "support@redux.io",
+                    "homepage": "http://redux.io",
+                    "role": "Support"
+                }
+            ],
+            "description": "Build better and beautiful sites in WordPress, faster.",
+            "homepage": "http://redux.io",
+            "keywords": [
+                "Settings",
+                "customizer",
+                "framework",
+                "options",
+                "plugin",
+                "redux",
+                "wordpress"
+            ],
+            "support": {
+                "docs": "https://devs.redux.io",
+                "forum": "https://wordpress.org/support/plugin/redux-framework/",
+                "issues": "https://github.com/reduxframework/redux-framework/issues",
+                "source": "https://github.com/reduxframework/redux-framework/tree/4.3.4",
+                "website": "https://redux.io/"
+            },
+            "time": "2021-11-24T02:39:01+00:00"
+        }
+    ],
     "packages-dev": [
         {
             "name": "bocharsky-bw/arrayzy",
@@ -55,6 +258,10 @@
                 "utility",
                 "wrapper"
             ],
+            "support": {
+                "issues": "https://github.com/bocharsky-bw/Arrayzy/issues",
+                "source": "https://github.com/bocharsky-bw/Arrayzy/tree/master"
+            },
             "time": "2015-07-12T19:31:25+00:00"
         },
         {
@@ -106,6 +313,10 @@
             "keywords": [
                 "test"
             ],
+            "support": {
+                "issues": "https://github.com/hamcrest/hamcrest-php/issues",
+                "source": "https://github.com/hamcrest/hamcrest-php/tree/1.2"
+            },
             "time": "2018-02-19T09:04:07+00:00"
         },
         {
@@ -114,12 +325,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/mockery/mockery.git",
-                "reference": "e206aa48a851b95a91eeb61bfcce536d51b7cd96"
+                "reference": "f356e061d8ae815cd283fdc8f4412b635044be3c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mockery/mockery/zipball/e206aa48a851b95a91eeb61bfcce536d51b7cd96",
-                "reference": "e206aa48a851b95a91eeb61bfcce536d51b7cd96",
+                "url": "https://api.github.com/repos/mockery/mockery/zipball/f356e061d8ae815cd283fdc8f4412b635044be3c",
+                "reference": "f356e061d8ae815cd283fdc8f4412b635044be3c",
                 "shasum": ""
             },
             "require": {
@@ -171,7 +382,11 @@
                 "test double",
                 "testing"
             ],
-            "time": "2018-02-02T16:28:49+00:00"
+            "support": {
+                "issues": "https://github.com/mockery/mockery/issues",
+                "source": "https://github.com/mockery/mockery/tree/0.9"
+            },
+            "time": "2019-05-13T15:59:04+00:00"
         }
     ],
     "aliases": [],
@@ -180,7 +395,8 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": ">=5.4"
+        "php": ">=7.1"
     },
-    "platform-dev": []
+    "platform-dev": [],
+    "plugin-api-version": "2.1.0"
 }
