@@ -224,7 +224,7 @@ module.exports = function (grunt) {
     grunt.registerTask('copy', ['shell:git_checkout']);
     grunt.registerTask('clean_pre_build', ['clean:pre_build']);
     grunt.registerTask('version_number', ['replace:core_file', 'replace:readme']);
-    grunt.registerTask('pre_vcs', ['shell:composer', 'version_number', 'copy', 'copyto:vendor', 'compress']);
+    grunt.registerTask('pre_vcs', ['shell:composer', 'version_number', 'copy', 'copyto:vendor', 'shell:copy_redux','shell:clean_build_dependencies', 'compress']);
     grunt.registerTask('do_git', [/*'gitadd',*/ 'gitcommit', 'gittag', 'gitpush']);
 
     grunt.registerTask('just_build', ['clean_pre_build', 'shell:composer', 'makepot', 'potomo', 'copy', 'copyto:vendor', 'shell:copy_redux','shell:clean_build_dependencies', 'assert-valid-copy', 'compress']);
