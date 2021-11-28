@@ -8,6 +8,9 @@ module.exports = function (grunt) {
             },
             git_checkout: {
                 command: 'git checkout-index -a -f --prefix=build/'
+            },
+            clean_build_dependencies: {
+                command: 'rm -R build/vendor/redux-framework/redux-framework/*.json build/vendor/redux-framework/redux-framework/*.lock build/vendor/redux-framework/redux-framework/sample'
             }
         },
         clean: {
@@ -221,7 +224,7 @@ module.exports = function (grunt) {
     grunt.registerTask('pre_vcs', ['shell:composer', 'version_number', 'copy', 'copyto:vendor', 'compress']);
     grunt.registerTask('do_git', [/*'gitadd',*/ 'gitcommit', 'gittag', 'gitpush']);
 
-    grunt.registerTask('just_build', ['clean_pre_build', 'shell:composer', 'makepot', 'potomo', 'copy', 'copyto:vendor', 'assert-valid-copy', 'compress']);
+    grunt.registerTask('just_build', ['clean_pre_build', 'shell:composer', 'makepot', 'potomo', 'copy', 'copyto:vendor', 'shell:clean_build_dependencies', 'assert-valid-copy', 'compress']);
     grunt.registerTask('release', ['clean_pre_build', 'pre_vcs', 'do_git', 'github-release', 'clean:post_build']);
     grunt.registerTask('compilecss', ['less']);
 };
