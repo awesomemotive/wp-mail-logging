@@ -6,7 +6,7 @@
     "homepage": "https://github.com/kgjerstad/wp-mail-logging",
     "require": {
         "php": ">=7.1",
-        "redux-framework/redux-framework": "4.3.4"
+        "redux-framework/redux-framework": "4.3.9"
     },
     "require-dev": {
         "bocharsky-bw/arrayzy": "v0.1.1",
@@ -36,6 +36,11 @@
         "psr-4": {
             "No3x\\WPML\\Tests\\": "tests/phpunit/tests",
             "No3x\\WPML\\Tests\\Helper\\": "tests/helper"
+        }
+    },
+    "config": {
+        "allow-plugins": {
+            "composer/installers": true
         }
     }
 }
