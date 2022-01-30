@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e4b88079b6b904c80dbff505133cb3f7",
+    "content-hash": "258ef739e98a451e94c1edc1a102a055",
     "packages": [
         {
             "name": "composer/installers",
@@ -159,16 +159,16 @@
         },
         {
             "name": "redux-framework/redux-framework",
-            "version": "4.3.4",
+            "version": "4.3.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/reduxframework/redux-framework.git",
-                "reference": "f5676033744caa1fe8d98f165901e53090421129"
+                "reference": "e98f1a7f286081b41eca70d6561b567bc39933ac"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/reduxframework/redux-framework/zipball/f5676033744caa1fe8d98f165901e53090421129",
-                "reference": "f5676033744caa1fe8d98f165901e53090421129",
+                "url": "https://api.github.com/repos/reduxframework/redux-framework/zipball/e98f1a7f286081b41eca70d6561b567bc39933ac",
+                "reference": "e98f1a7f286081b41eca70d6561b567bc39933ac",
                 "shasum": ""
             },
             "require": {
@@ -203,10 +203,10 @@
                 "docs": "https://devs.redux.io",
                 "forum": "https://wordpress.org/support/plugin/redux-framework/",
                 "issues": "https://github.com/reduxframework/redux-framework/issues",
-                "source": "https://github.com/reduxframework/redux-framework/tree/4.3.4",
+                "source": "https://github.com/reduxframework/redux-framework/tree/4.3.9",
                 "website": "https://redux.io/"
             },
-            "time": "2021-11-24T02:39:01+00:00"
+            "time": "2022-01-26T19:18:04+00:00"
         }
     ],
     "packages-dev": [
@@ -398,5 +398,5 @@
         "php": ">=7.1"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.1.0"
+    "plugin-api-version": "2.2.0"
 }
