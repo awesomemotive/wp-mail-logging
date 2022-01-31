@@ -10,7 +10,7 @@ module.exports = function (grunt) {
                 command: 'git checkout-index -a -f --prefix=build/'
             },
             clean_build_dependencies: {
-                command: 'rm -R build/lib/vendor/redux-framework/*.json build/lib/vendor/redux-framework/*.lock build/lib/vendor/redux-framework/sample'
+                command: 'rm -R build/lib/vendor/redux-framework/*.json build/lib/vendor/redux-framework/*.lock build/lib/vendor/redux-framework/sample build/lib/vendor/redux-framework/redux-templates'
             },
             copy_redux: {
                 command: 'cp -R lib/vendor/redux-framework build/lib/vendor/redux-framework'
