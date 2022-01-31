@@ -23,39 +23,16 @@ default_svnurl="http://plugins.svn.wordpress.org/$PLUGINSLUG"
 default_svnuser="wysija"
 default_plugindir="$CURRENTDIR/../../$PLUGINSLUG"
 default_mainfile="$PLUGINSLUG.php"
+default_releases_path="$default_plugindir/releases"
 
-echo "1b) Path to a local directory where a temporary SVN checkout can be made."
-printf "No trailing slash and don't add trunk ($default_svnpath): "
-read -e input
-input="${input%/}" # Strip trailing slash
-SVNPATH="${input:-$default_svnpath}" # Populate with default if empty
-echo
+SVNPATH=$default_svnpath # Populate with default if empty
+SVNURL=$default_svnurl # Populate with default if empty
+SVNUSER=$default_svnuser # Populate with default if empty
+PLUGINDIR=$default_plugindir # Populate with default if empty
+MAINFILE=$default_mainfile # Populate with default if empty
+RELEASESPATH=$default_releases_path
 
-echo "1c) Remote SVN repo on WordPress.org. No trailing slash."
-printf "($default_svnurl): "
-read -e input
-input="${input%/}" # Strip trailing slash
-SVNURL="${input:-$default_svnurl}" # Populate with default if empty
-echo
-
-printf "1d) Your WordPress repo SVN username ($default_svnuser): "
-read -e input
-SVNUSER="${input:-$default_svnuser}" # Populate with default if empty
-echo
-
-echo "1e) Your local plugin root directory, the Git repo. No trailing slash."
-printf "($default_plugindir): "
-read -e  input
-input="${input%/}" # Strip trailing slash
-PLUGINDIR="${input:-$default_plugindir}" # Populate with default if empty
-echo
-
-printf "1f) Name of the main plugin file ($default_mainfile): "
-read -e input
-MAINFILE="${input:-$default_mainfile}" # Populate with default if empty
-echo
-
-echo "That's all of the data collected."
+echo "Release data:"
 echo
 echo "Slug: $PLUGINSLUG"
 echo "Temp checkout path: $SVNPATH"
@@ -63,6 +40,7 @@ echo "Remote SVN repo: $SVNURL"
 echo "SVN username: $SVNUSER"
 echo "Plugin directory: $PLUGINDIR"
 echo "Main file: $MAINFILE"
+echo "Releases path: $RELEASESPATH"
 echo
 
 printf "OK to proceed (y|n)? "
@@ -138,27 +116,9 @@ bin
 composer.json
 composer.lock" "$SVNPATH/trunk/"
 
-echo "Exporting the HEAD of master from git to the trunk of SVN"
-git checkout-index -a -f --prefix=$SVNPATH/trunk/
-
-# If submodule exist, recursively check out their indexes
-if [ -f ".gitmodules" ]
-	then
-		echo "Exporting the HEAD of each submodule from git to the trunk of SVN"
-		git submodule init
-		git submodule update
-		git config -f .gitmodules --get-regexp '^submodule\..*\.path$' |
-			while read path_key path
-			do
-				#url_key=$(echo $path_key | sed 's/\.path/.url/')
-				#url=$(git config -f .gitmodules --get "$url_key")
-				#git submodule add $url $path
-				echo "This is the submodule path: $path"
-				echo "The following line is the command to checkout the submodule."
-				echo "git submodule foreach --recursive 'git checkout-index -a -f --prefix=$SVNPATH/trunk/$path/'"
-				git submodule foreach --recursive 'git checkout-index -a -f --prefix=$SVNPATH/trunk/$path/'
-			done
-fi
+# Release the built zip
+echo "Extracting the build zip"
+unzip "$RELEASESPATH/$PLUGINSLUG-$NEWVERSION1.zip" -d "$SVNPATH/trunk/"
 
 # Support for the /assets folder on the .org repo.
 echo "Moving assets"

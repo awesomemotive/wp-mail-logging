@@ -5,7 +5,7 @@ License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 Requires at least: 5.0
 Tested up to: 5.9
-Stable tag: 1.10.2
+Stable tag: 1.10.3
 
 Log every single email sent by WordPress. Zero configuration. Entirely free.
 
@@ -115,6 +115,8 @@ Yes, directly on <a href="https://github.com/kgjerstad/wp-mail-logging/" rel="no
 3. The Settings
 
 == Changelog ==
+= 1.10.3 - 2022-01-31 =
+- Removed: Redux Framework template lib and banner loading. Thanks @kprovance!
 
 = 1.10.2 - 2021-11-24 =
 - Updated: Redux framework version to 4.3.4.
