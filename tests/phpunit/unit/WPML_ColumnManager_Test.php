@@ -69,6 +69,23 @@ class WPML_ColumnManager_Test extends \PHPUnit_Framework_TestCase {
         $this->assertEquals('2018-09-24 16:02:11', $actual);
     }
 
+    public function test_column_subject_default() {
+        $actual = $this->columnManager->getColumnRenderer(WPML_ColumnManager::COLUMN_SUBJECT)->render($this->item, ColumnFormat::FULL);
+        $this->assertEquals('Test', $actual);
+    }
+
+    public function test_column_subject_base64() {
+        $this->item['subject'] = '=?UTF8?B?=' . base64_encode('Test') . '=';
+        $actual = $this->columnManager->getColumnRenderer(WPML_ColumnManager::COLUMN_SUBJECT)->render($this->item, ColumnFormat::FULL);
+        $this->assertEquals('[Base64] Test', $actual);
+    }
+
+    public function test_column_subject_quoted_printable() {
+        $this->item['subject'] = '=?UTF8?Q?=' . quoted_printable_encode('Test') . '=';
+        $actual = $this->columnManager->getColumnRenderer(WPML_ColumnManager::COLUMN_SUBJECT)->render($this->item, ColumnFormat::FULL);
+        $this->assertEquals('[Quoted] Test', $actual);
+    }
+
     public function test_column_attachments_simple() {
         $example1And2Expected = '/2018/05/file.pdf,\n/2018/01/bill.pdf';
         $actual = $this->columnManager->getColumnRenderer(WPML_ColumnManager::COLUMN_ATTACHMENTS)->render($this->item, ColumnFormat::SIMPLE);
