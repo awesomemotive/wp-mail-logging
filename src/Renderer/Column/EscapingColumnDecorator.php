@@ -18,6 +18,11 @@ class EscapingColumnDecorator implements IColumn {
      */
     public function render(array $mailArray, $format) {
         $delegated = $this->column->render($mailArray, $format);
+
+        if ( ! isset( $delegated ) ) {
+            return null;
+        }
+
         return htmlentities(htmlspecialchars_decode($delegated));
     }
 }

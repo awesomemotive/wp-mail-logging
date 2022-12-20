@@ -115,6 +115,9 @@ Yes, directly on <a href="https://github.com/kgjerstad/wp-mail-logging/" rel="no
 3. The Settings
 
 == Changelog ==
+= 1.10.5 - 2022-12-21 =
+- Fixed: PHP 8.1 issues.
+
 = 1.10.4 - 2022-01-31 =
 - Improved: reduced zip archive size.
 

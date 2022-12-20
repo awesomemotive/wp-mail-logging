@@ -29,25 +29,25 @@ namespace No3x\WPML\Pimple;
 /**
  * Container main class.
  *
- * @author  Fabien Potencier
+ * @author Fabien Potencier
  */
 class Container implements \ArrayAccess
 {
-    private $values = array();
+    private $values = [];
     private $factories;
     private $protected;
-    private $frozen = array();
-    private $raw = array();
-    private $keys = array();
+    private $frozen = [];
+    private $raw = [];
+    private $keys = [];
 
     /**
-     * Instantiate the container.
+     * Instantiates the container.
      *
      * Objects and parameters can be passed as argument to the constructor.
      *
-     * @param array $values The parameters or objects.
+     * @param array $values The parameters or objects
      */
-    public function __construct(array $values = array())
+    public function __construct(array $values = [])
     {
         $this->factories = new \SplObjectStorage();
         $this->protected = new \SplObjectStorage();
@@ -69,8 +69,11 @@ class Container implements \ArrayAccess
      * @param string $id    The unique identifier for the parameter or object
      * @param mixed  $value The value of the parameter or a closure to define an object
      *
+     * @return void
+     *
      * @throws \RuntimeException Prevent override of a frozen service
      */
+    #[\ReturnTypeWillChange]
     public function offsetSet($id, $value)
     {
         if (isset($this->frozen[$id])) {
@@ -90,6 +93,7 @@ class Container implements \ArrayAccess
      *
      * @throws \InvalidArgumentException if the identifier is not defined
      */
+    #[\ReturnTypeWillChange]
     public function offsetGet($id)
     {
         if (!isset($this->keys[$id])) {
@@ -125,6 +129,7 @@ class Container implements \ArrayAccess
      *
      * @return bool
      */
+    #[\ReturnTypeWillChange]
     public function offsetExists($id)
     {
         return isset($this->keys[$id]);
@@ -134,7 +139,10 @@ class Container implements \ArrayAccess
      * Unsets a parameter or an object.
      *
      * @param string $id The unique identifier for the parameter or object
+     *
+     * @return void
      */
+    #[\ReturnTypeWillChange]
     public function offsetUnset($id)
     {
         if (isset($this->keys[$id])) {
@@ -157,7 +165,7 @@ class Container implements \ArrayAccess
      */
     public function factory($callable)
     {
-        if (!method_exists($callable, '__invoke')) {
+        if (!is_object($callable) || !method_exists($callable, '__invoke')) {
             throw new \InvalidArgumentException('Service definition is not a Closure or invokable object.');
         }
 
@@ -179,7 +187,7 @@ class Container implements \ArrayAccess
      */
     public function protect($callable)
     {
-        if (!method_exists($callable, '__invoke')) {
+        if (!is_object($callable) || !method_exists($callable, '__invoke')) {
             throw new \InvalidArgumentException('Callable is not a Closure or invokable object.');
         }
 
@@ -269,7 +277,7 @@ class Container implements \ArrayAccess
      *
      * @return static
      */
-    public function register(ServiceProviderInterface $provider, array $values = array())
+    public function register(ServiceProviderInterface $provider, array $values = [])
     {
         $provider->register($this);
 
