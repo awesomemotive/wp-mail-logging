@@ -122,6 +122,9 @@ class WPML_Init {
         $this->container['mailRenderer'] = function ($c) {
             return new WPML_MailRenderer( new DefaultMailService() );
         };
+        $this->container['userFeedback'] = function ($c) {
+            return new WPML_UserFeedback();
+        };
         $this->container->addActionsAndFilters();
 
         add_filter( 'wpml_get_di_container', function() {
@@ -131,6 +134,11 @@ class WPML_Init {
         add_filter( 'wpml_get_di_service', function( $service ) {
             return $this->getService( $service );
         } );
+
+        // Set plugin activation time for all installs.
+        if ( empty( get_option( 'wp_mail_logging_activated_time' ) ) ) {
+            add_option( 'wp_mail_logging_activated_time', time() );
+        }
 
         /*
          * Install the plugin
