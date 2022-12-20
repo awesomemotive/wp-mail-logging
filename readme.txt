@@ -116,6 +116,7 @@ Yes, directly on <a href="https://github.com/kgjerstad/wp-mail-logging/" rel="no
 
 == Changelog ==
 = 1.10.5 - 2022-12-21 =
+- Fixed: automatic email log deletion via Log Rotation settings.
 - Fixed: PHP 8.1 issues.
 
 = 1.10.4 - 2022-01-31 =
