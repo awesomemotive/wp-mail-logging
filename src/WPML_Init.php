@@ -136,7 +136,7 @@ class WPML_Init {
         } );
 
         // Set plugin activation time for all installs.
-        if ( empty( get_option( 'wp_mail_logging_activated_time' ) ) ) {
+        if ( is_admin() && empty( get_option( 'wp_mail_logging_activated_time' ) ) ) {
             add_option( 'wp_mail_logging_activated_time', time() );
         }
 
