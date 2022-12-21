@@ -4,7 +4,7 @@ module.exports = function (grunt) {
         pkg: grunt.file.readJSON('package.json'),
         shell: {
             composer: {
-                command: './composer.phar install --no-dev --no-scripts --prefer-dist'
+                command: 'composer install --no-dev --no-scripts --prefer-dist'
             },
             git_checkout: {
                 command: 'git checkout-index -a -f --prefix=build/'
@@ -129,22 +129,22 @@ module.exports = function (grunt) {
                 ]
             }
         },
-        'github-release': {
-            options: {
-                repository: 'kgjerstad/wp-mail-logging', // Path to repository
-                auth: grunt.file.readJSON('credentials.json'),
-                release: {
-                    tag_name: 'release/<%= pkg.version %>',
-                    name: 'v<%= pkg.version %>',
-                    body: 'Description of the release',
-                    draft: true,
-                    prerelease: true
-                }
-            },
-            files: {
-                src: ['releases/<%= pkg.name %>-<%= pkg.version %>.zip']
-            }
-        },
+        // 'github-release': {
+        //     options: {
+        //         repository: 'kgjerstad/wp-mail-logging', // Path to repository
+        //         auth: grunt.file.readJSON('credentials.json'),
+        //         release: {
+        //             tag_name: 'release/<%= pkg.version %>',
+        //             name: 'v<%= pkg.version %>',
+        //             body: 'Description of the release',
+        //             draft: true,
+        //             prerelease: true
+        //         }
+        //     },
+        //     files: {
+        //         src: ['releases/<%= pkg.name %>-<%= pkg.version %>.zip']
+        //     }
+        // },
         less: {
             compile: {
                 options: {
