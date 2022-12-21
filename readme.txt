@@ -5,7 +5,7 @@ License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 Requires at least: 5.0
 Tested up to: 6.1
-Stable tag: 1.10.4
+Stable tag: 1.10.5
 
 Log every single email sent by WordPress. Zero configuration. Entirely free.
 

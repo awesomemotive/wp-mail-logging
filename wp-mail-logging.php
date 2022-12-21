@@ -2,7 +2,7 @@
 /*
    Plugin Name: WP Mail Logging
    Plugin URI: https://wordpress.org/plugins/wp-mail-logging/
-   Version: 1.10.4
+   Version: 1.10.5
    Author: SendLayer
    Author URI: https://sendlayer.com/
    Description: Logs each email sent by WordPress.

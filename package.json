@@ -1,6 +1,6 @@
 {
   "name": "wp-mail-logging",
-  "version": "1.10.4",
+  "version": "1.10.5",
   "description": "WordPress plugin that logs each email sent by WordPress.",
   "repository": {
     "type": "git",
