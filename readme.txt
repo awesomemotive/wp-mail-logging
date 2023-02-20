@@ -101,6 +101,11 @@ We recommend in this case to send your WordPress email with a service provider, 
 
 The plugin was created and launched in 2014 by <a href="https://no3x.de/">Christian Zöller</a>.
 
+== Installation ==
+
+1. Install WP Mail Logging either via the WordPress.org plugin repository or by uploading the files to your server. (See instructions on <a href="http://www.wpbeginner.com/beginners-guide/step-by-step-guide-to-install-a-wordpress-plugin-for-beginners/" rel="friend">how to install a WordPress plugin</a>)
+2. Activate WP Mail Logging.
+
 == Frequently Asked Questions ==
 = I need help! =
 We answer in the forums, but only occasionally.
