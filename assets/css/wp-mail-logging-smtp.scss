@@ -1,0 +1,297 @@
+// SMTP - ?page=wpml_plugin_log&tab=smtp
+
+@import "include-media";
+@import "variables";
+@import "general";
+
+#wp-mail-logging-admin-smtp {
+    color: #50575E;
+    margin: 0 auto;
+    max-width: 700px;
+
+    @include media("<=phone") {
+        width: auto;
+    }
+
+    h1, h2 {
+        color: #1E2327;
+        font-weight: $medium-weight;
+    }
+
+    *, *::before, *::after {
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+    }
+
+    section {
+        clear: both;
+        margin: 50px 0;
+        text-align: left;
+    }
+
+    p {
+        font-size: 15px;
+    }
+
+    .top {
+        text-align: center;
+
+        img {
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            font-size: 26px;
+            margin-bottom: 0;
+            padding: 0;
+        }
+
+        p {
+            font-size: 17px;
+            margin-top: 10px;
+        }
+
+        .updated {
+            display: none;
+        }
+    }
+
+    .screenshot {
+
+        & > * {
+            vertical-align: middle;
+        }
+
+
+        .cont {
+            background-color: #ffffff;
+            border-radius: 3px;
+            box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.05);
+            -moz-box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.05);
+            -webkit-box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.05);
+            display: inline-block;
+            padding: 5px;
+            position: relative;
+            width: 315px;
+
+            @include media("<=phone") {
+                width: auto;
+            }
+
+            img {
+                max-width: 100%;
+                display: block;
+            }
+
+            .hover {
+                background-color: rgba(0,0,0,0.15);
+                background-image: url('../images/smtp/zoom.svg');
+                background-repeat: no-repeat;
+                background-position: center;
+                background-size: 50px;
+                border: 5px solid #ffffff;
+                height: 100%;
+                left: 0;
+                opacity: 0;
+                position: absolute;
+                top: 0;
+                transition: all 0.3s;
+                width: 100%;
+            }
+
+            &:hover .hover {
+                opacity: 1;
+                transition: all 0.3s;
+            }
+        }
+
+        ul {
+            display: inline-block;
+            list-style-type: none;
+            margin: 0 0 0 30px;
+            max-width: calc(100% - 350px);
+
+            @include media("<=phone") {
+                margin: 20px 0 0 15px;
+                max-width: 100%;
+            }
+        }
+
+        li {
+            background-image: url('../images/arrow-right.svg');
+            background-position: left 3px;
+            background-repeat: no-repeat;
+            background-size: 14px;
+            font-size: 15px;
+            margin: 16px 0;
+            padding: 0 0 0 24px;
+        }
+    }
+
+    .step {
+        background-color: #F9F9F9;
+        border: 1px solid #E5E5E5;
+        border-radius: 4px;
+        box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.05);
+        -webkit-box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.05);
+        -moz-box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.05);
+        margin: 0 0 25px 0;
+
+        & > * {
+            vertical-align: middle;
+        }
+
+        .num {
+            display: inline-block;
+            position: relative;
+            width: 100px;
+            height: 50px;
+            text-align: center;
+        }
+
+        .loader {
+            animation: load8 1.1s infinite linear;
+            -webkit-animation: load8 1.1s infinite linear;
+            background-color: transparent;
+            border-top: 4px solid #969696;
+            border-right: 4px solid #969696;
+            border-bottom: 4px solid #969696;
+            border-left: 4px solid #404040;
+            margin: -54px auto 0;
+            opacity: 1;
+            position: relative;
+            text-indent: -9999em;
+            transform: translateZ(0);
+            -webkit-transform: translateZ(0);
+            -ms-transform: translateZ(0);
+            transition: all .3s;
+
+            &, &:after {
+                border-radius: 50%;
+                display: block;
+                width: 50px;
+                height: 50px;
+            }
+        }
+
+        div {
+            border-radius: 0 4px 4px 0;
+            display: inline-block;
+            width: calc(100% - 104px);
+            background-color: #ffffff;
+            padding: 30px;
+        }
+
+        h2 {
+            font-size: 24px;
+            line-height: 22px;
+            margin-top: 0;
+            margin-bottom: 15px;
+
+            @include media("<=phone") {
+                line-height: 28px;
+            }
+        }
+
+        p {
+            font-size: 16px;
+        }
+
+        .error {
+            color: #b97474;
+            font-size: 14px;
+            margin-bottom: 0;
+        }
+
+        .link {
+            text-decoration: none;
+        }
+
+        .button {
+            box-shadow: none;
+            font-size: 15px;
+            font-weight: $medium-weight;
+            height: auto;
+            line-height: 13px;
+            min-width: 200px;
+            padding: 12px;
+            text-align: center;
+            transition: all .3s;
+
+            &.grey {
+                background: #F6F6F6;
+                border: 1px solid #dddddd;
+                color: #9FA5AA;
+                text-shadow: none;
+            }
+
+            &.disabled {
+                cursor: default;
+            }
+        }
+
+        .hidden {
+            opacity: 0;
+            transition: all .3s;
+        }
+    }
+
+    .grey {
+        opacity: 0.5;
+    }
+}
+
+@media (max-width: 767px) {
+
+    #wpforms-admin-smtp {
+
+        width: auto;
+        margin: 0 20px;
+
+        .screenshot {
+
+            .cont {
+                box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.05);
+                -moz-box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.05);
+                -webkit-box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.05);
+                width: auto;
+            }
+
+            ul {
+                margin: 20px 0 0 15px;
+                max-width: 100%;
+            }
+        }
+
+        .button {
+            white-space: normal;
+        }
+    }
+}
+
+@-webkit-keyframes load8 {
+
+    0% {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+
+    100% {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes load8 {
+
+    0% {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+
+    100% {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}

@@ -2,6 +2,9 @@
 
 namespace No3x\WPML;
 
+use No3x\WPML\Admin\EmailLogsTab;
+use No3x\WPML\Admin\SettingsTab;
+use No3x\WPML\Admin\SMTPTab;
 use No3x\WPML\Model\WPML_Mail as Mail;
 use No3x\WPML\Renderer\WPML_MailRenderer_AJAX_Handler;
 
@@ -149,6 +152,13 @@ class WPML_Plugin extends WPML_LifeCycle implements IHooks {
     }
 
     public function addActionsAndFilters() {
+
+        EmailLogsTab::get_instance()->hooks();
+        SettingsTab::get_instance()->hooks();
+        SMTPTab::get_instance()->hooks();
+
+        add_action( 'current_screen', [ $this, 'create_screens' ], 90 );
+
         // Add options administration page
         // http://plugin.michael-simpson.com/?page_id=47
         add_action( 'admin_menu', array(&$this, 'createSettingsMenu'), 9 );
@@ -183,6 +193,121 @@ class WPML_Plugin extends WPML_LifeCycle implements IHooks {
 
         // Register AJAX hooks
         // http://plugin.michael-simpson.com/?page_id=41
+
+        // Admin footer text.
+        add_filter( 'admin_footer_text', [ $this, 'admin_footer' ], 1, 2 );
+
+        add_filter( 'in_admin_header', [ $this, 'admin_header' ] );
+    }
+
+    /**
+     * Header for WP Mail Logging admin pages.
+     *
+     * @since 1.11.0
+     *
+     * @return void
+     *
+     * @throws \Exception
+     */
+    public function admin_header() {
+
+        global $wp_logging_list_page;
+
+        $current_screen = get_current_screen();
+
+        if ( $current_screen->id !== $wp_logging_list_page ) {
+            return;
+        }
+
+        $assets_url = WPML_Init::getInstance()->getService( 'plugin' )->get_assets_url();
+        $tab        = isset( $_GET['tab'] ) ? $_GET['tab'] : null;
+        ?>
+        <div id="wp-mail-logging-page-header-temp"></div>
+        <div id="wp-mail-logging-page-header">
+            <div class="wp-mail-logging-page-title">
+                <div class="wp-mail-logging-logo-image">
+                    <?php
+                    printf(
+                        '<img src="%1$s" srcset="%2$s 2x" alt="%3$s"/>',
+                        esc_url( $assets_url . '/images/logo.png' ),
+                        esc_url( $assets_url . '/images/logo@2x.png' ),
+                        esc_html__( 'WP Mail Logging logo')
+                    )
+                    ?>
+                </div>
+
+                <div class="wp-mail-logging-logo-sep">
+                    <img src="<?php echo esc_url( $assets_url . '/images/sep.png' ); ?>" />
+                </div>
+
+                <?php
+                $admin_page_url = WPML_Utils::get_admin_page_url();
+                $menu_tabs      = [
+                    [
+                        'slug'  => '',
+                        'label' => __( 'Email Log', 'wp-mail-logging' ),
+                    ],
+                    [
+                        'slug'  => 'settings',
+                        'label' => __( 'Settings', 'wp-mail-logging' ),
+                    ],
+                    [
+                        'slug'  => 'smtp',
+                        'label' => __( 'SMTP', 'wp-mail-logging' ),
+                    ],
+                ];
+
+                foreach ( $menu_tabs as $menu_tab ) {
+                    ?>
+                    <a href="<?php echo esc_url( add_query_arg( 'tab', $menu_tab['slug'], $admin_page_url ) ) ?>"
+                       class="tab <?php echo $tab == $menu_tab['slug'] ? 'active' : null ?>"
+                       aria-current="page">
+                        <?php echo esc_html( $menu_tab['label'] ) ?>
+                    </a>
+                    <?php
+                }
+                ?>
+            </div>
+        </div>
+        <?php
+    }
+
+    /**
+     * Create WP Mail Logging screens.
+     *
+     * @since 1.11.0
+     *
+     * @param \WP_Screen $current_screen
+     *
+     * @return void
+     */
+    public function create_screens( $current_screen ) {
+
+        global $wp_logging_list_page;
+
+        if ( $current_screen->id !== $wp_logging_list_page ) {
+            return;
+        }
+
+        $tab = filter_input( INPUT_GET, 'tab' );
+
+        switch ( $tab ) {
+            case 'settings':
+                $tabObj = SettingsTab::get_instance();
+                break;
+            case 'smtp':
+                $tabObj = SMTPTab::get_instance();
+                break;
+            default:
+                $tabObj = EmailLogsTab::get_instance();
+                break;
+        }
+
+        if ( is_null( $tabObj ) ) {
+            return;
+        }
+
+        $tabObj->screen_hooks();
     }
 
     /**
@@ -223,5 +348,63 @@ class WPML_Plugin extends WPML_LifeCycle implements IHooks {
 
     public static function getClass() {
         return __CLASS__;
+    }
+
+    /**
+     * When user is on a WP Mail Logging related admin page, display footer text
+     * that graciously asks them to rate us.
+     *
+     * @since 1.11.0
+     *
+     * @param string $text Footer text.
+     *
+     * @return string
+     */
+    public function admin_footer( $text ) {
+
+        global $current_screen, $wp_logging_list_page;
+
+        if ( empty( $current_screen->id ) || $current_screen->id !== $wp_logging_list_page ) {
+            return $text;
+        }
+
+        $url  = 'https://wordpress.org/support/plugin/wp-mail-logging/reviews/?filter=5#new-post';
+
+        return sprintf(
+            wp_kses( /* translators: $1$s - WP Mail Logging plugin name; $2$s - WP.org review link; $3$s - WP.org review link. */
+                __( 'Please rate %1$s <a href="%2$s" target="_blank" rel="noopener noreferrer">&#9733;&#9733;&#9733;&#9733;&#9733;</a> on <a href="%3$s" target="_blank" rel="noopener">WordPress.org</a> to help us spread the word.', 'wp-mail-logging' ),
+                [
+                    'a' => [
+                        'href'   => [],
+                        'target' => [],
+                        'rel'    => [],
+                    ],
+                ]
+            ),
+            '<strong>WP Mail Logging</strong>',
+            $url,
+            $url
+        );
+    }
+
+    /**
+     * Plugin activation hook.
+     *
+     * @since 1.11.0
+     *
+     * @return void
+     */
+    public function activate() {}
+
+    /**
+     * Get the assets URL.
+     *
+     * @since 1.11.0
+     *
+     * @return string
+     */
+    public function get_assets_url() {
+
+        return untrailingslashit( WP_MAIL_LOGGING_PLUGIN_URL ) . '/assets';
     }
 }

@@ -1,12 +1,11 @@
 {
-    "name": "kgjerstad/wp-mail-logging",
+    "name": "awesomemotive/wp-mail-logging",
     "description": "WordPress plugin that logs each email sent by WordPress.",
     "type": "wordpress-plugin",
     "keywords": ["mail", "email", "log", "logging", "debug", "list", "store", "collect", "view"],
-    "homepage": "https://github.com/kgjerstad/wp-mail-logging",
+    "homepage": "https://github.com/awesomemotive/wp-mail-logging",
     "require": {
-        "php": ">=7.1",
-        "redux-framework/redux-framework": "4.3.9"
+        "php": ">=7.1"
     },
     "require-dev": {
         "bocharsky-bw/arrayzy": "v0.1.1",
@@ -22,20 +21,23 @@
         }
     ],
     "support": {
-        "issues": "https://github.com/kgjerstad/wp-mail-logging/issues",
-        "source": "https://github.com/kgjerstad/wp-mail-logging/releases"
+        "issues": "https://github.com/awesomemotive/wp-mail-logging/issues",
+        "source": "https://github.com/awesomemotive/wp-mail-logging/releases"
 
-    },
-    "extra": {
-        "installer-paths": {
-            "lib/vendor/redux-framework": ["redux-framework/redux-framework"]
-        }
     },
     "minimum-stability": "dev",
     "autoload": {
         "psr-4": {
             "No3x\\WPML\\Tests\\": "tests/phpunit/tests",
-            "No3x\\WPML\\Tests\\Helper\\": "tests/helper"
+            "No3x\\WPML\\Tests\\Helper\\": "tests/helper",
+            "No3x\\WPML\\Admin\\": "src/inc/Admin",
+            "No3x\\WPML\\Helpers\\": "src/inc/Helpers"
         }
+    },
+    "scripts": {
+        "build": [
+          "npm run gulp composer:delete_vendor",
+          "composer install --no-dev --no-plugins -o"
+        ]
     }
 }

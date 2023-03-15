@@ -2,6 +2,7 @@
 
 namespace No3x\WPML\Renderer;
 
+use No3x\WPML\Renderer\Column\ActionsColumn;
 use No3x\WPML\Renderer\Column\AttachmentsColumn;
 use No3x\WPML\Renderer\Column\ErrorColumn;
 use No3x\WPML\Renderer\Column\GenericColumn;
@@ -28,16 +29,13 @@ class WPML_ColumnManager {
      */
     public function __construct() {
         $this->columns = [
-            self::COLUMN_MAIL_ID	    => __( 'ID', 'wp-mail-logging' ),
-            self::COLUMN_TIMESTAMP		=> __( 'Time', 'wp-mail-logging' ),
-            self::COLUMN_HOST           => __( 'Host', 'wp-mail-logging' ),
-            self::COLUMN_RECEIVER		=> __( 'Receiver', 'wp-mail-logging' ),
-            self::COLUMN_SUBJECT		=> __( 'Subject', 'wp-mail-logging' ),
-            self::COLUMN_MESSAGE		=> __( 'Message', 'wp-mail-logging' ),
-            self::COLUMN_HEADERS		=> __( 'Headers', 'wp-mail-logging' ),
-            self::COLUMN_ATTACHMENTS	=> __( 'Attachments', 'wp-mail-logging' ),
-            self::COLUMN_ERROR          => __( 'Error', 'wp-mail-logging' ),
-            self::COLUMN_PLUGIN_VERSION	=> __( 'Plugin Version', 'wp-mail-logging' ),
+            self::COLUMN_MAIL_ID     => __( 'ID', 'wp-mail-logging' ),
+            self::COLUMN_TIMESTAMP   => __( 'Time', 'wp-mail-logging' ),
+            self::COLUMN_HOST        => __( 'Host', 'wp-mail-logging' ),
+            self::COLUMN_RECEIVER    => __( 'Receiver', 'wp-mail-logging' ),
+            self::COLUMN_SUBJECT     => __( 'Subject', 'wp-mail-logging' ),
+            self::COLUMN_ATTACHMENTS => __( 'Attachments', 'wp-mail-logging' ),
+            self::COLUMN_ERROR       => __( 'Error', 'wp-mail-logging' ),
         ];
     }
 

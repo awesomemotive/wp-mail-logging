@@ -20,4 +20,8 @@ class RawRenderer extends HeadingsRenderer {
 
         return $column_renderer->render($item, $column_format);
     }
+
+    public function renderModal( $item ) {
+        return $this->renderRawOrHtmlModal( $item, esc_html( $item['message'] ) );
+    }
 }

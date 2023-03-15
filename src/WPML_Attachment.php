@@ -125,12 +125,12 @@ class WPML_Attachment {
     private function determine_mime_icon_class( $file_path ) {
         $defaultIconClass = 'file';
 
-        if($this->gone) {
+        if ( $this->gone ) {
             return $defaultIconClass;
         }
 
-        $supported = array(
-            'archive' => array(
+        $supported = [
+            'archive' => [
                 'application/zip',
                 'application/x-rar-compressed',
                 'application/x-rar',
@@ -138,25 +138,31 @@ class WPML_Attachment {
                 'application/x-msdownload',
                 'application/x-msdownload',
                 'application/vnd.ms-cab-compressed',
-            ),
+            ],
             'audio',
-            'code' => array(
+            'code' => [
                 'text/x-c',
-                'text/x-c++',
-            ),
-            'excel' => array( 'application/vnd.ms-excel'
-            ),
-            'image', 'text', 'movie',
-            'pdf' => array(
-                'application/pdf',
-            ),
-            'photo', 'picture',
-            'powerpoint' => array(
+                'text/x-c++'
+            ],
+            'excel' => [ 'application/vnd.ms-excel' ],
+            'image',
+            'text',
+            'movie',
+            'pdf' => [
+                'application/pdf'
+            ],
+            'photo',
+            'picture',
+            'powerpoint' => [
                 'application/vnd.ms-powerpoint'
-            ), 'sound', 'video', 'word' => array(
+            ],
+            'sound',
+            'video',
+            'word' => [
                 'application/msword'
-            ), 'zip'
-        );
+            ],
+            'zip',
+        ];
 
         if( !function_exists('mime_content_type') ) {
             return $defaultIconClass;

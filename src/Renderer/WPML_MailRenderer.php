@@ -25,7 +25,7 @@ class WPML_MailRenderer {
      */
     public function __construct(IMailService $mailService) {
         $this->mailService = $mailService;
-        $this->supported_formats = [self::FORMAT_RAW, self::FORMAT_HTML, self::FORMAT_JSON];
+        $this->supported_formats = [self::FORMAT_HTML, self::FORMAT_RAW, self::FORMAT_JSON];
     }
 
     /**
@@ -57,16 +57,8 @@ class WPML_MailRenderer {
         switch ($format) {
             case self::FORMAT_HTML:
             case self::FORMAT_RAW:
-                $mailAppend .= $this->render_mail($mail->to_array(), $format);
-                break;
             case self::FORMAT_JSON:
-                if ($this->isHtmlMail($mail)) {
-                    // Fallback to raw in case it is a html mail
-                    $mailAppend .= sprintf("<span class='info'>%s</span>", __("Fallback to raw format because html is not convertible to json.", 'wp-mail-logging'));
-                    $mailAppend .= $this->render_mail($mail->to_array(), self::FORMAT_RAW);
-                } else {
-                    $mailAppend .= "<pre>" . json_encode($this->render_mail($mail->to_array(), self::FORMAT_JSON), JSON_PRETTY_PRINT) . "</pre>";
-                }
+                $mailAppend .= $this->render_mail($mail->to_array(), $format);
                 break;
             default:
                 throw new Exception("Unknown format.");
@@ -93,7 +85,7 @@ class WPML_MailRenderer {
      */
     function render_mail( $item, $format ) {
         $renderer = MailRendererFactory::factory($format);
-        return $renderer->render($item);
+        return $renderer->renderModal( $item );
     }
 
     public function getSupportedFormats() {

@@ -2,6 +2,7 @@
 
 namespace No3x\WPML\Renderer;
 
+use No3x\WPML\Admin\SettingsTab;
 use No3x\WPML\IHooks;
 use No3x\WPML\WPML_Utils;
 
@@ -74,8 +75,9 @@ class WPML_MailRenderer_AJAX_Handler implements IHooks {
      */
     public function get_ajax_data() {
         return [
-            'action' => self::ACTION,
-            'nonce' => wp_create_nonce(self::NONCE)
+            'action'         => self::ACTION,
+            'default_format' => 'html',
+            'nonce'          => wp_create_nonce(self::NONCE)
         ];
     }
 
@@ -85,7 +87,17 @@ class WPML_MailRenderer_AJAX_Handler implements IHooks {
     public function handle() {
 
         $this->checkNonce();
-        $id = $this->checkAndGetId();
+
+        $settings = SettingsTab::get_settings( SettingsTab::DEFAULT_SETTINGS );
+
+        if ( ! current_user_can( $settings['can-see-submission-data'] ) ) {
+            wp_send_json_error( [
+                'code'    => self::ERROR_OTHER_CODE,
+                'message' => 'Invalid request!'
+            ] );
+        }
+
+        $id     = $this->checkAndGetId();
         $format = $this->checkAndGetFormat();
 
         try {

@@ -1,101 +1,70 @@
 === WP Mail Logging ===
-Contributors: sendlayer, jaredatch, smub, capuderg
+Contributors: jaredatch, smub, capuderg
 Tags: mail, email, log, logging, email log, debug, smtp, spam, deliverability
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 Requires at least: 5.0
 Tested up to: 6.1
-Stable tag: 1.10.5
+Requires PHP: 7.1
+Stable tag: 1.11.0
 
-Log every single email sent by WordPress. Zero configuration. Entirely free.
+Log, view, and resend all emails sent from your WordPress site. Great for resolving email sending issues or keeping a copy for auditing.
 
 == Description ==
 
-WP Mail Logging is the most popular plugin to log emails sent by WordPress or WooCommerce. Simply activate it and it will work immediately, no configuration necessary.
+WP Mail Logging is the most popular plugin for logging emails sent from your WordPress site. Simply activate it and it will work immediately, no extra configuration is needed.
 
-### Why log emails sent from WordPress or WooCommerce?
+### Are your WordPress emails not being sent or delivered?
 
-Because it's useful to know which emails your WordPress sends for debugging purposes or out of curiosity.
+Use this plugin to log all outgoing emails from your WordPress site. If there are any errors when sending the email from your site, our email logs will catch that error and display it to you.
+
+This will allow you to debug and fix your email sending issue.
+
+### Did a client not receive your email?
+
+Our email logs allow you to resend any email that was sent from your site. No more lost emails!
+
+### Do you just want to keep a record of all emails sent from your site?
 
 By default, WordPress and your web host do not log, store or keep track of emails sent from your website.
 
+This plugin will allow you to do just that. Our email logs will store every email that is sent from your WordPress site.
+
+You can search and view a particular email log, inspect its content or attachments, and even resend that email.
+
 ### What email information is logged?
 
-The default emails WordPress sends are logged:
+All emails sent from your WordPress site are logged. And here is the information that is stored:
 
-* password reset emails
-* new account email notification emails
-* new comment email notification
-* WordPress version updates notification
-
-These emails will be logged like this:
-
-* Complete list of sent mails, and searchable
-* Contents of the email
-* Headers of the email
-* Error statuses
-* IP address of originating server
-* Feature: decide which emails you want to keep
-* Developer: filters are provided to extend the columns
-
-For most websites, this represents just a couple of emails per week. If your website is high traffic, is a membership website or is a WooCommerce store, the number of emails will increase and will be critical.
+* Email Subject
+* Email Content (HTML or text)
+* Email Attachments
+* Email Headers (to, from, reply-to, cc, bcc, ...)
+* Error Message (in case there was an error while attempting to send the email)
+* IP Address of originating server (can be enabled in the settings)
+* Date and Time of the email
+* Receiver (the TO email address)
 
 ### Why are my logged emails still not delivered to the inbox?
 
-When WordPress sends emails, there's no guarantee it will be delivered.
+There are a lot of steps that emails have to make in order to be delivered to the recipient's inbox.
 
-This is the lifecycle of a WordPress email:
-1. WordPress or plugin creates an email
-2. WordPress passes the email to the host and email gets logged by this plugin
-3. The host takes the email and sends it (SMTP or Mail Transfer Agent)
-4. Recipient receives or blocks the email
-5. If the email is accepted, the spam filter decides which inbox it goes into
+When your WordPress site sends an email, there's no guarantee it will be delivered.
+
+This is what the email's journey looks like:
+
+1. WordPress creates an email
+2. WordPress passes the email to your website host and that email gets logged by our plugin
+3. The host server takes the email and sends it (SMTP or Mail Transfer Agent)
+4. Recipient server receives or blocks the email
+5. If the email is accepted, the spam filter decides if it goes to the inbox or the spam folder
 6. Recipients see the email and might open it.
 
 This plugin does not track delivery after step 2.
 
-### How do I know if my WordPress' emails are delivered to an inbox then?
+If you have deliverability issues, we suggest installing the <a href="https://wordpress.org/plugins/wp-mail-smtp/">WP Mail SMTP</a> plugin.
 
-You need to send an email from your WordPress to an inbox that has no spam filter:
-
-1. Install the plugin <a href="https://wordpress.org/plugins/check-email/">Check Email</a>
-2. In a new tab, go to <a href="https://www.mail-tester.com">mail-tester.com</a>. Copy the email address there.
-3. In your WordPress admin, go to Tools > Check Email
-4. Send an email to the address you copied from mail-tester
-5. Return to the mail-tester, and click on "Check your score". Wait until mail-tester gets the email.
-
-If mail-tester never receives your email, there's a problem with your host's sending method. Contact your host to let them know.
-
-### What to do if the emails are not delivered to my personal inbox?
-
-If mail-tester receives your emails (see point above), but your own address doesn't receive it:
-
-* Check your inbox spam folder
-* If the email is not there, your email provider is blocking the email before it even reaches the spambox. This is common.
-
-We recommend in this case to send your WordPress email with a service provider, like MailPoet or Sendgrid. <a href="https://www.mailpoet.com/blog/top-three-smtp-plugins-for-wordpress/">See our guide on free plugins and options to send with an SMTP plugin.</a>
-
-### Which emails does WooCommerce send?
-
-* Cancelled order
-* Failed order
-* Order on-hold
-* Processing order
-* Completed order
-* Refunded order
-* Customer invoice / Order details
-* Customer note
-* Reset password
-* New account
-
-### Which popular plugins send emails?
-
-* The Event Calendar
-* Gravity Forms
-* Ninja Forms
-* Contact Form 7
-* Wordfence
-* ... and many more.
+WP Mail SMTP fixes WordPress email deliverability problems, you can choose between 12 email providers (Gmail, Outlook, SendLayer, Mailgun, ...) to resolve your email sending issue and it's super easy to set up. WP Mail SMTP is trusted by more than 3 million websites.
 
 ### Credits
 
@@ -107,19 +76,41 @@ The plugin was created and launched in 2014 by <a href="https://no3x.de/">Christ
 2. Activate WP Mail Logging.
 
 == Frequently Asked Questions ==
+
+= Does this plugin log emails sent from WordPress plugins? =
+
+Yes, it logs all emails sent from your site, including any emails that are created by your plugins or your theme.
+
 = I need help! =
-We answer in the forums, but only occasionally.
+
+Please open a new <a href="https://wordpress.org/support/plugin/wp-mail-logging/">support thread</a> and provide as much information as possible, without any private information (it is a public forum).
+
+And we will try to help out as soon as possible.
+
 = Where can I report a bug? =
-You can do so in the support forums. We'll be happy to review them.
+
+Please open a new <a href="https://wordpress.org/support/plugin/wp-mail-logging/">support thread</a> and provide as much information as possible, without any private information (it is a public forum).
+
+And we will investigate the issue as soon as possible.
+
 = Can I submit changes to the plugin? =
-Yes, directly on <a href="https://github.com/kgjerstad/wp-mail-logging/" rel="nofollow">GitHub</a>.
+
+Yes, you can contribute on <a href="https://github.com/awesomemotive/wp-mail-logging" rel="nofollow">GitHub</a>.
 
 == Screenshots ==
-1. The List
-2. The Detail View
-3. The Settings
+1. The Email Log
+2. The Detail Email Log View
+3. The Settings - part 1
+3. The Settings - part 2
 
 == Changelog ==
+= 1.11.0 - 2023-03-15 =
+- Added: the ability to move the menu position in the top-level for easier access.
+- Added: the ability to filter email logs.
+- Improved: overall UI/UX.
+- Removed: Redux Framework.
+- Fixed: resend with HTML type email not working all the time due to headers parsing error.
+
 = 1.10.5 - 2022-12-21 =
 - Fixed: automatic email log deletion via Log Rotation settings.
 - Fixed: PHP 8.1 issues.

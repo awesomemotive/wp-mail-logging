@@ -6,6 +6,14 @@ namespace No3x\WPML\Renderer\Column;
 class ErrorColumn extends GenericColumn {
 
     /**
+     * Max number of character to display before we
+     * truncate with ellipsis.
+     *
+     * @var int
+     */
+    const MAX_ERROR_CHAR_LENGTH = 90;
+
+    /**
      * TimestampColumn constructor.
      */
     public function __construct() {
@@ -31,9 +39,16 @@ class ErrorColumn extends GenericColumn {
      * @return string
      */
     function error_column($item) {
-        $error = $item['error'];
-        if( empty($error)) return "";
-        return '<i class="fa fa-exclamation-circle" title="' . esc_attr( $error ) . '"></i>';
+
+        if ( empty( $item['error'] ) ) {
+            return '';
+        }
+
+        if ( strlen( $item['error'] ) <= self::MAX_ERROR_CHAR_LENGTH ) {
+            return $item['error'];
+        }
+
+        echo substr( $item['error'], 0, self::MAX_ERROR_CHAR_LENGTH ) . '...';
     }
 
 }

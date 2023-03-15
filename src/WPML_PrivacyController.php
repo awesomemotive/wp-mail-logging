@@ -134,6 +134,7 @@ class WPML_PrivacyController implements IHooks {
             if($mail->delete()) {
                 $items_removed = true;
             } else {
+                /* translators: %d Mail Log ID that was not removed. */
                 $messages[] = sprintf( __( 'A mail with the id %d was unable to be removed at this time.', 'wp-mail-logging'), $mail->get_mail_id());
                 $items_retained = true;
             }

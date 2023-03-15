@@ -31,7 +31,18 @@ class WPML_Email_Resender {
             return WPML_Attachment::fromRelPath($attachments)->getPath();
         }, $attachments);
 
-        $headers = explode( "\\n", str_replace( "\\r\\n", "\\n", $mail->get_headers() ) );
+        $clean_headers = str_replace(
+            [
+                "\\r\\n",
+                "\r\n",
+                ",\n",
+                ",\\n"
+            ],
+            "\n",
+            $mail->get_headers()
+        );
+
+        $headers = explode( "\n", $clean_headers );
         $headers = array_map(function ($header) {
             return rtrim($header, ",");
         }, $headers);

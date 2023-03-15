@@ -1,0 +1,230 @@
+@import "include-media";
+@import "variables";
+
+// Product Education.
+.wp-mail-logging-product-education {
+    background-color: #FFFFFF;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    border-radius: 6px;
+    color: #50575E;
+    font-size: 14px;
+    font-weight: 400;
+    margin-top: 20px;
+    position: relative;
+
+    ul {
+        color: #646970;
+    }
+
+    &-dismiss {
+        position: absolute;
+        right: 15px;
+        top: 15px;
+
+        button {
+            background: none;
+            border: none;
+            color: #a7aaad;
+            cursor: pointer;
+            margin: 0;
+            padding: 0;
+
+            &:focus, &:hover {
+                color: #d63638;
+            }
+
+            .dashicons, .dashicons-before::before {
+                width: 16px;
+                height: 16px;
+                font-size: 16px;
+            }
+        }
+    }
+
+    &-content {
+        padding: 20px;
+
+        strong {
+            font-weight: $medium-weight;
+        }
+
+        a {
+            &.wp-mail-logging-education-btn {
+                border-radius: 3px;
+                color: #FFFFFF;
+                display: inline-block;
+                font-size: 14px;
+                padding: 7px 10px;
+                text-decoration: none;
+
+                &:hover {
+                    color: #FFFFFF;
+                }
+            }
+        }
+
+        p {
+            color: #646970;
+            font-size: 14px;
+            margin: 10px 0;
+
+            a {
+                color: #E77C5C;
+
+                &:hover, &:focus {
+                    color: #cb5836;
+                }
+            }
+        }
+    }
+
+    h3 {
+        color: #3C434A;
+        font-size: 18px;
+        font-weight: $medium-weight;
+        margin-bottom: 10px;
+        margin-top: 0;
+    }
+}
+
+#wp-mail-logging-product-education-email-logs-top {
+    border-radius: 7px;
+    margin-bottom: 20px;
+    margin-top: 0;
+
+    .wp-mail-logging-product-education-content {
+        padding: 15px;
+
+        h2 {
+            color: #222222;
+        }
+
+        p {
+            color: #646970;
+            line-height: 18px;
+            margin: 5px 0;
+        }
+
+        div {
+
+            p:last-child {
+                margin-top: 0;
+            }
+        }
+
+        a.wp-mail-logging-education-btn {
+            border-width: 0;
+            font-size: 13px;
+            line-height: 16px;
+            margin-top: 7px;
+        }
+    }
+}
+
+#wp-mail-logging-product-education-email-logs-bottom {
+    background: #FFFFFF url("../images/plane-bg.png") no-repeat right bottom;
+    background-size: 401px 119px;
+
+    /* @2x Images (Pixel Ratio of 1.25+) */
+    @media only screen and (-o-min-device-pixel-ratio: 5/4),
+           only screen and (-webkit-min-device-pixel-ratio: 1.25),
+           only screen and (min-device-pixel-ratio: 1.25),
+           only screen and (min-resolution: 1.25dppx) {
+
+        background-image: url("../images/plane-bg@2x.png");
+    }
+
+    @include media("<=tablet") {
+        margin-top: 100px;
+        margin-right: 20px;
+        position: absolute;
+    }
+
+    .wp-mail-logging-product-education-images-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 25px;
+        margin: 20px 0;
+
+        &-image {
+            display: flex;
+            flex-direction: column;
+            max-width: 370px;
+
+            a {
+                border: 5px solid #DCDCDE;
+                border-radius: 4px;
+                box-sizing: border-box;
+                margin-bottom: 10px;
+                position: relative;
+
+                &:hover::after {
+                    opacity: 1;
+                }
+
+                &::after {
+                    background: rgba(68, 68, 68, .15) url('../images/zoom.svg') no-repeat center;
+                    background-size: 50px;
+                    content: "";
+                    height: 100%;
+                    left: 0;
+                    opacity: 0;
+                    position: absolute;
+                    top: 0;
+                    transition: all .3s;
+                    width: 100%;
+                }
+            }
+
+            img {
+                display: block;
+                height: auto;
+                width: 100%;
+            }
+
+            span {
+                color: #3C434A;
+                font-size: 16px;
+                font-weight: $medium-weight;
+            }
+
+            ul {
+                font-size: 13px;
+                line-height: 20px;
+                margin-bottom: 0;
+                margin-top: 10px;
+
+                li {
+                    background: transparent url('../images/arrow-right-plain-icon.svg') no-repeat left 3px;
+                    background-size: 12px;
+                    padding-left: 18px;
+
+                    &::before {
+                        left: 0;
+                        position: absolute;
+                        top: -1px;
+                    }
+                }
+            }
+        }
+    }
+
+    .wp-mail-logging-education-btn {
+        background: #E77C5C;
+        border-color: #E77C5C;
+        border-radius: 4px;
+        border-width: 0;
+        font-weight: $medium-weight;
+        line-height: 16px;
+        padding: 12px 16px;
+
+        &:hover, &:focus {
+            background-color: #cb5836;
+            border-color: #cb5836;
+        }
+
+        &:focus {
+            box-shadow: 0 0 0 1px #fff, 0 0 0 3px #cb5836;
+        }
+    }
+}

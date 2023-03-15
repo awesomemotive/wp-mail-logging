@@ -3,6 +3,8 @@
 namespace No3x\WPML;
 
 // Exit if accessed directly.
+use No3x\WPML\Admin\SettingsTab;
+
 if ( ! defined( 'ABSPATH' ) ) exit;
 
 /**
@@ -35,7 +37,7 @@ class WPML_LogRotation implements IHooks {
      * @since 1.6.0
      */
     public function init() {
-        global $wpml_settings;
+        $wpml_settings = SettingsTab::get_settings();
 
         // if plugin is installed the first time settings are not initialized properly so quit early.
         if( !isset($wpml_settings) || !array_key_exists('log-rotation-limit-amout', $wpml_settings) ) {
@@ -74,7 +76,7 @@ class WPML_LogRotation implements IHooks {
     static function limitNumberOfMailsByAmount() {
         global $wpdb;
 
-        $wpml_settings = get_option( 'wpml_settings', [] );
+        $wpml_settings = SettingsTab::get_settings();
 
         if( empty( $wpml_settings ) ) {
             return;

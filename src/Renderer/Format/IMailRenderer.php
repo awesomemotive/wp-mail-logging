@@ -10,4 +10,6 @@ interface IMailRenderer {
      * @throws \Exception
      */
     function render($item);
+
+    function renderModal( $item );
 }

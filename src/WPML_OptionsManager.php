@@ -22,6 +22,7 @@
 namespace No3x\WPML;
 
 // Exit if accessed directly.
+use No3x\WPML\Admin\SettingsTab;
 use No3x\WPML\Renderer\WPML_MailRenderer_AJAX_Handler;
 
 if ( ! defined( 'ABSPATH' ) ) exit;
@@ -42,6 +43,10 @@ class WPML_OptionsManager {
      */
     public function getSetting($settingName, $default = null) {
         global $wpml_settings;
+
+        if ( is_null( $wpml_settings ) ) {
+            $wpml_settings = SettingsTab::get_settings();
+        }
 
         $retVal = null;
         if (is_array($wpml_settings) && array_key_exists($settingName, $wpml_settings)) {
@@ -122,6 +127,30 @@ class WPML_OptionsManager {
                 delete_option($prefixedOptionName);
             }
         }
+    }
+
+    /**
+     * Delete the saved settings.
+     *
+     * @since 1.11.0
+     *
+     * @return void
+     */
+    protected function deleteSavedSettings() {
+
+        delete_option( SettingsTab::OPTIONS_NAME );
+    }
+
+    /**
+     * Delete Product Education related saved option..
+     *
+     * @since 1.11.0
+     *
+     * @return void
+     */
+    protected function deleteSavedProductEducationOptions() {
+
+        delete_option( WPML_ProductEducation::OPTION_KEY );
     }
 
     /**
@@ -316,32 +345,27 @@ class WPML_OptionsManager {
      */
     public function createSettingsMenu() {
 
-        global $wp_version;
         global $wp_logging_list_page;
 
-        $pluginIcon = '';
-        if ( $wp_version >= 3.8 ) $pluginIcon = 'dashicons-email-alt';
-
         $pluginNameSlug = $this->getPluginSlug();
+        $menu_slug      = $pluginNameSlug . '_log';
+
         $capability = $this->getSetting( 'can-see-submission-data', 'manage_options' );
 
-        //create submenu in the tools menu item
-        $wp_logging_list_page = add_submenu_page( 'tools.php', __( 'WP Mail Log', 'wp-mail-logging' ),
-            __( 'WP Mail Log', 'wp-mail-logging' ),
-            $capability,
-            $pluginNameSlug . '_log',
-            array( &$this, 'LogMenu' )
-        );
+        if ( ! empty( $this->getSetting( 'top-level-menu', '1' ) ) ) {
+            $this->setup_top_level_menu( $capability, $menu_slug );
+        } else {
+            // create submenu in the tools menu item
+            $wp_logging_list_page = add_submenu_page( 'tools.php', __( 'WP Mail Log', 'wp-mail-logging' ),
+                __( 'WP Mail Logging', 'wp-mail-logging' ),
+                $capability,
+                $menu_slug,
+                [ $this, 'LogMenu' ]
+            );
+        }
 
         // Add Action to load assets when page is loaded
-        add_action( 'load-' . $wp_logging_list_page, array( $this, 'load_assets' ) );
-
-        add_submenu_page($pluginNameSlug . '_log',
-            __('About', 'wp-mail-logging'),
-            __('About', 'wp-mail-logging'),
-            $capability,
-            $pluginNameSlug . '_about',
-            array(&$this, 'LogSubMenuAbout') );
+        add_action( 'load-' . $wp_logging_list_page, [ $this, 'load_assets' ] );
 
         add_action( 'load-' . $wp_logging_list_page, function() {
             add_screen_option(
@@ -355,49 +379,115 @@ class WPML_OptionsManager {
         });
     }
 
+    /**
+     * Setup the menu in the top level.
+     *
+     * @since 1.11.0
+     *
+     * @param string $capability Capability to be able to access the pages in the menu.
+     * @param string $menu_slug  Menu slug.
+     *
+     * @return void
+     */
+    private function setup_top_level_menu( $capability, $menu_slug ) {
+
+        global $wp_logging_list_page;
+
+        $wp_logging_list_page = add_menu_page(
+            __( 'WP Mail Logging', 'wp-mail-logging' ),
+            __( 'WP Mail Logging', 'wp-mail-logging' ),
+            $capability,
+            $menu_slug,
+            [ $this, 'LogMenu' ],
+            'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHZpZXdCb3g9IjAgMCAyMCAyMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTE4IDkuMjI1ODFDMTggNC44Mzg3MSAxNC40NTE2IDIgMTAgMkM1LjU0ODM5IDIgMiA1LjU4MDY1IDIgMTBDMiAxNC40NTE2IDUuNTQ4MzkgMTggMTAgMThDMTEuNjc3NCAxOCAxMy4zNTQ4IDE3LjQ1MTYgMTQuNzQxOSAxNi40NTE2QzE0LjkwMzIgMTYuMzIyNiAxNC45MzU1IDE2LjA2NDUgMTQuODA2NSAxNS45MDMyTDE0LjI5MDMgMTUuMjkwM0MxNC4xNjEzIDE1LjEyOSAxMy45MzU1IDE1LjEyOSAxMy43NzQyIDE1LjIyNThDMTIuNjc3NCAxNi4wMzIzIDExLjM1NDggMTYuNDUxNiAxMCAxNi40NTE2QzYuNDE5MzUgMTYuNDUxNiAzLjU0ODM5IDEzLjU4MDYgMy41NDgzOSAxMEMzLjU0ODM5IDYuNDUxNjEgNi40MTkzNSAzLjU0ODM5IDEwIDMuNTQ4MzlDMTMuNTE2MSAzLjU0ODM5IDE2LjQ1MTYgNS42Nzc0MiAxNi40NTE2IDkuMjI1ODFDMTYuNDUxNiAxMS4yOTAzIDE1LjA2NDUgMTIuNDE5NCAxMy43NDE5IDEyLjQxOTRDMTMuMTI5IDEyLjQxOTQgMTMuMDk2OCAxMiAxMy4yMjU4IDExLjM4NzFMMTQuMTYxMyA2LjYxMjlDMTQuMTkzNSA2LjM1NDg0IDE0IDYuMTI5MDMgMTMuNzc0MiA2LjEyOTAzSDEyLjUxNjFDMTIuMzIyNiA2LjE2MTI5IDEyLjE2MTMgNi4yOTAzMiAxMi4xMjkgNi40NTE2MUMxMi4wOTY4IDYuNjQ1MTYgMTIuMDY0NSA2Ljc0MTk0IDEyLjA2NDUgNi45MDMyM0MxMS42Nzc0IDYuMjkwMzIgMTAuOTAzMiA1LjkwMzIzIDkuOTY3NzQgNS45MDMyM0M3LjY0NTE2IDUuOTAzMjMgNS42MTI5IDcuOTM1NDggNS42MTI5IDEwLjgzODdDNS42MTI5IDEyLjgwNjUgNi42NDUxNiAxNC4xMjkgOC42MTI5IDE0LjEyOUM5LjU0ODM5IDE0LjEyOSAxMC41ODA2IDEzLjU4MDYgMTEuMTYxMyAxMi43NzQyQzExLjMyMjYgMTMuNzc0MiAxMi4wOTY4IDE0IDEzLjA5NjggMTRDMTYuMjkwMyAxNCAxOCAxMS45MzU1IDE4IDkuMjI1ODFaTTkuMTYxMjkgMTIuMzg3MUM4LjIyNTgxIDEyLjM4NzEgNy42Nzc0MiAxMS43NDE5IDcuNjc3NDIgMTAuNzA5N0M3LjY3NzQyIDguODM4NzEgOC45Njc3NCA3LjY3NzQyIDEwLjA5NjggNy42Nzc0MkMxMS4wNjQ1IDcuNjc3NDIgMTEuNTQ4NCA4LjM4NzEgMTEuNTQ4NCA5LjM1NDg0QzExLjU0ODQgMTAuODcxIDEwLjQ4MzkgMTIuMzg3MSA5LjE2MTI5IDEyLjM4NzFaIiBmaWxsPSJ3aGl0ZSIvPgo8L3N2Zz4K'
+        );
+
+        add_submenu_page( $menu_slug,
+            __( 'Email Log', 'wp-mail-logging' ),
+            __( 'Email Log', 'wp-mail-logging' ),
+            $capability,
+            $menu_slug
+        );
+
+        add_submenu_page( $menu_slug,
+            __( 'Settings', 'wp-mail-logging' ),
+            __( 'Settings', 'wp-mail-logging' ),
+            $capability,
+            $menu_slug . '&tab=settings',
+            '__return_null'
+        );
+
+        add_submenu_page( $menu_slug,
+            __( 'SMTP', 'wp-mail-logging' ),
+            __( 'SMTP', 'wp-mail-logging' ),
+            $capability,
+            $menu_slug . '&tab=smtp',
+            '__return_null'
+        );
+
+        // Fix submenu highlighting depending on the selected tab.
+        add_filter( 'submenu_file', function( $submenu_file, $parent_file ) use ( $menu_slug ) {
+
+            if ( $parent_file !== $menu_slug ) {
+                return $submenu_file;
+            }
+
+            $tab = filter_input( INPUT_GET, 'tab' );
+
+            if ( ! empty( $tab ) ) {
+                return $menu_slug . '&tab=' . esc_html( $tab );
+            }
+
+            return $submenu_file;
+        }, 10, 2 );
+    }
+
+    /**
+     * Show About page.
+     *
+     * @since 1.11.0
+     *
+     * @deprecated 1.11.0
+     *
+     * @return string
+     */
     public function LogSubMenuAbout() {
-        ?>
-        <div class="wrap">
-            <h2><?php echo $this->getPluginDisplayName(); echo ' '; _e('About', 'wp-mail-logging'); ?></h2>
-            <h3>Why use?</h3>
-            <p>Sometimes you may ask yourself if a mail was actually sent by WordPress - with
-                <strong>With <?php echo $this->getPluginDisplayName(); ?>, you can:</strong></p>
-            <ul>
-                <li>View a complete list of sent mails.</li>
-                <li>Search for mails.</li>
-                <li>Count on regular updates, enhancements, and troubleshooting.</li>
-                <li>DevOP: IP of server sent the mail</li>
-                <li>Developer: Boost your development performance by keeping track of sent mails from your WordPress site.</li>
-                <li>Developer: Use Filters that are provided to extend the columns.</li>
-            </ul>
-            <h3>Contributors</h3>
-            <p>This plugin is open source and some people helped to make it better:</p>
-            <ul>
-                <li>tripflex</li>
-                <li><a href="http://www.grafixone.co.za" title="GrafixONE">Andr&eacute; Groenewald</a> (Icon before version 1.8.0, icon after this version slightly modified)</li>
-            </ul>
-            <h3>Donate</h3>
-            <p>Please consider to make a donation if you like the plugin. I spent a lot of time for support, enhancements and updates in general.</p>
-            <a title="Donate" class="button button-primary" href="http://no3x.de/web/donate">Donate</a>
-        </div>
-        <?php
+        return '';
     }
 
     public function load_assets() {
 
         global $wp_logging_list_page;
+
         $screen = get_current_screen();
 
         if ( $screen->id != $wp_logging_list_page )
             return;
 
+        $assets_url  = WPML_Init::getInstance()->getService( 'plugin' )->get_assets_url();
+        $plugin_meta = WPML_Init::getInstance()->getService( 'plugin-meta' );
+
+        if ( empty( $plugin_meta['version'] ) ) {
+            return;
+        }
+
         // Enqueue styles and scripts if we're on the list page
-        wp_enqueue_style( 'wp-mail-logging-modal', untrailingslashit( plugin_dir_url( __FILE__ ) ) . '/../css/modal.css', array(), $this->getVersion() );
-        wp_enqueue_script('wp-mail-logging-modal', untrailingslashit( plugin_dir_url( __FILE__ ) ) . '/../js/modal.js', array( 'jquery' ), $this->getVersion(), true);
+        $min = '';
+
+        if ( ! defined( 'SCRIPT_DEBUG' ) || ! SCRIPT_DEBUG ) {
+            $min = '.min';
+        }
+
+        wp_enqueue_style(
+            'wp-mail-logging-admin',
+            $assets_url . "/css/wp-mail-logging-admin{$min}.css",
+            [],
+            $plugin_meta['version']
+        );
+
+        wp_enqueue_style( 'wp-mail-logging-modal', $assets_url . "/css/modal{$min}.css", [], $plugin_meta['version'] );
+        wp_enqueue_script('wp-mail-logging-modal', $assets_url . "/js/modal{$min}.js", [ 'jquery' ], $plugin_meta['version'], true);
         wp_localize_script('wp-mail-logging-modal', 'wpml_modal_ajax', $this->mailRendererAJAXHandler->get_ajax_data());
-        wp_enqueue_style( 'wp-mail-logging-icons', untrailingslashit( plugin_dir_url( __FILE__ ) ) . '/../lib/font-awesome/css/font-awesome.min.css', array(), '4.1.0' );
-        wp_enqueue_script( 'icheck', untrailingslashit( plugin_dir_url( __FILE__ ) ) . '/../lib/icheck/icheck.min.js', array(), '1.0.2' );
-        wp_enqueue_style( 'icheck-square', untrailingslashit( plugin_dir_url( __FILE__ ) ) . '/../lib/icheck/square/blue.css', array(), '1.0.2' );
     }
 
     /**
@@ -410,7 +500,6 @@ class WPML_OptionsManager {
     }
 
     public function LogMenu() {
-        global $wp_version, $wpml_settings;
 
         if ( !current_user_can( $this->getSetting( 'can-see-submission-data', 'manage_options' ) ) ) {
             wp_die(__('You do not have sufficient permissions to access this page.', 'wp-mail-logging'));
@@ -421,102 +510,34 @@ class WPML_OptionsManager {
         }
 
         $tab = isset( $_GET['tab'] ) ? $_GET['tab'] : null;
-
         ?>
-        <div class="wrap">
-            <h2><?php echo $this->getPluginDisplayName(); echo ' '; _e('Log', 'wp-mail-logging'); ?></h2>
-            <script>
-                jQuery(document).ready(function($) {
-                    $('#wp-mail-logging-modal-content-header-format-switch input').iCheck({
-                        checkboxClass: 'icheckbox_square-blue',
-                        radioClass: 'iradio_square-blue',
-                        increaseArea: '20%' // optional
-                    });
-                });
-            </script>
-            <nav style="margin-bottom: 20px" class="nav-tab-wrapper wp-clearfix">
-                <a href="<?php echo admin_url( 'admin.php?page=wpml_plugin_log' ) ?>"
-                    class="nav-tab <?php echo $tab == null ? 'nav-tab-active' : null ?>"
-                    aria-current="page">
-                        <?php _e( 'Email log', 'wp-mail-logging' ); ?>
-                </a>
-                <a href="<?php echo add_query_arg( 'tab', 'settings', admin_url( 'admin.php?page=wpml_plugin_log' ) ) ?>"
-                    class="nav-tab <?php echo $tab == 'settings' ? 'nav-tab-active' : null ?>">
-                        <?php _e( 'Settings', 'wp-mail-logging' ) ?>
-                </a>
-            </nav>
-            <?php switch ( $tab ) {
-                case 'settings':
-                    $redux = WPML_Init::getInstance()->getService( 'redux' );
-                    $framework = $redux->ReduxFramework;
-
-                    $enqueue = new \Redux_Enqueue ( $framework );
-                    $enqueue->init();
-
-                    $panel = new \Redux_Panel ( $framework );
-                    $panel->init();
-                    break;
-                default:
-                    $this->_LogMenu();
-                    break;
-            }
-            ?>
+        <div id="wp-mail-logging" class="wrap">
+            <div class="wp-mail-logging-page-content">
+                <?php
+                /**
+                 * Hook the tab content here.
+                 *
+                 * @since 1.11.0
+                 *
+                 * @param string $tab Current active tab.
+                 */
+                do_action( 'wp_mail_logging_admin_tab_content', $tab );
+                ?>
+            </div>
         </div>
         <?php
-            }
+    }
 
-            public function _LogMenu() {
-                global $wp_version, $wpml_settings;
+    public function _LogMenu() {
 
-                if ( ! current_user_can( $this->getSetting( 'can-see-submission-data', 'manage_options' ) ) ) {
-                    wp_die( __( 'You do not have sufficient permissions to access this page.', 'wp-mail-logging' ) );
-                }
+        if ( ! current_user_can( $this->getSetting( 'can-see-submission-data', 'manage_options' ) ) ) {
+            wp_die( __( 'You do not have sufficient permissions to access this page.', 'wp-mail-logging' ) );
+        }
 
-                if ( ! class_exists( 'Email_Log_List_Table' ) ) {
-                    require_once( plugin_dir_path( __FILE__ ) . 'WPML_Email_Log_List.php' );
-                }
-
-                ?>
-
-            <div id="wp-mail-logging-modal-wrap">
-                <div id="wp-mail-logging-modal-backdrop"></div>
-                <div id="wp-mail-logging-modal-content-wrap">
-                    <div id="wp-mail-logging-modal-content">
-                        <div id="wp-mail-logging-modal-content-header">
-                            <a id="wp-mail-logging-modal-content-header-close" class="wp-mail-logging-modal-close" href="#" title="Close">
-                                <?php if ( $wp_version >= 3.8 ): ?>
-                                    <div class="dashicons dashicons-no"></div>
-                                <?php else: ?>
-                                    <span class="wp-mail-logging-modal-content-header-compat-close">X</span>
-                                <?php endif; ?>
-                            </a>
-                            <?php if ( $wp_version >= 3.8 ): ?>
-                                <div id="wp-mail-logging-modal-content-header-icon" class="dashicons dashicons-email-alt"></div>
-                            <?php endif; ?>
-                            <div id="wp-mail-logging-modal-content-header-title">
-                                <?php _e( 'Message', 'wp-mail-logging' ); ?>
-                            </div>
-                            <div id="wp-mail-logging-modal-content-header-format-switch">
-                                <?php
-                                foreach( $this->supportedMailRendererFormats as $key => $format ) {
-                                    $checked = checked($format, $this->getSetting('preferred-mail-format'), false);
-                                    echo ' <input type="radio" name="format" ' . $checked . ' id="' . esc_attr( $format ) . '"> ' . esc_html( $format ) . '</input> ';
-                                }
-                                ?>
-                            </div>
-                        </div>
-                        <div id="wp-mail-logging-modal-content-body">
-                            <div id="wp-mail-logging-modal-content-body-content">
-
-                            </div>
-                        </div>
-                        <div id="wp-mail-logging-modal-content-footer">
-                            <a class="wp-mail-logging-modal-close button button-primary" href="#"><?php _e( 'Close', 'wp-mail-logging' ); ?></a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
+        if ( ! class_exists( 'Email_Log_List_Table' ) ) {
+            require_once( plugin_dir_path( __FILE__ ) . 'WPML_Email_Log_List.php' );
+        }
+        ?>
             <form id="email-list" method="get">
                 <input type="hidden" name="page" value="<?php echo esc_attr( $_REQUEST['page'] ); ?>" />
                 <?php
@@ -526,6 +547,7 @@ class WPML_OptionsManager {
                 $emailLogList = WPML_Init::getInstance()->getService('emailLogList');
                 $emailLogList->prepare_items( $search );
                 $emailLogList->search_box( __( 'Search' ), 's' );
+                $emailLogList->views();
                 $emailLogList->display();
                 ?>
             </form>

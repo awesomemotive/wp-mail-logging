@@ -1,41 +1,26 @@
 <?php
-/*
-   Plugin Name: WP Mail Logging
-   Plugin URI: https://wordpress.org/plugins/wp-mail-logging/
-   Version: 1.10.5
-   Author: SendLayer
-   Author URI: https://sendlayer.com/
-   Description: Logs each email sent by WordPress.
-   Text Domain: wp-mail-logging
-   License: GPLv3
-  */
-
-/*
-	"WordPress Plugin Template" Copyright (C) 2013 Michael Simpson  (email : michael.d.simpson@gmail.com)
-
-	This following part of this file is part of WordPress Plugin Template for WordPress.
-
-	WordPress Plugin Template is free software: you can redistribute it and/or modify
-	it under the terms of the GNU General Public License as published by
-	the Free Software Foundation, either version 3 of the License, or
-	(at your option) any later version.
-
-	WordPress Plugin Template is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-	GNU General Public License for more details.
-
-	You should have received a copy of the GNU General Public License
-	along with Contact Form to Database Extension.
-	If not, see http://www.gnu.org/licenses/gpl-3.0.html
-*/
+/**
+ * Plugin Name: WP Mail Logging
+ * Plugin URI: https://wordpress.org/plugins/wp-mail-logging/
+ * Version: 1.11.0
+ * Requires at least: 5.0
+ * Requires PHP: 7.1
+ * Author: WP Mail Logging Team
+ * Author URI: https://github.com/awesomemotive/wp-mail-logging
+ * License: GPLv3
+ * Description: Logs each email sent by WordPress.
+ * Text Domain: wp-mail-logging
+ * Domain Path: /assets/languages
+ */
 
 namespace No3x\WPML;
 
 // Exit if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-define('WPML_PHP_MIN_VERSION', '7.1');
+define( 'WPML_PHP_MIN_VERSION', '7.1' );
+define( 'WP_MAIL_LOGGING_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
+define( 'WP_MAIL_LOGGING_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 
 /**
  * Check the PHP version and give a useful error message if the user's version is less than the required version
@@ -94,9 +79,7 @@ if (WPML_PhpVersionCheck()) {
     $loader->register();
 
     // Add our namespace and the folder it maps to
-    require_once __DIR__ . '/src/inc/redux/admin-init.php';
     $loader->addNamespace('No3x\\WPML\\', __DIR__ . '/src' );
-    $loader->addNamespace('No3x\\WPML\\Settings\\', __DIR__ . '/src/inc/redux');
     $loader->addNamespace('No3x\\WPML\\ORM\\', __DIR__ . '/lib/vendor/brandonwamboldt/wp-orm/src');
     $loader->addNamespace('No3x\\WPML\\Pimple\\', __DIR__ . '/lib/vendor/pimple/pimple/src');
     if( file_exists( __DIR__ . '/vendor/autoload.php' ) ) {

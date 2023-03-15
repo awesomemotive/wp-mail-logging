@@ -1,0 +1,229 @@
+$header-bg: #F0F0F1;
+$header-bottom-border: #ccc;
+
+$font-color: #1E2327;
+
+$backdrop-bg: #3c434a;
+$backdrop-opacity: 0.75;
+
+$content-bg: #fff;
+
+$modal-padding: 30px;
+
+$medium-weight: 600;
+
+#wp-mail-logging-modal {
+
+    &-wrap {
+        display: none;
+    }
+
+    &-backdrop {
+        background: none repeat scroll 0 0 $backdrop-bg;
+        bottom: 0;
+        left: 0;
+        min-height: 360px;
+        opacity: $backdrop-opacity;
+        position: fixed;
+        right: 0;
+        top: 0;
+        z-index: 159900;
+    }
+
+    &-content {
+        background: none repeat scroll 0 0 $content-bg;
+        border-radius: 6px;
+        font-size: 14px;
+        margin: 40px auto 0;
+        max-width: 688px;
+        max-height: 761px;
+
+        &-wrap {
+            bottom: $modal-padding;
+            left: $modal-padding;
+            position: fixed;
+            right: $modal-padding;
+            top: $modal-padding;
+            z-index: 300010;
+        }
+
+        &-header {
+            align-items: center;
+            background-color: $header-bg;
+            border-radius: 6px 6px 0px 0px;
+            color: $font-color;
+            display: flex;
+            font-size: 20px;
+            font-weight: $medium-weight;
+            justify-content: space-between;
+            padding: 20px 30px;
+
+            &-format-switch {
+                border-bottom: 1px solid #DCDCDE;
+                margin: 20px 0 30px 0;
+
+                ul {
+                    margin: 0;
+                    padding-bottom: 13.5px;
+
+                    li {
+                        padding: 0 10px;
+                        display: inline;
+                        text-transform: uppercase;
+
+                        &:first-of-type {
+                            padding-left: 0;
+                        }
+
+                        &:last-of-type {
+                            padding-right: 0;
+                        }
+                    }
+                }
+            }
+
+            &-close {
+                color: #C2C2C2;
+                text-decoration: none;
+
+                &:hover {
+                    color: #72777C;
+                }
+            }
+        }
+
+        &-body {
+            padding: 0 30px 30px;
+            overflow: auto;
+            max-height: 701px;
+
+            &-content {
+                position: relative;
+            }
+
+            & .info {
+                border-left: 4px solid #ffba00;
+                display: block;
+                background: #FFF9E9;
+                -webkit-box-shadow: 0 1px 1px 0 rgba( 0, 0, 0, 0.1 );
+                box-shadow: 0 1px 1px 0 rgba( 0, 0, 0, 0.1 );
+                margin: 5px 5px 2px;
+                padding: 1px 12px;
+            }
+
+            & .title {
+                font-weight: bold;
+                display: block;
+            }
+
+        }
+
+        .notice.wp-mail-logging-html-error-notice {
+            background: #F0F6FC;
+            border: none;
+            border-radius: 3px;
+            color: #646970;
+            margin: 10px 0 0;
+            padding: 10px;
+
+            p {
+                margin: 0;
+            }
+        }
+    }
+}
+
+#wp-mail-logging-modal-content-body-table {
+    border: 1px solid #DCDCDE;
+    border-radius: 6px;
+}
+
+.wp-mail-logging-modal {
+
+    &-row {
+        border-bottom: 1px solid #DCDCDE;
+        padding: 10px 14px;
+
+        &:last-of-type {
+            border-bottom: 0;
+        }
+
+        &-label, &-label-message {
+            color: #3C434A;
+            display: block;
+            float: left;
+            font-weight: $medium-weight;
+            width: 160px;
+        }
+
+        &-label-message {
+            float: none;
+            padding-bottom: 10px;
+        }
+
+        &-value {
+            color: #50575E;
+            font-weight: 400;
+            display: block;
+            margin-left: 160px;
+
+            &-error {
+                color: #D63637;
+                font-size: 13px;
+            }
+
+            &-message {
+                margin-left: 0;
+                max-height: 370px;
+                overflow-x: scroll;
+            }
+        }
+
+        &-error-value {
+            color: #D63637;
+        }
+    }
+}
+
+.wp-mail-logging-modal-clear {
+
+    &::before, &::after {
+        content: " ";
+        display: table;
+    }
+
+    &::after {
+        clear: both;
+    }
+}
+
+.wp-mail-logging-modal-format {
+    color: #787C82;
+    text-decoration: none;
+
+    &:focus {
+        color: inherit;
+        box-shadow: none;
+        outline: none;
+    }
+
+    &.wp-mail-logging-active-format, &:hover, &:focus {
+        border-bottom: 4px solid #a7aaad;
+        color: #2C3338;
+        padding-bottom: 10.5px;
+    }
+
+    &.wp-mail-logging-active-format {
+
+        border-color: #E77C5C;
+
+        &:focus, &:active {
+            border-color: #E77C5C;
+        }
+    }
+}
+
+.wp-mail-logging-modal-row-value-attachments a {
+    font-size: 18px;
+    text-decoration: none;
+}

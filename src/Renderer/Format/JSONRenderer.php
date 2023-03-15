@@ -23,4 +23,11 @@ class JSONRenderer extends BaseRenderer {
 
         return $json;
     }
+
+    public function renderModal( $item ) {
+
+        $item['message'] = htmlentities( htmlspecialchars_decode( $item['message'] ) );
+
+        return "<pre>" . json_encode( $item, JSON_PRETTY_PRINT ) . "</pre>";
+    }
 }
