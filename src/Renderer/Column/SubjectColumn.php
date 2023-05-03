@@ -7,10 +7,32 @@ use No3x\WPML\Renderer\WPML_ColumnManager;
 
 class SubjectColumn extends GenericColumn {
 
-    protected $subject = '';
-
+    /**
+     * Base64 encoding prefix.
+     *
+     * @since {VERSION}
+     *
+     * @var string
+     */
     const EMAIL_SUBJECT_BASE64_ENCODED = '=?utf-8?B?';
+
+    /**
+     * Quoted-printable encoding prefix.
+     *
+     * @since {VERSION}
+     *
+     * @var string
+     */
     const EMAIL_SUBJECT_QUOTED_ENCODED = '=?utf-8?Q?';
+
+    /**
+     * The email subject.
+     *
+     * @since {VERSION}
+     *
+     * @var string
+     */
+    protected $subject = '';
 
     public function __construct() {
 
