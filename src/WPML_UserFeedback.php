@@ -15,6 +15,15 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 class WPML_UserFeedback implements IHooks {
 
     /**
+     * The ajax action for notice dismissal.
+     *
+     * @since {VERSION}
+     *
+     * @var string
+     */
+    const AJAX_ACTION_NONCE = 'wp_mail_logging_user_feedback_notice_dismiss_nonce';
+
+    /**
      * The wp option for notice dismissal data.
      */
     const OPTION_NAME = 'wp_mail_logging_user_feedback_notice';
@@ -85,7 +94,7 @@ class WPML_UserFeedback implements IHooks {
         }
 
         ?>
-        <div class="notice notice-info is-dismissible wp-mail-logging-review-notice">
+        <div class="notice notice-info is-dismissible wp-mail-logging-review-notice" data-nonce="<?php echo esc_attr( wp_create_nonce( self::AJAX_ACTION_NONCE ) ); ?>">
             <div class="wp-mail-logging-review-step wp-mail-logging-review-step-1">
                 <p><?php esc_html_e( 'Are you enjoying WP Mail Logging?', 'wp-mail-logging' ); ?></p>
                 <p>
@@ -129,10 +138,25 @@ class WPML_UserFeedback implements IHooks {
         <script type="text/javascript">
             jQuery( document ).ready( function( $ ) {
                 $( document ).on( 'click', '.wp-mail-logging-dismiss-review-notice, .wp-mail-logging-review-notice button', function( e ) {
+
+                    var $parent = $( this ).parent( '.wp-mail-logging-review-notice' );
+
+                    if ( $parent.length <= 0 || ! $parent.data( 'nonce' ) ) {
+                        return;
+                    }
+
                     if (! $( this ).hasClass( 'wp-mail-logging-review-out' )) {
                         e.preventDefault();
                     }
-                    $.post( ajaxurl, {action: 'wp_mail_logging_feedback_notice_dismiss'} );
+
+                    $.post(
+                        ajaxurl,
+                        {
+                            action: 'wp_mail_logging_feedback_notice_dismiss',
+                            nonce: $parent.data( 'nonce' )
+                        }
+                    );
+
                     $( '.wp-mail-logging-review-notice' ).remove();
                 } );
 
@@ -161,13 +185,17 @@ class WPML_UserFeedback implements IHooks {
      */
     public function feedback_notice_dismiss() {
 
+        if ( empty( $_POST['nonce'] ) || ! check_admin_referer( self::AJAX_ACTION_NONCE, 'nonce' ) || ! is_super_admin() ) {
+            wp_send_json_error();
+        }
+
         $options              = get_option( self::OPTION_NAME, [] );
         $options['time']      = time();
         $options['dismissed'] = true;
 
         update_option( self::OPTION_NAME, $options );
 
-        if ( is_super_admin() && is_multisite() ) {
+        if ( is_multisite() ) {
             $site_list = get_sites();
             foreach ( (array) $site_list as $site ) {
                 switch_to_blog( $site->blog_id );

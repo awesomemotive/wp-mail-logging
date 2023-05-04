@@ -64,7 +64,7 @@ class WPML_ProductEducation {
 
         check_ajax_referer( self::DISMISS_NONCE_ACTION, 'nonce' );
 
-        if ( empty( $_POST['productEducationID'] ) ) {
+        if ( empty( $_POST['productEducationID'] || ! is_super_admin() ) ) {
 
             wp_send_json_error(
                 esc_html__( 'Request invalid.', 'wp-mail-logging' )

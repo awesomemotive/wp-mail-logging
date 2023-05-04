@@ -348,6 +348,15 @@ class WPML_Plugin extends WPML_LifeCycle implements IHooks {
                     continue;
                 }
 
+                // Handle the case when the callback is an array.
+                if (
+                    is_array( $arr ) && ! empty( $arr['function'] ) && is_array( $arr['function'] )
+                    && ! empty( $arr['function'][0] ) && is_object( $arr['function'][0] )
+                    && ( strpos( strtolower( get_class( $arr['function'][0] ) ), 'no3x\wpml' ) !== false )
+                ) {
+                    continue;
+                }
+
                 unset( $wp_filter[ $action ]->callbacks[ $priority ][ $name ] );
             }
         }
