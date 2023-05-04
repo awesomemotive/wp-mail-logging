@@ -7,6 +7,7 @@ use No3x\WPML\Renderer\Column\AttachmentsColumn;
 use No3x\WPML\Renderer\Column\ErrorColumn;
 use No3x\WPML\Renderer\Column\GenericColumn;
 use No3x\WPML\Renderer\Column\IColumn;
+use No3x\WPML\Renderer\Column\SubjectColumn;
 use No3x\WPML\Renderer\Column\TimestampColumn;
 
 class WPML_ColumnManager {
@@ -51,6 +52,8 @@ class WPML_ColumnManager {
                 return new AttachmentsColumn();
             case self::COLUMN_ERROR:
                 return new ErrorColumn();
+            case self::COLUMN_SUBJECT:
+                return new SubjectColumn();
             default:
                 return new GenericColumn($column_name);
         }
