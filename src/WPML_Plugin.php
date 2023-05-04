@@ -289,6 +289,9 @@ class WPML_Plugin extends WPML_LifeCycle implements IHooks {
             return;
         }
 
+        // Hide all unrelated to the plugin notices on the plugin admin pages.
+        add_action( 'admin_print_scripts', [ $this, 'hide_unrelated_notices' ] );
+
         $tab = filter_input( INPUT_GET, 'tab' );
 
         switch ( $tab ) {
@@ -308,6 +311,46 @@ class WPML_Plugin extends WPML_LifeCycle implements IHooks {
         }
 
         $tabObj->screen_hooks();
+    }
+
+    /**
+     * Remove all non-WP Mail Logging plugin notices from our plugin pages.
+     *
+     * @since {VERSION}
+     */
+    public function hide_unrelated_notices() {
+
+        $this->remove_unrelated_actions( 'user_admin_notices' );
+        $this->remove_unrelated_actions( 'admin_notices' );
+        $this->remove_unrelated_actions( 'all_admin_notices' );
+        $this->remove_unrelated_actions( 'network_admin_notices' );
+    }
+
+    /**
+     * Remove all non-WP Mail Logging notices from the our plugin pages based on the provided action hook.
+     *
+     * @since {VERSION}
+     *
+     * @param string $action The name of the action.
+     */
+    private function remove_unrelated_actions( $action ) {
+
+        global $wp_filter;
+
+        if ( empty( $wp_filter[ $action ]->callbacks ) || ! is_array( $wp_filter[ $action ]->callbacks ) ) {
+            return;
+        }
+
+        foreach ( $wp_filter[ $action ]->callbacks as $priority => $hooks ) {
+            foreach ( $hooks as $name => $arr ) {
+
+                if ( strpos( strtolower( $name ), 'no3x\wpml' ) !== false ) {
+                    continue;
+                }
+
+                unset( $wp_filter[ $action ]->callbacks[ $priority ][ $name ] );
+            }
+        }
     }
 
     /**
