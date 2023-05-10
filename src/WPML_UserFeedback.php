@@ -24,6 +24,15 @@ class WPML_UserFeedback implements IHooks {
     const AJAX_ACTION_NONCE = 'wp_mail_logging_user_feedback_notice_dismiss_nonce';
 
     /**
+     * Transient key for mail logs count.
+     *
+     * @since {VERSION}
+     *
+     * @var string
+     */
+    const MAIL_LOGS_COUNT_TRANSIENT_KEY = 'wp_mail_logging_total_logs_count';
+
+    /**
      * The wp option for notice dismissal data.
      */
     const OPTION_NAME = 'wp_mail_logging_user_feedback_notice';
@@ -86,9 +95,14 @@ class WPML_UserFeedback implements IHooks {
             return;
         }
 
-        // Only display the notice if our plugin is being used (has at least 10 email logs).
-        $total_logs = Mail::query()->search( false )->find( true );
+        $total_logs = get_transient( self::MAIL_LOGS_COUNT_TRANSIENT_KEY );
 
+        if ( $total_logs === false ) {
+            $total_logs = Mail::query()->search( false )->find( true );
+            set_transient( self::MAIL_LOGS_COUNT_TRANSIENT_KEY, absint( $total_logs ), DAY_IN_SECONDS );
+        }
+
+        // Only display the notice if our plugin is being used (has at least 10 email logs).
         if ( $total_logs < 10 ) {
             return;
         }
