@@ -380,12 +380,21 @@ class WPML_Plugin extends WPML_LifeCycle implements IHooks {
     /**
      * Logs mail to database.
      *
-     * @param array $mailArray
      * @global $wpml_current_mail_id
+     *
+     * @param array $mailArray
+     *
      * @since 1.0
+     * @since {VERSION} Short-circuit if $mailArray is not an array.
+     *
      * @return array $mailOriginal
      */
     public function log_email( $mailArray ) {
+
+        if ( ! is_array( $mailArray ) ) {
+            return $mailArray;
+        }
+
         global $wpml_current_mail_id;
 
         $mail = (new WPML_MailExtractor())->extract($mailArray);
