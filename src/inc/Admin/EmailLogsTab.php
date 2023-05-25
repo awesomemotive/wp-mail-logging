@@ -128,7 +128,15 @@ class EmailLogsTab {
             return;
         }
 
-        echo $mail->get_message();
+        $message = $mail->get_message();
+
+        // Loosely test if the message is HTML.
+        if ( preg_match( '/<[a-z][^\s>\/]*>/i', $message ) ) {
+            echo $message;
+            exit;
+        }
+
+        echo nl2br( $message );
         exit;
     }
 
