@@ -409,6 +409,10 @@ class WPML_OptionsManager {
             $menu_slug
         );
 
+        if ( ! current_user_can( WPML_Plugin::get_view_settings_capability() ) ) {
+            return;
+        }
+
         add_submenu_page( $menu_slug,
             __( 'Settings', 'wp-mail-logging' ),
             __( 'Settings', 'wp-mail-logging' ),
