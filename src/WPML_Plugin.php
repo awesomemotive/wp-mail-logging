@@ -247,15 +247,23 @@ class WPML_Plugin extends WPML_LifeCycle implements IHooks {
                         'slug'  => '',
                         'label' => __( 'Email Log', 'wp-mail-logging' ),
                     ],
-                    [
-                        'slug'  => 'settings',
-                        'label' => __( 'Settings', 'wp-mail-logging' ),
-                    ],
-                    [
-                        'slug'  => 'smtp',
-                        'label' => __( 'SMTP', 'wp-mail-logging' ),
-                    ],
                 ];
+
+                if ( current_user_can( self::get_view_settings_capability() ) ) {
+                    $menu_tabs = array_merge(
+                        $menu_tabs,
+                        [
+                            [
+                                'slug'  => 'settings',
+                                'label' => __( 'Settings', 'wp-mail-logging' ),
+                            ],
+                            [
+                                'slug'  => 'smtp',
+                                'label' => __( 'SMTP', 'wp-mail-logging' ),
+                            ],
+                        ]
+                    );
+                }
 
                 foreach ( $menu_tabs as $menu_tab ) {
                     ?>
@@ -270,6 +278,18 @@ class WPML_Plugin extends WPML_LifeCycle implements IHooks {
             </div>
         </div>
         <?php
+    }
+
+    /**
+     * Get the user capability that is required to view the settings page.
+     *
+     * @since {VERSION}
+     *
+     * @return string
+     */
+    public static function get_view_settings_capability() {
+
+        return apply_filters( 'wp_mail_logging_view_settings_capability', 'manage_options' );
     }
 
     /**
@@ -292,25 +312,21 @@ class WPML_Plugin extends WPML_LifeCycle implements IHooks {
         // Hide all unrelated to the plugin notices on the plugin admin pages.
         add_action( 'admin_print_scripts', [ $this, 'hide_unrelated_notices' ] );
 
+        if ( current_user_can( self::get_view_settings_capability() ) ) {
+            $allowed_screens = [
+                'settings' => SettingsTab::get_instance(),
+                'smtp'     => SMTPTab::get_instance(),
+            ];
+        }
+
         $tab = filter_input( INPUT_GET, 'tab' );
 
-        switch ( $tab ) {
-            case 'settings':
-                $tabObj = SettingsTab::get_instance();
-                break;
-            case 'smtp':
-                $tabObj = SMTPTab::get_instance();
-                break;
-            default:
-                $tabObj = EmailLogsTab::get_instance();
-                break;
+        if ( ! isset( $allowed_screens[ $tab ] ) ) {
+            EmailLogsTab::get_instance()->screen_hooks();
         }
-
-        if ( is_null( $tabObj ) ) {
-            return;
+        else {
+            $allowed_screens[ $tab ]->screen_hooks();
         }
-
-        $tabObj->screen_hooks();
     }
 
     /**
