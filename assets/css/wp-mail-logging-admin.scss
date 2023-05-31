@@ -768,7 +768,23 @@
 
         p.search-box {
             @include media("<=phone") {
-                width: inherit;
+                position: relative;
+                bottom: auto;
+                max-width: 600px;
+                width: 100%;
+                height: auto;
+                clear: both;
+                margin-bottom: 10px;
+
+                select, input[type="search"] {
+                    width: 100%;
+                    max-width: unset;
+                    margin: 0 0 5px 0;
+                }
+            }
+
+            select {
+                vertical-align: unset;
             }
         }
     }

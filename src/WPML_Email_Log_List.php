@@ -460,11 +460,14 @@ class WPML_Email_Log_List extends \WP_List_Table implements IHooks {
 
         $per_page = $this->get_items_per_page( 'per_page', 25 );
 
+        $search_place = ! empty( $_REQUEST['search']['place'] ) ? sanitize_key( $_REQUEST['search']['place'] ) : '';
+        $search       = ! empty( $_REQUEST['search']['term'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['search']['term'] ) ) : $search;
+
         $log_collection = new Email_Log_Collection( Mail::get_table(), Mail::get_searchable_fields() );
+        $log_collection->search( $search )->search_place( $search_place );
         $this->statuses_counts = $log_collection->get_statuses_count();
 
         $this->items = $log_collection->status( $this->get_current_status() )
-            ->search( $search )
             ->sort_by( $this->sanitize_orderby() )
             ->order( $this->sanitize_order() )
             ->limit( $per_page )
@@ -475,6 +478,85 @@ class WPML_Email_Log_List extends \WP_List_Table implements IHooks {
             'total_items' => $log_collection->count()->find_list(), // The total number of items.
             'per_page'    => $per_page, // Number of items per page.
         ] );
+    }
+
+    /**
+     * Display the search box.
+     *
+     * @since {VERSION}
+     *
+     * @param string $text     The 'submit' button label.
+     * @param string $input_id ID attribute value for the search input field.
+     */
+    public function search_box( $text, $input_id ) {
+
+        if ( ! $this->has_items() ) {
+            return;
+        }
+
+        $search_place = ! empty( $_REQUEST['search']['place'] ) ? sanitize_key( $_REQUEST['search']['place'] ) : 'people';
+        $search_term  = ! empty( $_REQUEST['search']['term'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['search']['term'] ) ) : '';
+
+        if ( ! empty( $_REQUEST['orderby'] ) && in_array( $_REQUEST['orderby'], [ 'timestamp', 'host', 'receiver', 'subject' ], true ) ) {
+            echo '<input type="hidden" name="orderby" value="' . esc_attr( sanitize_key( $_REQUEST['orderby'] ) ) . '" />';
+        }
+
+        if ( ! empty( $_REQUEST['order'] ) ) {
+            $order = strtoupper( sanitize_key( $_REQUEST['order'] ) );
+            $order = $order === 'ASC' ? 'ASC' : 'DESC';
+            echo '<input type="hidden" name="order" value="' . esc_attr( $order ) . '" />';
+        }
+
+        $columns            = $this->columnManager->getColumns();
+        $columns['message'] = __( 'Message', 'wp-mail-logging' );
+        ?>
+
+        <p class="search-box">
+            <label class="screen-reader-text" for="<?php echo esc_attr( $input_id ); ?>"><?php echo esc_html( $text ); ?>:</label>
+            <select name="search[place]">
+                <?php
+                foreach ( $this->get_search_dropdown_fields() as $field ) {
+
+                    if ( ! isset( $columns[ $field ] ) ) {
+                        continue;
+                    }
+                    ?>
+                    <option value="<?php echo esc_attr( $field ); ?>" <?php selected( esc_attr( $field ), $search_place ); ?>><?php echo esc_html( $columns[ $field ] ); ?></option>
+                    <?php
+                }
+                ?>
+            </select>
+            <input type="search" id="<?php echo esc_attr( $input_id ); ?>" name="search[term]" value="<?php echo esc_attr( $search_term ); ?>" />
+            <?php submit_button( $text, '', '', false, array( 'id' => 'search-submit' ) ); ?>
+        </p>
+
+        <?php
+    }
+
+    /**
+     * Get the dropdown search fields.
+     *
+     * @since {VERSION}
+     *
+     * @return array
+     */
+    private function get_search_dropdown_fields() {
+
+        $searchable_fields = Mail::get_searchable_fields();
+        $settings          = SettingsTab::get_settings([]);
+
+        foreach ( $searchable_fields as $k => $v ) {
+
+            // Check if we need to remove host or attachment.
+            if (
+                ( $v === 'host' && empty( $settings['display-host'] ) ) ||
+                ( $v === 'attachments' && empty( $settings['display-attachments'] ) )
+            ) {
+                unset( $searchable_fields[ $k ] );
+            }
+        }
+
+        return $searchable_fields;
     }
 
     /**
