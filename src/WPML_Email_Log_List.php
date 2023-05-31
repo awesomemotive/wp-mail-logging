@@ -497,7 +497,7 @@ class WPML_Email_Log_List extends \WP_List_Table implements IHooks {
         $search_place = ! empty( $_REQUEST['search']['place'] ) ? sanitize_key( $_REQUEST['search']['place'] ) : 'people';
         $search_term  = ! empty( $_REQUEST['search']['term'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['search']['term'] ) ) : '';
 
-        if ( ! empty( $_REQUEST['orderby'] ) && in_array( $_REQUEST['orderby'], [ 'subject', 'date_sent' ], true ) ) {
+        if ( ! empty( $_REQUEST['orderby'] ) && in_array( $_REQUEST['orderby'], [ 'timestamp', 'host', 'receiver', 'subject' ], true ) ) {
             echo '<input type="hidden" name="orderby" value="' . esc_attr( sanitize_key( $_REQUEST['orderby'] ) ) . '" />';
         }
 
