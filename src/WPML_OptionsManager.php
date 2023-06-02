@@ -519,6 +519,15 @@ class WPML_OptionsManager {
             <div class="wp-mail-logging-page-content">
                 <?php
                 /**
+                 * Hook before the tab content.
+                 *
+                 * @since {VERSION}
+                 *
+                 * @param string $tab Current active tab.
+                 */
+                do_action( 'wp_mail_logging_admin_tab_content_before', $tab );
+
+                /**
                  * Hook the tab content here.
                  *
                  * @since 1.11.0
