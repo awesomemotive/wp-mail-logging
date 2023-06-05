@@ -14,7 +14,7 @@ class Migration {
      *
      * @var int
      */
-    const VERSION = 2;
+    const VERSION = 1;
 
     /**
      * Option key where we save the current DB version.
@@ -62,6 +62,15 @@ class Migration {
     private $error;
 
     /**
+     * Whether the migration was successful.
+     *
+     * @since {VERSION}
+     *
+     * @var bool
+     */
+    private $is_success = false;
+
+    /**
      * Constructor
      *
      * @since {VERSION}
@@ -82,7 +91,8 @@ class Migration {
     private function hooks() {
 
         add_action( 'current_screen', [ $this, 'init'] );
-        add_action( 'admin_notices', [ $this, 'display_migration_notices' ] );
+        add_action( 'admin_notices', [ $this, 'display_migration_notice' ] );
+        add_action( 'admin_notices', [ $this, 'display_migration_result' ] );
         add_action( 'wp_mail_logging_admin_tab_content_before', [ $this, 'display_migration_button' ] );
     }
 
@@ -155,7 +165,7 @@ class Migration {
      *
      * @return void
      */
-    public function display_migration_notices() {
+    public function display_migration_notice() {
 
         global $wp_logging_list_page;
 
@@ -185,17 +195,32 @@ class Migration {
             </div>
             <?php
         }
+    }
 
-        if ( empty( $this->error ) ) {
-            return;
+    /**
+     * Display the migration result.
+     *
+     * @since {VERSION}
+     *
+     * @return void
+     */
+    public function display_migration_result() {
+
+        if ( ! empty( $this->error ) && ! $this->is_success ) {
+            ?>
+            <div class="notice notice-error is-dismissible">
+                <p><?php echo esc_html( $this->error ); ?></p>
+            </div>
+            <?php
         }
 
-        // Show error.
-        ?>
-        <div class="notice notice-error is-dismissible">
-            <p><?php echo esc_html( $this->error ); ?></p>
-        </div>
-        <?php
+        if ( $this->is_success ) {
+            ?>
+            <div class="notice notice-success is-dismissible">
+                <p><?php echo esc_html__( 'Database upgrade completed.', 'wp-mail-logging' ); ?></p>
+            </div>
+            <?php
+        }
     }
 
     /**
@@ -209,7 +234,7 @@ class Migration {
      */
     public function display_migration_button( $tab ) {
 
-        if ( ! $this->is_migration_needed || $tab !== 'settings' ) {
+        if ( ! $this->is_migration_needed || $tab !== 'settings' || $this->is_success ) {
             return;
         }
         ?>
@@ -286,6 +311,8 @@ class Migration {
                 $this->set_error_msg( $wpdb->last_error, 1 );
                 return;
             }
+
+            $this->is_success = true;
 
             // Update the DB version.
             update_option( self::OPTION_NAME, 1, false );
