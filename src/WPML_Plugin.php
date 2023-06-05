@@ -5,6 +5,7 @@ namespace No3x\WPML;
 use No3x\WPML\Admin\EmailLogsTab;
 use No3x\WPML\Admin\SettingsTab;
 use No3x\WPML\Admin\SMTPTab;
+use No3x\WPML\Migration\Migration;
 use No3x\WPML\Model\WPML_Mail as Mail;
 use No3x\WPML\Renderer\WPML_MailRenderer_AJAX_Handler;
 
@@ -54,20 +55,34 @@ class WPML_Plugin extends WPML_LifeCycle implements IHooks {
      */
     protected function installDatabaseTables() {
         global $wpdb;
+
+        $collate = ! empty( $wpdb->collate ) ? "COLLATE='{$wpdb->collate}'" : '';
+
         $tableName = WPML_Plugin::getTablename('mails');
-        $wpdb->query("CREATE TABLE IF NOT EXISTS `$tableName` (
-				`mail_id` INT NOT NULL AUTO_INCREMENT,
-				`timestamp` TIMESTAMP NOT NULL,
-				`host` VARCHAR(200) NOT NULL DEFAULT '0',
-				`receiver` VARCHAR(200) NOT NULL DEFAULT '0',
-				`subject` VARCHAR(200) NOT NULL DEFAULT '0',
-				`message` TEXT NULL,
-				`headers` TEXT NULL,
-				`attachments` VARCHAR(800) NOT NULL DEFAULT '0',
-				`error` VARCHAR(400) NULL DEFAULT '',
-				`plugin_version` VARCHAR(200) NOT NULL DEFAULT '0',
-				PRIMARY KEY (`mail_id`)
-			) DEFAULT CHARACTER SET = utf8 DEFAULT COLLATE utf8_general_ci;");
+        $result    = $wpdb->query("
+            CREATE TABLE IF NOT EXISTS `$tableName` (
+                `mail_id` INT NOT NULL AUTO_INCREMENT,
+                `timestamp` TIMESTAMP NOT NULL,
+                `host` VARCHAR(200) NOT NULL DEFAULT '0',
+                `receiver` VARCHAR(200) NOT NULL DEFAULT '0',
+                `subject` VARCHAR(200) NOT NULL DEFAULT '0',
+                `message` TEXT NULL,
+                `headers` TEXT NULL,
+                `attachments` VARCHAR(800) NOT NULL DEFAULT '0',
+                `error` VARCHAR(400) NULL DEFAULT '',
+                `plugin_version` VARCHAR(200) NOT NULL DEFAULT '0',
+                PRIMARY KEY (`mail_id`)
+            )
+            ENGINE='InnoDB'
+            {$collate};");
+
+        if ( $result !== false ) {
+            /*
+             * The first migration is changing the collate to `$wpdb->collate`.
+             * So we set the option to `1` to indicate that the migration is no longer needed.
+             */
+            update_option( Migration::OPTION_NAME, 1, false );
+        }
     }
 
     /**

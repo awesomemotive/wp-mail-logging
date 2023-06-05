@@ -21,6 +21,7 @@
 
 namespace No3x\WPML;
 
+use No3x\WPML\Migration\Migration;
 use No3x\WPML\Model\DefaultMailService;
 use No3x\WPML\Renderer\WPML_MailRenderer;
 use No3x\WPML\Renderer\WPML_MailRenderer_AJAX_Handler;
@@ -151,6 +152,9 @@ class WPML_Init {
         } else {
             // Perform any version-upgrade activities prior to activation (e.g. database changes).
             $this->container['plugin']->upgrade();
+
+            // Perform DB migrations.
+            new Migration();
         }
 
         if ( $file ) {
