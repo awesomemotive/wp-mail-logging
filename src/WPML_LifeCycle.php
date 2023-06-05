@@ -46,6 +46,15 @@ class WPML_LifeCycle extends WPML_InstallIndicator {
         $this->otherUninstall();
 
         if ( $this->getSetting('delete-on-deactivation', false) == true ) {
+
+            // Delete some options.
+            delete_option( 'wp_mail_logging_activated_time' );
+            delete_option( 'wp_mail_logging_user_feedback_notice' );
+            delete_option( 'wp_mail_logging_db_version' );
+
+            // Remove some transient.
+            delete_transient( self::CACHE_GROUP . '_' . self::CACHE_INSTALLED_KEY );
+
             //TOOD: is multi site?
             $this->unInstallDatabaseTables();
             $this->deleteSavedOptions();
