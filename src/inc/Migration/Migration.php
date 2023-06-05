@@ -116,7 +116,7 @@ class Migration {
         $this->is_migration_needed = true;
 
         // Check if migration is requested.
-        if ( ! empty( $_GET['migration'] ) && check_admin_referer( self::MIGRATION_NONCE, 'nonce' ) ) {
+        if ( ! empty( $_GET['migration'] ) && check_admin_referer( self::MIGRATION_NONCE, 'nonce' ) && current_user_can( 'manage_options' ) ) {
             $this->run( self::VERSION );
         }
     }
