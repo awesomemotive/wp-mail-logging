@@ -14,7 +14,7 @@ class Migration {
      *
      * @var int
      */
-    const VERSION = 1;
+    const VERSION = 2;
 
     /**
      * Option key where we save the current DB version.
@@ -274,6 +274,22 @@ class Migration {
     }
 
     /**
+     * Attempt to run older migration.
+     *
+     * @since {VERSION}
+     *
+     * @param int $version The version of migration to run.
+     *
+     * @return void
+     */
+    private function maybe_run_older_migration( $version ) {
+
+        if ( version_compare( $this->get_current_version(), $version, '<' ) ) {
+            $this->run( $version );
+        }
+    }
+
+    /**
      * Migration from 0 to 1.
      * Convert the columns charset to utf8mb4.
      *
@@ -317,6 +333,73 @@ class Migration {
             // Update the DB version.
             update_option( self::OPTION_NAME, 1, false );
         }
+    }
+
+    /**
+     * Migration from 1 to 2.
+     *
+     * This migration alters the table to add a FULL TEXT index on `message` column.
+     * For optimization reason, we make sure to keep only the last 500 logs since adding the index
+     * will take a lot of time and resources if the table is too big.
+     *
+     * @since {VERSION}
+     *
+     * @return void
+     */
+    private function migrate_to_2() {
+
+        $this->maybe_run_older_migration( 1 );
+
+        global $wpdb;
+
+        $number_of_logs_to_retain = 500;
+
+        $count = absint( $wpdb->get_var(
+            $wpdb->prepare(
+                'SELECT COUNT(`mail_id`) FROM %1$s',
+                WPML_Mail::get_table()
+            )
+        ) );
+
+        if ( $count > $number_of_logs_to_retain ) {
+
+            // Delete the rest of the logs.
+            $wpdb->query(
+                $wpdb->prepare(
+                    'DELETE FROM `%1$s`
+                    WHERE `mail_id` <= (
+                        SELECT `mail_id`
+                        FROM (
+                            SELECT `mail_id`
+                            FROM `%2$s`
+                            ORDER BY `mail_id` DESC
+                            LIMIT 1 OFFSET %3$d
+                        ) temp
+                    )',
+                    WPML_Mail::get_table(),
+                    WPML_Mail::get_table(),
+                    $number_of_logs_to_retain
+                )
+            );
+        }
+
+        // Add the FULLTEXT INDEX.
+        $query = $wpdb->query(
+                $wpdb->prepare(
+                'ALTER TABLE `%1$s` ADD FULLTEXT INDEX `idx_message` (`message`);',
+                WPML_Mail::get_table()
+            )
+        );
+
+        if ( $query === false ) {
+            $this->set_error_msg( $wpdb->last_error, 2 );
+            return;
+        }
+
+        $this->is_success = true;
+
+        // Update the DB version.
+        update_option( self::OPTION_NAME, 2, false );
     }
 
     /**

@@ -71,17 +71,17 @@ class WPML_Plugin extends WPML_LifeCycle implements IHooks {
                 `attachments` VARCHAR(800) NOT NULL DEFAULT '0',
                 `error` VARCHAR(400) NULL DEFAULT '',
                 `plugin_version` VARCHAR(200) NOT NULL DEFAULT '0',
-                PRIMARY KEY (`mail_id`)
+                PRIMARY KEY (`mail_id`),
+                FULLTEXT INDEX `idx_message` (`message`)
             )
             ENGINE='InnoDB'
             {$collate};");
 
         if ( $result !== false ) {
             /*
-             * The first migration is changing the collate to `$wpdb->collate`.
-             * So we set the option to `1` to indicate that the migration is no longer needed.
+             * Set the option to `2` to indicate that previous migrations are no longer needed.
              */
-            update_option( Migration::OPTION_NAME, 1, false );
+            update_option( Migration::OPTION_NAME, 2, false );
         }
     }
 
