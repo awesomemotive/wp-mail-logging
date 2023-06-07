@@ -35,6 +35,15 @@ class Migration {
     const MIGRATION_NONCE = 'wp_mail_logging_migration_nonce';
 
     /**
+     * Number of logs to retain after migration 2.
+     *
+     * @since {VERSION}
+     *
+     * @var int
+     */
+    const MIGRATE_2_RETAIN_LOGS_COUNT = 500;
+
+    /**
      * Current migration version.
      *
      * @since {VERSION}
@@ -247,11 +256,12 @@ class Migration {
                 <?php
                     printf(
                         wp_kses(
-                            __( '<strong>Important!</strong> By performing this upgrade, <strong>ALL</strong> your existing logs, except for the most recent 500, will be deleted. Please secure a backup of your database before performing the upgrade.', 'wp-mail-logging' ),
+                            __( '<strong>Important!</strong> By performing this upgrade, <strong>ALL</strong> your existing logs, except for the most recent %d, will be deleted. Please secure a backup of your database before performing the upgrade.', 'wp-mail-logging' ),
                             [
                                 'strong' => [],
                             ]
-                        )
+                        ),
+                        self::MIGRATE_2_RETAIN_LOGS_COUNT
                     );
                 ?>
             </p>
@@ -358,8 +368,6 @@ class Migration {
 
         global $wpdb;
 
-        $number_of_logs_to_retain = 500;
-
         $count = absint( $wpdb->get_var(
             $wpdb->prepare(
                 'SELECT COUNT(`mail_id`) FROM %1$s',
@@ -367,7 +375,7 @@ class Migration {
             )
         ) );
 
-        if ( $count > $number_of_logs_to_retain ) {
+        if ( $count > self::MIGRATE_2_RETAIN_LOGS_COUNT ) {
 
             // Delete the rest of the logs.
             $wpdb->query(
@@ -384,7 +392,7 @@ class Migration {
                     )',
                     WPML_Mail::get_table(),
                     WPML_Mail::get_table(),
-                    $number_of_logs_to_retain
+                    self::MIGRATE_2_RETAIN_LOGS_COUNT
                 )
             );
         }
