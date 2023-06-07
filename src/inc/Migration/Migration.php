@@ -238,7 +238,7 @@ class Migration {
             return;
         }
         ?>
-        <div class="wp-mail-logging-setting-row wp-mail-logging-setting-row-no-border wp-mail-logging-setting-row-content wp-mail-logging-clearfix section-heading">
+        <div id="wp-mail-logging-setting-db-upgrade" class="wp-mail-logging-setting-row wp-mail-logging-settings-bottom wp-mail-logging-setting-row-content wp-mail-logging-clearfix section-heading">
             <div class="wp-mail-logging-setting-field">
                 <h2><?php echo esc_html__( 'Database upgrade', 'wp-mail-logging' ) ?></h2>
             </div>
@@ -247,12 +247,18 @@ class Migration {
                 <?php
                     printf(
                         wp_kses(
-                            __( '<strong>Important!</strong> Please secure a backup of your database before performing the upgrade.', 'wp-mail-logging' ),
+                            __( '<strong>Important!</strong> By performing this upgrade, <strong>ALL</strong> your existing logs, except for the most recent 500, will be deleted. Please secure a backup of your database before performing the upgrade.', 'wp-mail-logging' ),
                             [
                                 'strong' => [],
                             ]
                         )
                     );
+                ?>
+            </p>
+
+            <p>
+                <?php
+                    esc_attr_e( 'Please secure a backup of your database before performing the upgrade.', 'wp-mail-logging' );
                 ?>
             </p>
 
@@ -267,7 +273,7 @@ class Migration {
                     WPML_Utils::get_admin_page_url()
                 )
                 ?>
-                <a class="button button-primary" href="<?php echo esc_url( $migration_button_url ); ?>">Upgrade</a>
+                <a id="wp-mail-logging-btn-db-upgrade" class="button button-primary wp-mail-logging-btn wp-mail-logging-btn-lg" href="<?php echo esc_url( $migration_button_url ); ?>">Upgrade</a>
             </p>
         </div>
         <?php
