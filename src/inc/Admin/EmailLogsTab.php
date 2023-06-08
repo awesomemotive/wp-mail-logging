@@ -149,6 +149,9 @@ class EmailLogsTab {
      */
     private function get_html_preview_message( $message ) {
 
+        // Strip <xml> tag.
+        $message = preg_replace( '/<xml\b[^>]*>(.*?)<\/xml>/is', '', $message );
+
         $allowed_html = wp_kses_allowed_html( 'post' );
         $allowed_html['style'][''] = true;
 
