@@ -5,6 +5,7 @@ namespace No3x\WPML\Admin;
 use No3x\WPML\Model\WPML_Mail as Mail;
 use No3x\WPML\WPML_Email_Log_List;
 use No3x\WPML\WPML_Init;
+use No3x\WPML\WPML_MessageSanitizer;
 use No3x\WPML\WPML_ProductEducation;
 use No3x\WPML\WPML_Utils;
 
@@ -149,28 +150,10 @@ class EmailLogsTab {
      */
     private function get_html_preview_message( $message ) {
 
-        // Loosely test if the message is HTML.
-        if ( preg_match( '/<[\w\/][\w\s="\':\/-]+>/', $message ) ) {
-            // Convert escape '<script`> tags.
-            $message = str_replace(
-                [
-                    '<script',
-                    '</script>',
-                ],
-                [
-                    esc_html( '<script' ),
-                    esc_html( '</script>' ),
-                ],
-                $message
-            );
+        $allowed_html = wp_kses_allowed_html( 'post' );
+        $allowed_html['style'][''] = true;
 
-            // Removes `<xml>` and `<iframe>` tags.
-            $message = preg_replace( '/<(?:xml|iframe)\b[^>]*>(.*?)<\/(?:xml|iframe)>/is', '', $message );
-
-            return $message;
-        }
-
-        return nl2br( esc_html( $message ) );
+        return wp_kses( $message, $allowed_html );
     }
 
     /**
