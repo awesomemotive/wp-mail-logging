@@ -141,7 +141,7 @@ class EmailLogsTab {
     /**
      * Get the message to be rendered in the preview.
      *
-     * @since {VERSION}
+     * @since 1.11.1
      *
      * @param string $message Email log message.
      *
@@ -164,13 +164,10 @@ class EmailLogsTab {
                 $message
             );
 
-            // Removes `<xml>` tags.
-            $message = preg_replace( '/<xml\b[^>]*>(.*?)<\/xml>/is', '', $message );
+            // Removes `<xml>` and `<iframe>` tags.
+            $message = preg_replace( '/<(?:xml|iframe)\b[^>]*>(.*?)<\/(?:xml|iframe)>/is', '', $message );
 
-            $allowed_html = wp_kses_allowed_html( 'post' );
-            $allowed_html['style'][''] = true;
-
-            return wp_kses( $message, $allowed_html );
+            return $message;
         }
 
         return nl2br( esc_html( $message ) );
