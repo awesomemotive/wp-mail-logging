@@ -2,7 +2,7 @@
 /**
  * Plugin Name: WP Mail Logging
  * Plugin URI: https://wordpress.org/plugins/wp-mail-logging/
- * Version: 1.11.0
+ * Version: 1.11.1
  * Requires at least: 5.0
  * Requires PHP: 7.1
  * Author: WP Mail Logging Team
