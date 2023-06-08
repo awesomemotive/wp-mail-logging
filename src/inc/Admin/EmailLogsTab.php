@@ -5,7 +5,6 @@ namespace No3x\WPML\Admin;
 use No3x\WPML\Model\WPML_Mail as Mail;
 use No3x\WPML\WPML_Email_Log_List;
 use No3x\WPML\WPML_Init;
-use No3x\WPML\WPML_Plugin;
 use No3x\WPML\WPML_ProductEducation;
 use No3x\WPML\WPML_Utils;
 
@@ -151,7 +150,7 @@ class EmailLogsTab {
     private function get_html_preview_message( $message ) {
 
         // Loosely test if the message is HTML.
-        if ( preg_match( '/<[a-z][^\s>\/]*>/i', $message ) ) {
+        if ( preg_match( '/<[\w\/][\w\s="\':\/-]+>/', $message ) ) {
             // Convert escape '<script`> tags.
             $message = str_replace(
                 [
