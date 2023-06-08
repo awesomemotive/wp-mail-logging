@@ -113,6 +113,15 @@ class Email_Log_Collection {
     private $search = '';
 
     /**
+     * What field to search in.
+     *
+     * @since {VERSION}
+     *
+     * @var string
+     */
+    private $search_place = '';
+
+    /**
      * Sorting of the email logs.
      *
      * @since 1.11.0
@@ -244,6 +253,22 @@ class Email_Log_Collection {
     }
 
     /**
+     * Set the field where we want to search in.
+     *
+     * @since {VERSION}
+     *
+     * @param string $search_place Field to search in.
+     *
+     * @return $this
+     */
+    public function search_place( $search_place ) {
+
+        $this->search_place = $search_place;
+
+        return $this;
+    }
+
+    /**
      * Set the sorting field of the collection.
      *
      * @since 1.11.0
@@ -355,7 +380,7 @@ class Email_Log_Collection {
                 $search_where .= ' AND (';
             }
 
-            foreach ( $this->searchable_fields as $field ) {
+            foreach ( $this->get_search_place() as $field ) {
                 $search_where .= '`' . esc_sql( $field ) . '` LIKE "%' . esc_sql( $this->search ) . '%" OR ';
             }
 
@@ -399,6 +424,22 @@ class Email_Log_Collection {
         }
 
         return $results;
+    }
+
+    /**
+     * Get the fields where the search term will be searched.
+     *
+     * @since {VERSION}
+     *
+     * @return string[]
+     */
+    private function get_search_place() {
+
+        if ( empty( $this->search_place ) || ! in_array( $this->search_place, $this->searchable_fields, true ) ) {
+            return $this->searchable_fields;
+        }
+
+        return [ $this->search_place ];
     }
 
     /**

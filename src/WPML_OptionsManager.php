@@ -409,6 +409,10 @@ class WPML_OptionsManager {
             $menu_slug
         );
 
+        if ( ! current_user_can( WPML_Plugin::get_view_settings_capability() ) ) {
+            return;
+        }
+
         add_submenu_page( $menu_slug,
             __( 'Settings', 'wp-mail-logging' ),
             __( 'Settings', 'wp-mail-logging' ),
@@ -514,6 +518,15 @@ class WPML_OptionsManager {
         <div id="wp-mail-logging" class="wrap">
             <div class="wp-mail-logging-page-content">
                 <?php
+                /**
+                 * Hook before the tab content.
+                 *
+                 * @since {VERSION}
+                 *
+                 * @param string $tab Current active tab.
+                 */
+                do_action( 'wp_mail_logging_admin_tab_content_before', $tab );
+
                 /**
                  * Hook the tab content here.
                  *

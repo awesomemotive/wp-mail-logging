@@ -5,6 +5,7 @@ namespace No3x\WPML;
 use No3x\WPML\Admin\EmailLogsTab;
 use No3x\WPML\Admin\SettingsTab;
 use No3x\WPML\Admin\SMTPTab;
+use No3x\WPML\Migration\Migration;
 use No3x\WPML\Model\WPML_Mail as Mail;
 use No3x\WPML\Renderer\WPML_MailRenderer_AJAX_Handler;
 
@@ -54,20 +55,34 @@ class WPML_Plugin extends WPML_LifeCycle implements IHooks {
      */
     protected function installDatabaseTables() {
         global $wpdb;
+
+        $collate = ! empty( $wpdb->collate ) ? "COLLATE='{$wpdb->collate}'" : '';
+
         $tableName = WPML_Plugin::getTablename('mails');
-        $wpdb->query("CREATE TABLE IF NOT EXISTS `$tableName` (
-				`mail_id` INT NOT NULL AUTO_INCREMENT,
-				`timestamp` TIMESTAMP NOT NULL,
-				`host` VARCHAR(200) NOT NULL DEFAULT '0',
-				`receiver` VARCHAR(200) NOT NULL DEFAULT '0',
-				`subject` VARCHAR(200) NOT NULL DEFAULT '0',
-				`message` TEXT NULL,
-				`headers` TEXT NULL,
-				`attachments` VARCHAR(800) NOT NULL DEFAULT '0',
-				`error` VARCHAR(400) NULL DEFAULT '',
-				`plugin_version` VARCHAR(200) NOT NULL DEFAULT '0',
-				PRIMARY KEY (`mail_id`)
-			) DEFAULT CHARACTER SET = utf8 DEFAULT COLLATE utf8_general_ci;");
+        $result    = $wpdb->query("
+            CREATE TABLE IF NOT EXISTS `$tableName` (
+                `mail_id` INT NOT NULL AUTO_INCREMENT,
+                `timestamp` TIMESTAMP NOT NULL,
+                `host` VARCHAR(200) NOT NULL DEFAULT '0',
+                `receiver` VARCHAR(200) NOT NULL DEFAULT '0',
+                `subject` VARCHAR(200) NOT NULL DEFAULT '0',
+                `message` TEXT NULL,
+                `headers` TEXT NULL,
+                `attachments` VARCHAR(800) NOT NULL DEFAULT '0',
+                `error` VARCHAR(400) NULL DEFAULT '',
+                `plugin_version` VARCHAR(200) NOT NULL DEFAULT '0',
+                PRIMARY KEY (`mail_id`)
+            )
+            ENGINE='InnoDB'
+            {$collate};");
+
+        if ( $result !== false ) {
+            /*
+             * The first migration is changing the collate to `$wpdb->collate`.
+             * So we set the option to `1` to indicate that the migration is no longer needed.
+             */
+            update_option( Migration::OPTION_NAME, 1, false );
+        }
     }
 
     /**
@@ -247,15 +262,23 @@ class WPML_Plugin extends WPML_LifeCycle implements IHooks {
                         'slug'  => '',
                         'label' => __( 'Email Log', 'wp-mail-logging' ),
                     ],
-                    [
-                        'slug'  => 'settings',
-                        'label' => __( 'Settings', 'wp-mail-logging' ),
-                    ],
-                    [
-                        'slug'  => 'smtp',
-                        'label' => __( 'SMTP', 'wp-mail-logging' ),
-                    ],
                 ];
+
+                if ( current_user_can( self::get_view_settings_capability() ) ) {
+                    $menu_tabs = array_merge(
+                        $menu_tabs,
+                        [
+                            [
+                                'slug'  => 'settings',
+                                'label' => __( 'Settings', 'wp-mail-logging' ),
+                            ],
+                            [
+                                'slug'  => 'smtp',
+                                'label' => __( 'SMTP', 'wp-mail-logging' ),
+                            ],
+                        ]
+                    );
+                }
 
                 foreach ( $menu_tabs as $menu_tab ) {
                     ?>
@@ -270,6 +293,18 @@ class WPML_Plugin extends WPML_LifeCycle implements IHooks {
             </div>
         </div>
         <?php
+    }
+
+    /**
+     * Get the user capability that is required to view the settings page.
+     *
+     * @since {VERSION}
+     *
+     * @return string
+     */
+    public static function get_view_settings_capability() {
+
+        return apply_filters( 'wp_mail_logging_view_settings_capability', 'manage_options' );
     }
 
     /**
@@ -289,25 +324,73 @@ class WPML_Plugin extends WPML_LifeCycle implements IHooks {
             return;
         }
 
-        $tab = filter_input( INPUT_GET, 'tab' );
+        // Hide all unrelated to the plugin notices on the plugin admin pages.
+        add_action( 'admin_print_scripts', [ $this, 'hide_unrelated_notices' ] );
 
-        switch ( $tab ) {
-            case 'settings':
-                $tabObj = SettingsTab::get_instance();
-                break;
-            case 'smtp':
-                $tabObj = SMTPTab::get_instance();
-                break;
-            default:
-                $tabObj = EmailLogsTab::get_instance();
-                break;
+        if ( current_user_can( self::get_view_settings_capability() ) ) {
+            $allowed_screens = [
+                'settings' => SettingsTab::get_instance(),
+                'smtp'     => SMTPTab::get_instance(),
+            ];
         }
 
-        if ( is_null( $tabObj ) ) {
+        $tab = filter_input( INPUT_GET, 'tab' );
+
+        if ( ! isset( $allowed_screens[ $tab ] ) ) {
+            EmailLogsTab::get_instance()->screen_hooks();
+        }
+        else {
+            $allowed_screens[ $tab ]->screen_hooks();
+        }
+    }
+
+    /**
+     * Remove all non-WP Mail Logging plugin notices from our plugin pages.
+     *
+     * @since {VERSION}
+     */
+    public function hide_unrelated_notices() {
+
+        $this->remove_unrelated_actions( 'user_admin_notices' );
+        $this->remove_unrelated_actions( 'admin_notices' );
+        $this->remove_unrelated_actions( 'all_admin_notices' );
+        $this->remove_unrelated_actions( 'network_admin_notices' );
+    }
+
+    /**
+     * Remove all non-WP Mail Logging notices from the our plugin pages based on the provided action hook.
+     *
+     * @since {VERSION}
+     *
+     * @param string $action The name of the action.
+     */
+    private function remove_unrelated_actions( $action ) {
+
+        global $wp_filter;
+
+        if ( empty( $wp_filter[ $action ]->callbacks ) || ! is_array( $wp_filter[ $action ]->callbacks ) ) {
             return;
         }
 
-        $tabObj->screen_hooks();
+        foreach ( $wp_filter[ $action ]->callbacks as $priority => $hooks ) {
+            foreach ( $hooks as $name => $arr ) {
+
+                if ( strpos( strtolower( $name ), 'no3x\wpml' ) !== false ) {
+                    continue;
+                }
+
+                // Handle the case when the callback is an array.
+                if (
+                    is_array( $arr ) && ! empty( $arr['function'] ) && is_array( $arr['function'] )
+                    && ! empty( $arr['function'][0] ) && is_object( $arr['function'][0] )
+                    && ( strpos( strtolower( get_class( $arr['function'][0] ) ), 'no3x\wpml' ) !== false )
+                ) {
+                    continue;
+                }
+
+                unset( $wp_filter[ $action ]->callbacks[ $priority ][ $name ] );
+            }
+        }
     }
 
     /**
@@ -328,12 +411,21 @@ class WPML_Plugin extends WPML_LifeCycle implements IHooks {
     /**
      * Logs mail to database.
      *
-     * @param array $mailArray
      * @global $wpml_current_mail_id
+     *
+     * @param array $mailArray
+     *
      * @since 1.0
+     * @since {VERSION} Short-circuit if $mailArray is not an array.
+     *
      * @return array $mailOriginal
      */
     public function log_email( $mailArray ) {
+
+        if ( ! is_array( $mailArray ) ) {
+            return $mailArray;
+        }
+
         global $wpml_current_mail_id;
 
         $mail = (new WPML_MailExtractor())->extract($mailArray);

@@ -36,22 +36,28 @@ class WPML_InstallIndicator extends WPML_OptionsManager {
      * @return bool indicating if the plugin is installed already
      */
     public function isInstalled() {
-        $installed = false;
 
-        // We don't use the cached value, only its presence.
-        // This is because we never cache not installed state.
-        wp_cache_get(self::CACHE_INSTALLED_KEY, self::CACHE_GROUP, false, $installed);
-        if (!$installed) {
-            global $wpdb;
+        $installed = (bool) get_transient( self::CACHE_GROUP . '_' . self::CACHE_INSTALLED_KEY );
 
-            $mails = $this->getTablename('mails');
-            $query = $wpdb->query("SHOW TABLES LIKE \"$mails\"");
-            $installed = (bool) $query;
-
-            if ($installed) {
-                wp_cache_set(self::CACHE_INSTALLED_KEY, true, self::CACHE_GROUP, 3600);
-            }
+        if ( $installed ) {
+            return true;
         }
+
+        global $wpdb;
+
+        $query = $wpdb->query(
+            $wpdb->prepare(
+                "SHOW TABLES LIKE %s",
+                $this->getTablename( 'mails' )
+            )
+        );
+
+        $installed = (bool) $query;
+
+        if ( $installed ) {
+            set_transient( self::CACHE_GROUP . '_' . self::CACHE_INSTALLED_KEY, true, 3600 );
+        }
+
         return $installed;
     }
 

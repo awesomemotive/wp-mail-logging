@@ -134,7 +134,11 @@
         background-image: url("../images/plane-bg@2x.png");
     }
 
-    @include media("<=tablet") {
+    @include media("<=phone") {
+        margin-top: 0;
+    }
+
+    @include media(">phone", "<=tablet") {
         margin-top: 100px;
         margin-right: 20px;
         position: absolute;
