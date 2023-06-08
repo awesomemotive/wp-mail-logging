@@ -104,7 +104,7 @@ Yes, you can contribute on <a href="https://github.com/awesomemotive/wp-mail-log
 3. The Settings - part 2
 
 == Changelog ==
-= 1.11.1 - 2023-06-08 =.
+= 1.11.1 - 2023-06-08 =
 - Fixed: Email Log HTML preview security.
 
 = 1.11.0 - 2023-03-15 =
