@@ -5,7 +5,6 @@ namespace No3x\WPML\Admin;
 use No3x\WPML\Model\WPML_Mail as Mail;
 use No3x\WPML\WPML_Email_Log_List;
 use No3x\WPML\WPML_Init;
-use No3x\WPML\WPML_MessageSanitizer;
 use No3x\WPML\WPML_ProductEducation;
 use No3x\WPML\WPML_Utils;
 
