@@ -35,13 +35,24 @@ class Migration {
     const MIGRATION_NONCE = 'wp_mail_logging_migration_nonce';
 
     /**
-     * Number of logs to retain after migration 2.
+     * Nonce for migration notice dismiss.
      *
      * @since {VERSION}
      *
-     * @var int
+     * @var string
      */
-    const MIGRATE_2_RETAIN_LOGS_COUNT = 500;
+    const MIGRATION_NOTICE_DISMISS_NONCE = 'wp_mail_logging_migration_dismiss_nonce';
+
+    /**
+     * DB key for migration notice dismiss.
+     *
+     * This will only exists in DB option if the user has dismissed the notice.
+     *
+     * @since {VERSION}
+     *
+     * @var string
+     */
+    const MIGRATION_NOTICE_DISMISS_DB_KEY = 'wp_mail_logging_migration_dismiss_notice';
 
     /**
      * Current migration version.
@@ -59,7 +70,7 @@ class Migration {
      *
      * @var bool
      */
-    private $is_migration_needed = false;
+    private $is_migration_needed = null;
 
     /**
      * Current migration's error.
@@ -102,7 +113,8 @@ class Migration {
         add_action( 'current_screen', [ $this, 'init'] );
         add_action( 'admin_notices', [ $this, 'display_migration_notice' ] );
         add_action( 'admin_notices', [ $this, 'display_migration_result' ] );
-        add_action( 'wp_mail_logging_admin_tab_content_before', [ $this, 'display_migration_button' ] );
+        add_action( 'wp_mail_logging_admin_tab_content_before', [ $this, 'display_migration_section'] );
+        add_action( 'wp_ajax_wp_mail_logging_dismiss_db_upgrade_notice', [ $this, 'ajax_dismiss_migration_notice' ] );
     }
 
     /**
@@ -114,20 +126,58 @@ class Migration {
      */
     public function init() {
 
-        global $wp_logging_list_page;
-
-        $current_screen = get_current_screen();
-
-        if ( $current_screen->id !== $wp_logging_list_page || ! version_compare( $this->get_current_version(), self::VERSION, '<' ) ) {
+        if (
+            ! $this->is_wp_mail_logging_admin_page() ||
+            ! $this->is_migration_needed()
+        ) {
             return;
         }
-
-        $this->is_migration_needed = true;
 
         // Check if migration is requested.
         if ( ! empty( $_GET['migration'] ) && check_admin_referer( self::MIGRATION_NONCE, 'nonce' ) && current_user_can( 'manage_options' ) ) {
             $this->run( self::VERSION );
         }
+    }
+
+    /**
+     * Whether we are WP Mail Logging admin pages.
+     *
+     * @since {VERSION}
+     *
+     * @return bool
+     */
+    private function is_wp_mail_logging_admin_page() {
+
+        global $wp_logging_list_page;
+
+        $current_screen = get_current_screen();
+
+        return $current_screen->id === $wp_logging_list_page;
+    }
+
+    /**
+     * Whether or not the migration is needed.
+     *
+     * @since {VERSION}
+     *
+     * @return bool
+     */
+    private function is_migration_needed() {
+
+        if ( ! is_null( $this->is_migration_needed ) ) {
+            return $this->is_migration_needed;
+        }
+
+        if (
+            version_compare( $this->get_current_version(), self::VERSION, '<' ) &&
+            ! get_option( self::MIGRATION_NOTICE_DISMISS_DB_KEY, false )
+        ) {
+            $this->is_migration_needed = true;
+        } else {
+            $this->is_migration_needed = false;
+        }
+
+        return $this->is_migration_needed;
     }
 
     /**
@@ -145,6 +195,28 @@ class Migration {
         }
 
         return $this->current_version;
+    }
+
+    /**
+     * AJAX handler when DB upgrade notice is dismissed.
+     *
+     * @since {VERSION}
+     *
+     * @return void
+     */
+    public function ajax_dismiss_migration_notice() {
+
+        if (
+            empty( $_POST['nonce'] ) ||
+            ! check_admin_referer( self::MIGRATION_NOTICE_DISMISS_NONCE, 'nonce' ) ||
+            ! current_user_can( 'manage_options' )
+        ) {
+            wp_send_json_error();
+        }
+
+        update_option( self::MIGRATION_NOTICE_DISMISS_DB_KEY, true, false );
+
+        wp_send_json_success();
     }
 
     /**
@@ -176,16 +248,14 @@ class Migration {
      */
     public function display_migration_notice() {
 
-        global $wp_logging_list_page;
-
-        $current_screen = get_current_screen();
-
-        if ( $current_screen->id === $wp_logging_list_page && ! empty( $_GET['tab'] ) && $_GET['tab'] === 'settings' ) {
+        if (
+            ! $this->is_wp_mail_logging_admin_page() ||
+            ( ! empty( $_GET['tab'] ) && $_GET['tab'] === 'settings' ) ||
+            ! $this->is_migration_needed()
+        ) {
             return;
         }
-
-        if ( $this->is_migration_needed ) {
-            ?>
+        ?>
             <div class="notice notice-warning is-dismissible">
                 <p>
                     <?php
@@ -202,8 +272,7 @@ class Migration {
                     ); ?>
                 </p>
             </div>
-            <?php
-        }
+        <?php
     }
 
     /**
@@ -214,6 +283,13 @@ class Migration {
      * @return void
      */
     public function display_migration_result() {
+
+        if (
+            ! $this->is_wp_mail_logging_admin_page() ||
+            ( ! empty( $_GET['tab'] ) && $_GET['tab'] !== 'settings' )
+        ) {
+            return;
+        }
 
         if ( ! empty( $this->error ) && ! $this->is_success ) {
             ?>
@@ -233,7 +309,7 @@ class Migration {
     }
 
     /**
-     * Display the migration button in Settings.
+     * Display the migration section in Settings.
      *
      * @since {VERSION}
      *
@@ -241,28 +317,27 @@ class Migration {
      *
      * @return void
      */
-    public function display_migration_button( $tab ) {
+    public function display_migration_section( $tab ) {
 
-        if ( ! $this->is_migration_needed || $tab !== 'settings' || $this->is_success ) {
+        if ( ! $this->is_migration_needed() || $tab !== 'settings' || $this->is_success ) {
             return;
         }
         ?>
-        <div id="wp-mail-logging-setting-db-upgrade" class="wp-mail-logging-setting-row wp-mail-logging-settings-bottom wp-mail-logging-setting-row-content wp-mail-logging-clearfix section-heading">
+        <div id="wp-mail-logging-setting-db-upgrade"
+             class="wp-mail-logging-setting-row wp-mail-logging-settings-bottom wp-mail-logging-setting-row-content wp-mail-logging-clearfix section-heading"
+             data-dismiss="<?php echo esc_attr( wp_create_nonce( self::MIGRATION_NOTICE_DISMISS_NONCE ) ); ?>">
             <div class="wp-mail-logging-setting-field">
                 <h2><?php echo esc_html__( 'Database upgrade', 'wp-mail-logging' ) ?></h2>
             </div>
 
             <p>
                 <?php
-                    printf(
-                        wp_kses(
-                            __( '<strong>Important!</strong> By performing this upgrade, <strong>ALL</strong> your existing logs, except for the most recent %d, will be deleted. Please secure a backup of your database before performing the upgrade.', 'wp-mail-logging' ),
-                            [
-                                'strong' => [],
-                            ]
-                        ),
-                        self::MIGRATE_2_RETAIN_LOGS_COUNT
-                    );
+                    echo wp_kses(
+                        __( '<strong>Important!</strong> By performing this upgrade, <strong>ALL</strong> your existing logs will be deleted. Please secure a backup of your database before performing the upgrade.', 'wp-mail-logging' ),
+                        [
+                            'strong' => [],
+                        ]
+                    )
                 ?>
             </p>
 
@@ -285,6 +360,8 @@ class Migration {
                 ?>
                 <a id="wp-mail-logging-btn-db-upgrade" class="button button-primary wp-mail-logging-btn wp-mail-logging-btn-lg" href="<?php echo esc_url( $migration_button_url ); ?>">Upgrade</a>
             </p>
+
+            <button type="button" class="notice-dismiss"><span class="screen-reader-text">Dismiss this notice.</span></button>
         </div>
         <?php
     }
@@ -355,8 +432,7 @@ class Migration {
      * Migration from 1 to 2.
      *
      * This migration alters the table to add a FULL TEXT index on `message` column.
-     * For optimization reason, we make sure to keep only the last 500 logs since adding the index
-     * will take a lot of time and resources if the table is too big.
+     * For optimization reason, we truncate (delete all the existing logs) the table before adding the index.
      *
      * @since {VERSION}
      *
@@ -368,34 +444,12 @@ class Migration {
 
         global $wpdb;
 
-        $count = absint( $wpdb->get_var(
+        $wpdb->query(
             $wpdb->prepare(
-                'SELECT COUNT(`mail_id`) FROM %1$s',
+                'TRUNCATE TABLE `%1$s`;',
                 WPML_Mail::get_table()
             )
-        ) );
-
-        if ( $count > self::MIGRATE_2_RETAIN_LOGS_COUNT ) {
-
-            // Delete the rest of the logs.
-            $wpdb->query(
-                $wpdb->prepare(
-                    'DELETE FROM `%1$s`
-                    WHERE `mail_id` <= (
-                        SELECT `mail_id`
-                        FROM (
-                            SELECT `mail_id`
-                            FROM `%2$s`
-                            ORDER BY `mail_id` DESC
-                            LIMIT 1 OFFSET %3$d
-                        ) temp
-                    )',
-                    WPML_Mail::get_table(),
-                    WPML_Mail::get_table(),
-                    self::MIGRATE_2_RETAIN_LOGS_COUNT
-                )
-            );
-        }
+        );
 
         // Add the FULLTEXT INDEX.
         $query = $wpdb->query(
