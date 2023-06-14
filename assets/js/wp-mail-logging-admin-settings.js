@@ -81,6 +81,41 @@ WPMailLogging.Admin.Settings = WPMailLogging.Admin.Settings || ( function( docum
                     }
                 )
             } );
+
+            $( document ).on( 'click', '#wp-mail-logging-btn-db-upgrade', function( e ) {
+
+                e.preventDefault();
+
+                $.confirm( {
+                    animateFromElement: false,
+                    animationBounce: 1,
+                    backgroundDismiss: false,
+                    buttons: {
+                        confirm: {
+                            text: WPMailLoggingJqueryConfirm.db_upgrade_yes,
+                            btnClass: 'btn-confirm',
+                            keys: [ 'enter' ],
+                            action: function() {
+                                window.location = WPMailLoggingJqueryConfirm.db_upgrade_url;
+                            }
+                        },
+                        cancel: {
+                            text: WPMailLoggingJqueryConfirm.db_upgrade_cancel,
+                            btnClass: 'btn-cancel',
+                        }
+                    },
+                    content: WPMailLoggingJqueryConfirm.db_upgrade_message,
+                    draggable: false,
+                    escapeKey: true,
+                    theme: 'modern',
+                    type: 'orange',
+                    typeAnimated: false,
+                    title: WPMailLoggingJqueryConfirm.db_upgrade_headsup,
+                    useBootstrap: false,
+                    boxWidth: '400px',
+                    icon: '"></i><img src="' + WPMailLoggingJqueryConfirm.db_upgrade_icon + '" style="width: 40px; height: 40px;" alt="' + WPMailLoggingJqueryConfirm.db_upgrade_warning + '"><i class="'
+                } );
+            } );
         }
     };
 

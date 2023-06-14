@@ -515,21 +515,14 @@ class EmailLogsTab {
      * Add admin body class for WP Mail Logging logs page.
      *
      * @since 1.11.0
+     * @deprecated {VERSION} We are now adding this class in all the WP Mail Logging pages.
      *
-     * @param $classes Space-separated list of CSS classes.
+     * @param string $classes Space-separated list of CSS classes.
      *
      * @return string
      */
     public function add_admin_body_class( $classes ) {
 
-        global $wp_logging_list_page;
-
-        $current_screen = get_current_screen();
-
-        if ( empty( $current_screen ) || ! is_a( $current_screen, 'WP_Screen' ) || $current_screen->id !== $wp_logging_list_page ) {
-            return $classes;
-        }
-
-        return $classes . ' wp-mail-logging-admin-page';
+        return $classes;
     }
 }

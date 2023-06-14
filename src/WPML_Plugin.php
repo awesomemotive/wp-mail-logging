@@ -213,6 +213,34 @@ class WPML_Plugin extends WPML_LifeCycle implements IHooks {
         add_filter( 'admin_footer_text', [ $this, 'admin_footer' ], 1, 2 );
 
         add_filter( 'in_admin_header', [ $this, 'admin_header' ] );
+
+        add_filter( 'admin_body_class', [ $this, 'add_admin_body_class' ] );
+    }
+
+    /**
+     * Add admin body class for WP Mail Logging admin pages.
+     *
+     * @since {VERSION}
+     *
+     * @param string $classes Space-separated list of CSS classes.
+     *
+     * @return string
+     */
+    public function add_admin_body_class( $classes ) {
+
+        global $wp_logging_list_page;
+
+        $current_screen = get_current_screen();
+
+        if (
+            empty( $current_screen ) ||
+            ! is_a( $current_screen, 'WP_Screen' ) ||
+            $current_screen->id !== $wp_logging_list_page
+        ) {
+            return $classes;
+        }
+
+        return $classes . ' wp-mail-logging-admin-page';
     }
 
     /**

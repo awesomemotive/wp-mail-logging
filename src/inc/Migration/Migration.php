@@ -3,6 +3,7 @@
 namespace No3x\WPML\Migration;
 
 use No3x\WPML\Model\WPML_Mail;
+use No3x\WPML\WPML_Init;
 use No3x\WPML\WPML_Utils;
 
 class Migration {
@@ -115,6 +116,7 @@ class Migration {
         add_action( 'admin_notices', [ $this, 'display_migration_result' ] );
         add_action( 'wp_mail_logging_admin_tab_content_before', [ $this, 'display_migration_section'] );
         add_action( 'wp_ajax_wp_mail_logging_dismiss_db_upgrade_notice', [ $this, 'ajax_dismiss_migration_notice' ] );
+        add_filter( 'wp_mail_logging_jquery_confirm_localized_strings', [ $this, 'jquery_confirm_localized_string' ]);
     }
 
     /**
@@ -332,8 +334,30 @@ class Migration {
 
             <p>
                 <?php
+                    esc_attr_e( 'This upgrade will include the following:', 'wp-mail-logging' );
+                ?>
+            </p>
+
+            <ul>
+                <li>
+                    <?php
+                        printf(
+                            esc_html__( 'Support for non-UTF8 characters like emojis (%s).', 'wp-mail-logging' ),
+                            '🚀🥳❤️'
+                        );
+                    ?>
+                </li>
+                <li>
+                    <?php
+                        esc_attr_e( 'Faster email log search.', 'wp-mail-logging' );
+                    ?>
+                </li>
+            </ul>
+
+            <p>
+                <?php
                     echo wp_kses(
-                        __( '<strong>Important!</strong> By performing this upgrade, <strong>ALL</strong> your existing logs will be deleted. Please secure a backup of your database before performing the upgrade.', 'wp-mail-logging' ),
+                        __( '<strong>Important!</strong> By performing this upgrade, <strong>ALL</strong> your existing logs will be deleted.', 'wp-mail-logging' ),
                         [
                             'strong' => [],
                         ]
@@ -342,26 +366,14 @@ class Migration {
             </p>
 
             <p>
-                <?php
-                    esc_attr_e( 'Please secure a backup of your database before performing the upgrade.', 'wp-mail-logging' );
-                ?>
+                <?php esc_html_e( 'Please secure a backup of your database before performing the upgrade.', 'wp-mail-logging' ); ?>
             </p>
 
             <p>
-                <?php
-                $migration_button_url = add_query_arg(
-                    [
-                        'tab'       => 'settings',
-                        'migration' => '1',
-                        'nonce'     => wp_create_nonce( self::MIGRATION_NONCE ),
-                    ],
-                    WPML_Utils::get_admin_page_url()
-                )
-                ?>
-                <a id="wp-mail-logging-btn-db-upgrade" class="button button-primary wp-mail-logging-btn wp-mail-logging-btn-lg" href="<?php echo esc_url( $migration_button_url ); ?>">Upgrade</a>
+                <button id="wp-mail-logging-btn-db-upgrade" class="button button-primary wp-mail-logging-btn wp-mail-logging-btn-lg" type="button"><?php esc_attr_e( 'Upgrade', 'wp-mail-logging' ); ?></button>
             </p>
 
-            <button type="button" class="notice-dismiss"><span class="screen-reader-text">Dismiss this notice.</span></button>
+            <button type="button" class="notice-dismiss"><span class="screen-reader-text"><?php esc_html_e( 'Dismiss this notice.', 'wp-mail-logging' ); ?></span></button>
         </div>
         <?php
     }
@@ -483,5 +495,38 @@ class Migration {
     private function set_error_msg( $error, $version ) {
 
         $this->error = "Unable to complete migration to version {$version}. Error: {$error}";
+    }
+
+    /**
+     * The localised strings for the jQuery confirm dialog.
+     *
+     * @since {VERSION}
+     *
+     * @param array $strings Localized strings.
+     *
+     * @return mixed
+     */
+    public function jquery_confirm_localized_string( $strings ) {
+
+        $assets_url = WPML_Init::getInstance()->getService( 'plugin' )->get_assets_url();
+
+        $strings['db_upgrade_headsup'] = esc_html__( 'Heads up!', 'wp-mail-logging' );
+        $strings['db_upgrade_message'] = esc_html__( 'This upgrade will delete all of your existings logs. Are you sure you want to proceed?', 'wp-mail-logging' );
+        $strings['db_upgrade_yes']     = esc_html__( 'Yes', 'wp-mail-logging' );
+        $strings['db_upgrade_cancel']  = esc_html__( 'Cancel', 'wp-mail-logging' );
+        $strings['db_upgrade_warning'] = esc_html__( 'Warning!', 'wp-mail-logging' );
+        $strings['db_upgrade_url']     = esc_url(
+            add_query_arg(
+                [
+                    'tab'       => 'settings',
+                    'migration' => '1',
+                    'nonce'     => wp_create_nonce( self::MIGRATION_NONCE ),
+                ],
+                WPML_Utils::get_admin_page_url()
+            )
+        );
+        $strings['db_upgrade_icon']  = esc_url( $assets_url . '/images/font-awesome/exclamation-circle-solid-orange.svg' );
+
+        return $strings;
     }
 }

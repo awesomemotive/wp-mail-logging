@@ -22,6 +22,11 @@
         padding: 16px;
         position: relative;
 
+        ul {
+            list-style-type: initial;
+            list-style-position: inside;
+        }
+
         #wp-mail-logging-btn-db-upgrade {
             padding: 11px 16px;
             line-height: 1.2;
@@ -989,3 +994,4 @@
 }
 
 @import "wp-mail-logging-product-education";
+@import "confirm";
