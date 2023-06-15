@@ -92,7 +92,7 @@ WPMailLogging.Admin.Settings = WPMailLogging.Admin.Settings || ( function( docum
                     backgroundDismiss: false,
                     buttons: {
                         confirm: {
-                            text: WPMailLoggingJqueryConfirm.db_upgrade_yes,
+                            text: WPMailLoggingJqueryConfirm.yes,
                             btnClass: 'btn-confirm',
                             keys: [ 'enter' ],
                             action: function() {
@@ -100,7 +100,7 @@ WPMailLogging.Admin.Settings = WPMailLogging.Admin.Settings || ( function( docum
                             }
                         },
                         cancel: {
-                            text: WPMailLoggingJqueryConfirm.db_upgrade_cancel,
+                            text: WPMailLoggingJqueryConfirm.cancel,
                             btnClass: 'btn-cancel',
                         }
                     },
@@ -110,10 +110,10 @@ WPMailLogging.Admin.Settings = WPMailLogging.Admin.Settings || ( function( docum
                     theme: 'modern',
                     type: 'orange',
                     typeAnimated: false,
-                    title: WPMailLoggingJqueryConfirm.db_upgrade_headsup,
+                    title: WPMailLoggingJqueryConfirm.headsup,
                     useBootstrap: false,
                     boxWidth: '400px',
-                    icon: '"></i><img src="' + WPMailLoggingJqueryConfirm.db_upgrade_icon + '" style="width: 40px; height: 40px;" alt="' + WPMailLoggingJqueryConfirm.db_upgrade_warning + '"><i class="'
+                    icon: '"></i><img src="' + WPMailLoggingJqueryConfirm.icon + '" style="width: 40px; height: 40px;" alt="' + WPMailLoggingJqueryConfirm.warning + '"><i class="'
                 } );
             } );
         }

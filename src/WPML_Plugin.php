@@ -362,7 +362,7 @@ class WPML_Plugin extends WPML_LifeCycle implements IHooks {
             ];
         }
 
-        $tab = filter_input( INPUT_GET, 'tab' );
+        $tab = ! empty( $_GET['tab'] ) ? sanitize_text_field( $_GET['tab'] ): 'logs';
 
         if ( ! isset( $allowed_screens[ $tab ] ) ) {
             EmailLogsTab::get_instance()->screen_hooks();
@@ -370,6 +370,61 @@ class WPML_Plugin extends WPML_LifeCycle implements IHooks {
         else {
             $allowed_screens[ $tab ]->screen_hooks();
         }
+
+        if ( $tab === 'logs' || $tab === 'settings' ) {
+            add_action( 'admin_enqueue_scripts', [ $this, 'enqueue_jquery_confirm' ] );
+        }
+    }
+
+    /**
+     * Enqueue the jQuery confirm library.
+     *
+     * @since {VERSION}
+     *
+     * @return void
+     *
+     * @throws \Exception
+     */
+    public function enqueue_jquery_confirm() {
+
+        $plugin_meta = WPML_Init::getInstance()->getService( 'plugin-meta' );
+
+        wp_enqueue_script(
+            'wp-mail-logging-jquery-confirm',
+            $plugin_meta['uri'] . "lib/jquery-confirm/jquery-confirm.min.js",
+            [ 'jquery' ],
+            '3.3.4',
+            true
+        );
+
+        wp_enqueue_style(
+            'wp-mail-logging-jquery-confirm',
+            $plugin_meta['uri'] . "lib/jquery-confirm/jquery-confirm.min.css",
+            [],
+            '3.3.4'
+        );
+
+        $assets_url = WPML_Init::getInstance()->getService( 'plugin' )->get_assets_url();
+
+        wp_localize_script(
+            'wp-mail-logging-jquery-confirm',
+            'WPMailLoggingJqueryConfirm',
+            /**
+             * Filter the jQuery Confirm localized strings.
+             *
+             * @since {VERSION}
+             */
+            apply_filters(
+                'wp_mail_logging_jquery_confirm_localized_strings',
+                [
+                    'headsup' => esc_html__( 'Heads up!', 'wp-mail-logging' ),
+                    'yes'     => esc_html__( 'Yes', 'wp-mail-logging' ),
+                    'cancel'  => esc_html__( 'Cancel', 'wp-mail-logging' ),
+                    'icon'    => esc_url( $assets_url . '/images/font-awesome/exclamation-circle-solid-orange.svg' ),
+                    'warning' => esc_html__( 'Warning!', 'wp-mail-logging' ),
+                ]
+            )
+        );
     }
 
     /**
