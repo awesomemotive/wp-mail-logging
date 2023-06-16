@@ -165,6 +165,40 @@ jQuery(function ($) {
                 redirectUrl = utils.updateQueryString( 'email_log_id', mailId, redirectUrl );
                 redirectUrl = utils.updateQueryString( wp_mail_logging_admin_logs.single_log_action_key, wp_mail_logging_admin_logs.single_log_action_nonce, redirectUrl );
 
+                if ( action === 'delete' ) {
+
+                    $.confirm( {
+                        animateFromElement: false,
+                        animationBounce: 1,
+                        backgroundDismiss: false,
+                        buttons: {
+                            confirm: {
+                                text: WPMailLoggingJqueryConfirm.yes,
+                                btnClass: 'btn-confirm',
+                                keys: [ 'enter' ],
+                                action: function() {
+                                    window.location.href = redirectUrl;
+                                }
+                            },
+                            cancel: {
+                                text: WPMailLoggingJqueryConfirm.cancel,
+                                btnClass: 'btn-cancel',
+                            }
+                        },
+                        content: WPMailLoggingJqueryConfirm.delete_log_confirm_msg,
+                        draggable: false,
+                        escapeKey: true,
+                        theme: 'modern',
+                        type: 'orange',
+                        typeAnimated: false,
+                        title: WPMailLoggingJqueryConfirm.headsup,
+                        useBootstrap: false,
+                        boxWidth: '400px',
+                        icon: '"></i><img src="' + WPMailLoggingJqueryConfirm.icon + '" style="width: 40px; height: 40px;" alt="' + WPMailLoggingJqueryConfirm.warning + '"><i class="'
+                    } );
+                    return;
+                }
+
             window.location.href = redirectUrl;
             return;
         }

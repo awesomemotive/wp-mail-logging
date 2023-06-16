@@ -3,7 +3,6 @@
 namespace No3x\WPML\Migration;
 
 use No3x\WPML\Model\WPML_Mail;
-use No3x\WPML\WPML_Init;
 use No3x\WPML\WPML_Utils;
 
 class Migration {
@@ -524,13 +523,7 @@ class Migration {
      */
     public function jquery_confirm_localized_string( $strings ) {
 
-        $assets_url = WPML_Init::getInstance()->getService( 'plugin' )->get_assets_url();
-
-        $strings['db_upgrade_headsup'] = esc_html__( 'Heads up!', 'wp-mail-logging' );
         $strings['db_upgrade_message'] = esc_html__( 'This upgrade will delete all of your existings logs. Are you sure you want to proceed?', 'wp-mail-logging' );
-        $strings['db_upgrade_yes']     = esc_html__( 'Yes', 'wp-mail-logging' );
-        $strings['db_upgrade_cancel']  = esc_html__( 'Cancel', 'wp-mail-logging' );
-        $strings['db_upgrade_warning'] = esc_html__( 'Warning!', 'wp-mail-logging' );
         $strings['db_upgrade_url']     = esc_url(
             add_query_arg(
                 [
@@ -541,7 +534,6 @@ class Migration {
                 WPML_Utils::get_admin_page_url()
             )
         );
-        $strings['db_upgrade_icon']  = esc_url( $assets_url . '/images/font-awesome/exclamation-circle-solid-orange.svg' );
 
         return $strings;
     }
