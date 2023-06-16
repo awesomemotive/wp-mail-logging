@@ -73,6 +73,9 @@ WPMailLogging.Admin.SMTP = WPMailLogging.Admin.SMTP || ( function( document, win
 
             // Step 'Setup' button click.
             el.$stepSetup.on( 'click', 'button', app.gotoURL );
+
+            // DB upgrade admin notice dismiss.
+            $( document ).on( 'click', '#wp-mail-logging-db-upgrade-admin-notice .notice-dismiss', app.dbUpgradeAdminNoticeDismiss );
         },
 
         /**
@@ -241,6 +244,31 @@ WPMailLogging.Admin.SMTP = WPMailLogging.Admin.SMTP || ( function( document, win
 
             window.location.href = $btn.attr( 'data-url' );
         },
+
+        /**
+         * Event triggered when DB upgrade admin notice is dismissed.
+         *
+         * @since {VERSION}
+         *
+         * @param {Event} e Event object.
+         */
+        dbUpgradeAdminNoticeDismiss: function( e ) {
+
+            var $notice = $( this ).parents( '#wp-mail-logging-db-upgrade-admin-notice' ).first();
+
+            if ( $notice.length <= 0 || ! $notice.data( 'nonce' ) ) {
+                return;
+            }
+
+            $.post(
+                ajaxurl,
+                {
+                    action: 'wp_mail_logging_dismiss_db_upgrade_notice',
+                    nonce: $notice.data( 'nonce' ),
+                    type: 'admin-notice'
+                }
+            )
+        }
     };
 
     // Expose to the public.

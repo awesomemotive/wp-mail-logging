@@ -28,6 +28,6 @@ class JSONRenderer extends BaseRenderer {
 
         $item['message'] = htmlentities( htmlspecialchars_decode( $item['message'] ) );
 
-        return "<pre>" . json_encode( $item, JSON_PRETTY_PRINT ) . "</pre>";
+        return "<pre>" . esc_html( json_encode( $item, JSON_PRETTY_PRINT ) ) . "</pre>";
     }
 }

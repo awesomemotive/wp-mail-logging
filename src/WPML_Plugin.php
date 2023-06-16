@@ -505,6 +505,15 @@ class WPML_Plugin extends WPML_LifeCycle implements IHooks {
      */
     public function log_email( $mailArray ) {
 
+        /**
+         * Filters mail data before it is logged.
+         *
+         * @since {VERSION}
+         *
+         * @param array $mailArray Array containing the mail data to be logged.
+         */
+        $mailArray = apply_filters( 'wp_mail_logging_before_log_email', $mailArray );
+
         if ( ! is_array( $mailArray ) ) {
             return $mailArray;
         }

@@ -121,6 +121,12 @@ class EmailLogsTab {
             return;
         }
 
+        $allowed_capability = WPML_Init::getInstance()->getService( 'plugin' )->getSetting( 'can-see-submission-data', 'manage_options' );
+
+        if ( ! current_user_can( $allowed_capability ) ) {
+            return;
+        }
+
         // Get the mail log.
         $mail = Mail::find_one( absint( $_GET['email_log_id'] ) );
 
@@ -128,16 +134,29 @@ class EmailLogsTab {
             return;
         }
 
-        $message = $mail->get_message();
-
-        // Loosely test if the message is HTML.
-        if ( preg_match( '/<[a-z][^\s>\/]*>/i', $message ) ) {
-            echo $message;
-            exit;
-        }
-
-        echo nl2br( $message );
+        echo $this->get_html_preview_message( $mail->get_message() );
         exit;
+    }
+
+    /**
+     * Get the message to be rendered in the preview.
+     *
+     * @since 1.11.1
+     *
+     * @param string $message Email log message.
+     *
+     * @return string
+     */
+    private function get_html_preview_message( $message ) {
+
+        // Strip <xml> and comment tags.
+        $message = preg_replace( '/<xml\b[^>]*>(.*?)<\/xml>/is', '', $message );
+        $message = preg_replace( '/<!--(.*?)-->/', '', $message );
+
+        $allowed_html = wp_kses_allowed_html( 'post' );
+        $allowed_html['style'][''] = true;
+
+        return wp_kses( $message, $allowed_html );
     }
 
     /**
