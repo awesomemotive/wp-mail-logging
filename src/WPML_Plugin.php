@@ -450,12 +450,6 @@ class WPML_Plugin extends WPML_LifeCycle implements IHooks {
      */
     public function log_email( $mailArray ) {
 
-        if ( ! is_array( $mailArray ) ) {
-            return $mailArray;
-        }
-
-        global $wpml_current_mail_id;
-
         /**
          * Filters mail data before it is logged.
          *
@@ -464,6 +458,12 @@ class WPML_Plugin extends WPML_LifeCycle implements IHooks {
          * @param array $mailArray Array containing the mail data to be logged.
          */
         $mailArray = apply_filters( 'wp_mail_logging_before_log_email', $mailArray );
+
+        if ( ! is_array( $mailArray ) ) {
+            return $mailArray;
+        }
+
+        global $wpml_current_mail_id;
 
         $mail = (new WPML_MailExtractor())->extract($mailArray);
         $mail->set_plugin_version($this->getVersionSaved());
