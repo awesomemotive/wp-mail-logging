@@ -39,6 +39,7 @@ WPMailLogging.Admin.Logs = WPMailLogging.Admin.Logs || ( function( document, win
         bindActions: function() {
 
             $( document ).on( 'click', '.wp-mail-logging-product-education-dismiss', app.productEducationDismiss );
+            $( document ).on( 'click', '#wp-mail-logging-db-upgrade-admin-notice .notice-dismiss', app.dbUpgradeAdminNoticeDismiss );
         },
 
         /**
@@ -88,6 +89,31 @@ WPMailLogging.Admin.Logs = WPMailLogging.Admin.Logs || ( function( document, win
                     });
                 }
             );
+        },
+
+        /**
+         * Event triggered when DB upgrade admin notice is dismissed.
+         *
+         * @since {VERSION}
+         *
+         * @param {Event} e Event object.
+         */
+        dbUpgradeAdminNoticeDismiss: function( e ) {
+
+            var $notice = $( this ).parents( '#wp-mail-logging-db-upgrade-admin-notice' ).first();
+
+            if ( $notice.length <= 0 || ! $notice.data( 'nonce' ) ) {
+                return;
+            }
+
+            $.post(
+                ajaxurl,
+                {
+                    action: 'wp_mail_logging_dismiss_db_upgrade_notice',
+                    nonce: $notice.data( 'nonce' ),
+                    type: 'admin-notice'
+                }
+            )
         }
     };
 

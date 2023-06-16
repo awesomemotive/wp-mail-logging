@@ -56,6 +56,17 @@ class Migration {
     const MIGRATION_NOTICE_DISMISS_DB_KEY = 'wp_mail_logging_migration_dismiss_notice';
 
     /**
+     * DB key for migration admin notice dismiss.
+     *
+     * This will only exists in DB option if the user has dismissed the admin notice.
+     *
+     * @since {VERSION}
+     *
+     * @var string
+     */
+    const MIGRATION_ADMIN_NOTICE_DISMISS_DB_KEY = 'wp_mail_logging_migration_dismiss_admin_notice';
+
+    /**
      * Current migration version.
      *
      * @since {VERSION}
@@ -116,7 +127,7 @@ class Migration {
         add_action( 'admin_notices', [ $this, 'display_migration_result' ] );
         add_action( 'wp_mail_logging_admin_tab_content_before', [ $this, 'display_migration_section'] );
         add_action( 'wp_ajax_wp_mail_logging_dismiss_db_upgrade_notice', [ $this, 'ajax_dismiss_migration_notice' ] );
-        add_filter( 'wp_mail_logging_jquery_confirm_localized_strings', [ $this, 'jquery_confirm_localized_string' ]);
+        add_filter( 'wp_mail_logging_jquery_confirm_localized_strings', [ $this, 'jquery_confirm_localized_string' ] );
     }
 
     /**
@@ -216,7 +227,11 @@ class Migration {
             wp_send_json_error();
         }
 
-        update_option( self::MIGRATION_NOTICE_DISMISS_DB_KEY, true, false );
+        if ( ! empty( $_POST['type'] ) && $_POST['type'] === 'admin-notice' ) {
+            update_option( self::MIGRATION_ADMIN_NOTICE_DISMISS_DB_KEY, true, false );
+        } else {
+            update_option( self::MIGRATION_NOTICE_DISMISS_DB_KEY, true, false );
+        }
 
         wp_send_json_success();
     }
@@ -253,17 +268,18 @@ class Migration {
         if (
             ! $this->is_wp_mail_logging_admin_page() ||
             ( ! empty( $_GET['tab'] ) && $_GET['tab'] === 'settings' ) ||
-            ! $this->is_migration_needed()
+            ! $this->is_migration_needed() ||
+            get_option( self::MIGRATION_ADMIN_NOTICE_DISMISS_DB_KEY, false )
         ) {
             return;
         }
         ?>
-            <div class="notice notice-warning is-dismissible">
+            <div id="wp-mail-logging-db-upgrade-admin-notice" class="notice notice-info is-dismissible" data-nonce="<?php echo esc_attr( wp_create_nonce( self::MIGRATION_NOTICE_DISMISS_NONCE ) ); ?>">
                 <p>
                     <?php
                     printf(
                         wp_kses(
-                            __( 'A database upgrade is available. Click <a href="%s">here</a> to start the upgrade.', 'wp-mail-logging' ),
+                            __( 'An optional database optimization upgrade is available. Click <a href="%s">here</a> to learn more.', 'wp-mail-logging' ),
                             [
                                 'a' => [
                                     'href' => []
@@ -357,7 +373,7 @@ class Migration {
             <p>
                 <?php
                     echo wp_kses(
-                        __( '<strong>Important!</strong> By performing this upgrade, <strong>ALL</strong> your existing logs will be deleted.', 'wp-mail-logging' ),
+                        __( '<strong>Important!</strong> By performing this upgrade, <strong>ALL your existing logs will be deleted</strong>.', 'wp-mail-logging' ),
                         [
                             'strong' => [],
                         ]
@@ -366,7 +382,7 @@ class Migration {
             </p>
 
             <p>
-                <?php esc_html_e( 'Please secure a backup of your database before performing the upgrade.', 'wp-mail-logging' ); ?>
+                <?php esc_html_e( 'Please create a backup of your database before performing the upgrade.', 'wp-mail-logging' ); ?>
             </p>
 
             <p>
