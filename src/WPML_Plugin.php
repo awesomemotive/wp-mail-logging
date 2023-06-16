@@ -71,17 +71,17 @@ class WPML_Plugin extends WPML_LifeCycle implements IHooks {
                 `attachments` VARCHAR(800) NOT NULL DEFAULT '0',
                 `error` VARCHAR(400) NULL DEFAULT '',
                 `plugin_version` VARCHAR(200) NOT NULL DEFAULT '0',
-                PRIMARY KEY (`mail_id`)
+                PRIMARY KEY (`mail_id`),
+                FULLTEXT INDEX `idx_message` (`message`)
             )
             ENGINE='InnoDB'
             {$collate};");
 
         if ( $result !== false ) {
             /*
-             * The first migration is changing the collate to `$wpdb->collate`.
-             * So we set the option to `1` to indicate that the migration is no longer needed.
+             * Set the option to `2` to indicate that previous migrations are no longer needed.
              */
-            update_option( Migration::OPTION_NAME, 1, false );
+            update_option( Migration::OPTION_NAME, 2, false );
         }
     }
 
@@ -213,6 +213,34 @@ class WPML_Plugin extends WPML_LifeCycle implements IHooks {
         add_filter( 'admin_footer_text', [ $this, 'admin_footer' ], 1, 2 );
 
         add_filter( 'in_admin_header', [ $this, 'admin_header' ] );
+
+        add_filter( 'admin_body_class', [ $this, 'add_admin_body_class' ] );
+    }
+
+    /**
+     * Add admin body class for WP Mail Logging admin pages.
+     *
+     * @since {VERSION}
+     *
+     * @param string $classes Space-separated list of CSS classes.
+     *
+     * @return string
+     */
+    public function add_admin_body_class( $classes ) {
+
+        global $wp_logging_list_page;
+
+        $current_screen = get_current_screen();
+
+        if (
+            empty( $current_screen ) ||
+            ! is_a( $current_screen, 'WP_Screen' ) ||
+            $current_screen->id !== $wp_logging_list_page
+        ) {
+            return $classes;
+        }
+
+        return $classes . ' wp-mail-logging-admin-page';
     }
 
     /**

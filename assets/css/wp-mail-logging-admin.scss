@@ -14,6 +14,26 @@
         }
     }
 
+    #wp-mail-logging-setting-db-upgrade {
+        background: #fff;
+        border: 1px solid #c3c4c7;
+        border-left: 4px solid #e77c5c;
+        box-shadow: 0 1px 1px rgba(0,0,0,.04);
+        margin-bottom: 30px;
+        padding: 16px;
+        position: relative;
+
+        ul {
+            list-style-type: initial;
+            list-style-position: inside;
+        }
+
+        #wp-mail-logging-btn-db-upgrade {
+            padding: 11px 16px;
+            line-height: 1.2;
+        }
+    }
+
     #wp-mail-logging-setting-tab-form {
 
         #wp-mail-logging-setting-tab-row-log-rotation-limit-amout-keep, #wp-mail-logging-setting-tab-row-log-rotation-delete-time-days {
@@ -975,3 +995,4 @@
 }
 
 @import "wp-mail-logging-product-education";
+@import "confirm";

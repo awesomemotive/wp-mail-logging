@@ -3,6 +3,8 @@
 namespace No3x\WPML\Model;
 
 // Exit if accessed directly
+use No3x\WPML\Migration\Migration;
+
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
@@ -381,7 +383,8 @@ class Email_Log_Collection {
             }
 
             foreach ( $this->get_search_place() as $field ) {
-                $search_where .= '`' . esc_sql( $field ) . '` LIKE "%' . esc_sql( $this->search ) . '%" OR ';
+
+                $search_where .= $this->get_search_sql( $field );
             }
 
             // Remove the last ' OR ' and add the closing ')';
@@ -440,6 +443,30 @@ class Email_Log_Collection {
         }
 
         return [ $this->search_place ];
+    }
+
+    /**
+     * Get the search SQL.
+     *
+     * @since {VERSION}
+     *
+     * @param string $field Field we are trying to search to.
+     *
+     * @return string
+     */
+    private function get_search_sql( $field ) {
+
+        $db_migrate_version = absint( get_option( Migration::OPTION_NAME, 0 ) );
+
+        /*
+         * We use `MATCH AGAINST` for the `message` field if the database is migrated to version 2 or higher.
+         * We add the FULL TEXT index to the `message` field in version 2.
+         */
+        if ( $field === 'message' && version_compare( $db_migrate_version, 2, '>=' ) ) {
+            return "MATCH (`message`) AGAINST ('" . esc_sql( $this->search ) . "') OR ";
+        }
+
+        return '`' . esc_sql( $field ) . '` LIKE "%' . esc_sql( $this->search ) . '%" OR ';
     }
 
     /**

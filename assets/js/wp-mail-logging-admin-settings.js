@@ -30,6 +30,7 @@ WPMailLogging.Admin.Settings = WPMailLogging.Admin.Settings || ( function( docum
          * Bind all actions/events.
          *
          * @since 1.11.0
+         * @since {VERSION} Add support for dismissing the database upgrade notice.
          */
         bindActions: function() {
 
@@ -47,6 +48,73 @@ WPMailLogging.Admin.Settings = WPMailLogging.Admin.Settings || ( function( docum
                 } else {
                     $togglesIdDOM.hide();
                 }
+            } );
+
+            $( document ).on( 'click', '#wp-mail-logging-setting-db-upgrade .notice-dismiss', function ( e ) {
+
+                e.preventDefault();
+
+                var $notice = $( this ).closest( '#wp-mail-logging-setting-db-upgrade' );
+
+                if ( $notice.length <= 0 ) {
+                    return;
+                }
+
+                $notice.fadeTo( 100, 0, function() {
+                    $notice.slideUp( 100, function() {
+                        $notice.remove();
+                    } );
+                } );
+
+                // Get nonce.
+                var $nonce = $notice.data( 'dismiss' );
+
+                if ( ! $nonce ) {
+                    return;
+                }
+
+                $.post(
+                    ajaxurl,
+                    {
+                        'action': 'wp_mail_logging_dismiss_db_upgrade_notice',
+                        'nonce': $nonce
+                    }
+                )
+            } );
+
+            $( document ).on( 'click', '#wp-mail-logging-btn-db-upgrade', function( e ) {
+
+                e.preventDefault();
+
+                $.confirm( {
+                    animateFromElement: false,
+                    animationBounce: 1,
+                    backgroundDismiss: false,
+                    buttons: {
+                        confirm: {
+                            text: WPMailLoggingJqueryConfirm.db_upgrade_yes,
+                            btnClass: 'btn-confirm',
+                            keys: [ 'enter' ],
+                            action: function() {
+                                window.location = WPMailLoggingJqueryConfirm.db_upgrade_url;
+                            }
+                        },
+                        cancel: {
+                            text: WPMailLoggingJqueryConfirm.db_upgrade_cancel,
+                            btnClass: 'btn-cancel',
+                        }
+                    },
+                    content: WPMailLoggingJqueryConfirm.db_upgrade_message,
+                    draggable: false,
+                    escapeKey: true,
+                    theme: 'modern',
+                    type: 'orange',
+                    typeAnimated: false,
+                    title: WPMailLoggingJqueryConfirm.db_upgrade_headsup,
+                    useBootstrap: false,
+                    boxWidth: '400px',
+                    icon: '"></i><img src="' + WPMailLoggingJqueryConfirm.db_upgrade_icon + '" style="width: 40px; height: 40px;" alt="' + WPMailLoggingJqueryConfirm.db_upgrade_warning + '"><i class="'
+                } );
             } );
         }
     };

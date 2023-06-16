@@ -173,10 +173,36 @@ class SettingsTab {
             return;
         }
 
+        wp_register_script(
+            'wp-mail-logging-jquery-confirm',
+            $plugin_meta['uri'] . "lib/jquery-confirm/jquery-confirm.min.js",
+            [ 'jquery' ],
+            '3.3.4',
+            true
+        );
+
+        wp_enqueue_style(
+            'wp-mail-logging-jquery-confirm',
+            $plugin_meta['uri'] . "lib/jquery-confirm/jquery-confirm.min.css",
+            [],
+            '3.3.4'
+        );
+
+        wp_localize_script(
+            'wp-mail-logging-jquery-confirm',
+            'WPMailLoggingJqueryConfirm',
+            /**
+             * Filter the jQuery Confirm localized strings.
+             *
+             * @since {VERSION}
+             */
+            apply_filters( 'wp_mail_logging_jquery_confirm_localized_strings', [] )
+        );
+
         wp_enqueue_script(
             'wp-mail-logging-admin-settings',
             $assets_url . '/js/wp-mail-logging-admin-settings.js',
-            [ 'jquery' ],
+            [ 'jquery', 'wp-mail-logging-jquery-confirm' ],
             $plugin_meta['version']
         );
     }
