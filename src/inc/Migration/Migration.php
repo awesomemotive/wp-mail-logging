@@ -344,7 +344,7 @@ class Migration {
              class="wp-mail-logging-setting-row wp-mail-logging-settings-bottom wp-mail-logging-setting-row-content wp-mail-logging-clearfix section-heading"
              data-dismiss="<?php echo esc_attr( wp_create_nonce( self::MIGRATION_NOTICE_DISMISS_NONCE ) ); ?>">
             <div class="wp-mail-logging-setting-field">
-                <h2><?php echo esc_html__( 'Database upgrade', 'wp-mail-logging' ) ?></h2>
+                <h3><?php echo esc_html__( 'Database upgrade', 'wp-mail-logging' ) ?></h3>
             </div>
 
             <p>
