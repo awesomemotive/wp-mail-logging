@@ -172,7 +172,11 @@ abstract class BaseRenderer implements IMailRenderer {
                 } catch ( \Exception $e ) {}
             }
 
-            echo wp_kses_post( $value );
+            if ( $key === WPML_ColumnManager::COLUMN_SUBJECT ) {
+                echo esc_html( $value );
+            } else {
+                echo wp_kses_post( $value );
+            }
 
             if ( $key === 'error' ) {
                 ?>
