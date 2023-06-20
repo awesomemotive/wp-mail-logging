@@ -199,11 +199,15 @@ class WPML_LifeCycle extends WPML_InstallIndicator {
     }
 
     public function registerPluginActionLinks( $actions, $plugin_file ) {
-        if ($this->getMainPluginFileName() == basename($plugin_file)) {
+
+        if ( $this->getMainPluginFileName() == basename( $plugin_file ) && is_array( $actions ) ) {
             $admin_url = add_query_arg( 'tab', 'settings', WPML_Utils::get_admin_page_url() );
-            $settings  = array('settings' => '<a href="' . esc_url( $admin_url ) . '">' . __( 'Settings', 'General' ) . '</a>' );
-            $actions   = array_merge($settings, $actions);
+            $settings  = array(
+                'settings' => '<a href="' . esc_url( $admin_url ) . '">' . __( 'Settings', 'General' ) . '</a>',
+            );
+            $actions   = array_merge( $settings, $actions );
         }
+
         return $actions;
     }
 }
