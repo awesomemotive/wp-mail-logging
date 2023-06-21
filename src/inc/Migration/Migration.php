@@ -261,7 +261,7 @@ class Migration {
             )
         );
 
-        if ( ! empty( $charset ) && strpos( $charset, 'utf8mb4' ) !== false ) {
+        if ( ! empty( $charset ) && strpos( $charset, 'utf8mb4' ) !== false && defined( 'DB_NAME' ) ) {
             // If we're here then migration_1() is already done.
             $message_index = $wpdb->get_results(
                 $wpdb->prepare(
