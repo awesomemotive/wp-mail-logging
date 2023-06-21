@@ -3,6 +3,7 @@
 namespace No3x\WPML\Migration;
 
 use No3x\WPML\Model\WPML_Mail;
+use No3x\WPML\WPML_Plugin;
 use No3x\WPML\WPML_Utils;
 
 class Migration {
@@ -229,10 +230,55 @@ class Migration {
         if ( ! empty( $_POST['type'] ) && $_POST['type'] === 'admin-notice' ) {
             update_option( self::MIGRATION_ADMIN_NOTICE_DISMISS_DB_KEY, true, false );
         } else {
-            update_option( self::MIGRATION_NOTICE_DISMISS_DB_KEY, true, false );
+            $this->dismiss_db_upgrade_banner();
         }
 
         wp_send_json_success();
+    }
+
+    /**
+     * Dismiss the DB upgrade banner.
+     *
+     * Check if the user already performed migration's 1 and 2 manually
+     * and if so, add the option that tracks the completed migration.
+     *
+     * @since {VERSION}
+     *
+     * @return void
+     */
+    private function dismiss_db_upgrade_banner() {
+
+        global $wpdb;
+
+        // Get the existing charset of the table.
+        $charset = $wpdb->get_var(
+            $wpdb->prepare(
+                'SELECT CHARACTER_SET_NAME
+                FROM information_schema.columns
+                WHERE TABLE_NAME = %s
+                AND COLUMN_NAME = "subject";',
+                WPML_Plugin::getTablename( 'mails' )
+            )
+        );
+
+        if ( ! empty( $charset ) && strpos( $charset, 'utf8mb4' ) !== false && defined( 'DB_NAME' ) ) {
+            // If we're here then migration_1() is already done.
+            $message_index = $wpdb->get_results(
+                $wpdb->prepare(
+                    'SHOW INDEX FROM `%1$s`.`%2$s`
+                    WHERE Column_name = "message";',
+                    DB_NAME,
+                    WPML_Plugin::getTablename( 'mails' )
+                )
+            );
+
+            if ( ! empty( $message_index ) ) {
+                // If we're here then migration_2() is already done.
+                update_option( self::OPTION_NAME, 2, false );
+            }
+        }
+
+        update_option( self::MIGRATION_NOTICE_DISMISS_DB_KEY, true, false );
     }
 
     /**
