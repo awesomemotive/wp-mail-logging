@@ -17,7 +17,7 @@ class WPML_UserFeedback implements IHooks {
     /**
      * The ajax action for notice dismissal.
      *
-     * @since {VERSION}
+     * @since 1.12.0
      *
      * @var string
      */
@@ -26,7 +26,7 @@ class WPML_UserFeedback implements IHooks {
     /**
      * Transient key for mail logs count.
      *
-     * @since {VERSION}
+     * @since 1.12.0
      *
      * @var string
      */

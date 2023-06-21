@@ -521,7 +521,7 @@ class WPML_OptionsManager {
                 /**
                  * Hook before the tab content.
                  *
-                 * @since {VERSION}
+                 * @since 1.12.0
                  *
                  * @param string $tab Current active tab.
                  */

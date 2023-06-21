@@ -35,6 +35,7 @@
         }
 
         #wp-mail-logging-btn-db-upgrade {
+            height: inherit;
             padding: 11px 16px;
             line-height: 1.2;
         }
@@ -542,6 +543,7 @@
             select {
                 background-image: url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTMiIGhlaWdodD0iNyIgdmlld0JveD0iMCAwIDEzIDciIGZpbGw9IiM4ZDhmOTUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxwYXRoIGQ9Ik0xMyAwLjk5ODI4MUMxMyAwLjkwMjA2MiAxMi45NTE5IDAuNzkzODE0IDEyLjg3OTcgMC43MjE2NDlMMTIuMjc4NCAwLjEyMDI3NEMxMi4yMDYyIDAuMDQ4MTA5OCAxMi4wOTggMCAxMi4wMDE3IDBDMTEuOTA1NSAwIDExLjc5NzMgMC4wNDgxMDk4IDExLjcyNTEgMC4xMjAyNzRMNi45OTgzIDQuODQ3MDhMMi4yNzE1IDAuMTIwMjc0QzIuMTk5MzMgMC4wNDgxMDk4IDIuMDkxMDggMCAxLjk5NDg2IDBDMS44ODY2MiAwIDEuNzkwNCAwLjA0ODEwOTggMS43MTgyMyAwLjEyMDI3NEwxLjExNjg2IDAuNzIxNjQ5QzEuMDQ0NjkgMC43OTM4MTQgMC45OTY1ODIgMC45MDIwNjIgMC45OTY1ODIgMC45OTgyODFDMC45OTY1ODIgMS4wOTQ1IDEuMDQ0NjkgMS4yMDI3NSAxLjExNjg2IDEuMjc0OTFMNi43MjE2NyA2Ljg3OTcyQzYuNzkzODMgNi45NTE4OSA2LjkwMjA4IDcgNi45OTgzIDdDNy4wOTQ1MiA3IDcuMjAyNzcgNi45NTE4OSA3LjI3NDkzIDYuODc5NzJMMTIuODc5NyAxLjI3NDkxQzEyLjk1MTkgMS4yMDI3NSAxMyAxLjA5NDUgMTMgMC45OTgyODFaIiBmaWxsPSIjOGQ4Zjk1Ii8+Cjwvc3ZnPgo=");
                 background-position: right 12px center;
+                background-repeat: no-repeat;
             }
         }
 

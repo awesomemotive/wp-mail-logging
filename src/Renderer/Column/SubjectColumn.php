@@ -10,7 +10,7 @@ class SubjectColumn extends GenericColumn {
     /**
      * Base64 encoding prefix.
      *
-     * @since {VERSION}
+     * @since 1.12.0
      *
      * @var string
      */
@@ -19,7 +19,7 @@ class SubjectColumn extends GenericColumn {
     /**
      * Quoted-printable encoding prefix.
      *
-     * @since {VERSION}
+     * @since 1.12.0
      *
      * @var string
      */
@@ -28,7 +28,7 @@ class SubjectColumn extends GenericColumn {
     /**
      * The email subject.
      *
-     * @since {VERSION}
+     * @since 1.12.0
      *
      * @var string
      */
@@ -42,7 +42,7 @@ class SubjectColumn extends GenericColumn {
     /**
      * @inerhitDoc
      *
-     * @since {VERSION}
+     * @since 1.12.0
      */
     public function render( $item, $column_format ) {
 
@@ -70,7 +70,7 @@ class SubjectColumn extends GenericColumn {
     /**
      * Get the encoded part from the subject string.
      *
-     * @since {VERSION}
+     * @since 1.12.0
      *
      * @param string $encode Type of encoding used in the subject.
      *

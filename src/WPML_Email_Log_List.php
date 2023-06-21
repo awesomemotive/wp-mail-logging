@@ -483,7 +483,7 @@ class WPML_Email_Log_List extends \WP_List_Table implements IHooks {
     /**
      * Display the search box.
      *
-     * @since {VERSION}
+     * @since 1.12.0
      *
      * @param string $text     The 'submit' button label.
      * @param string $input_id ID attribute value for the search input field.
@@ -536,7 +536,7 @@ class WPML_Email_Log_List extends \WP_List_Table implements IHooks {
     /**
      * Get the dropdown search fields.
      *
-     * @since {VERSION}
+     * @since 1.12.0
      *
      * @return array
      */

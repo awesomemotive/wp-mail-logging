@@ -220,7 +220,7 @@ class WPML_Plugin extends WPML_LifeCycle implements IHooks {
     /**
      * Add admin body class for WP Mail Logging admin pages.
      *
-     * @since {VERSION}
+     * @since 1.12.0
      *
      * @param string $classes Space-separated list of CSS classes.
      *
@@ -326,7 +326,7 @@ class WPML_Plugin extends WPML_LifeCycle implements IHooks {
     /**
      * Get the user capability that is required to view the settings page.
      *
-     * @since {VERSION}
+     * @since 1.12.0
      *
      * @return string
      */
@@ -379,7 +379,7 @@ class WPML_Plugin extends WPML_LifeCycle implements IHooks {
     /**
      * Enqueue the jQuery confirm library.
      *
-     * @since {VERSION}
+     * @since 1.12.0
      *
      * @return void
      *
@@ -412,7 +412,7 @@ class WPML_Plugin extends WPML_LifeCycle implements IHooks {
             /**
              * Filter the jQuery Confirm localized strings.
              *
-             * @since {VERSION}
+             * @since 1.12.0
              */
             apply_filters(
                 'wp_mail_logging_jquery_confirm_localized_strings',
@@ -430,7 +430,7 @@ class WPML_Plugin extends WPML_LifeCycle implements IHooks {
     /**
      * Remove all non-WP Mail Logging plugin notices from our plugin pages.
      *
-     * @since {VERSION}
+     * @since 1.12.0
      */
     public function hide_unrelated_notices() {
 
@@ -443,7 +443,7 @@ class WPML_Plugin extends WPML_LifeCycle implements IHooks {
     /**
      * Remove all non-WP Mail Logging notices from the our plugin pages based on the provided action hook.
      *
-     * @since {VERSION}
+     * @since 1.12.0
      *
      * @param string $action The name of the action.
      */
@@ -499,7 +499,7 @@ class WPML_Plugin extends WPML_LifeCycle implements IHooks {
      * @param array $mailArray
      *
      * @since 1.0
-     * @since {VERSION} Short-circuit if $mailArray is not an array.
+     * @since 1.12.0 Short-circuit if $mailArray is not an array.
      *
      * @return array $mailOriginal
      */
@@ -508,7 +508,7 @@ class WPML_Plugin extends WPML_LifeCycle implements IHooks {
         /**
          * Filters mail data before it is logged.
          *
-         * @since {VERSION}
+         * @since 1.12.0
          *
          * @param array $mailArray Array containing the mail data to be logged.
          */

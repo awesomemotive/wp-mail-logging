@@ -94,7 +94,7 @@ WPMailLogging.Admin.Logs = WPMailLogging.Admin.Logs || ( function( document, win
         /**
          * Event triggered when DB upgrade admin notice is dismissed.
          *
-         * @since {VERSION}
+         * @since 1.12.0
          *
          * @param {Event} e Event object.
          */

@@ -30,7 +30,7 @@ WPMailLogging.Admin.Settings = WPMailLogging.Admin.Settings || ( function( docum
          * Bind all actions/events.
          *
          * @since 1.11.0
-         * @since {VERSION} Add support for dismissing the database upgrade notice.
+         * @since 1.12.0 Add support for dismissing the database upgrade notice.
          */
         bindActions: function() {
 
