@@ -112,6 +112,9 @@ Yes, you can contribute on <a href="https://github.com/awesomemotive/wp-mail-log
 Added: Support UTF-8 encoded subjects.
 Added: Search by filter.
 Added: New filter hook for mail data before it’s saved.
+Improved: Hide unrelated notices in admin plugin pages.
+Improved: Use transient to cache certain DB calls.
+Improved: Search logs by message optimization.
 Fixed: Missing security checks in AJAX dismiss notices feature.
 Fixed: MySQL 8 syntax error when `sql-mode = ANSI_QUOTES`.
 Fixed: PHP Deprecated: Constant FILTER_SANITIZE_STRING.
@@ -119,9 +122,6 @@ Fixed: Logger breaks if no array passed from wp_mail.
 Fixed: Line breaks on plain text email on “HTML” preview.
 Fixed: Non-admin users can see and access “Settings” and “SMTP” pages.
 Fixed: Escape the subject in logs table and single view.
-Improved: Hide unrelated notices in admin plugin pages.
-Improved: Use transient to cache certain DB calls.
-Improved: Search logs by message optimization.
 
 = 1.11.2 - 2023-06-14 =
 - Fixed: Email Log JSON preview security.
