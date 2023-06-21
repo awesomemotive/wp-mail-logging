@@ -390,7 +390,7 @@ class Migration {
              class="wp-mail-logging-setting-row wp-mail-logging-settings-bottom wp-mail-logging-setting-row-content wp-mail-logging-clearfix section-heading"
              data-dismiss="<?php echo esc_attr( wp_create_nonce( self::MIGRATION_NOTICE_DISMISS_NONCE ) ); ?>">
             <div class="wp-mail-logging-setting-field">
-                <h3><?php echo esc_html__( 'Database upgrade', 'wp-mail-logging' ) ?></h3>
+                <h3><?php echo esc_html__( 'Database Upgrade', 'wp-mail-logging' ) ?></h3>
             </div>
 
             <p>
@@ -409,11 +409,13 @@ class Migration {
                     ?>
                 </li>
                 <li>
-                    <?php
-                        esc_attr_e( 'Faster email log search.', 'wp-mail-logging' );
-                    ?>
+                    <?php esc_html_e( 'Faster email log search by message.', 'wp-mail-logging' ); ?>
                 </li>
             </ul>
+
+            <p>
+                <i><?php esc_html_e( 'If you do not need these improvements, you can keep using the plugin as is and dismiss this banner in the top right corner.', 'wp-mail-logging' ); ?></i>
+            </p>
 
             <p>
                 <?php
@@ -424,6 +426,25 @@ class Migration {
                         ]
                     )
                 ?>
+            </p>
+
+            <p>
+                <?php
+                echo wp_kses(
+                    __( '<i>If you wish to keep all email logs and get the above improvements as well, please <a href="https://wordpress.org/support/topic/how-to-keep-your-email-logs-with-manual-v1-12-0-database-upgrade/" target="_blank">read our manual upgrade guide</a> for more information.</i>', 'wp-mail-logging' ),
+                    [
+                        'i' => [],
+                        'a' => [
+                            'href' => [],
+                            'target' => [],
+                        ],
+                    ]
+                )
+                ?>
+            </p>
+
+            <p>
+
             </p>
 
             <p>
