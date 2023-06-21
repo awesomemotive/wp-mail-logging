@@ -535,7 +535,7 @@ class EmailLogsTab {
      * Add admin body class for WP Mail Logging logs page.
      *
      * @since 1.11.0
-     * @deprecated {VERSION} We are now adding this class in all the WP Mail Logging pages.
+     * @deprecated 1.12.0 We are now adding this class in all the WP Mail Logging pages.
      *
      * @param string $classes Space-separated list of CSS classes.
      *
@@ -549,7 +549,7 @@ class EmailLogsTab {
     /**
      * The localised strings for the jQuery confirm dialog.
      *
-     * @since {VERSION}
+     * @since 1.12.0
      *
      * @param array $strings Localized strings.
      *

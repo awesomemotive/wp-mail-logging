@@ -148,7 +148,7 @@ abstract class BaseRenderer implements IMailRenderer {
      * Render the value.
      *
      * @since 1.11.0
-     * @since {VERSION}
+     * @since 1.12.0
      *
      * @param string $key   Key of the value to render.
      * @param string $value Value to be rendered.

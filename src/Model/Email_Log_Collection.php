@@ -117,7 +117,7 @@ class Email_Log_Collection {
     /**
      * What field to search in.
      *
-     * @since {VERSION}
+     * @since 1.12.0
      *
      * @var string
      */
@@ -257,7 +257,7 @@ class Email_Log_Collection {
     /**
      * Set the field where we want to search in.
      *
-     * @since {VERSION}
+     * @since 1.12.0
      *
      * @param string $search_place Field to search in.
      *
@@ -432,7 +432,7 @@ class Email_Log_Collection {
     /**
      * Get the fields where the search term will be searched.
      *
-     * @since {VERSION}
+     * @since 1.12.0
      *
      * @return string[]
      */
@@ -448,7 +448,7 @@ class Email_Log_Collection {
     /**
      * Get the search SQL.
      *
-     * @since {VERSION}
+     * @since 1.12.0
      *
      * @param string $field Field we are trying to search to.
      *

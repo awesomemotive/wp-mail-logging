@@ -6,7 +6,7 @@ License URI: http://www.gnu.org/licenses/gpl-3.0.html
 Requires at least: 5.0
 Tested up to: 6.2
 Requires PHP: 7.1
-Stable tag: 1.11.2
+Stable tag: 1.12.0
 
 Log, view, and resend all emails sent from your WordPress site. Great for resolving email sending issues or keeping a copy for auditing.
 
@@ -81,6 +81,10 @@ The plugin was created and launched in 2014 by <a href="https://no3x.de/">Christ
 
 Yes, it logs all emails sent from your site, including any emails that are created by your plugins or your theme.
 
+= Why are some attachments not logged? =
+
+This plugin only stores the file path of the attachments and not the attachments file themselves. If the attachment file path does not exist or the file was deleted, then it will not show up in the logs.
+
 = I need help! =
 
 Please open a new <a href="https://wordpress.org/support/plugin/wp-mail-logging/">support thread</a> and provide as much information as possible, without any private information (it is a public forum).
@@ -104,6 +108,21 @@ Yes, you can contribute on <a href="https://github.com/awesomemotive/wp-mail-log
 3. The Settings - part 2
 
 == Changelog ==
+= 1.12.0 - 2023-06-21 =
+Added: Support UTF-8 encoded subjects.
+Added: Search by filter.
+Added: New filter hook for mail data before it’s saved.
+Fixed: Missing security checks in AJAX dismiss notices feature.
+Fixed: MySQL 8 syntax error when `sql-mode = ANSI_QUOTES`.
+Fixed: PHP Deprecated: Constant FILTER_SANITIZE_STRING.
+Fixed: Logger breaks if no array passed from wp_mail.
+Fixed: Line breaks on plain text email on “HTML” preview.
+Fixed: Non-admin users can see and access “Settings” and “SMTP” pages.
+Fixed: Escape the subject in logs table and single view.
+Improved: Hide unrelated notices in admin plugin pages.
+Improved: Use transient to cache certain DB calls.
+Improved: Search logs by message optimization.
+
 = 1.11.2 - 2023-06-14 =
 - Fixed: Email Log JSON preview security.
 

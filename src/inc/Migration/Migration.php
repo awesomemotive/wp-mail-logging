@@ -11,7 +11,7 @@ class Migration {
     /**
      * Version of the latest migration.
      *
-     * @since {VERSION}
+     * @since 1.12.0
      *
      * @var int
      */
@@ -20,7 +20,7 @@ class Migration {
     /**
      * Option key where we save the current DB version.
      *
-     * @since {VERSION}
+     * @since 1.12.0
      *
      * @var string
      */
@@ -29,7 +29,7 @@ class Migration {
     /**
      * Nonce for migration.
      *
-     * @since {VERSION}
+     * @since 1.12.0
      *
      * @var string
      */
@@ -38,7 +38,7 @@ class Migration {
     /**
      * Nonce for migration notice dismiss.
      *
-     * @since {VERSION}
+     * @since 1.12.0
      *
      * @var string
      */
@@ -49,7 +49,7 @@ class Migration {
      *
      * This will only exists in DB option if the user has dismissed the notice.
      *
-     * @since {VERSION}
+     * @since 1.12.0
      *
      * @var string
      */
@@ -60,7 +60,7 @@ class Migration {
      *
      * This will only exists in DB option if the user has dismissed the admin notice.
      *
-     * @since {VERSION}
+     * @since 1.12.0
      *
      * @var string
      */
@@ -69,7 +69,7 @@ class Migration {
     /**
      * Current migration version.
      *
-     * @since {VERSION}
+     * @since 1.12.0
      *
      * @var int
      */
@@ -78,7 +78,7 @@ class Migration {
     /**
      * Flag to indicate if a migration is needed.
      *
-     * @since {VERSION}
+     * @since 1.12.0
      *
      * @var bool
      */
@@ -87,7 +87,7 @@ class Migration {
     /**
      * Current migration's error.
      *
-     * @since {VERSION}
+     * @since 1.12.0
      *
      * @var string
      */
@@ -96,7 +96,7 @@ class Migration {
     /**
      * Whether the migration was successful.
      *
-     * @since {VERSION}
+     * @since 1.12.0
      *
      * @var bool
      */
@@ -105,7 +105,7 @@ class Migration {
     /**
      * Constructor
      *
-     * @since {VERSION}
+     * @since 1.12.0
      */
     public function __construct() {
 
@@ -116,7 +116,7 @@ class Migration {
     /**
      * WP Hooks.
      *
-     * @since {VERSION}
+     * @since 1.12.0
      *
      * @return void
      */
@@ -133,7 +133,7 @@ class Migration {
     /**
      * Init the migration UI and process if requested.
      *
-     * @since {VERSION}
+     * @since 1.12.0
      *
      * @return void
      */
@@ -155,7 +155,7 @@ class Migration {
     /**
      * Whether we are WP Mail Logging admin pages.
      *
-     * @since {VERSION}
+     * @since 1.12.0
      *
      * @return bool
      */
@@ -171,7 +171,7 @@ class Migration {
     /**
      * Whether or not the migration is needed.
      *
-     * @since {VERSION}
+     * @since 1.12.0
      *
      * @return bool
      */
@@ -196,7 +196,7 @@ class Migration {
     /**
      * Get current DB version.
      *
-     * @since {VERSION}
+     * @since 1.12.0
      *
      * @return int
      */
@@ -213,7 +213,7 @@ class Migration {
     /**
      * AJAX handler when DB upgrade notice is dismissed.
      *
-     * @since {VERSION}
+     * @since 1.12.0
      *
      * @return void
      */
@@ -242,7 +242,7 @@ class Migration {
      * Check if the user already performed migration's 1 and 2 manually
      * and if so, add the option that tracks the completed migration.
      *
-     * @since {VERSION}
+     * @since 1.12.0
      *
      * @return void
      */
@@ -284,7 +284,7 @@ class Migration {
     /**
      * Run the migrations.
      *
-     * @since {VERSION}
+     * @since 1.12.0
      *
      * @param int $version The version of migration to run.
      *
@@ -304,7 +304,7 @@ class Migration {
     /**
      * Display the migration-related notices.
      *
-     * @since {VERSION}
+     * @since 1.12.0
      *
      * @return void
      */
@@ -341,7 +341,7 @@ class Migration {
     /**
      * Display the migration result.
      *
-     * @since {VERSION}
+     * @since 1.12.0
      *
      * @return void
      */
@@ -374,7 +374,7 @@ class Migration {
     /**
      * Display the migration section in Settings.
      *
-     * @since {VERSION}
+     * @since 1.12.0
      *
      * @param string $tab Current tab in WP Mail Logging page.
      *
@@ -463,7 +463,7 @@ class Migration {
     /**
      * Attempt to run older migration.
      *
-     * @since {VERSION}
+     * @since 1.12.0
      *
      * @param int $version The version of migration to run.
      *
@@ -480,7 +480,7 @@ class Migration {
      * Migration from 0 to 1.
      * Convert the columns charset to utf8mb4.
      *
-     * @since {VERSION}
+     * @since 1.12.0
      *
      * @return void
      */
@@ -528,7 +528,7 @@ class Migration {
      * This migration alters the table to add a FULL TEXT index on `message` column.
      * For optimization reason, we truncate (delete all the existing logs) the table before adding the index.
      *
-     * @since {VERSION}
+     * @since 1.12.0
      *
      * @return void
      */
@@ -567,7 +567,7 @@ class Migration {
     /**
      * Set the error message.
      *
-     * @since {VERSION}
+     * @since 1.12.0
      *
      * @param string $error   Error occured during migration.
      * @param int    $version Version of migration.
@@ -582,7 +582,7 @@ class Migration {
     /**
      * The localised strings for the jQuery confirm dialog.
      *
-     * @since {VERSION}
+     * @since 1.12.0
      *
      * @param array $strings Localized strings.
      *
