@@ -424,14 +424,14 @@ class Migration {
         if ( strpos( $wpdb->collate, 'utf8mb4' ) !== false ) {
             $query = $wpdb->prepare(
                 'ALTER TABLE %1$s
-                        MODIFY `host` VARCHAR(200) CHARACTER SET utf8mb4 COLLATE %2$s,
-                        MODIFY `receiver` VARCHAR(200) CHARACTER SET utf8mb4 COLLATE %3$s,
-                        MODIFY `subject` VARCHAR(200) CHARACTER SET utf8mb4 COLLATE %4$s,
+                        MODIFY `host` VARCHAR(200) CHARACTER SET utf8mb4 COLLATE %2$s NOT NULL DEFAULT "0",
+                        MODIFY `receiver` VARCHAR(200) CHARACTER SET utf8mb4 COLLATE %3$s NOT NULL DEFAULT "0",
+                        MODIFY `subject` VARCHAR(200) CHARACTER SET utf8mb4 COLLATE %4$s NOT NULL DEFAULT "0",
                         MODIFY `message` TEXT CHARACTER SET utf8mb4 COLLATE %5$s,
                         MODIFY `headers` TEXT CHARACTER SET utf8mb4 COLLATE %6$s,
-                        MODIFY `attachments` VARCHAR(800) CHARACTER SET utf8mb4 COLLATE %7$s,
-                        MODIFY `error` VARCHAR(400) CHARACTER SET utf8mb4 COLLATE %8$s,
-                        MODIFY `plugin_version` VARCHAR(200) CHARACTER SET utf8mb4 COLLATE %9$s;',
+                        MODIFY `attachments` VARCHAR(800) CHARACTER SET utf8mb4 COLLATE %7$s NOT NULL DEFAULT "0",
+                        MODIFY `error` VARCHAR(400) CHARACTER SET utf8mb4 COLLATE %8$s NULL DEFAULT "",
+                        MODIFY `plugin_version` VARCHAR(200) CHARACTER SET utf8mb4 COLLATE %9$s NOT NULL DEFAULT "0";',
                 WPML_Mail::get_table(),
                 $wpdb->collate,
                 $wpdb->collate,

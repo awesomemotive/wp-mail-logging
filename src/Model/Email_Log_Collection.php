@@ -364,7 +364,7 @@ class Email_Log_Collection {
         $status_where = '';
         switch( $this->status ) {
             case self::STATUS_SUCCESSFUL:
-                $status_where .= " WHERE `error` IS NULL";
+                $status_where .= " WHERE `error` IS NULL OR `error` = ''";
                 break;
             case self::STATUS_FAILED:
                 $status_where .= " WHERE `error` IS NOT NULL AND `error` != ''";
