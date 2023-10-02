@@ -294,7 +294,7 @@ class SettingsTab {
 
                 $this->create_group_field_header(
                     'log-rotation',
-                    __( 'Log Rotation', 'wp-mail-logging' ),
+                    __( 'Log Retention', 'wp-mail-logging' ),
                     __( 'Save space by deleting logs regularly.', 'wp-mail-logging' )
                 );
 
