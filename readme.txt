@@ -4,7 +4,7 @@ Tags: mail, email, log, logging, email log, debug, smtp, spam, deliverability
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 Requires at least: 5.0
-Tested up to: 6.2
+Tested up to: 6.5
 Requires PHP: 7.1
 Stable tag: 1.12.0
 
