@@ -437,7 +437,7 @@ class SMTPTab {
             esc_url( $assets_url . '/images/smtp/screenshot-full.png?ver=' . $plugin_meta['version'] ),
             esc_html__( 'Improves email deliverability in WordPress.', 'wp-mail-logging' ),
             esc_html__( 'Used by 3+ million websites.', 'wp-mail-logging' ),
-            esc_html__( 'Free mailers: SendLayer, SMTP.com, Sendinblue, Google / Gmail, Mailgun, Postmark, SendGrid.', 'wp-mail-logging' ),
+            esc_html__( 'Free mailers: SendLayer, SMTP.com, Brevo (formerly Sendinblue), Google / Gmail, Mailgun, Postmark, SendGrid.', 'wp-mail-logging' ),
             esc_html__( 'Pro mailers: Amazon SES, Microsoft 365 / Outlook.com, Zoho Mail.', 'wp-mail-logging' )
         );
     }
