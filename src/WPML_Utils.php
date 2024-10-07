@@ -276,4 +276,20 @@ class WPML_Utils {
 
         return add_query_arg( 'page', self::ADMIN_PAGE_SLUG, $admin_base );
     }
+
+    /**
+     * Check if the current user can access the WP Mail Logging submissions.
+     *
+     * @since {VERSION}
+     *
+     * @return bool
+     *
+     * @throws \Exception If the service is not registered.
+     */
+    public static function can_current_user_access_wp_mail_logging_submissions() {
+
+        // Either an administrator or a user with the correct capability can see the submission data.
+        return current_user_can( 'administrator' ) ||
+            current_user_can( WPML_Init::getInstance()->getService( 'plugin' )->getSetting( 'can-see-submission-data', 'manage_options' ) );
+    }
 }

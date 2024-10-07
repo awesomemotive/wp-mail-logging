@@ -83,17 +83,17 @@ class WPML_MailRenderer_AJAX_Handler implements IHooks {
 
     /**
      * Handles the AJAX request for my plugin.
+     *
+     * @since {VERSION} Updated the user capability check.
      */
     public function handle() {
 
         $this->checkNonce();
 
-        $settings = SettingsTab::get_settings( SettingsTab::DEFAULT_SETTINGS );
-
-        if ( ! current_user_can( $settings['can-see-submission-data'] ) ) {
+        if ( ! WPML_Utils::can_current_user_access_wp_mail_logging_submissions() ) {
             wp_send_json_error( [
                 'code'    => self::ERROR_OTHER_CODE,
-                'message' => 'Invalid request!'
+                'message' => esc_html__( 'Invalid request!', 'wp-mail-logging' ),
             ] );
         }
 

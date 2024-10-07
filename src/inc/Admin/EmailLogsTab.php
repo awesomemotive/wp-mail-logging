@@ -121,9 +121,7 @@ class EmailLogsTab {
             return;
         }
 
-        $allowed_capability = WPML_Init::getInstance()->getService( 'plugin' )->getSetting( 'can-see-submission-data', 'manage_options' );
-
-        if ( ! current_user_can( $allowed_capability ) ) {
+        if ( ! WPML_Utils::can_current_user_access_wp_mail_logging_submissions() ) {
             return;
         }
 
