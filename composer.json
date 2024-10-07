@@ -9,7 +9,7 @@
     },
     "require-dev": {
         "bocharsky-bw/arrayzy": "v0.1.1",
-        "mockery/mockery": "^0.9.9"
+        "mockery/mockery": "2.0.x-dev"
     },
     "license": "GPL-2.0",
     "authors": [
