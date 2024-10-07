@@ -15,6 +15,9 @@ class WPML_Email_Resender {
 
     /**
      * Resend mail
+     *
+     * @since {VERSION} Use the WP hook `wp_mail_content_type` as the resent mail `Content-Type` header.
+     *
      * @param WPML_Mail $mail
      */
     public function resendMail($mail) {
@@ -43,11 +46,21 @@ class WPML_Email_Resender {
         );
 
         $headers = explode( "\n", $clean_headers );
-        $headers = array_map(function ($header) {
-            return rtrim($header, ",");
-        }, $headers);
 
-        $this->dispatcher->dispatch($receivers, $mail->get_subject(), $mail->get_message(), $headers, $attachments );
+        for ( $ctr = 0; $ctr < count( $headers ); $ctr++ ) {
+            $header_arr = explode( ":", $headers[ $ctr ] );
+
+            if ( ! empty( $header_arr[0] ) && strtolower( $header_arr[0] ) === 'content-type' ) {
+                // Unset the content type header.
+                unset( $headers[ $ctr ] );
+            } else {
+                $headers[ $ctr ] = rtrim( $headers[ $ctr ], "," );
+            }
+        }
+
+        $headers[] = 'Content-Type: ' . apply_filters( 'wp_mail_content_type', 'text/html' );
+
+        $this->dispatcher->dispatch( $receivers, $mail->get_subject(), $mail->get_message(), $headers, $attachments );
     }
 
 }
