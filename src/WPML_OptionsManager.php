@@ -351,6 +351,10 @@ class WPML_OptionsManager {
         $menu_slug      = $pluginNameSlug . '_log';
         $capability     = 'manage_options';
 
+        if ( ! current_user_can( 'manage_options' ) && current_user_can( $this->getSetting( 'can-see-submission-data', 'manage_options' ) ) ) {
+            $capability = $this->getSetting( 'can-see-submission-data', 'manage_options' );
+        }
+
         if ( ! empty( $this->getSetting( 'top-level-menu', '1' ) ) ) {
             $this->setup_top_level_menu( $capability, $menu_slug );
         } else {
