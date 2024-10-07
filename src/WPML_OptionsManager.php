@@ -349,8 +349,7 @@ class WPML_OptionsManager {
 
         $pluginNameSlug = $this->getPluginSlug();
         $menu_slug      = $pluginNameSlug . '_log';
-
-        $capability = $this->getSetting( 'can-see-submission-data', 'manage_options' );
+        $capability     = 'manage_options';
 
         if ( ! empty( $this->getSetting( 'top-level-menu', '1' ) ) ) {
             $this->setup_top_level_menu( $capability, $menu_slug );
@@ -503,10 +502,18 @@ class WPML_OptionsManager {
         return $status;
     }
 
+    /**
+     * Show the log menu.
+     *
+     * @since 1.1.0
+     * @since {VERSION} Update the method used to check the user capabilities.
+     *
+     * @return void
+     */
     public function LogMenu() {
 
-        if ( !current_user_can( $this->getSetting( 'can-see-submission-data', 'manage_options' ) ) ) {
-            wp_die(__('You do not have sufficient permissions to access this page.', 'wp-mail-logging'));
+        if ( ! WPML_Utils::can_current_user_access_wp_mail_logging_submissions() ) {
+            wp_die( __( 'You do not have sufficient permissions to access this page.', 'wp-mail-logging' ) );
         }
 
         if (!class_exists( 'Email_Log_List_Table' ) ) {
@@ -543,7 +550,7 @@ class WPML_OptionsManager {
 
     public function _LogMenu() {
 
-        if ( ! current_user_can( $this->getSetting( 'can-see-submission-data', 'manage_options' ) ) ) {
+        if ( ! WPML_Utils::can_current_user_access_wp_mail_logging_submissions() ) {
             wp_die( __( 'You do not have sufficient permissions to access this page.', 'wp-mail-logging' ) );
         }
 

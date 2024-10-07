@@ -130,6 +130,7 @@ class WPML_Email_Log_List extends \WP_List_Table implements IHooks {
      * Process action the admin initiated.
      *
      * @since 1.11.0
+     * @since {VERSION} Updated the user capability check.
      *
      * @return void
      */
@@ -141,9 +142,7 @@ class WPML_Email_Log_List extends \WP_List_Table implements IHooks {
             return;
         }
 
-        $settings = SettingsTab::get_settings( SettingsTab::DEFAULT_SETTINGS );
-
-        if ( ! current_user_can( $settings['can-see-submission-data'] ) ) {
+        if ( ! WPML_Utils::can_current_user_access_wp_mail_logging_submissions() ) {
             return;
         }
 
