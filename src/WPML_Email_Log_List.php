@@ -799,8 +799,8 @@ class WPML_Email_Log_List extends \WP_List_Table implements IHooks {
      */
     function get_bulk_actions() {
         $actions = array(
-            'delete'    => 'Delete',
-            'resend'    => 'Resend'
+            'delete'    => __( 'Delete', 'wp-mail-logging' ),
+            'resend'    => __( 'Resend', 'wp-mail-logging' ),
         );
         return $actions;
     }
