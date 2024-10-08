@@ -500,6 +500,7 @@ class WPML_Plugin extends WPML_LifeCycle implements IHooks {
      *
      * @since 1.0
      * @since 1.12.0 Short-circuit if $mailArray is not an array.
+     * @since {VERSION} Trim the subject to < 200 characters.
      *
      * @return array $mailOriginal
      */
@@ -519,6 +520,10 @@ class WPML_Plugin extends WPML_LifeCycle implements IHooks {
         }
 
         global $wpml_current_mail_id;
+
+        if ( ! empty( $mailArray['subject'] ) && mb_strlen( $mailArray['subject'] ) > 200 ) {
+            $mailArray['subject'] = mb_substr( $mailArray['subject'], 0, 195 ) . '...';
+        }
 
         $mail = (new WPML_MailExtractor())->extract($mailArray);
         $mail->set_plugin_version($this->getVersionSaved());
