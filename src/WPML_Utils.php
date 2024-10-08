@@ -292,4 +292,37 @@ class WPML_Utils {
         return current_user_can( 'administrator' ) ||
             current_user_can( WPML_Init::getInstance()->getService( 'plugin' )->getSetting( 'can-see-submission-data', 'manage_options' ) );
     }
+
+    /**
+     * Clean the headers and return an array of headers.
+     *
+     * @since {VERSION}
+     *
+     * @param mixed $raw_headers Raw headers.
+     *
+     * @return string[]
+     */
+    public static function clean_headers( $raw_headers ) {
+
+        if ( is_array( $raw_headers ) ) {
+            return $raw_headers;
+        }
+
+        $clean_headers = str_replace(
+            [
+                "\\r\\n",
+                "\r\n",
+                ",\n",
+                ",\\n"
+            ],
+            "\n",
+            $raw_headers
+        );
+
+        $headers = explode( "\n", $clean_headers );
+
+        return array_filter( array_map( function( $header ) {
+            return rtrim( $header, "," );
+        }, $headers ) );
+    }
 }

@@ -500,7 +500,7 @@ class WPML_Plugin extends WPML_LifeCycle implements IHooks {
      *
      * @since 1.0
      * @since 1.12.0 Short-circuit if $mailArray is not an array.
-     * @since {VERSION} Trim the subject to < 200 characters.
+     * @since {VERSION} Trim the subject to < 200 characters and save the Content-Type header if not set.
      *
      * @return array $mailOriginal
      */
@@ -525,6 +525,8 @@ class WPML_Plugin extends WPML_LifeCycle implements IHooks {
             $mailArray['subject'] = mb_substr( $mailArray['subject'], 0, 195 ) . '...';
         }
 
+        $mailArray['headers'] = $this->get_mail_headers( $mailArray );
+
         $mail = (new WPML_MailExtractor())->extract($mailArray);
         $mail->set_plugin_version($this->getVersionSaved());
         $mail->set_timestamp(current_time( 'mysql' ));
@@ -533,6 +535,47 @@ class WPML_Plugin extends WPML_LifeCycle implements IHooks {
         $wpml_current_mail_id = $mail->save();
 
         return $mailArray;
+    }
+
+    /**
+     * Get the headers of the mail to be logged.
+     *
+     * @since {VERSION}
+     *
+     * @param array $mail_array Array containing the mail data to be logged.
+     *
+     * @return string[]
+     */
+    public function get_mail_headers( $mail_array ) {
+
+        $content_type = 'Content-Type: ' . apply_filters( 'wp_mail_content_type', 'text/html' );
+
+        if ( empty( $mail_array['headers'] ) ) {
+            return [ $content_type ];
+        }
+
+        $mail_headers = WPML_Utils::clean_headers( $mail_array['headers'] );
+
+        if ( empty( $mail_headers ) ) {
+            return [ $content_type ];
+        }
+
+        $should_force_add_content_type = true;
+
+        for ( $ctr = 0; $ctr < count( $mail_headers ); $ctr++ ) {
+            $header_arr = explode( ":", $mail_headers[ $ctr ] );
+
+            // If Content-Type header is already set, don't add it again.
+            if ( ! empty( $header_arr[0] ) && strtolower( $header_arr[0] ) === 'content-type' ) {
+                $should_force_add_content_type = false;
+            }
+        }
+
+        if ( $should_force_add_content_type ) {
+            $mail_headers[] = $content_type;
+        }
+
+        return $mail_headers;
     }
 
     public static function getClass() {
