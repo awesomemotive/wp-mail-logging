@@ -84,7 +84,7 @@ class WPML_MailRenderer_AJAX_Handler implements IHooks {
     /**
      * Handles the AJAX request for my plugin.
      *
-     * @since {VERSION} Updated the user capability check.
+     * @since 1.13.0 Updated the user capability check.
      */
     public function handle() {
 

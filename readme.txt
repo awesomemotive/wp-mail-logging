@@ -110,7 +110,7 @@ Yes, you can contribute on <a href="https://github.com/awesomemotive/wp-mail-log
 == Changelog ==
 = 1.13.0 - 2024-10-08 =
 Improved: Allow admins to always have access to WP Mail Logging logs.
-Improved: Use the `wp_mail_content_type` filter to determine the email content type when resending emails.
+Improved: Use the `wp_mail_content_type` filter to determine the email content type when saving the logs.
 Fixed: Issue when emails with subjects that are more than 200 characters long are not logged.
 Fixed: Make "Delete" and "Rename" in Bulk Actions selection translatable strings.
 Fixed: Update Sendinblue string instances to Brevo.

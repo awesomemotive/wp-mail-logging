@@ -510,7 +510,7 @@ class WPML_OptionsManager {
      * Show the log menu.
      *
      * @since 1.1.0
-     * @since {VERSION} Update the method used to check the user capabilities.
+     * @since 1.13.0 Update the method used to check the user capabilities.
      *
      * @return void
      */

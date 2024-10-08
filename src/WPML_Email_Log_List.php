@@ -130,7 +130,7 @@ class WPML_Email_Log_List extends \WP_List_Table implements IHooks {
      * Process action the admin initiated.
      *
      * @since 1.11.0
-     * @since {VERSION} Updated the user capability check.
+     * @since 1.13.0 Updated the user capability check.
      *
      * @return void
      */

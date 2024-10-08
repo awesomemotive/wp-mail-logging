@@ -500,7 +500,7 @@ class WPML_Plugin extends WPML_LifeCycle implements IHooks {
      *
      * @since 1.0
      * @since 1.12.0 Short-circuit if $mailArray is not an array.
-     * @since {VERSION} Trim the subject to < 200 characters and save the Content-Type header if not set.
+     * @since 1.13.0 Trim the subject to < 200 characters and save the Content-Type header if not set.
      *
      * @return array $mailOriginal
      */
@@ -540,7 +540,7 @@ class WPML_Plugin extends WPML_LifeCycle implements IHooks {
     /**
      * Get the headers of the mail to be logged.
      *
-     * @since {VERSION}
+     * @since 1.13.0
      *
      * @param array $mail_array Array containing the mail data to be logged.
      *

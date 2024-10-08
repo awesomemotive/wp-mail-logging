@@ -280,7 +280,7 @@ class WPML_Utils {
     /**
      * Check if the current user can access the WP Mail Logging submissions.
      *
-     * @since {VERSION}
+     * @since 1.13.0
      *
      * @return bool
      *
@@ -296,7 +296,7 @@ class WPML_Utils {
     /**
      * Clean the headers and return an array of headers.
      *
-     * @since {VERSION}
+     * @since 1.13.0
      *
      * @param mixed $raw_headers Raw headers.
      *
