@@ -12,14 +12,6 @@
         "mockery/mockery": "2.0.x-dev"
     },
     "license": "GPL-2.0",
-    "authors": [
-        {
-            "name": "No3x",
-            "email": "no3x@no3x.de",
-            "homepage": "http://no3x.de",
-            "role": "Developer"
-        }
-    ],
     "support": {
         "issues": "https://github.com/awesomemotive/wp-mail-logging/issues",
         "source": "https://github.com/awesomemotive/wp-mail-logging/releases"
