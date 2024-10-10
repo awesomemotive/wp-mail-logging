@@ -6,7 +6,7 @@ License URI: http://www.gnu.org/licenses/gpl-3.0.html
 Requires at least: 5.0
 Tested up to: 6.6
 Requires PHP: 7.1
-Stable tag: 1.13.0
+Stable tag: 1.13.1
 
 Log, view, and resend all emails sent from your WordPress site. Great for resolving email sending issues or keeping a copy for auditing.
 
@@ -108,6 +108,10 @@ Yes, you can contribute on <a href="https://github.com/awesomemotive/wp-mail-log
 3. The Settings - part 2
 
 == Changelog ==
+= 1.13.1 - 2024-10-10 =
+Added: Action hook when saving email logs.
+Fixed: Issue with email content type.
+
 = 1.13.0 - 2024-10-08 =
 Improved: Allow admins to always have access to WP Mail Logging logs.
 Improved: Use the `wp_mail_content_type` filter to determine the email content type when saving the logs.

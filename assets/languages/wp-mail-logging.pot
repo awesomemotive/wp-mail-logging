@@ -1,13 +1,13 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: WP Mail Logging 1.13.0\n"
+"Project-Id-Version: WP Mail Logging 1.13.1\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wp-mail-logging\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2024-10-08T08:43:32+00:00\n"
+"POT-Creation-Date: 2024-10-10T03:46:09+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.8.1\n"
 "X-Domain: wp-mail-logging\n"
@@ -594,7 +594,7 @@ msgstr ""
 #: src/WPML_LifeCycle.php:204
 #: src/WPML_OptionsManager.php:420
 #: src/WPML_OptionsManager.php:421
-#: src/WPML_Plugin.php:301
+#: src/WPML_Plugin.php:302
 msgid "Settings"
 msgstr ""
 
@@ -608,13 +608,13 @@ msgstr ""
 
 #: src/WPML_OptionsManager.php:409
 #: src/WPML_OptionsManager.php:410
-#: src/WPML_Plugin.php:291
+#: src/WPML_Plugin.php:292
 msgid "Email Log"
 msgstr ""
 
 #: src/WPML_OptionsManager.php:428
 #: src/WPML_OptionsManager.php:429
-#: src/WPML_Plugin.php:305
+#: src/WPML_Plugin.php:306
 msgid "SMTP"
 msgstr ""
 
@@ -655,25 +655,25 @@ msgstr ""
 msgid "Anyone"
 msgstr ""
 
-#: src/WPML_Plugin.php:420
+#: src/WPML_Plugin.php:421
 msgid "Heads up!"
 msgstr ""
 
-#: src/WPML_Plugin.php:421
+#: src/WPML_Plugin.php:422
 #: src/WPML_UserFeedback.php:116
 msgid "Yes"
 msgstr ""
 
-#: src/WPML_Plugin.php:422
+#: src/WPML_Plugin.php:423
 msgid "Cancel"
 msgstr ""
 
-#: src/WPML_Plugin.php:424
+#: src/WPML_Plugin.php:425
 msgid "Warning!"
 msgstr ""
 
 #. translators: $1$s - WP Mail Logging plugin name; $2$s - WP.org review link; $3$s - WP.org review link.
-#: src/WPML_Plugin.php:607
+#: src/WPML_Plugin.php:628
 msgid "Please rate %1$s <a href=\"%2$s\" target=\"_blank\" rel=\"noopener noreferrer\">&#9733;&#9733;&#9733;&#9733;&#9733;</a> on <a href=\"%3$s\" target=\"_blank\" rel=\"noopener\">WordPress.org</a> to help us spread the word."
 msgstr ""
 
