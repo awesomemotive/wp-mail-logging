@@ -190,6 +190,7 @@ class WPML_Plugin extends WPML_LifeCycle implements IHooks {
         // http://plugin.michael-simpson.com/?page_id=37
         add_filter( 'plugin_action_links', array( &$this, 'registerPluginActionLinks'), 10, 5 );
         add_filter( 'wp_mail', array( $this, self::HOOK_LOGGING_MAIL ), self::HOOK_LOGGING_MAIL_PRIORITY );
+        add_action( 'wp_mail_logging_log_email', [ $this, 'save_email_log' ] );
         add_action( 'wp_mail_failed', array( &$this, 'log_email_failed' ) );
         add_filter( 'set-screen-option', array( &$this, 'save_screen_options' ), 10, 3);
         add_filter( 'wpml_get_plugin_version', array( &$this, 'getVersion' ) );
@@ -501,40 +502,60 @@ class WPML_Plugin extends WPML_LifeCycle implements IHooks {
      * @since 1.0
      * @since 1.12.0 Short-circuit if $mailArray is not an array.
      * @since 1.13.0 Trim the subject to < 200 characters and save the Content-Type header if not set.
+     * @since {VERSION} Add a hook action `wp_mail_logging_log_email` to log email data before being sent.
      *
      * @return array $mailOriginal
      */
     public function log_email( $mailArray ) {
 
         /**
+         * Log email data before being sent.
+         *
+         * @since {VERSION}
+         *
+         * @param array $mailArray Array containing the mail data to be logged.
+         */
+        do_action( 'wp_mail_logging_log_email', $mailArray );
+
+        return $mailArray;
+    }
+
+    /**
+     * Save the email logs to the database.
+     *
+     * @since {VERSION}
+     *
+     * @param array $mail_data Array containing the mail data to be logged.
+     */
+    public function save_email_log( $mail_data ) {
+
+        /**
          * Filters mail data before it is logged.
          *
          * @since 1.12.0
          *
-         * @param array $mailArray Array containing the mail data to be logged.
+         * @param array $mail_data Array containing the mail data to be logged.
          */
-        $mailArray = apply_filters( 'wp_mail_logging_before_log_email', $mailArray );
+        $mail_data = apply_filters( 'wp_mail_logging_before_log_email', $mail_data );
 
-        if ( ! is_array( $mailArray ) ) {
-            return $mailArray;
+        if ( ! is_array( $mail_data ) ) {
+            return $mail_data;
         }
 
         global $wpml_current_mail_id;
 
-        if ( ! empty( $mailArray['subject'] ) && mb_strlen( $mailArray['subject'] ) > 200 ) {
-            $mailArray['subject'] = mb_substr( $mailArray['subject'], 0, 195 ) . '...';
+        if ( ! empty( $mail_data['subject'] ) && mb_strlen( $mail_data['subject'] ) > 200 ) {
+            $mail_data['subject'] = mb_substr( $mail_data['subject'], 0, 195 ) . '...';
         }
 
-        $mailArray['headers'] = $this->get_mail_headers( $mailArray );
+        $mail_data['headers'] = $this->get_mail_headers( $mail_data );
 
-        $mail = (new WPML_MailExtractor())->extract($mailArray);
-        $mail->set_plugin_version($this->getVersionSaved());
-        $mail->set_timestamp(current_time( 'mysql' ));
-        $mail->set_host( isset( $_SERVER['SERVER_ADDR'] ) ? $_SERVER['SERVER_ADDR'] : '');
+        $mail = (new WPML_MailExtractor())->extract( $mail_data );
+        $mail->set_plugin_version( $this->getVersionSaved() );
+        $mail->set_timestamp( current_time( 'mysql' ) );
+        $mail->set_host( isset( $_SERVER['SERVER_ADDR'] ) ? $_SERVER['SERVER_ADDR'] : '' );
 
         $wpml_current_mail_id = $mail->save();
-
-        return $mailArray;
     }
 
     /**
