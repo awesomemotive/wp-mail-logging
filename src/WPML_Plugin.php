@@ -583,8 +583,8 @@ class WPML_Plugin extends WPML_LifeCycle implements IHooks {
 
         $should_force_add_content_type = true;
 
-        for ( $ctr = 0; $ctr < count( $mail_headers ); $ctr++ ) {
-            $header_arr = explode( ":", $mail_headers[ $ctr ] );
+        foreach ( $mail_headers as $mail_header ) {
+            $header_arr = explode( ":", $mail_header );
 
             // If Content-Type header is already set, don't add it again.
             if ( ! empty( $header_arr[0] ) && strtolower( $header_arr[0] ) === 'content-type' ) {
