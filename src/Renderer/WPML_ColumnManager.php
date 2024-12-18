@@ -29,6 +29,16 @@ class WPML_ColumnManager {
      * WPML_ColumnRenderer constructor.
      */
     public function __construct() {
+
+    }
+
+    /**
+     * Setup the columns.
+     *
+     * @since {VERSION}
+     */
+    private function setupColumns() {
+
         $this->columns = [
             self::COLUMN_MAIL_ID     => __( 'ID', 'wp-mail-logging' ),
             self::COLUMN_TIMESTAMP   => __( 'Time', 'wp-mail-logging' ),
@@ -60,6 +70,11 @@ class WPML_ColumnManager {
     }
 
     public function getColumns() {
+
+        if ( empty( $this->columns ) ) {
+            $this->setupColumns();
+        }
+
         return $this->columns;
     }
 
