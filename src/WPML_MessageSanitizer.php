@@ -48,6 +48,11 @@ class WPML_MessageSanitizer {
 
     private function stripEvilCode() {
         $allowed_tags = wp_kses_allowed_html( 'post' );
+
+        if ( ! is_array( $allowed_tags ) ) {
+            $allowed_tags = [];
+        }
+
         $allowed_tags['style'][''] = true;
         $allowed_tags[self::SAVED_COMMENT_HTMLEntity_OPEN][''] = true;
         $allowed_tags[self::SAVED_COMMENT_HTMLEntity_CLOSE][''] = true;
