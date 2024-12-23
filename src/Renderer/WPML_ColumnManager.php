@@ -35,7 +35,7 @@ class WPML_ColumnManager {
     /**
      * Setup the columns.
      *
-     * @since {VERSION}
+     * @since 1.14.0
      */
     private function setupColumns() {
 
