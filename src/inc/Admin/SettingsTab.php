@@ -206,7 +206,7 @@ class SettingsTab {
                 $this->create_field(
                     [
                         'bordered' => false,
-                        'desc'     => __( 'Select the minimum role required to view submission data.', 'wp-mail-logging' ),
+                        'desc'     => __( 'Select the WordPress user capability required to view submission data.', 'wp-mail-logging' ),
                         'id'       => 'can-see-submission-data',
                         'label'    => __( 'Can See Submission data', 'wp-mail-logging' ),
                         'options'  => $this->get_capabilities(),
