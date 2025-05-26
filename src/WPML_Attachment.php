@@ -109,8 +109,8 @@ class WPML_Attachment {
         // $relPath can be an empty string ''.
         if ( ! empty( $relPath ) ) {
             $basename = '/uploads';
-            $path = WP_CONTENT_DIR . $basename . $relPath;
-            $url = WP_CONTENT_URL . $basename . $relPath;
+            $path     = WP_CONTENT_DIR . $basename . DIRECTORY_SEPARATOR . ltrim( $relPath, '/\\' );
+            $url      = WP_CONTENT_URL . $basename . '/' . ltrim( $relPath, '/\\' );
 
             if ( self::getFS()->is_file( $path ) ) {
                 $gone = false;
