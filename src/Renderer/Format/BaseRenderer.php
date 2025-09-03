@@ -149,6 +149,7 @@ abstract class BaseRenderer implements IMailRenderer {
      *
      * @since 1.11.0
      * @since 1.12.0
+     * @since {VERSION} Used `esc_html()` on `receiver` column.
      *
      * @param string $key   Key of the value to render.
      * @param string $value Value to be rendered.

@@ -28,7 +28,9 @@ class GenericColumn implements IColumn {
     }
 
     /**
-     * @inheritdoc 
+     * Get the column name.
+     *
+     * @since {VERSION}
      */
     public function getColumnName() {
 
