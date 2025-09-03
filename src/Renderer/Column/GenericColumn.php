@@ -5,6 +5,7 @@ namespace No3x\WPML\Renderer\Column;
 use No3x\WPML\Renderer\Exception\ColumnDoesntExistException;
 
 class GenericColumn implements IColumn {
+
     protected $column_name;
 
     /**
@@ -24,5 +25,13 @@ class GenericColumn implements IColumn {
         }
 
         return $mailArray[$this->column_name];
+    }
+
+    /**
+     * @inheritdoc 
+     */
+    public function getColumnName() {
+
+        return $this->column_name;
     }
 }

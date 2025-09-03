@@ -54,7 +54,7 @@ class WPML_ColumnManager {
      * @param $column_name
      * @return IColumn
      */
-    public function getColumnRenderer($column_name) {
+    public function getColumnRenderer( $column_name ) {
         switch ($column_name) {
             case self::COLUMN_TIMESTAMP:
                 return new TimestampColumn();

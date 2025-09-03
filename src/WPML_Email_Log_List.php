@@ -734,7 +734,9 @@ class WPML_Email_Log_List extends \WP_List_Table implements IHooks {
             return $this->display_actions_icons( $item['mail_id'] );
         }
 
-        return ( new SanitizedColumnDecorator($this->columnManager->getColumnRenderer($column_name)))->render($item, ColumnFormat::FULL);
+        return ( new SanitizedColumnDecorator(
+            $this->columnManager->getColumnRenderer( $column_name )
+        ) )->render( $item, ColumnFormat::FULL );
     }
 
     /**
