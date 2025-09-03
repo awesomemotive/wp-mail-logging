@@ -198,17 +198,29 @@ class WPML_LifeCycle extends WPML_InstallIndicator {
         return admin_url('admin-ajax.php') . '?action=' . $actionName;
     }
 
+    /**
+     * Register plugin action links.
+     *
+     * @since {VERSION} Taken into account non-array `$actions`.
+     *
+     * @param string[] $actions     An array of plugin action links.
+     * @param string   $plugin_file Path to the plugin file relative to the plugins directory.
+     *
+     * @return array
+     */
     public function registerPluginActionLinks( $actions, $plugin_file ) {
-        if ($this->getMainPluginFileName() == basename($plugin_file)) {
+
+        if ( $this->getMainPluginFileName() == basename( $plugin_file ) ) {
             $admin_url = add_query_arg( 'tab', 'settings', WPML_Utils::get_admin_page_url() );
             $settings  = array('settings' => '<a href="' . esc_url( $admin_url ) . '">' . __( 'Settings', 'wp-mail-logging' ) . '</a>' );
 
-            if ( ! is_array( $actions ) ) {
+            if ( empty( $actions ) || ! is_array( $actions ) ) {
                 $actions = [];
             }
 
             $actions = array_merge( $settings, $actions );
         }
+
         return $actions;
     }
 }
