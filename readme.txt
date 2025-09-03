@@ -110,6 +110,7 @@ Yes, you can contribute on <a href="https://github.com/awesomemotive/wp-mail-log
 == Changelog ==
 = 1.15.0 - 2025-09-XX =
 Added: Support "Name <email@domain.test>" format on Receiver.
+Fixed: PHP Warning when JetPack plugin is also activated.
 
 = 1.14.0 - 2024-12-26 =
 Fixed: PHP warning notice when another plugin or code snippet passed an associative array to `WPML_Plugin::get_mail_headers()`.
