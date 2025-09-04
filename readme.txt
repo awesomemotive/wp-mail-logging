@@ -113,6 +113,7 @@ Added: Support "Name <email@domain.test>" format on Receiver.
 Added: New filters `wp_mail_logging_allowed_html_email_html_preview` and `wp_mail_logging_allowed_protocols_email_html_preview`.
 Fixed: PHP Warning when JetPack plugin is also activated.
 Fixed: Incorrect Headers format in modal row.
+Fixed: Long non-breaking message not displaying properly when viewed as Raw.
 
 = 1.14.0 - 2024-12-26 =
 Fixed: PHP warning notice when another plugin or code snippet passed an associative array to `WPML_Plugin::get_mail_headers()`.
