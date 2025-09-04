@@ -136,6 +136,10 @@ $medium-weight: 600;
 #wp-mail-logging-modal-content-body-table {
     border: 1px solid #DCDCDE;
     border-radius: 6px;
+
+    .wp-mail-logging-modal-row .wp-mail-logging-modal-row-html-container--raw {
+        overflow: auto;
+    }
 }
 
 .wp-mail-logging-modal {

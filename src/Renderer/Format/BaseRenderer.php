@@ -83,7 +83,7 @@ abstract class BaseRenderer implements IMailRenderer {
                     </div>
 
                     <?php
-                    if ( $key === 'message') {
+                    if ( $key === 'message' ) {
                         $this->render_message_value( $item, $settings['preferred-mail-format'] );
                     } else {
                         $this->render_column_value( $key, $value );
@@ -103,6 +103,7 @@ abstract class BaseRenderer implements IMailRenderer {
      * Render the message value.
      *
      * @since 1.11.0
+     * @since {VERSION} Added dynamic DOM class for the message container.
      *
      * @param array  $mail           Mail data in context.
      * @param string $default_format Default format of the message to render.
@@ -112,7 +113,7 @@ abstract class BaseRenderer implements IMailRenderer {
     private function render_message_value( $mail, $default_format = 'html' ) {
         $format = empty( $_POST['format'] ) ? $default_format : $_POST['format'];
         ?>
-        <div class="wp-mail-logging-modal-row-html-container">
+        <div class="wp-mail-logging-modal-row-html-container wp-mail-logging-modal-row-html-container--<?php echo esc_attr( $format ); ?>">
             <?php
             if ( $format === 'raw' ) {
                 echo nl2br( esc_html( $mail['message'] ) );
