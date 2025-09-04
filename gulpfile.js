@@ -6,7 +6,6 @@ var gulp = require('gulp'),
     clean = require('gulp-clean'),
     debug = require('gulp-debug'),
     exec = require('child_process').exec,
-    imagemin = require('gulp-imagemin'),
     packageJSON = require('./package.json'),
     rename = require('gulp-rename'),
     replace = require('gulp-replace'),
@@ -114,12 +113,20 @@ gulp.task('js', function () {
  * Optimize image files.
  */
 gulp.task('img', function () {
-    return gulp.src(plugin.images)
-        .pipe(imagemin())
-        .pipe(gulp.dest(function (file) {
-            return file.base;
-        }))
-        .pipe(debug({title: '[img]'}));
+    return import('gulp-imagemin').then(function (mod) {
+        var imagemin = mod && mod.default ? mod.default : mod;
+
+        return new Promise(function (resolve, reject) {
+            gulp.src(plugin.images)
+                .pipe(imagemin())
+                .pipe(gulp.dest(function (file) {
+                    return file.base;
+                }))
+                .pipe(debug({title: '[img]'}))
+                .on('end', resolve)
+                .on('error', reject);
+        });
+    });
 });
 
 /**
