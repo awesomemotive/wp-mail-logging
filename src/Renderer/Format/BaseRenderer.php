@@ -149,7 +149,7 @@ abstract class BaseRenderer implements IMailRenderer {
      *
      * @since 1.11.0
      * @since 1.12.0
-     * @since {VERSION} Used `esc_html()` on `receiver` column.
+     * @since {VERSION} Used `esc_html()` on Subject, Receiver, and Headers columns.
      *
      * @param string $key   Key of the value to render.
      * @param string $value Value to be rendered.
@@ -173,7 +173,13 @@ abstract class BaseRenderer implements IMailRenderer {
                 } catch ( \Exception $e ) {}
             }
 
-            if ( $key === WPML_ColumnManager::COLUMN_SUBJECT || $key === WPML_ColumnManager::COLUMN_RECEIVER ) {
+            $values_to_escape = [
+                WPML_ColumnManager::COLUMN_SUBJECT,
+                WPML_ColumnManager::COLUMN_RECEIVER,
+                WPML_ColumnManager::COLUMN_HEADERS,
+            ];
+
+            if ( in_array( $key, $values_to_escape, true ) ) {
                 echo esc_html( $value );
             } else {
                 echo wp_kses_post( $value );
