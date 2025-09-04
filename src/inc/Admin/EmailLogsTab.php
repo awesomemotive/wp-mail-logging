@@ -140,6 +140,7 @@ class EmailLogsTab {
      * Get the message to be rendered in the preview.
      *
      * @since 1.11.1
+     * @since {VERSION} Added filterable `$allowed_html` and `$allowed_protocols` to `wp_kses()`.
      *
      * @param string $message Email log message.
      *
@@ -151,10 +152,38 @@ class EmailLogsTab {
         $message = preg_replace( '/<xml\b[^>]*>(.*?)<\/xml>/is', '', $message );
         $message = preg_replace( '/<!--(.*?)-->/', '', $message );
 
-        $allowed_html = wp_kses_allowed_html( 'post' );
+        $allowed_html              = wp_kses_allowed_html( 'post' );
         $allowed_html['style'][''] = true;
 
-        return wp_kses( $message, $allowed_html );
+         /**
+         * Filters the allowed HTML in the email HTML preview.
+         *
+         * @since {VERSION}
+         *
+         * @param string[] $allowed_html Array of allowed HTML.
+         * @param string   $message      Email message.
+         */
+        $allowed_html = apply_filters(
+            'wp_mail_logging_allowed_html_email_html_preview',
+            $allowed_html,
+            $message
+        );
+
+        /**
+         * Filters the allowed protocols in the email HTML preview.
+         *
+         * @since {VERSION}
+         *
+         * @param string[] $allowed_protocols Array of allowed protocols.
+         * @param string   $message           Email message.
+         */
+        $allowed_protocols = apply_filters(
+            'wp_mail_logging_allowed_protocols_email_html_preview',
+            wp_allowed_protocols(),
+            $message
+        );
+
+        return wp_kses( $message, $allowed_html, $allowed_protocols );
     }
 
     /**

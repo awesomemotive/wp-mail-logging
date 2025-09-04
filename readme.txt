@@ -110,6 +110,7 @@ Yes, you can contribute on <a href="https://github.com/awesomemotive/wp-mail-log
 == Changelog ==
 = 1.15.0 - 2025-09-XX =
 Added: Support "Name <email@domain.test>" format on Receiver.
+Added: New filters `wp_mail_logging_allowed_html_email_html_preview` and `wp_mail_logging_allowed_protocols_email_html_preview`.
 Fixed: PHP Warning when JetPack plugin is also activated.
 
 = 1.14.0 - 2024-12-26 =
