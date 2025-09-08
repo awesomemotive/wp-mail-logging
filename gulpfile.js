@@ -6,7 +6,6 @@ var gulp = require('gulp'),
     clean = require('gulp-clean'),
     debug = require('gulp-debug'),
     exec = require('child_process').exec,
-    imagemin = require('gulp-imagemin'),
     packageJSON = require('./package.json'),
     rename = require('gulp-rename'),
     replace = require('gulp-replace'),
@@ -114,6 +113,8 @@ gulp.task('js', function () {
  * Optimize image files.
  */
 gulp.task('img', function () {
+    const imagemin = require('gulp-imagemin');
+
     return gulp.src(plugin.images)
         .pipe(imagemin())
         .pipe(gulp.dest(function (file) {
