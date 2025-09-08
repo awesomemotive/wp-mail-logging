@@ -112,11 +112,20 @@ gulp.task('js', function () {
 /**
  * Optimize image files.
  */
-gulp.task('img', function () {
-    const imagemin = require('gulp-imagemin');
+gulp.task('img', async function () {
+    const imagemin = await require('gulp-imagemin');
+    const {default: mozjpeg} = await import(`imagemin-mozjpeg`);
+    const {default: optipng} = await import(`imagemin-optipng`);
+    const {default: svgo} = await import(`imagemin-svgo`);
+    const {default: gifsicle} = await import(`imagemin-gifsicle`);
 
     return gulp.src(plugin.images)
-        .pipe(imagemin())
+        .pipe(imagemin([
+            gifsicle(),
+            mozjpeg(),
+            optipng(),
+            svgo()
+        ]))
         .pipe(gulp.dest(function (file) {
             return file.base;
         }))
