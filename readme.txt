@@ -6,7 +6,7 @@ License URI: http://www.gnu.org/licenses/gpl-3.0.html
 Requires at least: 5.3
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 1.14.0
+Stable tag: 1.15.0
 
 Log, view, and resend all emails sent from your WordPress site. Great for resolving email sending issues or keeping a copy for auditing.
 
@@ -108,12 +108,15 @@ Yes, you can contribute on <a href="https://github.com/awesomemotive/wp-mail-log
 3. The Settings - part 2
 
 == Changelog ==
-= 1.15.0 - 2025-09-XX =
+= 1.15.0 - 2025-09-09 =
 Added: Support "Name <email@domain.test>" format on Receiver.
 Added: New filters `wp_mail_logging_allowed_html_email_html_preview` and `wp_mail_logging_allowed_protocols_email_html_preview`.
+Changed: Description for the option "Can See Submission data".
 Fixed: PHP Warning when JetPack plugin is also activated.
 Fixed: Incorrect Headers format in modal row.
 Fixed: Long non-breaking message not displaying properly when viewed as Raw.
+Fixed: Some attachments are not displayed in the Email Logs table.
+Fixed: PHP Warning "Notice: Function _load_textdomain_just_in_time was called incorrectly".
 
 = 1.14.0 - 2024-12-26 =
 Fixed: PHP warning notice when another plugin or code snippet passed an associative array to `WPML_Plugin::get_mail_headers()`.

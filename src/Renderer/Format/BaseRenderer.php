@@ -103,7 +103,7 @@ abstract class BaseRenderer implements IMailRenderer {
      * Render the message value.
      *
      * @since 1.11.0
-     * @since {VERSION} Added dynamic DOM class for the message container.
+     * @since 1.15.0 Added dynamic DOM class for the message container.
      *
      * @param array  $mail           Mail data in context.
      * @param string $default_format Default format of the message to render.
@@ -150,7 +150,7 @@ abstract class BaseRenderer implements IMailRenderer {
      *
      * @since 1.11.0
      * @since 1.12.0
-     * @since {VERSION} Used `esc_html()` on Subject, Receiver, and Headers columns.
+     * @since 1.15.0 Used `esc_html()` on Subject, Receiver, and Headers columns.
      *
      * @param string $key   Key of the value to render.
      * @param string $value Value to be rendered.

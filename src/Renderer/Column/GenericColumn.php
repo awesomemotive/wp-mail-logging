@@ -30,7 +30,7 @@ class GenericColumn implements IColumn {
     /**
      * Get the column name.
      *
-     * @since {VERSION}
+     * @since 1.15.0
      */
     public function getColumnName() {
 

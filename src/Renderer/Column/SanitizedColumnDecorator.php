@@ -25,7 +25,7 @@ class SanitizedColumnDecorator implements IColumn {
     /**
      * @inheritdoc
      *
-     * @since {VERSION} Used `esc_html()` on `receiver` column.
+     * @since 1.15.0 Used `esc_html()` on `receiver` column.
      */
     public function render(array $mailArray, $format) {
         $delegated = $this->column->render($mailArray, $format);

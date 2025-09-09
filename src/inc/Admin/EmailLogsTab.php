@@ -140,7 +140,7 @@ class EmailLogsTab {
      * Get the message to be rendered in the preview.
      *
      * @since 1.11.1
-     * @since {VERSION} Added filterable `$allowed_html` and `$allowed_protocols` to `wp_kses()`.
+     * @since 1.15.0 Added filterable `$allowed_html` and `$allowed_protocols` to `wp_kses()`.
      *
      * @param string $message Email log message.
      *
@@ -158,7 +158,7 @@ class EmailLogsTab {
          /**
          * Filters the allowed HTML in the email HTML preview.
          *
-         * @since {VERSION}
+         * @since 1.15.0
          *
          * @param string[] $allowed_html Array of allowed HTML.
          * @param string   $message      Email message.
@@ -172,7 +172,7 @@ class EmailLogsTab {
         /**
          * Filters the allowed protocols in the email HTML preview.
          *
-         * @since {VERSION}
+         * @since 1.15.0
          *
          * @param string[] $allowed_protocols Array of allowed protocols.
          * @param string   $message           Email message.

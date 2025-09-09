@@ -201,7 +201,7 @@ class WPML_LifeCycle extends WPML_InstallIndicator {
     /**
      * Register plugin action links.
      *
-     * @since {VERSION} Taken into account non-array `$actions`.
+     * @since 1.15.0 Taken into account non-array `$actions`.
      *
      * @param string[] $actions     An array of plugin action links.
      * @param string   $plugin_file Path to the plugin file relative to the plugins directory.
