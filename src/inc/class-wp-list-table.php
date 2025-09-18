@@ -406,7 +406,7 @@ class WP_List_Table {
         $m = isset( $_GET['m'] ) ? (int) $_GET['m'] : 0;
         ?>
         <select name='m'>
-            <option<?php selected( $m, 0 ); ?> value='0'><?php _e( 'Show all dates' ); ?></option>
+            <option<?php selected( $m, 0 ); ?> value='0'><?php _e( 'Show all dates', 'wp-mail-logging' ); ?></option>
             <?php
             foreach ( $months as $arc_row ) {
                 if ( 0 == $arc_row->year )
@@ -436,7 +436,7 @@ class WP_List_Table {
     function view_switcher( $current_mode ) {
         $modes = array(
             'list'    => __( 'List View' ),
-            'excerpt' => __( 'Excerpt View' )
+            'excerpt' => __( 'Excerpt View', 'wp-mail-logging' )
         );
 
         ?>
@@ -462,7 +462,7 @@ class WP_List_Table {
      * @param int $pending_comments
      */
     function comments_bubble( $post_id, $pending_comments ) {
-        $pending_phrase = sprintf( __( '%s pending' ), number_format( $pending_comments ) );
+        $pending_phrase = sprintf( __( '%s pending', 'wp-mail-logging' ), number_format( $pending_comments ) );
 
         if ( $pending_comments )
             echo '<strong>';
@@ -530,7 +530,7 @@ class WP_List_Table {
 
         extract( $this->_pagination_args, EXTR_SKIP );
 
-        $output = '<span class="displaying-num">' . sprintf( _n( '1 item', '%s items', $total_items ), number_format_i18n( $total_items ) ) . '</span>';
+        $output = '<span class="displaying-num">' . sprintf( _n( '1 item', '%s items', $total_items, 'wp-mail-logging' ), number_format_i18n( $total_items ) ) . '</span>';
 
         $current = $this->get_pagenum();
 
@@ -548,14 +548,14 @@ class WP_List_Table {
 
         $page_links[] = sprintf( "<a class='%s' title='%s' href='%s'>%s</a>",
             'first-page' . $disable_first,
-            esc_attr__( 'Go to the first page' ),
+            esc_attr__( 'Go to the first page', 'wp-mail-logging' ),
             esc_url( remove_query_arg( 'paged', $current_url ) ),
             '&laquo;'
         );
 
         $page_links[] = sprintf( "<a class='%s' title='%s' href='%s'>%s</a>",
             'prev-page' . $disable_first,
-            esc_attr__( 'Go to the previous page' ),
+            esc_attr__( 'Go to the previous page', 'wp-mail-logging' ),
             esc_url( add_query_arg( 'paged', max( 1, $current-1 ), $current_url ) ),
             '&lsaquo;'
         );
@@ -574,14 +574,14 @@ class WP_List_Table {
 
         $page_links[] = sprintf( "<a class='%s' title='%s' href='%s'>%s</a>",
             'next-page' . $disable_last,
-            esc_attr__( 'Go to the next page' ),
+            esc_attr__( 'Go to the next page', 'wp-mail-logging' ),
             esc_url( add_query_arg( 'paged', min( $total_pages, $current+1 ), $current_url ) ),
             '&rsaquo;'
         );
 
         $page_links[] = sprintf( "<a class='%s' title='%s' href='%s'>%s</a>",
             'last-page' . $disable_last,
-            esc_attr__( 'Go to the last page' ),
+            esc_attr__( 'Go to the last page', 'wp-mail-logging' ),
             esc_url( add_query_arg( 'paged', $total_pages, $current_url ) ),
             '&raquo;'
         );
@@ -945,7 +945,7 @@ class WP_List_Table {
         $response = array( 'rows' => $rows );
 
         if ( isset( $total_items ) )
-            $response['total_items_i18n'] = sprintf( _n( '1 item', '%s items', $total_items ), number_format_i18n( $total_items ) );
+            $response['total_items_i18n'] = sprintf( _n( '1 item', '%s items', $total_items, 'wp-mail-logging' ), number_format_i18n( $total_items ) );
 
         if ( isset( $total_pages ) ) {
             $response['total_pages'] = $total_pages;

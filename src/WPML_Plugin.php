@@ -275,7 +275,7 @@ class WPML_Plugin extends WPML_LifeCycle implements IHooks {
                         '<img src="%1$s" srcset="%2$s 2x" alt="%3$s"/>',
                         esc_url( $assets_url . '/images/logo.png' ),
                         esc_url( $assets_url . '/images/logo@2x.png' ),
-                        esc_html__( 'WP Mail Logging logo')
+                        esc_html__( 'WP Mail Logging logo', 'wp-mail-logging' )
                     )
                     ?>
                 </div>

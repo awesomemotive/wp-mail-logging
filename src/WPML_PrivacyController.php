@@ -51,7 +51,7 @@ class WPML_PrivacyController implements IHooks {
 
     function register_exporter( $exporters ) {
         $exporters[self::WPML_PRIVACY_EXPORTER] = array(
-            'exporter_friendly_name' => __( 'WP Mail Logging' ),
+            'exporter_friendly_name' => __( 'WP Mail Logging', 'wp-mail-logging' ),
             'callback'               => [$this, 'export'],
         );
         return $exporters;
@@ -59,7 +59,7 @@ class WPML_PrivacyController implements IHooks {
 
     function register_eraser( $erasers ) {
         $erasers[self::WPML_PRIVACY_ERASER] = array(
-            'eraser_friendly_name' => __( 'WP Mail Logging' ),
+            'eraser_friendly_name' => __( 'WP Mail Logging', 'wp-mail-logging' ),
             'callback'             => [$this, 'erase'],
         );
         return $erasers;
@@ -98,7 +98,7 @@ class WPML_PrivacyController implements IHooks {
             // If you define your own group, the first exporter to
             // include a label will be used as the group label in the
             // final exported report
-            $group_label = __( 'Mails' );
+            $group_label = __( 'Mails', 'wp-mail-logging' );
 
             // Plugins can add as many items in the item data array as they want
             $mail_as_array = $mail->to_array();
