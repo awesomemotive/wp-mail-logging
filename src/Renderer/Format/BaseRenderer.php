@@ -128,7 +128,7 @@ abstract class BaseRenderer implements IMailRenderer {
 
                 $iframe_title = sprintf(
                     /* translators: %d - Email Log ID. */
-                    __( "Email Log ID Content: %d" ),
+                    __( "Email Log ID Content: %d", 'wp-mail-logging' ),
                     absint( $mail['mail_id'] )
                 )
                 ?>
