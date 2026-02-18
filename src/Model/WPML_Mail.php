@@ -3,6 +3,7 @@
 namespace No3x\WPML\Model;
 
 use \DateTime;
+use Exception;
 use No3x\WPML\ORM\BaseModel;
 
 // Exit if accessed directly
@@ -89,7 +90,31 @@ class WPML_Mail extends BaseModel {
      */
     public function __construct(array $properties = array())
     {
-        parent::__construct($properties);
+        $model_props = $this->properties();
+        $properties  = array_intersect_key($properties, $model_props);
+
+        foreach ( $properties as $property => $value ) {
+
+            if ( ! is_string( $value ) || ! is_serialized( $value ) ) {
+                $this->{$property} = $value;
+                continue;
+            }
+
+            $unserialized_val = unserialize(
+                $value,
+                [
+                    'allowed_classes' => false,
+                ]
+            );
+
+            $property_val = '';
+
+            if ( ! is_object( $unserialized_val ) ) {
+                $property_val = $unserialized_val;
+            }
+
+            $this->{$property} = $property_val;
+        }
     }
 
     /**
