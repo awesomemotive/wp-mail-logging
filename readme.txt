@@ -4,9 +4,9 @@ Tags: email, email log, smtp, spam, deliverability
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 Requires at least: 5.3
-Tested up to: 6.8
+Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 1.15.0
+Stable tag: 1.16.0
 
 Log, view, and resend all emails sent from your WordPress site. Great for resolving email sending issues or keeping a copy for auditing.
 
@@ -108,6 +108,9 @@ Yes, you can contribute on <a href="https://github.com/awesomemotive/wp-mail-log
 3. The Settings - part 2
 
 == Changelog ==
+= 1.16.0 - 2026-02-19 =
+Fixed: Security improvement.
+
 = 1.15.0 - 2025-09-09 =
 Added: Support "Name <email@domain.test>" format on Receiver.
 Added: New filters `wp_mail_logging_allowed_html_email_html_preview` and `wp_mail_logging_allowed_protocols_email_html_preview`.

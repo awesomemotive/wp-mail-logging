@@ -1,13 +1,13 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: WP Mail Logging 1.15.0\n"
+"Project-Id-Version: WP Mail Logging 1.16.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wp-mail-logging\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2025-09-08T09:43:08+00:00\n"
+"POT-Creation-Date: 2026-02-19T06:54:25+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.8.1\n"
 "X-Domain: wp-mail-logging\n"
@@ -16,6 +16,8 @@ msgstr ""
 #: src/WPML_OptionsManager.php:363
 #: src/WPML_OptionsManager.php:400
 #: src/WPML_OptionsManager.php:401
+#: src/WPML_PrivacyController.php:54
+#: src/WPML_PrivacyController.php:62
 msgid "WP Mail Logging"
 msgstr ""
 
@@ -398,6 +400,41 @@ msgstr ""
 msgid "Start Setup"
 msgstr ""
 
+#: src/inc/class-wp-list-table.php:409
+msgid "Show all dates"
+msgstr ""
+
+#: src/inc/class-wp-list-table.php:439
+msgid "Excerpt View"
+msgstr ""
+
+#: src/inc/class-wp-list-table.php:465
+msgid "%s pending"
+msgstr ""
+
+#: src/inc/class-wp-list-table.php:533
+#: src/inc/class-wp-list-table.php:948
+msgid "1 item"
+msgid_plural "%s items"
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/inc/class-wp-list-table.php:551
+msgid "Go to the first page"
+msgstr ""
+
+#: src/inc/class-wp-list-table.php:558
+msgid "Go to the previous page"
+msgstr ""
+
+#: src/inc/class-wp-list-table.php:577
+msgid "Go to the next page"
+msgstr ""
+
+#: src/inc/class-wp-list-table.php:584
+msgid "Go to the last page"
+msgstr ""
+
 #: src/inc/Migration/Migration.php:327
 msgid "An optional database optimization upgrade is available. Click <a href=\"%s\">here</a> to learn more."
 msgstr ""
@@ -502,6 +539,11 @@ msgstr ""
 #: src/Renderer/Format/BaseRenderer.php:53
 #: src/Renderer/WPML_ColumnManager.php:45
 msgid "Host"
+msgstr ""
+
+#. translators: %d - Email Log ID.
+#: src/Renderer/Format/BaseRenderer.php:131
+msgid "Email Log ID Content: %d"
 msgstr ""
 
 #. translators: %s - Link to the SMTP page.
@@ -655,6 +697,10 @@ msgstr ""
 msgid "Anyone"
 msgstr ""
 
+#: src/WPML_Plugin.php:278
+msgid "WP Mail Logging logo"
+msgstr ""
+
 #: src/WPML_Plugin.php:421
 msgid "Heads up!"
 msgstr ""
@@ -679,6 +725,10 @@ msgstr ""
 
 #: src/WPML_PrivacyController.php:43
 msgid "When you use this site several actions (e.g. commenting) trigger the dispatch of emails. They contain information about you associated with your email address. Which data are part of these emails depends on the action performed. These emails are stored and accessible to the site management as log."
+msgstr ""
+
+#: src/WPML_PrivacyController.php:101
+msgid "Mails"
 msgstr ""
 
 #. translators: %d Mail Log ID that was not removed.
