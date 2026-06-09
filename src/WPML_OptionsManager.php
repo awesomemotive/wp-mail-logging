@@ -432,6 +432,14 @@ class WPML_OptionsManager {
             '__return_null'
         );
 
+        add_submenu_page( $menu_slug,
+            __( 'Spam Protection', 'wp-mail-logging' ),
+            __( 'Spam Protection', 'wp-mail-logging' ),
+            $capability,
+            $menu_slug . '&tab=activelayer',
+            '__return_null'
+        );
+
         // Fix submenu highlighting depending on the selected tab.
         add_filter( 'submenu_file', function( $submenu_file, $parent_file ) use ( $menu_slug ) {
 

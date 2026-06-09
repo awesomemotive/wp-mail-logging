@@ -5,6 +5,7 @@ namespace No3x\WPML;
 use No3x\WPML\Admin\EmailLogsTab;
 use No3x\WPML\Admin\SettingsTab;
 use No3x\WPML\Admin\SMTPTab;
+use No3x\WPML\Admin\ActiveLayerTab;
 use No3x\WPML\Migration\Migration;
 use No3x\WPML\Model\WPML_Mail as Mail;
 use No3x\WPML\Renderer\WPML_MailRenderer_AJAX_Handler;
@@ -171,6 +172,7 @@ class WPML_Plugin extends WPML_LifeCycle implements IHooks {
         EmailLogsTab::get_instance()->hooks();
         SettingsTab::get_instance()->hooks();
         SMTPTab::get_instance()->hooks();
+        ActiveLayerTab::get_instance()->hooks();
 
         add_action( 'current_screen', [ $this, 'create_screens' ], 90 );
 
@@ -305,6 +307,10 @@ class WPML_Plugin extends WPML_LifeCycle implements IHooks {
                                 'slug'  => 'smtp',
                                 'label' => __( 'SMTP', 'wp-mail-logging' ),
                             ],
+                            [
+                                'slug'  => 'activelayer',
+                                'label' => __( 'Spam Protection', 'wp-mail-logging' ),
+                            ],
                         ]
                     );
                 }
@@ -358,8 +364,9 @@ class WPML_Plugin extends WPML_LifeCycle implements IHooks {
 
         if ( current_user_can( self::get_view_settings_capability() ) ) {
             $allowed_screens = [
-                'settings' => SettingsTab::get_instance(),
-                'smtp'     => SMTPTab::get_instance(),
+                'settings'    => SettingsTab::get_instance(),
+                'smtp'        => SMTPTab::get_instance(),
+                'activelayer' => ActiveLayerTab::get_instance(),
             ];
         }
 
