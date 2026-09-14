@@ -177,6 +177,8 @@ class EmailLogsTab {
      *
      * @since 1.11.1
      * @since 1.15.0 Added filterable `$allowed_html` and `$allowed_protocols` to `wp_kses()`.
+     * @since 1.17.0 `$allowed_html` now has `a.target` and `a.rel` removed before it reaches
+     *               the `wp_mail_logging_allowed_html_email_html_preview` filter.
      *
      * @param string $message Email log message.
      *
@@ -191,6 +193,10 @@ class EmailLogsTab {
         $allowed_html              = wp_kses_allowed_html( 'post' );
         $allowed_html['style'][''] = true;
 
+        // Removed before the filter below runs, so a filter that rebuilds $allowed_html
+        // from wp_kses_allowed_html( 'post' ) (rather than mutating what it received) will
+        // re-add `a.target`/`a.rel`. That is harmless here: the iframe sandbox still blocks
+        // top-level navigation, but it is worth writing down since it is easy to miss.
         unset( $allowed_html['a']['target'], $allowed_html['a']['rel'] );
 
          /**
@@ -251,6 +257,14 @@ class EmailLogsTab {
 
         /**
          * Filters the Content Security Policy directives for the email HTML preview.
+         *
+         * This is the only supported way to change the `sandbox` directive's value.
+         * It must be kept in sync with the `PREVIEW_SANDBOX_TOKENS` constant, which
+         * supplies the same tokens to the iframe's `sandbox` attribute -- browsers take
+         * the intersection of the header and attribute, so narrowing one without the
+         * other silently breaks the preview (e.g. a filtered `sandbox allow-scripts`
+         * loses `allow-popups`, and every link in the preview stops working with no
+         * console error).
          *
          * @since 1.17.0
          *

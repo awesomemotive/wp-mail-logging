@@ -48,7 +48,12 @@ class ErrorColumn extends GenericColumn {
             return $item['error'];
         }
 
-        return substr( $item['error'], 0, self::MAX_ERROR_CHAR_LENGTH ) . '...';
+        // Use mb_strcut() instead of substr(): substr() cuts by raw bytes and can
+        // split a multibyte UTF-8 character in half, producing an invalid string.
+        // The caller (column_default()) passes this through esc_html(), which calls
+        // wp_check_invalid_utf8() and returns '' for invalid UTF-8 -- so a mid-character
+        // cut silently blanks the whole cell instead of just looking wrong.
+        return mb_strcut( $item['error'], 0, self::MAX_ERROR_CHAR_LENGTH ) . '...';
     }
 
 }
