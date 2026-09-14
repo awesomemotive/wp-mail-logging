@@ -48,7 +48,7 @@ class ErrorColumn extends GenericColumn {
             return $item['error'];
         }
 
-        echo substr( $item['error'], 0, self::MAX_ERROR_CHAR_LENGTH ) . '...';
+        return substr( $item['error'], 0, self::MAX_ERROR_CHAR_LENGTH ) . '...';
     }
 
 }
