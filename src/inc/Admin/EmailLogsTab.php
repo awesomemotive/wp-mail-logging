@@ -252,16 +252,23 @@ class EmailLogsTab {
          * @param bool  $remote_allowed Whether remote images and fonts may load.
          * @param int   $mail_id        Email log ID being previewed.
          */
-        $directives = apply_filters(
+        $filtered_directives = apply_filters(
             'wp_mail_logging_csp_email_html_preview',
             $directives,
             $remote_allowed,
             $mail_id
         );
 
+        // A filter that returns anything but a non-empty array would otherwise
+        // produce an empty policy, which browsers treat as no policy at all.
+        // Fall back to the unfiltered directives so this fails closed.
+        if ( ! is_array( $filtered_directives ) || empty( $filtered_directives ) ) {
+            $filtered_directives = $directives;
+        }
+
         $parts = [];
 
-        foreach ( $directives as $directive => $value ) {
+        foreach ( $filtered_directives as $directive => $value ) {
             $parts[] = $value === '' ? $directive : $directive . ' ' . $value;
         }
 
