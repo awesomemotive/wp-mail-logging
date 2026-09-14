@@ -149,11 +149,17 @@ class EmailLogsTab {
 
         $mail_id = absint( $_GET['email_log_id'] );
 
+        // `get_settings()` does not merge defaults, so an install upgraded from
+        // an earlier version has no such key. empty() neither warns nor treats
+        // a missing key as enabled, so the upgrade failure mode is the safe one.
+        $settings       = SettingsTab::get_settings( SettingsTab::DEFAULT_SETTINGS );
+        $remote_allowed = ! empty( $settings['load-remote-images'] ) || ! empty( $_GET['load_remote'] );
+
         if ( ! headers_sent() ) {
             header( 'Content-Type: text/html; charset=' . get_bloginfo( 'charset' ) );
             header( 'X-Content-Type-Options: nosniff' );
             header( 'Referrer-Policy: no-referrer' );
-            header( 'Content-Security-Policy: ' . $this->get_csp_header_value( true, $mail_id ) );
+            header( 'Content-Security-Policy: ' . $this->get_csp_header_value( $remote_allowed, $mail_id ) );
         }
 
         // Sent as a prelude rather than a full document wrapper, so emails that
@@ -251,6 +257,9 @@ class EmailLogsTab {
          * @param array $directives     Map of directive name to value.
          * @param bool  $remote_allowed Whether remote images and fonts may load.
          * @param int   $mail_id        Email log ID being previewed.
+         *
+         * @return array A filter must return a non-empty array of directives; anything else
+         *               (an empty array, or a non-array value) leaves the default directives in place.
          */
         $filtered_directives = apply_filters(
             'wp_mail_logging_csp_email_html_preview',

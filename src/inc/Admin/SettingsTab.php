@@ -22,6 +22,7 @@ class SettingsTab {
         'preferred-mail-format'         => 'html',
         'display-host'                  => '0',
         'display-attachments'           => '0',
+        'load-remote-images'            => '0',
         'log-rotation-limit-amout'      => '0',
         'log-rotation-limit-amout-keep' => '75',
         'log-rotation-delete-time'      => '0',
@@ -267,6 +268,17 @@ class SettingsTab {
                         'label'    => __( 'Display Attachments', 'wp-mail-logging' ),
                         'type'     => 'checkbox-toggle',
                         'value'    => empty( $saved_settings['display-attachments'] ) ? '0' : '1',
+                    ]
+                );
+
+                $this->create_field(
+                    [
+                        'bordered' => false,
+                        'desc'     => __( 'Load images and fonts hosted on other servers when previewing an email. Leaving this off means senders cannot tell when you open a log entry. You can still load them for a single entry from the preview.', 'wp-mail-logging' ),
+                        'id'       => 'load-remote-images',
+                        'label'    => __( 'Always Load Remote Images', 'wp-mail-logging' ),
+                        'type'     => 'checkbox-toggle',
+                        'value'    => empty( $saved_settings['load-remote-images'] ) ? '0' : '1',
                     ]
                 );
 
