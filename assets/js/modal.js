@@ -212,6 +212,21 @@ jQuery(function ($) {
         e.preventDefault();
         wpml.modal.hide();
     });
+
+    $( document ).on( 'click', '.wp-mail-logging-load-remote', function ( e ) {
+        e.preventDefault();
+
+        var $notice = $( this ).closest( '.wp-mail-logging-remote-content-notice' ),
+            $iframe = $notice.siblings( 'iframe' ).first();
+
+        if ( $iframe.length <= 0 ) {
+            return;
+        }
+
+        $iframe.attr( 'src', utils.updateQueryString( 'load_remote', '1', $iframe.attr( 'src' ) ) );
+        $notice.remove();
+    });
+
     $(document).keyup(function(e) {
         if (e.keyCode === 27) wpml.modal.hide();
     });

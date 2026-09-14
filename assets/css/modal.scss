@@ -142,6 +142,19 @@ $medium-weight: 600;
     }
 }
 
+.wp-mail-logging-remote-content-notice {
+    align-items: center;
+    background: #F6F7F7;
+    border: 1px solid #DCDCDE;
+    border-bottom: none;
+    display: flex;
+    gap: 10px;
+    justify-content: space-between;
+    padding: 8px 12px;
+    width: 598px;
+    box-sizing: border-box;
+}
+
 .wp-mail-logging-modal {
 
     &-row {

@@ -132,6 +132,20 @@ abstract class BaseRenderer implements IMailRenderer {
                     absint( $mail['mail_id'] )
                 )
                 ?>
+                <?php
+                $settings = SettingsTab::get_settings( SettingsTab::DEFAULT_SETTINGS );
+
+                if ( empty( $settings['load-remote-images'] ) ) {
+                    ?>
+                    <div class="wp-mail-logging-remote-content-notice">
+                        <span><?php esc_html_e( 'Remote images are blocked.', 'wp-mail-logging' ); ?></span>
+                        <button type="button" class="button wp-mail-logging-load-remote">
+                            <?php esc_html_e( 'Load images', 'wp-mail-logging' ); ?>
+                        </button>
+                    </div>
+                    <?php
+                }
+                ?>
                 <iframe id="SingleEmailLogContent"
                     title="<?php echo esc_attr( $iframe_title ); ?>"
                     height="320"
