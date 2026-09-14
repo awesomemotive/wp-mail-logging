@@ -55,7 +55,7 @@ class WPML_MessageSanitizer {
      * leaks its tail, and what leaks is inert text rather than a live tag.
      * A proper fix needs a comment-aware linear scanner rather than regexes.
      *
-     * @since {VERSION}
+     * @since 1.17.0
      *
      * @return void
      */

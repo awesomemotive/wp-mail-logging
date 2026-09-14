@@ -46,7 +46,7 @@ class EmailLogsTab {
      * to navigate the admin window. The Content Security Policy repeats
      * these tokens, so both must be changed together.
      *
-     * @since {VERSION}
+     * @since 1.17.0
      *
      * @var string
      */
@@ -227,7 +227,7 @@ class EmailLogsTab {
     /**
      * Build the Content Security Policy for the email preview response.
      *
-     * @since {VERSION}
+     * @since 1.17.0
      *
      * @param bool $remote_allowed Whether remote images and fonts may load.
      * @param int  $mail_id        Email log ID being previewed.
@@ -252,7 +252,7 @@ class EmailLogsTab {
         /**
          * Filters the Content Security Policy directives for the email HTML preview.
          *
-         * @since {VERSION}
+         * @since 1.17.0
          *
          * @param array $directives     Map of directive name to value.
          * @param bool  $remote_allowed Whether remote images and fonts may load.

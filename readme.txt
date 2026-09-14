@@ -6,7 +6,7 @@ License URI: http://www.gnu.org/licenses/gpl-3.0.html
 Requires at least: 5.3
 Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 1.16.0
+Stable tag: 1.17.0
 
 Log, view, and resend all emails sent from your WordPress site. Great for resolving email sending issues or keeping a copy for auditing.
 
@@ -108,6 +108,14 @@ Yes, you can contribute on <a href="https://github.com/awesomemotive/wp-mail-log
 3. The Settings - part 2
 
 == Changelog ==
+= 1.17.0 - 2026-09-14 =
+Fixed: Security - email content is now escaped on the Email Log list screen instead of being filtered as markup.
+Fixed: Security - the email preview is now sandboxed, and links in it open in a new tab rather than navigating the admin.
+Added: Remote images in previews are blocked by default, with a per-entry "Load images" control and an "Always Load Remote Images" setting.
+Added: New filter `wp_mail_logging_csp_email_html_preview` to adjust the preview's Content Security Policy.
+Changed: Audio and video elements no longer play inside the email preview.
+Fixed: Quoted-printable encoded subjects no longer show a trailing "?".
+
 = 1.16.0 - 2026-02-19 =
 Fixed: Security improvement.
 

@@ -37,7 +37,7 @@ class WPML_Email_Log_List extends \WP_List_Table implements IHooks {
      * Every other column is escaped. Adding to this list means the column's
      * renderer is responsible for escaping everything it interpolates.
      *
-     * @since {VERSION}
+     * @since 1.17.0
      *
      * @var string[]
      */
