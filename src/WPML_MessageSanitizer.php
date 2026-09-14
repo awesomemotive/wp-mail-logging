@@ -38,7 +38,22 @@ class WPML_MessageSanitizer {
      *
      * wp_kses() strips the tags but keeps the CSS between them, which would
      * render as visible text. This path feeds the admin document, so the
-     * element is removed entirely rather than allowed.
+     * element is removed entirely rather than allowed. An unterminated
+     * `<style>` takes everything to the end of its segment with it, matching
+     * how a browser would parse it. The buffer is first split on HTML
+     * comments so a literal `<style` sitting inside comment content cannot
+     * pair with a real closing tag elsewhere and consume the comment markers
+     * in between; comment contents are left untouched since they are not
+     * rendered.
+     *
+     * Known limitation: a "<!--" occurring inside a <style> element is not
+     * really a comment delimiter there, but this split treats it as one, so
+     * the element is torn in two at that point. The common legacy pattern of
+     * wrapping an entire stylesheet in a comment (`<style><!-- ...css...
+     * --></style>`) is unaffected, since all of its CSS ends up inside the
+     * resulting comment segment and is never rendered; only a partial one
+     * leaks its tail, and what leaks is inert text rather than a live tag.
+     * A proper fix needs a comment-aware linear scanner rather than regexes.
      *
      * @since {VERSION}
      *
@@ -46,8 +61,25 @@ class WPML_MessageSanitizer {
      */
     private function stripStyleBlocks() {
 
-        $this->buffer = preg_replace( '#<style\b[^>]*>.*?</style>#is', '', $this->buffer );
-        $this->buffer = preg_replace( '#<style\b[^>]*/?>#i', '', $this->buffer );
+        // Split on HTML comments, keeping them. Comment contents are left
+        // verbatim: they are not rendered, and a style regex reaching across a
+        // comment boundary would consume the terminator and leave a dangling
+        // marker. With one capture group, odd indices are the comments.
+        $parts = preg_split( '#(<!--.*?-->)#s', $this->buffer, -1, PREG_SPLIT_DELIM_CAPTURE );
+
+        foreach ( $parts as $i => $part ) {
+
+            if ( $i % 2 === 1 ) {
+                continue;
+            }
+
+            // Well-formed blocks first, then an unterminated one to the end of
+            // the segment, which is how a browser parses it.
+            $part = preg_replace( '#<style\b[^>]*>.*?</style>#is', '', $part );
+            $parts[ $i ] = preg_replace( '#<style\b[^>]*>.*$#is', '', $part );
+        }
+
+        $this->buffer = implode( '', $parts );
     }
 
     private function saveComments() {
