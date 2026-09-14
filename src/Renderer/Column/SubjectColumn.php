@@ -64,7 +64,7 @@ class SubjectColumn extends GenericColumn {
             return quoted_printable_decode( $this->get_encoded_subject( self::EMAIL_SUBJECT_QUOTED_ENCODED ) );
         }
 
-        return esc_html( $this->subject );
+        return $this->subject;
     }
 
     /**
@@ -78,8 +78,11 @@ class SubjectColumn extends GenericColumn {
      */
     private function get_encoded_subject( $encode ) {
 
-        $encode_len      = strlen( $encode );
-        $encoded_subject = substr( $this->subject, $encode_len, strlen( $this->subject ) - $encode_len - 1 );
+        $encoded_subject = substr( $this->subject, strlen( $encode ) );
+
+        if ( substr( $encoded_subject, -2 ) === '?=' ) {
+            $encoded_subject = substr( $encoded_subject, 0, -2 );
+        }
 
         return $encoded_subject;
     }
