@@ -38,6 +38,21 @@ class EmailLogsTab {
     const SINGLE_EMAIL_CONTENT_PREVIEW_MODE_NONCE = 'wp-mail-logging-single-email-preview';
 
     /**
+     * Sandbox tokens applied to the email preview.
+     *
+     * Popups are permitted so links can open in a new tab, and that tab
+     * escapes the sandbox so the destination site works normally. Nothing
+     * else is granted: no script, no forms, no admin origin, and no ability
+     * to navigate the admin window. The Content Security Policy repeats
+     * these tokens, so both must be changed together.
+     *
+     * @since {VERSION}
+     *
+     * @var string
+     */
+    const PREVIEW_SANDBOX_TOKENS = 'allow-popups allow-popups-to-escape-sandbox';
+
+    /**
      * Only instance of this object.
      *
      * @since 1.11.0

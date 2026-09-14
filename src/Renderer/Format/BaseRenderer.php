@@ -132,10 +132,11 @@ abstract class BaseRenderer implements IMailRenderer {
                     absint( $mail['mail_id'] )
                 )
                 ?>
-                <iframe id="SingleEmailLogContent>"
+                <iframe id="SingleEmailLogContent"
                     title="<?php echo esc_attr( $iframe_title ); ?>"
                     height="320"
                     width="598"
+                    sandbox="<?php echo esc_attr( EmailLogsTab::PREVIEW_SANDBOX_TOKENS ); ?>"
                     src="<?php echo esc_url( $iframe_src ); ?>">
                 </iframe>
             <?php
