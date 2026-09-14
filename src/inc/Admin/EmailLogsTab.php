@@ -147,6 +147,21 @@ class EmailLogsTab {
             return;
         }
 
+        $mail_id = absint( $_GET['email_log_id'] );
+
+        if ( ! headers_sent() ) {
+            header( 'Content-Type: text/html; charset=' . get_bloginfo( 'charset' ) );
+            header( 'X-Content-Type-Options: nosniff' );
+            header( 'Referrer-Policy: no-referrer' );
+            header( 'Content-Security-Policy: ' . $this->get_csp_header_value( true, $mail_id ) );
+        }
+
+        // Sent as a prelude rather than a full document wrapper, so emails that
+        // style `body` keep rendering as they do today. The base element is what
+        // sends links with no target of their own out of the frame.
+        echo '<meta name="referrer" content="no-referrer">' . "\n";
+        echo '<base target="_blank">' . "\n";
+
         echo $this->get_html_preview_message( $mail->get_message() );
         exit;
     }
@@ -169,6 +184,8 @@ class EmailLogsTab {
 
         $allowed_html              = wp_kses_allowed_html( 'post' );
         $allowed_html['style'][''] = true;
+
+        unset( $allowed_html['a']['target'], $allowed_html['a']['rel'] );
 
          /**
          * Filters the allowed HTML in the email HTML preview.
@@ -199,6 +216,56 @@ class EmailLogsTab {
         );
 
         return wp_kses( $message, $allowed_html, $allowed_protocols );
+    }
+
+    /**
+     * Build the Content Security Policy for the email preview response.
+     *
+     * @since {VERSION}
+     *
+     * @param bool $remote_allowed Whether remote images and fonts may load.
+     * @param int  $mail_id        Email log ID being previewed.
+     *
+     * @return string
+     */
+    private function get_csp_header_value( $remote_allowed, $mail_id ) {
+
+        $resource = $remote_allowed ? 'https: data:' : 'data:';
+
+        $directives = [
+            'default-src'     => "'none'",
+            'img-src'         => $resource,
+            'font-src'        => $resource,
+            'style-src'       => "'unsafe-inline'",
+            'base-uri'        => "'none'",
+            'form-action'     => "'none'",
+            'frame-ancestors' => "'self'",
+            'sandbox'         => self::PREVIEW_SANDBOX_TOKENS,
+        ];
+
+        /**
+         * Filters the Content Security Policy directives for the email HTML preview.
+         *
+         * @since {VERSION}
+         *
+         * @param array $directives     Map of directive name to value.
+         * @param bool  $remote_allowed Whether remote images and fonts may load.
+         * @param int   $mail_id        Email log ID being previewed.
+         */
+        $directives = apply_filters(
+            'wp_mail_logging_csp_email_html_preview',
+            $directives,
+            $remote_allowed,
+            $mail_id
+        );
+
+        $parts = [];
+
+        foreach ( $directives as $directive => $value ) {
+            $parts[] = $value === '' ? $directive : $directive . ' ' . $value;
+        }
+
+        return implode( '; ', $parts );
     }
 
     /**
