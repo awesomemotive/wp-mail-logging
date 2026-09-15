@@ -9,6 +9,7 @@ use No3x\WPML\Admin\SMTPTab;
 use No3x\WPML\Renderer\Column\AttachmentsColumn;
 use No3x\WPML\Renderer\Column\ColumnFormat;
 use No3x\WPML\Renderer\Column\SubjectColumn;
+use No3x\WPML\Renderer\RemoteContentDetector;
 use No3x\WPML\Renderer\WPML_ColumnManager;
 use No3x\WPML\Renderer\WPML_MailRenderer;
 use No3x\WPML\WPML_Utils;
@@ -135,7 +136,8 @@ abstract class BaseRenderer implements IMailRenderer {
                 <?php
                 $settings = SettingsTab::get_settings( SettingsTab::DEFAULT_SETTINGS );
 
-                if ( empty( $settings['load-remote-images'] ) ) {
+                // Only offer the opt-in when there is something for it to unblock.
+                if ( empty( $settings['load-remote-images'] ) && RemoteContentDetector::has_blocked_content( $mail['message'] ) ) {
                     ?>
                     <div class="wp-mail-logging-remote-content-notice">
                         <span><?php esc_html_e( 'Remote images are blocked.', 'wp-mail-logging' ); ?></span>
