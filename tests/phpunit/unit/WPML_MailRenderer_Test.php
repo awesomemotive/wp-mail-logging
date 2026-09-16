@@ -61,6 +61,72 @@ class WPML_MailRenderer_Test extends \PHPUnit_Framework_TestCase {
         $this->mailServiceMock->mockery_verify();
     }
 
+    /**
+     * Regression guard for #227: rendering a mail whose message is null must not raise a
+     * PHP 8.1+ "Passing null to parameter" deprecation.
+     *
+     * Without the (string) cast in JSONRenderer::renderModal(), the null message reaches
+     * htmlspecialchars_decode() as null, which PHP 8.1+ reports as an E_DEPRECATED notice.
+     * The preview shows an empty string either way, so asserting only the output would pass
+     * with or without the fix; this captures deprecations so removing the cast fails it.
+     *
+     * @since {VERSION}
+     */
+    public function test_print_mail_json_null_message_raises_no_deprecation() {
+
+        $this->mailServiceMock = Mockery::mock('No3x\WPML\Model\IMailService');
+
+        /** @var $mail WPML_Mail */
+        $mail = (new WPML_MailExtractor())->extract(WPMailArrayBuilder::aMail()
+            ->withSubject("Test")
+            ->withTo("example@exmple.com")
+            ->withHeaders("Content-Type: text/plain")
+            ->withMessage("Placeholder")
+            ->build());
+        $mail->set_mail_id($this->id);
+        $mail->set_plugin_version('1.8.5');
+        $mail->set_timestamp('2018-09-24 16:02:11');
+        $mail->set_host('127.0.0.1');
+        $mail->set_error('a');
+        // The extractor rejects a null message, so null it afterwards to model a NULL
+        // `message` column - the schema declares it TEXT NULL.
+        $mail->set_message(null);
+
+        $this->mailServiceMock->shouldReceive('find_one')
+            ->times(1)
+            ->with( $this->id )
+            ->andReturn( $mail );
+
+        $this->mailRenderer = new WPML_MailRenderer($this->mailServiceMock);
+
+        $deprecations = [];
+        set_error_handler(
+            function ($errno, $errstr) use (&$deprecations) {
+                $deprecations[] = $errstr;
+                return true;
+            },
+            E_DEPRECATED
+        );
+
+        try {
+            $actual = $this->mailRenderer->render($this->id, WPML_MailRenderer::FORMAT_JSON);
+        } finally {
+            restore_error_handler();
+        }
+
+        $this->assertSame(
+            [],
+            $deprecations,
+            'Rendering a null message as JSON must not trigger a PHP deprecation; got: ' . implode(' | ', $deprecations)
+        );
+        $this->assertContains(
+            '&quot;message&quot;: &quot;&quot;',
+            $actual,
+            'A null message must still render as an empty string in the JSON preview'
+        );
+        $this->mailServiceMock->mockery_verify();
+    }
+
     public function test_supported_formats() {
         $this->assertEquals(['raw', 'html', 'json'], $this->mailRenderer->getSupportedFormats());
     }
