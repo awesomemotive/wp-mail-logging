@@ -8,6 +8,7 @@ use No3x\WPML\Admin\SettingsTab;
 use No3x\WPML\Admin\SMTPTab;
 use No3x\WPML\Renderer\Column\AttachmentsColumn;
 use No3x\WPML\Renderer\Column\ColumnFormat;
+use No3x\WPML\Renderer\Column\ReceiverColumn;
 use No3x\WPML\Renderer\Column\SubjectColumn;
 use No3x\WPML\Renderer\WPML_ColumnManager;
 use No3x\WPML\Renderer\WPML_MailRenderer;
@@ -172,6 +173,10 @@ abstract class BaseRenderer implements IMailRenderer {
                     ColumnFormat::SIMPLE
                 );
                 } catch ( \Exception $e ) {}
+            }
+
+            if ( $key === WPML_ColumnManager::COLUMN_RECEIVER ) {
+                $value = ReceiverColumn::normalize( $value );
             }
 
             $values_to_escape = [
