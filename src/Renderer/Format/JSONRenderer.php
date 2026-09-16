@@ -24,9 +24,14 @@ class JSONRenderer extends BaseRenderer {
         return $json;
     }
 
+    /**
+     * @inheritdoc
+     *
+     * @since {VERSION} Cast the message to string so a null message does not raise a PHP 8.1+ deprecation.
+     */
     public function renderModal( $item ) {
 
-        $item['message'] = htmlentities( htmlspecialchars_decode( $item['message'] ) );
+        $item['message'] = htmlentities( htmlspecialchars_decode( (string) $item['message'] ) );
 
         return "<pre>" . esc_html( json_encode( $item, JSON_PRETTY_PRINT ) ) . "</pre>";
     }

@@ -23,7 +23,7 @@ class WPML_MessageSanitizer {
     }
 
     public function sanitize($message) {
-        $this->buffer = $message;
+        $this->buffer = (string) $message;
 
         $this->stripStyleBlocks();
         $this->saveComments();
