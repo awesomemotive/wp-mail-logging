@@ -208,6 +208,31 @@ jQuery(function ($) {
         wpml.modal.hide();
     });
 
+    /**
+     * Close the modal when the user clicks the dim area outside the content box.
+     *
+     * The transparent content wrap covers the viewport above the backdrop, so we test
+     * against the content box rather than the backdrop element. The press must also
+     * start outside the box, so a text selection that ends outside does not close it.
+     *
+     * @since {VERSION}
+     */
+    var isOutsideModalContent = function ( target ) {
+        return $( target ).closest( '#wp-mail-logging-modal-content' ).length === 0;
+    };
+
+    var pressedOutsideModalContent = false;
+
+    $( '#wp-mail-logging-modal-wrap' ).on( 'mousedown', function ( e ) {
+        pressedOutsideModalContent = isOutsideModalContent( e.target );
+    });
+
+    $( '#wp-mail-logging-modal-wrap' ).on( 'click', function ( e ) {
+        if ( pressedOutsideModalContent && isOutsideModalContent( e.target ) ) {
+            wpml.modal.hide();
+        }
+    });
+
     $( document ).on( 'click', '.wp-mail-logging-load-remote', function ( e ) {
         e.preventDefault();
 
