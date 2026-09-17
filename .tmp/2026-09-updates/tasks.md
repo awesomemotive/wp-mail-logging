@@ -22,7 +22,7 @@ under **Evidence**.
 | T1 | `error` field renders attacker markup into the admin document | **High** | **Fixed** 2026-09-17 (test deferred) | Modal, no frame |
 | T2 | `area[target]` not stripped alongside `a[target]` | Low | **Fixed** 2026-09-17 | Both allow-lists |
 | T3 | CSP fails open when headers are already sent | Low | **Fixed** 2026-09-17 | Preview response |
-| T4 | `stripStyleBlocks()` unguarded `preg_replace()` null return | Low | Open | Sanitiser |
+| T4 | `stripStyleBlocks()` unguarded `preg_replace()` null return | Low | **Fixed** 2026-09-17 | Sanitiser |
 | T5 | No tests added; one existing test now fails | **Process** | Open | `tests/phpunit/unit/` |
 | T6 | Test suite cannot run on this machine | **Process** | Open | Tooling, blocks T5 |
 
@@ -288,7 +288,7 @@ was removed immediately after the run.
 
 ## T4 — `stripStyleBlocks()` unguarded `preg_replace()` null return
 
-**Severity: Low. Status: Open.**
+**Severity: Low. Status: Fixed 2026-09-17 — code only, test deferred to T5.**
 Files: `src/WPML_MessageSanitizer.php:78-79`
 
 ### What is wrong
@@ -321,8 +321,55 @@ detector's existing pattern.
 
 ### Done when
 
-- A body that trips the backtrack limit still renders.
-- No deprecation is raised.
+- A body that trips the backtrack limit still renders. ✅
+- No deprecation is raised. ✅
+- Test covers it. — **deferred to T5** (suite is unrunnable here; see T6).
+
+### What landed
+
+Each pattern's result is checked before use, keeping the segment when
+`preg_replace()` returns `null` — matching `RemoteContentDetector::strip_hidden_markup()`.
+
+The `preg_split()` one line above had the identical defect and was fixed in the same
+place: it returns `false` on the same failure, and on PHP 8 `implode()` over `false`
+is a `TypeError`. It now falls back to treating the buffer as one segment.
+
+```
+stored message      : 46,023 bytes        default backtrack : 1,000,000
+
+--- at the default limit ---
+output              : 108 bytes
+invoice preserved   : YES
+style tag gone      : yes
+
+--- at pcre.backtrack_limit = 20000 ---
+output              : 66 bytes
+invoice preserved   : YES
+live <style> tag    : no (inert text only)
+deprecations raised : none
+```
+
+**What actually survives — this differs from the prediction.** The trade is not
+"CSS leaks as inert text", as first assumed. Measured per pattern at the low limit:
+
+```
+pattern 1 (well-formed, lazy)   : NULL (backtrack limit)
+pattern 2 (unterminated, greedy): 66 bytes  -- succeeds
+```
+
+Pattern 1 fails, so the guard keeps the segment; pattern 2 then still succeeds and
+removes the element as if unterminated. The result is that content **before** the
+style block survives and content **after** it is lost:
+
+```
+default : '<p>IMPORTANT: invoice total is 1,240.00 EUR, due 30 September.</p>
+           <p>Tail content after the style block.</p>'
+at 20000: '<p>IMPORTANT: invoice total is 1,240.00 EUR, due 30 September.</p>'
+```
+
+Losing the tail is a real regression against a clean run, but it replaces losing the
+entire message, and no CSS leaks. Only if *both* patterns failed would the element
+reach `stripEvilCode()`, which drops the tag and leaves the CSS as inert text.
 
 ---
 

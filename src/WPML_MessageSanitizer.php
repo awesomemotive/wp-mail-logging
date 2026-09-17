@@ -56,6 +56,8 @@ class WPML_MessageSanitizer {
      * A proper fix needs a comment-aware linear scanner rather than regexes.
      *
      * @since 1.17.0
+     * @since {VERSION} Guarded against `preg_replace()` returning null at a
+     *                  backtrack limit, which blanked the whole message.
      *
      * @return void
      */
@@ -67,6 +69,13 @@ class WPML_MessageSanitizer {
         // marker. With one capture group, odd indices are the comments.
         $parts = preg_split( '#(<!--.*?-->)#s', $this->buffer, -1, PREG_SPLIT_DELIM_CAPTURE );
 
+        // preg_split() returns false on the same backtrack failure. Treat the
+        // buffer as a single non-comment segment so the style stripping below
+        // still runs, rather than iterating false and imploding it.
+        if ( ! is_array( $parts ) ) {
+            $parts = [ $this->buffer ];
+        }
+
         foreach ( $parts as $i => $part ) {
 
             if ( $i % 2 === 1 ) {
@@ -75,8 +84,31 @@ class WPML_MessageSanitizer {
 
             // Well-formed blocks first, then an unterminated one to the end of
             // the segment, which is how a browser parses it.
-            $part = preg_replace( '#<style\b[^>]*>.*?</style>#is', '', $part );
-            $parts[ $i ] = preg_replace( '#<style\b[^>]*>.*$#is', '', $part );
+            $patterns = [
+                '#<style\b[^>]*>.*?</style>#is',
+                '#<style\b[^>]*>.*$#is',
+            ];
+
+            foreach ( $patterns as $pattern ) {
+                $stripped = preg_replace( $pattern, '', $part );
+
+                // preg_replace() returns null at a PCRE backtrack limit, which a
+                // large body carrying a style block can reach. Keep the segment
+                // rather than feeding null back in as the next subject, which
+                // blanked the whole message and raised a PHP 8.1+ deprecation.
+                //
+                // In practice the lazy pattern is the one that fails first, and
+                // the greedy pattern still succeeds -- the element is then treated
+                // as unterminated, so content before it survives and content after
+                // it is lost. Should both fail, the element itself survives to
+                // stripEvilCode(), which drops the tag and leaves the CSS as inert
+                // text. Either way the message no longer disappears wholesale.
+                if ( $stripped !== null ) {
+                    $part = $stripped;
+                }
+            }
+
+            $parts[ $i ] = $part;
         }
 
         $this->buffer = implode( '', $parts );
