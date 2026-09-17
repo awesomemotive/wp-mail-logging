@@ -61,15 +61,10 @@ jQuery(function ($) {
             $('#wp-mail-logging-modal-content-body-content').html( $value );
         },
         show: function () {
-            // Work around to fix the education banner not fading immediately due to position being relative.
-            $( '#wp-mail-logging-product-education-email-logs-bottom' ).css( 'z-index', -1 );
-
             $('#wp-mail-logging-modal-wrap').fadeIn();
         },
         hide: function () {
-            $('#wp-mail-logging-modal-wrap').fadeOut( 400, function() {
-                $( '#wp-mail-logging-product-education-email-logs-bottom' ).css( 'z-index', '' );
-            } );
+            $('#wp-mail-logging-modal-wrap').fadeOut();
         },
         setSelectedFormat: function( newFormat ) {
             wpml.modal.selectedFormat = newFormat;
