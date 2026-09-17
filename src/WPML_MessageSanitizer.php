@@ -108,7 +108,15 @@ class WPML_MessageSanitizer {
         $allowed_tags[self::SAVED_COMMENT_HTMLCode_OPEN][''] = true;
         $allowed_tags[self::SAVED_COMMENT_HTMLCode_CLOSE][''] = true;
 
-        unset( $allowed_tags['a']['target'], $allowed_tags['a']['rel'] );
+        // `area` is in WordPress's post allow-list with `target => true`, and `map`
+        // is allowed too, so an image map is a second route to the same navigation
+        // that unsetting `a.target` closes.
+        unset(
+            $allowed_tags['a']['target'],
+            $allowed_tags['a']['rel'],
+            $allowed_tags['area']['target'],
+            $allowed_tags['area']['rel']
+        );
 
         $this->buffer = wp_kses( $this->buffer, $allowed_tags );
     }

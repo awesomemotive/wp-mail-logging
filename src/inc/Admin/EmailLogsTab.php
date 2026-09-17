@@ -197,7 +197,14 @@ class EmailLogsTab {
         // from wp_kses_allowed_html( 'post' ) (rather than mutating what it received) will
         // re-add `a.target`/`a.rel`. That is harmless here: the iframe sandbox still blocks
         // top-level navigation, but it is worth writing down since it is easy to miss.
-        unset( $allowed_html['a']['target'], $allowed_html['a']['rel'] );
+        // `area` carries the same `target` in WordPress's post allow-list, so an image
+        // map would otherwise keep the route that unsetting `a.target` closes.
+        unset(
+            $allowed_html['a']['target'],
+            $allowed_html['a']['rel'],
+            $allowed_html['area']['target'],
+            $allowed_html['area']['rel']
+        );
 
          /**
          * Filters the allowed HTML in the email HTML preview.

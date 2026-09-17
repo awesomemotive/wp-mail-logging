@@ -20,7 +20,7 @@ under **Evidence**.
 | # | Task | Severity | Status | Where it lives |
 |---|---|---|---|---|
 | T1 | `error` field renders attacker markup into the admin document | **High** | **Fixed** 2026-09-17 (test deferred) | Modal, no frame |
-| T2 | `area[target]` not stripped alongside `a[target]` | Low | Open | Both allow-lists |
+| T2 | `area[target]` not stripped alongside `a[target]` | Low | **Fixed** 2026-09-17 | Both allow-lists |
 | T3 | CSP fails open when headers are already sent | Low | Open | Preview response |
 | T4 | `stripStyleBlocks()` unguarded `preg_replace()` null return | Low | Open | Sanitiser |
 | T5 | No tests added; one existing test now fails | **Process** | Open | `tests/phpunit/unit/` |
@@ -144,7 +144,7 @@ confirmed escaped in the same run.
 
 ## T2 — `area[target]` not stripped alongside `a[target]`
 
-**Severity: Low. Status: Open.**
+**Severity: Low. Status: Fixed 2026-09-17 — code only, test deferred to T5.**
 Files: `src/WPML_MessageSanitizer.php:111`, `src/inc/Admin/EmailLogsTab.php:200`
 
 ### What is wrong
@@ -170,8 +170,26 @@ Unset `area.target` in both places, next to the existing `a.target` removal.
 
 ### Done when
 
-- The payload above comes back without `target` from both sanitisers.
-- Test covers it.
+- The payload above comes back without `target` from both sanitisers. ✅
+- Test covers it. — **deferred to T5** (suite is unrunnable here; see T6).
+
+### What landed
+
+Both `unset()` calls extended to cover `area`, alongside the existing `a` entries.
+`rel` is unset on `area` too, for symmetry with `a` — WordPress does not currently
+allow `area[rel]`, so that half is defensive against the allow-list widening later.
+
+Verified by running the payload through both paths — `WPML_MessageSanitizer::sanitize()`
+and `EmailLogsTab::get_html_preview_message()`:
+
+```
+area target survived : no
+a    target survived : no
+area element kept    : yes (only target dropped)
+```
+
+Identical output from both. The `<area>` element itself is preserved, so image maps
+keep working; only the navigation target is removed.
 
 ---
 
