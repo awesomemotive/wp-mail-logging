@@ -171,14 +171,13 @@ class EmailLogsTab {
         echo '<meta name="referrer" content="no-referrer">' . "\n";
         echo '<base target="_blank">' . "\n";
 
-        // Another plugin flushing output before `admin_init` costs this response every
-        // one of its headers. The meta policy recovers what meta form can carry.
-        if ( $headers_sent ) {
-            printf(
-                '<meta http-equiv="Content-Security-Policy" content="%s">' . "\n",
-                esc_attr( $this->get_csp_meta_value( $remote_allowed, $mail_id ) )
-            );
-        }
+        // Always include the policy before the email content. A server or CDN can
+        // replace the CSP header after PHP sends it, which headers_sent() cannot
+        // detect. The meta policy keeps resource blocking in place in that case.
+        printf(
+            '<meta http-equiv="Content-Security-Policy" content="%s">' . "\n",
+            esc_attr( $this->get_csp_meta_value( $remote_allowed, $mail_id ) )
+        );
 
         $preview = $this->get_html_preview_message( $mail->get_message() );
 
@@ -275,11 +274,12 @@ class EmailLogsTab {
     }
 
     /**
-     * Build the Content Security Policy for the `<meta http-equiv>` fallback.
+     * Build the Content Security Policy for the preview's `<meta http-equiv>` element.
      *
-     * Used when `headers_sent()` is already true and the real header can no longer be
-     * sent. `sandbox` and `frame-ancestors` are dropped because browsers ignore both in
-     * meta form; the iframe's `sandbox` attribute supplies the former either way.
+     * Sent on every preview response so resource blocking survives a server or CDN
+     * replacing the CSP header. `sandbox` and `frame-ancestors` are dropped because
+     * browsers ignore both in meta form; the iframe's `sandbox` attribute supplies
+     * the former either way.
      *
      * This is best effort on its own. A meta policy only applies while the parser is
      * still in `<head>`, so whatever was flushed first decides whether it counts:
