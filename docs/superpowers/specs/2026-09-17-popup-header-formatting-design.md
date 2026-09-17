@@ -1,7 +1,7 @@
 # Email details popup: header formatting
 
 Date: 2026-09-17
-Status: Design approved in conversation; written spec awaiting review.
+Status: Design and written spec approved in conversation.
 
 ## Problem and evidence
 
