@@ -1,7 +1,7 @@
 # Email details popup: header formatting
 
 Date: 2026-09-17
-Status: Design and written spec approved in conversation.
+Status: Implemented; runtime checks passed. Full legacy PHPUnit and browser checks unavailable in this environment.
 
 ## Problem and evidence
 

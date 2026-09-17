@@ -211,6 +211,14 @@ abstract class BaseRenderer implements IMailRenderer {
             // These values, including untrusted SMTP errors, render outside the sandbox.
             if ( in_array( $key, self::MARKUP_COLUMNS, true ) ) {
                 echo wp_kses_post( $value );
+            } elseif ( $key === WPML_ColumnManager::COLUMN_HEADERS ) {
+                // Normalize legacy separators for display without changing stored headers.
+                $value = str_replace(
+                    [ ',\r\n', ',\n', '\r\n', '\n', "\r\n" ],
+                    "\n",
+                    $value
+                );
+                echo nl2br( esc_html( $value ) );
             } else {
                 echo esc_html( $value );
             }

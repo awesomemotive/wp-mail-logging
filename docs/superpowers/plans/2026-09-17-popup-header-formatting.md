@@ -30,7 +30,7 @@ At planning time, `vendor/bin/phpunit` and both the default and configured WordP
 
 **Modify:** `tests/phpunit/unit/WPML_MailRenderer_Test.php`.
 
-- [ ] **Step 1: Establish the available runner.**
+- [x] **Step 1: Establish the available runner.**
 
 ```sh
 php --version
@@ -41,7 +41,7 @@ test -f /srv/www/wordpress-develop/public_html/tests/phpunit/includes/bootstrap.
 
 Record missing tools or compatibility errors. An unavailable runner is a test limitation, not evidence that the regression fails correctly.
 
-- [ ] **Step 2: Add these methods inside `WPML_MailRenderer_Test`.**
+- [x] **Step 2: Add these methods inside `WPML_MailRenderer_Test`.**
 
 The test drives the actual popup renderer. Checking the number of `<br>` elements distinguishes visible line breaks from newlines that HTML would collapse. DOM text assertions cover escaping without duplicating the normalization algorithm.
 
@@ -126,7 +126,7 @@ public function popup_headers_provider() {
 }
 ```
 
-- [ ] **Step 3: Run the focused regression before changing production code.**
+- [x] **Step 3: Run the focused regression before changing production code.**
 
 With a compatible installed runner and WordPress test harness:
 
@@ -140,7 +140,7 @@ Expected: the legacy separator cases fail because literal `,\n` remains in the D
 
 **Modify:** `src/Renderer/Format/BaseRenderer.php`, `render_column_value()`.
 
-- [ ] **Step 1: Replace the existing final output branch with this branch.**
+- [x] **Step 1: Replace the existing final output branch with this branch.**
 
 ```php
 // These values, including untrusted SMTP errors, render outside the sandbox.
@@ -161,7 +161,7 @@ if ( in_array( $key, self::MARKUP_COLUMNS, true ) ) {
 
 Longer literal separators appear first to avoid partially replacing them. Actual comma-plus-newline combinations retain their comma, since that comma may belong to a folded address list. Only the recognized literal legacy separators lose their comma. Empty/null values never reach this branch through the modal loop.
 
-- [ ] **Step 2: Run syntax checks and repeat the focused regression.**
+- [x] **Step 2: Run syntax checks and repeat the focused regression.**
 
 ```sh
 php -l src/Renderer/Format/BaseRenderer.php
@@ -176,7 +176,7 @@ Expected: syntax and whitespace checks pass, and all focused cases pass in a com
 
 **Temporary file:** `/tmp/wpml-popup-headers-check.php`.
 
-- [ ] **Step 1: When needed, create this focused check for the local WordPress runtime.**
+- [x] **Step 1: When needed, create this focused check for the local WordPress runtime.**
 
 This renders synthetic data through the real plugin and real WordPress escaping functions. It does not call `wp_mail()`, resend messages, or create log records. Run it both before and after Task 2 if PHPUnit is unavailable.
 
@@ -246,7 +246,7 @@ Expected: no regressions relative to the baseline. Existing tests include old ex
 
 Load the `browser-use:browser` skill. Open the existing local log reported by the user at `wpml.test`, and inspect Headers in both HTML and Raw popup views. Confirm that the example appears on two lines with its address visible, no literal separator, and readable wrapping at a narrower window width. For the long-value check, use an existing suitable log or a temporary rendered HTML fixture; do not send an email solely to create a test record.
 
-- [ ] **Step 4: Review and commit the focused fix.**
+- [x] **Step 4: Review and commit the focused fix.**
 
 ```sh
 git diff --check
@@ -256,3 +256,23 @@ git commit -m "fix: display popup email headers on separate lines"
 ```
 
 Confirm the diff preserves the escaped default branch, keeps Headers outside `MARKUP_COLUMNS`, and changes no stored data or resend behavior. Report the verified outcome and any unavailable PHPUnit checks.
+
+
+## Execution results — 2026-09-17
+
+- Implemented the popup-only formatting branch and the 13 regression fixtures.
+- The focused WordPress runtime check failed on the unchanged renderer with
+  `Popup header formatting failed: html`, then passed all six checks after the fix.
+- Invoked the new regression method and its fixtures against real WordPress and
+  plugin classes using a temporary assertion adapter: 13 cases in both HTML and
+  Raw views, 114 assertions passed. This bypasses the legacy PHPUnit runner and
+  does not represent a full PHPUnit suite run.
+- Separate runtime checks passed for the stored header format, shared resend
+  parser, actual resender arguments captured without sending email, and JSON output.
+- PHP syntax checks and `git diff --check` passed. Independent code review found
+  no issues.
+- The full legacy suite remains unavailable: no project PHPUnit binary or
+  configured WordPress test harness, and global PHPUnit fails to parse on PHP 8.2
+  at its `Match.php` class. The related suite step above remains unchecked.
+- Browser interaction tools are unavailable in this session. DOM output was
+  verified, but visual wrapping was not; the browser step above remains unchecked.
