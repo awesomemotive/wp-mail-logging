@@ -17,6 +17,19 @@ use No3x\WPML\WPML_Utils;
 
 abstract class BaseRenderer implements IMailRenderer {
 
+    /**
+     * Columns whose value is markup the modal is meant to render.
+     *
+     * Everything not named here is escaped. Mirrors
+     * `WPML_Email_Log_List::MARKUP_COLUMNS`, which guards the same values on the
+     * log list screen.
+     *
+     * @since {VERSION}
+     *
+     * @var string[]
+     */
+    const MARKUP_COLUMNS = [ WPML_ColumnManager::COLUMN_ATTACHMENTS ];
+
     /** @var WPML_ColumnManager */
     protected $columnManager;
 
@@ -169,6 +182,7 @@ abstract class BaseRenderer implements IMailRenderer {
      * @since 1.11.0
      * @since 1.12.0
      * @since 1.15.0 Used `esc_html()` on Subject, Receiver, and Headers columns.
+     * @since {VERSION} Escapes every column except those in `MARKUP_COLUMNS`.
      *
      * @param string $key   Key of the value to render.
      * @param string $value Value to be rendered.
@@ -196,16 +210,15 @@ abstract class BaseRenderer implements IMailRenderer {
                 $value = ReceiverColumn::normalize( $value );
             }
 
-            $values_to_escape = [
-                WPML_ColumnManager::COLUMN_SUBJECT,
-                WPML_ColumnManager::COLUMN_RECEIVER,
-                WPML_ColumnManager::COLUMN_HEADERS,
-            ];
-
-            if ( in_array( $key, $values_to_escape, true ) ) {
-                echo esc_html( $value );
-            } else {
+            // Escape by default and name the exceptions, rather than the reverse.
+            // `error` carries the remote MTA's rejection text under SMTP transport,
+            // which the owner of a recipient domain controls, and this markup lands
+            // in the admin document itself -- outside the preview iframe, so neither
+            // its sandbox nor its CSP applies here.
+            if ( in_array( $key, self::MARKUP_COLUMNS, true ) ) {
                 echo wp_kses_post( $value );
+            } else {
+                echo esc_html( $value );
             }
 
             if ( $key === 'error' ) {
