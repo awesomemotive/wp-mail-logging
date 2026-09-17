@@ -3,6 +3,7 @@
 namespace No3x\WPML\Admin;
 
 use No3x\WPML\Model\WPML_Mail as Mail;
+use No3x\WPML\Renderer\RemoteContentDetector;
 use No3x\WPML\WPML_Email_Log_List;
 use No3x\WPML\WPML_Init;
 use No3x\WPML\WPML_ProductEducation;
@@ -155,7 +156,9 @@ class EmailLogsTab {
         $settings       = SettingsTab::get_settings( SettingsTab::DEFAULT_SETTINGS );
         $remote_allowed = ! empty( $settings['load-remote-images'] ) || ! empty( $_GET['load_remote'] );
 
-        if ( ! headers_sent() ) {
+        $headers_sent = headers_sent();
+
+        if ( ! $headers_sent ) {
             header( 'Content-Type: text/html; charset=' . get_bloginfo( 'charset' ) );
             header( 'X-Content-Type-Options: nosniff' );
             header( 'Referrer-Policy: no-referrer' );
@@ -168,7 +171,26 @@ class EmailLogsTab {
         echo '<meta name="referrer" content="no-referrer">' . "\n";
         echo '<base target="_blank">' . "\n";
 
-        echo $this->get_html_preview_message( $mail->get_message() );
+        // Another plugin flushing output before `admin_init` costs this response every
+        // one of its headers. The meta policy recovers what meta form can carry.
+        if ( $headers_sent ) {
+            printf(
+                '<meta http-equiv="Content-Security-Policy" content="%s">' . "\n",
+                esc_attr( $this->get_csp_meta_value( $remote_allowed, $mail_id ) )
+            );
+        }
+
+        $preview = $this->get_html_preview_message( $mail->get_message() );
+
+        // With no real CSP the meta policy above is the only thing blocking remote
+        // content, and it is ignored outright when the flushed output was markup
+        // rather than whitespace. Take the references out of the markup instead, so
+        // the opt-in still means something on a response that lost its headers.
+        if ( $headers_sent && ! $remote_allowed ) {
+            $preview = RemoteContentDetector::strip_remote_content( $preview );
+        }
+
+        echo $preview;
         exit;
     }
 
@@ -249,6 +271,72 @@ class EmailLogsTab {
      */
     private function get_csp_header_value( $remote_allowed, $mail_id ) {
 
+        return self::join_csp_directives( $this->get_csp_directives( $remote_allowed, $mail_id ) );
+    }
+
+    /**
+     * Build the Content Security Policy for the `<meta http-equiv>` fallback.
+     *
+     * Used when `headers_sent()` is already true and the real header can no longer be
+     * sent. `sandbox` and `frame-ancestors` are dropped because browsers ignore both in
+     * meta form; the iframe's `sandbox` attribute supplies the former either way.
+     *
+     * This is best effort on its own. A meta policy only applies while the parser is
+     * still in `<head>`, so whatever was flushed first decides whether it counts:
+     * whitespace keeps it in head, but real markup opens `<body>` and the policy is
+     * ignored. `strip_remote_content()` is what actually holds in that case.
+     *
+     * @since {VERSION}
+     * @access private
+     *
+     * @param bool $remote_allowed Whether remote images and fonts may load.
+     * @param int  $mail_id        Email log ID being previewed.
+     *
+     * @return string
+     */
+    private function get_csp_meta_value( $remote_allowed, $mail_id ) {
+
+        $directives = $this->get_csp_directives( $remote_allowed, $mail_id );
+
+        unset( $directives['sandbox'], $directives['frame-ancestors'] );
+
+        return self::join_csp_directives( $directives );
+    }
+
+    /**
+     * Join a directive map into a policy string.
+     *
+     * @since {VERSION}
+     * @access private
+     *
+     * @param array $directives Map of directive name to value.
+     *
+     * @return string
+     */
+    private static function join_csp_directives( $directives ) {
+
+        $parts = [];
+
+        foreach ( $directives as $directive => $value ) {
+            $parts[] = $value === '' ? $directive : $directive . ' ' . $value;
+        }
+
+        return implode( '; ', $parts );
+    }
+
+    /**
+     * Build the Content Security Policy directives for the email preview response.
+     *
+     * @since {VERSION}
+     * @access private
+     *
+     * @param bool $remote_allowed Whether remote images and fonts may load.
+     * @param int  $mail_id        Email log ID being previewed.
+     *
+     * @return array Map of directive name to value.
+     */
+    private function get_csp_directives( $remote_allowed, $mail_id ) {
+
         $resource = $remote_allowed ? 'https: data:' : 'data:';
 
         $directives = [
@@ -296,13 +384,7 @@ class EmailLogsTab {
             $filtered_directives = $directives;
         }
 
-        $parts = [];
-
-        foreach ( $filtered_directives as $directive => $value ) {
-            $parts[] = $value === '' ? $directive : $directive . ' ' . $value;
-        }
-
-        return implode( '; ', $parts );
+        return $filtered_directives;
     }
 
     /**

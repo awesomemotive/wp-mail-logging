@@ -43,6 +43,166 @@ class RemoteContentDetector {
     }
 
     /**
+     * Remove the references to remote sub-resources from already-filtered markup.
+     *
+     * The preview normally blocks these with its Content Security Policy and leaves the
+     * markup alone. When the response could not send that header, this takes the
+     * references out instead, so the "Load images" opt-in still decides whether anything
+     * is fetched. Expects the output of `EmailLogsTab::get_html_preview_message()`, not a
+     * raw body -- `wp_kses()` has already run by then.
+     *
+     * Covers exactly what `has_blocked_content()` detects: `img` sources and CSS `url()`
+     * references. Keeping the two symmetric means the notice and the stripping can never
+     * disagree about what counts as remote.
+     *
+     * @since {VERSION}
+     * @access public
+     *
+     * @param string $message Filtered preview markup.
+     *
+     * @return string Markup with blocked sources removed.
+     */
+    public static function strip_remote_content( $message ) {
+
+        if ( ! is_string( $message ) || $message === '' ) {
+            return $message;
+        }
+
+        return self::strip_blocked_css_urls( self::strip_blocked_image_sources( $message ) );
+    }
+
+    /**
+     * Drop `src` and `srcset` from images pointing at blocked resources.
+     *
+     * An `img` with neither attribute requests nothing, so the element stays in place
+     * and the layout it occupies does not collapse.
+     *
+     * @since {VERSION}
+     * @access private
+     *
+     * @param string $message Filtered preview markup.
+     *
+     * @return string
+     */
+    private static function strip_blocked_image_sources( $message ) {
+
+        $stripped = preg_replace_callback(
+            '/<img\b[^>]*>/i',
+            function ( $match ) {
+
+                $tag = $match[0];
+
+                foreach ( [ 'src', 'srcset' ] as $attribute ) {
+
+                    $value = self::get_attribute_value( $tag, $attribute );
+
+                    if ( $value === '' ) {
+                        continue;
+                    }
+
+                    $blocked = $attribute === 'srcset'
+                        ? self::has_blocked_srcset_url( $value )
+                        : self::is_blocked_url( $value );
+
+                    if ( $blocked ) {
+                        $tag = self::remove_attribute( $tag, $attribute );
+                    }
+                }
+
+                return $tag;
+            },
+            $message
+        );
+
+        return $stripped === null ? $message : $stripped;
+    }
+
+    /**
+     * Point blocked CSS `url()` references at an empty `data:` URI.
+     *
+     * Covers `<style>` blocks and inline `style` attributes, the same two places
+     * `get_css_text()` reads. `data:,` is a valid empty URI, so the declaration stays
+     * syntactically intact and nothing is fetched.
+     *
+     * @since {VERSION}
+     * @access private
+     *
+     * @param string $message Filtered preview markup.
+     *
+     * @return string
+     */
+    private static function strip_blocked_css_urls( $message ) {
+
+        $stripped = preg_replace_callback(
+            '#(<style\b[^>]*>)(.*?)(</style>)#is',
+            function ( $match ) {
+                return $match[1] . self::neutralize_css_urls( $match[2] ) . $match[3];
+            },
+            $message
+        );
+
+        if ( $stripped !== null ) {
+            $message = $stripped;
+        }
+
+        $stripped = preg_replace_callback(
+            '/\bstyle\s*=\s*(["\'])(.*?)\1/is',
+            function ( $match ) {
+                return 'style=' . $match[1] . self::neutralize_css_urls( $match[2] ) . $match[1];
+            },
+            $message
+        );
+
+        return $stripped === null ? $message : $stripped;
+    }
+
+    /**
+     * Replace every blocked `url()` in a fragment of CSS.
+     *
+     * @since {VERSION}
+     * @access private
+     *
+     * @param string $css CSS text.
+     *
+     * @return string
+     */
+    private static function neutralize_css_urls( $css ) {
+
+        $stripped = preg_replace_callback(
+            '/url\(\s*("[^"]*"|\'[^\']*\'|[^)]*)\s*\)/i',
+            function ( $match ) {
+
+                $url = trim( $match[1], " \t\n\r\0\x0B\"'" );
+
+                return self::is_blocked_url( $url ) ? 'url(data:,)' : $match[0];
+            },
+            $css
+        );
+
+        return $stripped === null ? $css : $stripped;
+    }
+
+    /**
+     * Remove one attribute from a tag.
+     *
+     * @since {VERSION}
+     * @access private
+     *
+     * @param string $tag       Full tag, angle brackets included.
+     * @param string $attribute Attribute name to remove.
+     *
+     * @return string
+     */
+    private static function remove_attribute( $tag, $attribute ) {
+
+        $pattern = '/\s*\b' . preg_quote( $attribute, '/' ) . '\s*=\s*("[^"]*"|\'[^\']*\'|[^\s"\'>]+)/i';
+
+        $stripped = preg_replace( $pattern, '', $tag );
+
+        return $stripped === null ? $tag : $stripped;
+    }
+
+    /**
      * Remove the markup the preview itself discards before rendering.
      *
      * Keeps commented-out and Office `<xml>` payloads from lighting up the notice for

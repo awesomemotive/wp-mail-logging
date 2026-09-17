@@ -21,7 +21,7 @@ under **Evidence**.
 |---|---|---|---|---|
 | T1 | `error` field renders attacker markup into the admin document | **High** | **Fixed** 2026-09-17 (test deferred) | Modal, no frame |
 | T2 | `area[target]` not stripped alongside `a[target]` | Low | **Fixed** 2026-09-17 | Both allow-lists |
-| T3 | CSP fails open when headers are already sent | Low | Open | Preview response |
+| T3 | CSP fails open when headers are already sent | Low | **Fixed** 2026-09-17 | Preview response |
 | T4 | `stripStyleBlocks()` unguarded `preg_replace()` null return | Low | Open | Sanitiser |
 | T5 | No tests added; one existing test now fails | **Process** | Open | `tests/phpunit/unit/` |
 | T6 | Test suite cannot run on this machine | **Process** | Open | Tooling, blocks T5 |
@@ -195,8 +195,8 @@ keep working; only the navigation target is removed.
 
 ## T3 — CSP fails open when headers are already sent
 
-**Severity: Low. Status: Open.**
-Files: `src/inc/Admin/EmailLogsTab.php:158-163`
+**Severity: Low. Status: Fixed 2026-09-17 — code only, test deferred to T5.**
+Files: `src/inc/Admin/EmailLogsTab.php:158-163`, `src/Renderer/RemoteContentDetector.php`
 
 ### What is wrong
 
@@ -217,7 +217,72 @@ Decide explicitly whether a headers-already-sent preview should render at all.
 
 ### Done when
 
-- With headers pre-sent, the preview still carries a policy that blocks remote images.
+- With headers pre-sent, the preview still carries a policy that blocks remote images. ✅
+- Test covers it. — **deferred to T5** (suite is unrunnable here; see T6).
+
+### The deferred decision, decided
+
+**The preview still renders.** Refusing to render was considered and rejected: a
+stray notice from any other plugin would break email preview entirely, which is a
+worse outcome than a contained one. Containment is achieved instead.
+
+A meta policy alone is *not* enough, which is why the ledger's proposed fix was
+extended. `<meta http-equiv>` only applies while the parser is still in `<head>`.
+If the already-flushed output was whitespace the meta survives; if it was a PHP
+notice or real markup, the parser has opened `<body>` and the policy is ignored
+outright. Since remote blocking was previously *only* CSP-driven — nothing removed
+the `<img>` itself — the beacon would still fire in exactly the case that matters.
+
+### What landed
+
+Two parts:
+
+1. `get_csp_header_value()` split into `get_csp_directives()` (build + filter +
+   fail-closed) and a joiner, so the meta path shares one source of truth.
+   `get_csp_meta_value()` drops `sandbox` and `frame-ancestors`, which browsers
+   ignore in meta form; the iframe attribute supplies `sandbox` regardless.
+2. `RemoteContentDetector::strip_remote_content()` removes blocked `src`/`srcset`
+   and rewrites blocked CSS `url()` to `url(data:,)`. It runs only when headers
+   were already sent *and* remote content is not allowed. It covers exactly what
+   `has_blocked_content()` detects, so the notice and the stripping cannot disagree.
+
+Component behaviour:
+
+```
+remote img           <img width="1">                    <- src dropped
+data: img (keep)     <img src="data:image/png;base64,…">
+cid: img (keep)      <img src="cid:attachment1">
+relative img         <img>
+protocol-relative    <img>
+srcset               <img alt="x">
+inline style url     <div style="background-image:url(data:,);color:red">
+style block url      <style>body{background:url(data:,)}</style>
+style block data     <style>body{background:url(data:image/gif;base64,R0lGOD)}</style>
+@font-face           <style>@font-face{src:url(data:,)}</style>
+
+remaining remote refs: 0    has_blocked_content() after stripping: no
+```
+
+End-to-end against the real preview URL, with a mu-plugin flushing a byte on
+`plugins_loaded` to force `headers_sent()`:
+
+```
+PASS 1 — headers not yet sent
+  header CSP : default-src 'none'; img-src data:; font-src data:; style-src 'unsafe-inline';
+               base-uri 'none'; form-action 'none'; frame-ancestors 'self';
+               sandbox allow-popups allow-popups-to-escape-sandbox
+  meta CSP   : 0 (not needed)
+  beacon img : <img src="…/baseline-beacon.png" width="420" height="120" alt="receipt">
+
+PASS 2 — headers already sent
+  header CSP : 0   (lost, as expected)
+  meta CSP   : default-src 'none'; img-src data:; font-src data:; style-src 'unsafe-inline';
+               base-uri 'none'; form-action 'none'
+  beacon img : <img width="420" height="120" alt="receipt">   <- src removed
+```
+
+Layout attributes survive, so the element still occupies its space. The mu-plugin
+was removed immediately after the run.
 
 ---
 
