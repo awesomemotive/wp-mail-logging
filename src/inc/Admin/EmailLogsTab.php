@@ -39,13 +39,10 @@ class EmailLogsTab {
     const SINGLE_EMAIL_CONTENT_PREVIEW_MODE_NONCE = 'wp-mail-logging-single-email-preview';
 
     /**
-     * Sandbox tokens applied to the email preview.
+     * Sandbox tokens shared by the preview iframe and CSP.
      *
-     * Popups are permitted so links can open in a new tab, and that tab
-     * escapes the sandbox so the destination site works normally. Nothing
-     * else is granted: no script, no forms, no admin origin, and no ability
-     * to navigate the admin window. The Content Security Policy repeats
-     * these tokens, so both must be changed together.
+     * Allow unsandboxed popups; block scripts, forms, same-origin access and
+     * top-level navigation. Keep filtered CSP sandbox tokens in sync.
      *
      * @since 1.17.0
      *
@@ -150,9 +147,7 @@ class EmailLogsTab {
 
         $mail_id = absint( $_GET['email_log_id'] );
 
-        // `get_settings()` does not merge defaults, so an install upgraded from
-        // an earlier version has no such key. empty() neither warns nor treats
-        // a missing key as enabled, so the upgrade failure mode is the safe one.
+        // Settings do not merge defaults; missing keys on upgrades must stay disabled.
         $settings       = SettingsTab::get_settings( SettingsTab::DEFAULT_SETTINGS );
         $remote_allowed = ! empty( $settings['load-remote-images'] ) || ! empty( $_GET['load_remote'] );
 
@@ -165,15 +160,11 @@ class EmailLogsTab {
             header( 'Content-Security-Policy: ' . $this->get_csp_header_value( $remote_allowed, $mail_id ) );
         }
 
-        // Sent as a prelude rather than a full document wrapper, so emails that
-        // style `body` keep rendering as they do today. The base element is what
-        // sends links with no target of their own out of the frame.
+        // Preserve email body styles and open untargeted links in a new tab.
         echo '<meta name="referrer" content="no-referrer">' . "\n";
         echo '<base target="_blank">' . "\n";
 
-        // Always include the policy before the email content. A server or CDN can
-        // replace the CSP header after PHP sends it, which headers_sent() cannot
-        // detect. The meta policy keeps resource blocking in place in that case.
+        // Always add a meta policy in case a server or CDN replaces the CSP header.
         printf(
             '<meta http-equiv="Content-Security-Policy" content="%s">' . "\n",
             esc_attr( $this->get_csp_meta_value( $remote_allowed, $mail_id ) )
@@ -181,10 +172,7 @@ class EmailLogsTab {
 
         $preview = $this->get_html_preview_message( $mail->get_message() );
 
-        // With no real CSP the meta policy above is the only thing blocking remote
-        // content, and it is ignored outright when the flushed output was markup
-        // rather than whitespace. Take the references out of the markup instead, so
-        // the opt-in still means something on a response that lost its headers.
+        // Earlier markup can invalidate the meta policy; strip remote sources as a fallback.
         if ( $headers_sent && ! $remote_allowed ) {
             $preview = RemoteContentDetector::strip_remote_content( $preview );
         }
@@ -198,8 +186,7 @@ class EmailLogsTab {
      *
      * @since 1.11.1
      * @since 1.15.0 Added filterable `$allowed_html` and `$allowed_protocols` to `wp_kses()`.
-     * @since 1.17.0 `$allowed_html` now has `a.target` and `a.rel` removed before it reaches
-     *               the `wp_mail_logging_allowed_html_email_html_preview` filter.
+     * @since 1.17.0 Removes `target` and `rel` from links and areas before filtering allowed HTML.
      *
      * @param string $message Email log message.
      *
@@ -214,12 +201,8 @@ class EmailLogsTab {
         $allowed_html              = wp_kses_allowed_html( 'post' );
         $allowed_html['style'][''] = true;
 
-        // Removed before the filter below runs, so a filter that rebuilds $allowed_html
-        // from wp_kses_allowed_html( 'post' ) (rather than mutating what it received) will
-        // re-add `a.target`/`a.rel`. That is harmless here: the iframe sandbox still blocks
-        // top-level navigation, but it is worth writing down since it is easy to miss.
-        // `area` carries the same `target` in WordPress's post allow-list, so an image
-        // map would otherwise keep the route that unsetting `a.target` closes.
+        // Strip navigation attributes from links and image-map areas. If filters
+        // restore them, the iframe sandbox still blocks top-level navigation.
         unset(
             $allowed_html['a']['target'],
             $allowed_html['a']['rel'],
@@ -259,12 +242,12 @@ class EmailLogsTab {
     }
 
     /**
-     * Build the Content Security Policy for the email preview response.
+     * Build the preview's Content Security Policy header.
      *
      * @since 1.17.0
      *
-     * @param bool $remote_allowed Whether remote images and fonts may load.
-     * @param int  $mail_id        Email log ID being previewed.
+     * @param bool $remote_allowed Allow remote images and fonts.
+     * @param int  $mail_id        Email log ID.
      *
      * @return string
      */
@@ -274,23 +257,17 @@ class EmailLogsTab {
     }
 
     /**
-     * Build the Content Security Policy for the preview's `<meta http-equiv>` element.
+     * Build the preview's CSP meta policy.
      *
-     * Sent on every preview response so resource blocking survives a server or CDN
-     * replacing the CSP header. `sandbox` and `frame-ancestors` are dropped because
-     * browsers ignore both in meta form; the iframe's `sandbox` attribute supplies
-     * the former either way.
-     *
-     * This is best effort on its own. A meta policy only applies while the parser is
-     * still in `<head>`, so whatever was flushed first decides whether it counts:
-     * whitespace keeps it in head, but real markup opens `<body>` and the policy is
-     * ignored. `strip_remote_content()` is what actually holds in that case.
+     * Omit `sandbox` and `frame-ancestors`, which meta policies ignore.
+     * The iframe supplies sandboxing. If earlier output opens `<body>`, the
+     * policy is ignored; `strip_remote_content()` provides the fallback.
      *
      * @since {VERSION}
      * @access private
      *
-     * @param bool $remote_allowed Whether remote images and fonts may load.
-     * @param int  $mail_id        Email log ID being previewed.
+     * @param bool $remote_allowed Allow remote images and fonts.
+     * @param int  $mail_id        Email log ID.
      *
      * @return string
      */
@@ -304,12 +281,12 @@ class EmailLogsTab {
     }
 
     /**
-     * Join a directive map into a policy string.
+     * Join CSP directives into a policy string.
      *
      * @since {VERSION}
      * @access private
      *
-     * @param array $directives Map of directive name to value.
+     * @param array $directives Directive names and values.
      *
      * @return string
      */
@@ -325,15 +302,15 @@ class EmailLogsTab {
     }
 
     /**
-     * Build the Content Security Policy directives for the email preview response.
+     * Build the preview's CSP directives.
      *
      * @since {VERSION}
      * @access private
      *
-     * @param bool $remote_allowed Whether remote images and fonts may load.
-     * @param int  $mail_id        Email log ID being previewed.
+     * @param bool $remote_allowed Allow remote images and fonts.
+     * @param int  $mail_id        Email log ID.
      *
-     * @return array Map of directive name to value.
+     * @return array Directive names and values.
      */
     private function get_csp_directives( $remote_allowed, $mail_id ) {
 
@@ -351,24 +328,18 @@ class EmailLogsTab {
         ];
 
         /**
-         * Filters the Content Security Policy directives for the email HTML preview.
+         * Filters the email preview's Content Security Policy directives.
          *
-         * This is the only supported way to change the `sandbox` directive's value.
-         * It must be kept in sync with the `PREVIEW_SANDBOX_TOKENS` constant, which
-         * supplies the same tokens to the iframe's `sandbox` attribute -- browsers take
-         * the intersection of the header and attribute, so narrowing one without the
-         * other silently breaks the preview (e.g. a filtered `sandbox allow-scripts`
-         * loses `allow-popups`, and every link in the preview stops working with no
-         * console error).
+         * Keep `sandbox` tokens in sync with `PREVIEW_SANDBOX_TOKENS`.
+         * Browsers allow only permissions shared by the CSP and iframe sandbox.
          *
          * @since 1.17.0
          *
-         * @param array $directives     Map of directive name to value.
-         * @param bool  $remote_allowed Whether remote images and fonts may load.
-         * @param int   $mail_id        Email log ID being previewed.
+         * @param array $directives     Directive names and values.
+         * @param bool  $remote_allowed Allow remote images and fonts.
+         * @param int   $mail_id        Email log ID.
          *
-         * @return array A filter must return a non-empty array of directives; anything else
-         *               (an empty array, or a non-array value) leaves the default directives in place.
+         * @return array Non-empty directives; otherwise defaults apply.
          */
         $filtered_directives = apply_filters(
             'wp_mail_logging_csp_email_html_preview',
@@ -377,9 +348,7 @@ class EmailLogsTab {
             $mail_id
         );
 
-        // A filter that returns anything but a non-empty array would otherwise
-        // produce an empty policy, which browsers treat as no policy at all.
-        // Fall back to the unfiltered directives so this fails closed.
+        // Fall back to defaults so an invalid filter result cannot disable the policy.
         if ( ! is_array( $filtered_directives ) || empty( $filtered_directives ) ) {
             $filtered_directives = $directives;
         }

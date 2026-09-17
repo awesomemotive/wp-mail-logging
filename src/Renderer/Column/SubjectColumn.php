@@ -43,7 +43,7 @@ class SubjectColumn extends GenericColumn {
      * @inerhitDoc
      *
      * @since 1.12.0
-     * @since 1.17.0 Returns a plain, unescaped value; callers are responsible for escaping it.
+     * @since 1.17.0 Returns unescaped text; callers must escape for output.
      */
     public function render( $item, $column_format ) {
 

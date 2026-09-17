@@ -7,7 +7,7 @@ interface IColumn {
     /**
      * @param array $mailArray
      * @param $format
-     * @return mixed Plain, unescaped value; callers are responsible for escaping it before output.
+     * @return mixed Unescaped value; callers must escape for output.
      * @throws \Exception
      */
     public function render(array $mailArray, $format);

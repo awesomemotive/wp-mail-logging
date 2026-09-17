@@ -3,31 +3,22 @@
 namespace No3x\WPML\Renderer;
 
 /**
- * Detects whether an email body references sub-resources that the preview's
- * Content Security Policy blocks while remote content is turned off.
+ * Detects resources blocked by the preview's Content Security Policy (CSP).
  *
- * The preview iframe is served with `img-src data:` and `font-src data:` until the
- * viewer opts in, at which point both widen to `https: data:`. Anything that is not
- * an inline `data:` URI is therefore gated behind that opt-in -- relative URLs
- * included, since they resolve to same-origin https URLs rather than to `data:`.
- * This class answers the one question the preview UI needs: is there anything in
- * this message for the "Load images" button to unblock?
- *
- * Where the answer is ambiguous it returns true. A false negative leaves the viewer
- * with no way to load a genuinely blocked image; a false positive is only a button
- * that does nothing.
+ * Images and fonts allow only `data:` until opt-in adds `https:`. Relative URLs
+ * also require opt-in. Ambiguous URLs count as blocked to keep "Load images" available.
  *
  * @since {VERSION}
  */
 class RemoteContentDetector {
 
     /**
-     * Whether the message references anything the preview CSP blocks.
+     * Check for blocked image or CSS URLs.
      *
      * @since {VERSION}
      * @access public
      *
-     * @param string $message Raw email body as it was logged.
+     * @param string $message Raw email body.
      *
      * @return bool
      */
@@ -43,22 +34,14 @@ class RemoteContentDetector {
     }
 
     /**
-     * Remove the references to remote sub-resources from already-filtered markup.
+     * Remove blocked image and CSS URLs when the CSP header cannot be sent.
      *
-     * The preview normally blocks these with its Content Security Policy and leaves the
-     * markup alone. When the response could not send that header, this takes the
-     * references out instead, so the "Load images" opt-in still decides whether anything
-     * is fetched. Expects the output of `EmailLogsTab::get_html_preview_message()`, not a
-     * raw body -- `wp_kses()` has already run by then.
-     *
-     * Covers exactly what `has_blocked_content()` detects: `img` sources and CSS `url()`
-     * references. Keeping the two symmetric means the notice and the stripping can never
-     * disagree about what counts as remote.
+     * Uses the same URL checks as `has_blocked_content()` to match the opt-in notice.
      *
      * @since {VERSION}
      * @access public
      *
-     * @param string $message Filtered preview markup.
+     * @param string $message Preview markup after `EmailLogsTab::get_html_preview_message()`.
      *
      * @return string Markup with blocked sources removed.
      */
@@ -72,10 +55,9 @@ class RemoteContentDetector {
     }
 
     /**
-     * Drop `src` and `srcset` from images pointing at blocked resources.
+     * Remove blocked image `src` and `srcset` attributes.
      *
-     * An `img` with neither attribute requests nothing, so the element stays in place
-     * and the layout it occupies does not collapse.
+     * Keep image elements to preserve layout.
      *
      * @since {VERSION}
      * @access private
@@ -118,11 +100,9 @@ class RemoteContentDetector {
     }
 
     /**
-     * Point blocked CSS `url()` references at an empty `data:` URI.
+     * Replace blocked CSS URLs with `data:,` in style blocks and attributes.
      *
-     * Covers `<style>` blocks and inline `style` attributes, the same two places
-     * `get_css_text()` reads. `data:,` is a valid empty URI, so the declaration stays
-     * syntactically intact and nothing is fetched.
+     * The empty data URI preserves CSS syntax without fetching a resource.
      *
      * @since {VERSION}
      * @access private
@@ -157,7 +137,7 @@ class RemoteContentDetector {
     }
 
     /**
-     * Replace every blocked `url()` in a fragment of CSS.
+     * Replace blocked CSS `url()` values with an empty data URI.
      *
      * @since {VERSION}
      * @access private
@@ -183,12 +163,12 @@ class RemoteContentDetector {
     }
 
     /**
-     * Remove one attribute from a tag.
+     * Remove a tag attribute.
      *
      * @since {VERSION}
      * @access private
      *
-     * @param string $tag       Full tag, angle brackets included.
+     * @param string $tag       Tag including angle brackets.
      * @param string $attribute Attribute name to remove.
      *
      * @return string
@@ -203,11 +183,9 @@ class RemoteContentDetector {
     }
 
     /**
-     * Remove the markup the preview itself discards before rendering.
+     * Remove comments and Office XML ignored by the preview.
      *
-     * Keeps commented-out and Office `<xml>` payloads from lighting up the notice for
-     * images the preview never renders. Mirrors `EmailLogsTab::get_html_preview_message()`,
-     * plus the comment stripping `wp_kses()` performs on top of it.
+     * Mirrors `EmailLogsTab::get_html_preview_message()` and `wp_kses()` comment removal.
      *
      * @since {VERSION}
      * @access private
@@ -226,8 +204,7 @@ class RemoteContentDetector {
         foreach ( $patterns as $pattern ) {
             $stripped = preg_replace( $pattern, '', $message );
 
-            // preg_replace() returns null when it hits a backtrack limit, which a very
-            // large body can do. Keep the un-stripped text rather than losing the message.
+            // Preserve the message if regex backtracking fails.
             if ( $stripped !== null ) {
                 $message = $stripped;
             }
@@ -237,12 +214,12 @@ class RemoteContentDetector {
     }
 
     /**
-     * Whether any `<img>` points at a resource the CSP blocks.
+     * Check images for blocked URLs.
      *
      * @since {VERSION}
      * @access private
      *
-     * @param string $message Email body with hidden markup already removed.
+     * @param string $message Email body without hidden markup.
      *
      * @return bool
      */
@@ -267,16 +244,14 @@ class RemoteContentDetector {
     }
 
     /**
-     * Whether any candidate in a `srcset` points at a resource the CSP blocks.
+     * Check `srcset` candidates for blocked URLs.
      *
-     * Candidates are separated by commas, but a `data:` URI contains commas of its own,
-     * so the list is tokenised on whitespace instead -- a srcset URL can never contain
-     * any. What is left is either a URL or a width/pixel-density descriptor.
+     * Split on whitespace to preserve commas inside data URIs.
      *
      * @since {VERSION}
      * @access private
      *
-     * @param string $srcset Value of the `srcset` attribute.
+     * @param string $srcset Image source candidates.
      *
      * @return bool
      */
@@ -286,7 +261,7 @@ class RemoteContentDetector {
 
             $token = rtrim( $token, ',' );
 
-            // Skip `2x` and `640w` descriptors; everything else is a candidate URL.
+            // Skip width and pixel-density descriptors, such as `640w` and `2x`.
             if ( $token === '' || preg_match( '/^\d+(?:\.\d+)?[wx]$/i', $token ) ) {
                 continue;
             }
@@ -300,16 +275,14 @@ class RemoteContentDetector {
     }
 
     /**
-     * Whether any CSS `url()` points at a resource the CSP blocks.
+     * Check CSS `url()` values for blocked resources.
      *
-     * Covers `background-image` and `@font-face` alike, in both `<style>` blocks and
-     * inline `style` attributes. Only those two places are searched, so prose that
-     * happens to contain "url(" does not trigger the notice.
+     * Search only style blocks and attributes to avoid matching email text.
      *
      * @since {VERSION}
      * @access private
      *
-     * @param string $message Email body with hidden markup already removed.
+     * @param string $message Email body without hidden markup.
      *
      * @return bool
      */
@@ -332,12 +305,12 @@ class RemoteContentDetector {
     }
 
     /**
-     * Collect every piece of CSS the preview renders.
+     * Collect CSS from style blocks and attributes.
      *
      * @since {VERSION}
      * @access private
      *
-     * @param string $message Email body with hidden markup already removed.
+     * @param string $message Email body without hidden markup.
      *
      * @return string
      */
@@ -360,15 +333,15 @@ class RemoteContentDetector {
     }
 
     /**
-     * Read a single attribute out of a tag.
+     * Read a tag attribute.
      *
      * @since {VERSION}
      * @access private
      *
-     * @param string $tag       Full tag, angle brackets included.
+     * @param string $tag       Tag including angle brackets.
      * @param string $attribute Attribute name to read.
      *
-     * @return string Attribute value, or an empty string when the attribute is absent.
+     * @return string Attribute value, or an empty string if absent.
      */
     private static function get_attribute_value( $tag, $attribute ) {
 
@@ -382,12 +355,12 @@ class RemoteContentDetector {
     }
 
     /**
-     * Whether a single URL is one the preview CSP blocks.
+     * Check whether a URL requires remote-content opt-in.
      *
      * @since {VERSION}
      * @access private
      *
-     * @param string $url URL as it appears in the markup.
+     * @param string $url URL from the markup.
      *
      * @return bool
      */
@@ -399,9 +372,7 @@ class RemoteContentDetector {
             return false;
         }
 
-        // `data:` renders whether or not remote content is allowed, and `cid:` refers to
-        // an attachment the preview cannot resolve in either mode. Everything else --
-        // absolute, protocol-relative or relative -- is gated behind the opt-in.
+        // Data URIs always render; CID attachments never resolve. All other URLs require opt-in.
         return ! preg_match( '/^(?:data|cid):/i', $url );
     }
 }

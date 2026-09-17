@@ -18,11 +18,9 @@ use No3x\WPML\WPML_Utils;
 abstract class BaseRenderer implements IMailRenderer {
 
     /**
-     * Columns whose value is markup the modal is meant to render.
+     * Columns rendered as markup; all others are escaped.
      *
-     * Everything not named here is escaped. Mirrors
-     * `WPML_Email_Log_List::MARKUP_COLUMNS`, which guards the same values on the
-     * log list screen.
+     * Mirrors `WPML_Email_Log_List::MARKUP_COLUMNS`.
      *
      * @since {VERSION}
      *
@@ -150,7 +148,7 @@ abstract class BaseRenderer implements IMailRenderer {
                 <?php
                 $settings = SettingsTab::get_settings( SettingsTab::DEFAULT_SETTINGS );
 
-                // Only offer the opt-in when there is something for it to unblock.
+                // Show the opt-in only for blocked content.
                 if ( empty( $settings['load-remote-images'] ) && RemoteContentDetector::has_blocked_content( $mail['message'] ) ) {
                     ?>
                     <div class="wp-mail-logging-remote-content-notice">
@@ -182,7 +180,7 @@ abstract class BaseRenderer implements IMailRenderer {
      * @since 1.11.0
      * @since 1.12.0
      * @since 1.15.0 Used `esc_html()` on Subject, Receiver, and Headers columns.
-     * @since {VERSION} Escapes every column except those in `MARKUP_COLUMNS`.
+     * @since {VERSION} Escapes columns outside `MARKUP_COLUMNS`.
      *
      * @param string $key   Key of the value to render.
      * @param string $value Value to be rendered.
@@ -210,11 +208,7 @@ abstract class BaseRenderer implements IMailRenderer {
                 $value = ReceiverColumn::normalize( $value );
             }
 
-            // Escape by default and name the exceptions, rather than the reverse.
-            // `error` carries the remote MTA's rejection text under SMTP transport,
-            // which the owner of a recipient domain controls, and this markup lands
-            // in the admin document itself -- outside the preview iframe, so neither
-            // its sandbox nor its CSP applies here.
+            // These values, including untrusted SMTP errors, render outside the sandbox.
             if ( in_array( $key, self::MARKUP_COLUMNS, true ) ) {
                 echo wp_kses_post( $value );
             } else {

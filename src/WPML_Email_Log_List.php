@@ -32,10 +32,9 @@ class WPML_Email_Log_List extends \WP_List_Table implements IHooks {
     private $columnManager;
 
     /**
-     * Columns permitted to emit their own markup.
+     * Columns rendered as markup; all others are escaped.
      *
-     * Every other column is escaped. Adding to this list means the column's
-     * renderer is responsible for escaping everything it interpolates.
+     * Their renderers must escape interpolated values.
      *
      * @since 1.17.0
      *

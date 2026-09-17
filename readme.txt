@@ -109,13 +109,10 @@ Yes, you can contribute on <a href="https://github.com/awesomemotive/wp-mail-log
 
 == Changelog ==
 = 1.17.0 - 2026-09-14 =
-Fixed: Security - email content is now escaped on the Email Log list screen instead of being filtered as markup.
-Fixed: Security - the single email modal now escapes every field except attachments, so a delivery error cannot draw markup over the admin screen.
-Fixed: Security - the email preview keeps blocking remote content even when another plugin has already sent the page headers.
-Fixed: Security - the email preview is now sandboxed, and links in it open in a new tab rather than navigating the admin.
-Added: Remote images in previews are blocked by default, with a per-entry "Load images" control and an "Always Load Remote Images" setting.
-Added: New filter `wp_mail_logging_csp_email_html_preview` to adjust the preview's Content Security Policy.
-Changed: Audio and video elements no longer play inside the email preview.
+Fixed: Security updates.
+Added: Remote images blocked by default; use "Load images" per entry or enable "Always Load Remote Images".
+Added: `wp_mail_logging_csp_email_html_preview` filter for the preview's Content Security Policy.
+Changed: Disabled audio and video playback in email previews.
 Fixed: Quoted-printable encoded subjects no longer show a trailing "?".
 
 = 1.16.0 - 2026-02-19 =

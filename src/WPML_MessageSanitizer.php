@@ -34,44 +34,25 @@ class WPML_MessageSanitizer {
     }
 
     /**
-     * Remove style elements along with their contents.
+     * Remove style elements and their CSS, preserving HTML comments.
      *
-     * wp_kses() strips the tags but keeps the CSS between them, which would
-     * render as visible text. This path feeds the admin document, so the
-     * element is removed entirely rather than allowed. An unterminated
-     * `<style>` takes everything to the end of its segment with it, matching
-     * how a browser would parse it. The buffer is first split on HTML
-     * comments so a literal `<style` sitting inside comment content cannot
-     * pair with a real closing tag elsewhere and consume the comment markers
-     * in between; comment contents are left untouched since they are not
-     * rendered.
+     * wp_kses() alone leaves CSS visible as text. Unclosed style blocks consume
+     * the rest of their segment, matching browser parsing.
      *
-     * Known limitation: a "<!--" occurring inside a <style> element is not
-     * really a comment delimiter there, but this split treats it as one, so
-     * the element is torn in two at that point. The common legacy pattern of
-     * wrapping an entire stylesheet in a comment (`<style><!-- ...css...
-     * --></style>`) is unaffected, since all of its CSS ends up inside the
-     * resulting comment segment and is never rendered; only a partial one
-     * leaks its tail, and what leaks is inert text rather than a live tag.
-     * A proper fix needs a comment-aware linear scanner rather than regexes.
+     * Limitation: comment markers inside CSS can split a style block and leave
+     * trailing CSS as inert text. Fully comment-wrapped styles are unaffected.
      *
      * @since 1.17.0
-     * @since {VERSION} Guarded against `preg_replace()` returning null at a
-     *                  backtrack limit, which blanked the whole message.
+     * @since {VERSION} Preserves content when regex backtracking fails.
      *
      * @return void
      */
     private function stripStyleBlocks() {
 
-        // Split on HTML comments, keeping them. Comment contents are left
-        // verbatim: they are not rendered, and a style regex reaching across a
-        // comment boundary would consume the terminator and leave a dangling
-        // marker. With one capture group, odd indices are the comments.
+        // Preserve comments at odd indices so style matching cannot cross their boundaries.
         $parts = preg_split( '#(<!--.*?-->)#s', $this->buffer, -1, PREG_SPLIT_DELIM_CAPTURE );
 
-        // preg_split() returns false on the same backtrack failure. Treat the
-        // buffer as a single non-comment segment so the style stripping below
-        // still runs, rather than iterating false and imploding it.
+        // If splitting fails, strip styles from the whole buffer.
         if ( ! is_array( $parts ) ) {
             $parts = [ $this->buffer ];
         }
@@ -82,8 +63,7 @@ class WPML_MessageSanitizer {
                 continue;
             }
 
-            // Well-formed blocks first, then an unterminated one to the end of
-            // the segment, which is how a browser parses it.
+            // Remove closed blocks, then any unclosed block through the segment's end.
             $patterns = [
                 '#<style\b[^>]*>.*?</style>#is',
                 '#<style\b[^>]*>.*$#is',
@@ -92,17 +72,9 @@ class WPML_MessageSanitizer {
             foreach ( $patterns as $pattern ) {
                 $stripped = preg_replace( $pattern, '', $part );
 
-                // preg_replace() returns null at a PCRE backtrack limit, which a
-                // large body carrying a style block can reach. Keep the segment
-                // rather than feeding null back in as the next subject, which
-                // blanked the whole message and raised a PHP 8.1+ deprecation.
-                //
-                // In practice the lazy pattern is the one that fails first, and
-                // the greedy pattern still succeeds -- the element is then treated
-                // as unterminated, so content before it survives and content after
-                // it is lost. Should both fail, the element itself survives to
-                // stripEvilCode(), which drops the tag and leaves the CSS as inert
-                // text. Either way the message no longer disappears wholesale.
+                // Keep the segment on regex failure. The next pattern may remove
+                // everything from <style> onward; if both fail, stripEvilCode()
+                // removes the tags and leaves inert CSS text.
                 if ( $stripped !== null ) {
                     $part = $stripped;
                 }
@@ -140,9 +112,7 @@ class WPML_MessageSanitizer {
         $allowed_tags[self::SAVED_COMMENT_HTMLCode_OPEN][''] = true;
         $allowed_tags[self::SAVED_COMMENT_HTMLCode_CLOSE][''] = true;
 
-        // `area` is in WordPress's post allow-list with `target => true`, and `map`
-        // is allowed too, so an image map is a second route to the same navigation
-        // that unsetting `a.target` closes.
+        // Strip navigation attributes from both links and image-map areas.
         unset(
             $allowed_tags['a']['target'],
             $allowed_tags['a']['rel'],
