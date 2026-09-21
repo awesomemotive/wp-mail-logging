@@ -152,7 +152,7 @@ abstract class BaseRenderer implements IMailRenderer {
                 if ( empty( $settings['load-remote-images'] ) && RemoteContentDetector::has_blocked_content( $mail['message'] ) ) {
                     ?>
                     <div class="wp-mail-logging-remote-content-notice">
-                        <span><?php esc_html_e( 'Remote images are blocked.', 'wp-mail-logging' ); ?></span>
+                        <span><?php esc_html_e( 'Images are blocked.', 'wp-mail-logging' ); ?></span>
                         <button type="button" class="button wp-mail-logging-load-remote">
                             <?php esc_html_e( 'Load images', 'wp-mail-logging' ); ?>
                         </button>
