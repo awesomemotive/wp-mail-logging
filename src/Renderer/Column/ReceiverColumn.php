@@ -14,14 +14,14 @@ use No3x\WPML\Renderer\WPML_ColumnManager;
  * already contain it. It therefore stays in the database and is normalized here, at
  * display time, so historical rows are covered too.
  *
- * @since {VERSION}
+ * @since 1.17.0
  */
 class ReceiverColumn extends GenericColumn {
 
     /**
      * ReceiverColumn constructor.
      *
-     * @since {VERSION}
+     * @since 1.17.0
      */
     public function __construct() {
 
@@ -31,7 +31,7 @@ class ReceiverColumn extends GenericColumn {
     /**
      * Render the receiver column with the internal delimiter replaced by a comma and a space.
      *
-     * @since {VERSION}
+     * @since 1.17.0
      *
      * @param array  $mailArray The current item.
      * @param string $format    The column format.
@@ -51,7 +51,7 @@ class ReceiverColumn extends GenericColumn {
      * Handles the literal `\n` and `\r\n` sequences written by the extractor as well as
      * real newlines, so that both current and historical rows render consistently.
      *
-     * @since {VERSION}
+     * @since 1.17.0
      *
      * @param string $receiver The raw receiver value as stored.
      *

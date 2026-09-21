@@ -43,7 +43,7 @@ class WPML_MessageSanitizer {
      * trailing CSS as inert text. Fully comment-wrapped styles are unaffected.
      *
      * @since 1.17.0
-     * @since {VERSION} Preserves content when regex backtracking fails.
+     * @since 1.17.0 Preserves content when regex backtracking fails.
      *
      * @return void
      */

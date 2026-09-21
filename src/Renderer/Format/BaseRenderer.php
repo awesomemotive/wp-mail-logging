@@ -22,7 +22,7 @@ abstract class BaseRenderer implements IMailRenderer {
      *
      * Mirrors `WPML_Email_Log_List::MARKUP_COLUMNS`.
      *
-     * @since {VERSION}
+     * @since 1.17.0
      *
      * @var string[]
      */
@@ -180,7 +180,7 @@ abstract class BaseRenderer implements IMailRenderer {
      * @since 1.11.0
      * @since 1.12.0
      * @since 1.15.0 Used `esc_html()` on Subject, Receiver, and Headers columns.
-     * @since {VERSION} Escapes columns outside `MARKUP_COLUMNS`.
+     * @since 1.17.0 Escapes columns outside `MARKUP_COLUMNS`.
      *
      * @param string $key   Key of the value to render.
      * @param string $value Value to be rendered.

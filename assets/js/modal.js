@@ -215,7 +215,7 @@ jQuery(function ($) {
      * against the content box rather than the backdrop element. The press must also
      * start outside the box, so a text selection that ends outside does not close it.
      *
-     * @since {VERSION}
+     * @since 1.17.0
      */
     var isOutsideModalContent = function ( target ) {
         return $( target ).closest( '#wp-mail-logging-modal-content' ).length === 0;

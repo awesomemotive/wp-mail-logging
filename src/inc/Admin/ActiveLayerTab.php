@@ -9,14 +9,14 @@ use No3x\WPML\WPML_Init;
  * Renders the "Spam Protection" tab that recommends, installs and activates
  * the ActiveLayer anti-spam plugin from WordPress.org.
  *
- * @since {VERSION}
+ * @since 1.17.0
  */
 class ActiveLayerTab {
 
     /**
      * Nonce action for the ActiveLayer page.
      *
-     * @since {VERSION}
+     * @since 1.17.0
      *
      * @var string
      */
@@ -25,7 +25,7 @@ class ActiveLayerTab {
     /**
      * Configuration.
      *
-     * @since {VERSION}
+     * @since 1.17.0
      *
      * @var string[]
      */
@@ -39,7 +39,7 @@ class ActiveLayerTab {
     /**
      * Runtime data used for generating page HTML.
      *
-     * @since {VERSION}
+     * @since 1.17.0
      *
      * @var array
      */
@@ -48,7 +48,7 @@ class ActiveLayerTab {
     /**
      * Only instance of this object.
      *
-     * @since {VERSION}
+     * @since 1.17.0
      *
      * @var ActiveLayerTab
      */
@@ -57,7 +57,7 @@ class ActiveLayerTab {
     /**
      * Get the only instance of this object.
      *
-     * @since {VERSION}
+     * @since 1.17.0
      *
      * @return ActiveLayerTab
      */
@@ -73,7 +73,7 @@ class ActiveLayerTab {
     /**
      * Constructor.
      *
-     * @since {VERSION}
+     * @since 1.17.0
      */
     private function __construct() {
     }
@@ -81,7 +81,7 @@ class ActiveLayerTab {
     /**
      * Hooks that are fired earlier.
      *
-     * @since {VERSION}
+     * @since 1.17.0
      *
      * @return void
      */
@@ -94,7 +94,7 @@ class ActiveLayerTab {
     /**
      * AJAX operation to install and activate the ActiveLayer plugin.
      *
-     * @since {VERSION}
+     * @since 1.17.0
      *
      * @return void
      */
@@ -184,7 +184,7 @@ class ActiveLayerTab {
     /**
      * AJAX operation to activate the ActiveLayer plugin.
      *
-     * @since {VERSION}
+     * @since 1.17.0
      *
      * @return void
      */
@@ -212,7 +212,7 @@ class ActiveLayerTab {
     /**
      * Only add hooks here that are invoked after `current_screen` action hook.
      *
-     * @since {VERSION}
+     * @since 1.17.0
      *
      * @return void
      */
@@ -226,7 +226,7 @@ class ActiveLayerTab {
     /**
      * Enqueue scripts in the ActiveLayer tab.
      *
-     * @since {VERSION}
+     * @since 1.17.0
      *
      * @return void
      *
@@ -321,7 +321,7 @@ class ActiveLayerTab {
     /**
      * Display the ActiveLayer tab content.
      *
-     * @since {VERSION}
+     * @since 1.17.0
      *
      * @return void
      */
@@ -341,7 +341,7 @@ class ActiveLayerTab {
     /**
      * Generate and output the heading section HTML.
      *
-     * @since {VERSION}
+     * @since 1.17.0
      *
      * @return void
      */
@@ -367,7 +367,7 @@ class ActiveLayerTab {
     /**
      * Generate and output the screenshot section HTML.
      *
-     * @since {VERSION}
+     * @since 1.17.0
      *
      * @return void
      */
@@ -403,7 +403,7 @@ class ActiveLayerTab {
     /**
      * Generate and output the step 'Install' section HTML.
      *
-     * @since {VERSION}
+     * @since 1.17.0
      *
      * @return void
      */
@@ -467,7 +467,7 @@ class ActiveLayerTab {
     /**
      * Step 'Install' data.
      *
-     * @since {VERSION}
+     * @since 1.17.0
      *
      * @return array Step data.
      */
@@ -511,7 +511,7 @@ class ActiveLayerTab {
     /**
      * Determine if plugin installation is allowed.
      *
-     * @since {VERSION}
+     * @since 1.17.0
      *
      * @return bool
      */
@@ -527,7 +527,7 @@ class ActiveLayerTab {
     /**
      * Whether the ActiveLayer plugin is active or not.
      *
-     * @since {VERSION}
+     * @since 1.17.0
      *
      * @return bool True if the ActiveLayer plugin is active.
      */
@@ -539,7 +539,7 @@ class ActiveLayerTab {
     /**
      * Generate and output the step 'Setup' section HTML.
      *
-     * @since {VERSION}
+     * @since 1.17.0
      *
      * @return void
      */
@@ -579,7 +579,7 @@ class ActiveLayerTab {
     /**
      * Step 'Setup' data.
      *
-     * @since {VERSION}
+     * @since 1.17.0
      *
      * @return array Step data.
      */
@@ -605,7 +605,7 @@ class ActiveLayerTab {
     /**
      * Return the ActiveLayer tab url.
      *
-     * @since {VERSION}
+     * @since 1.17.0
      *
      * @return string
      */

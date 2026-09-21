@@ -1,18 +1,19 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: WP Mail Logging 1.16.0\n"
+"Project-Id-Version: WP Mail Logging 1.17.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wp-mail-logging\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-02-19T06:54:25+00:00\n"
+"POT-Creation-Date: 2026-09-21T11:47:55+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"X-Generator: WP-CLI 2.8.1\n"
+"X-Generator: WP-CLI 3.0.0-alpha-e14916e\n"
 "X-Domain: wp-mail-logging\n"
 
 #. Plugin Name of the plugin
+#: wp-mail-logging.php:3
 #: src/WPML_OptionsManager.php:363
 #: src/WPML_OptionsManager.php:400
 #: src/WPML_OptionsManager.php:401
@@ -22,263 +23,407 @@ msgid "WP Mail Logging"
 msgstr ""
 
 #. Plugin URI of the plugin
+#: wp-mail-logging.php:4
 msgid "https://wordpress.org/plugins/wp-mail-logging/"
 msgstr ""
 
 #. Description of the plugin
+#: wp-mail-logging.php:11
 msgid "Logs each email sent by WordPress."
 msgstr ""
 
 #. Author of the plugin
+#: wp-mail-logging.php:8
 msgid "WP Mail Logging Team"
 msgstr ""
 
 #. Author URI of the plugin
+#: wp-mail-logging.php:9
 msgid "https://github.com/awesomemotive/wp-mail-logging"
 msgstr ""
 
-#: src/inc/Admin/EmailLogsTab.php:297
-msgid "To solve email delivery issues, install WP Mail SMTP (free) - trusted by over 3,000,00 sites!"
-msgstr ""
-
-#: src/inc/Admin/EmailLogsTab.php:298
-msgid "Use the one-click install and setup wizard to fix your emails in minutes."
-msgstr ""
-
-#: src/inc/Admin/EmailLogsTab.php:303
-msgid "Heads up! WP Mail Logging has detected a problem sending emails."
-msgstr ""
-
-#: src/inc/Admin/EmailLogsTab.php:307
-#: src/inc/Admin/SMTPTab.php:532
-msgid "Install WP Mail SMTP"
-msgstr ""
-
-#: src/inc/Admin/EmailLogsTab.php:360
-#: src/inc/Admin/EmailLogsTab.php:460
-msgid "Email Logs"
-msgstr ""
-
-#: src/inc/Admin/EmailLogsTab.php:362
-msgid "See delivery status"
-msgstr ""
-
-#: src/inc/Admin/EmailLogsTab.php:363
-msgid "Resend emails"
-msgstr ""
-
-#: src/inc/Admin/EmailLogsTab.php:364
-msgid "View original email content"
-msgstr ""
-
-#: src/inc/Admin/EmailLogsTab.php:369
-msgid "Individual Log"
-msgstr ""
-
-#: src/inc/Admin/EmailLogsTab.php:371
-msgid "Review technical details"
-msgstr ""
-
-#: src/inc/Admin/EmailLogsTab.php:372
-msgid "Track open and click data"
-msgstr ""
-
-#: src/inc/Admin/EmailLogsTab.php:373
-msgid "Download sent attachments"
-msgstr ""
-
-#: src/inc/Admin/EmailLogsTab.php:378
-msgid "Email Reports"
-msgstr ""
-
-#: src/inc/Admin/EmailLogsTab.php:380
-msgid "Generate deliverability charts"
-msgstr ""
-
-#: src/inc/Admin/EmailLogsTab.php:381
-msgid "Review open & click statistics"
-msgstr ""
-
-#: src/inc/Admin/EmailLogsTab.php:382
-msgid "Get weekly email summary"
-msgstr ""
-
-#. translators: 1: URL to WP Mail SMTP pricing page 2: URL to WP Forms pricing page
-#: src/inc/Admin/EmailLogsTab.php:394
-msgid "Want more from your email logs? <strong><a target=\"_blank\" href=\"%1$s\">WP Mail SMTP Pro</a></strong> offers advanced email logging, failed email alerts, backup connections, email reports, email tracking, and much more!"
-msgstr ""
-
-#: src/inc/Admin/EmailLogsTab.php:408
-msgid "We know you'll love the powerful features in WP Mail SMTP. It's used by over 3,000,000 websites."
-msgstr ""
-
-#: src/inc/Admin/EmailLogsTab.php:440
-msgid "Take Your Email Logs to the Next level"
-msgstr ""
-
-#: src/inc/Admin/EmailLogsTab.php:444
-msgid "Get WP Mail SMTP Pro"
-msgstr ""
-
-#: src/inc/Admin/EmailLogsTab.php:508
-#: src/Renderer/Format/BaseRenderer.php:46
-#: src/WPML_Email_Log_List.php:510
-msgid "Message"
-msgstr ""
-
-#: src/inc/Admin/EmailLogsTab.php:553
-msgid "Search"
-msgstr ""
-
-#: src/inc/Admin/EmailLogsTab.php:587
-msgid "Are you sure you want to delete this log?"
-msgstr ""
-
-#: src/inc/Admin/SettingsTab.php:137
-#: src/inc/Admin/SettingsTab.php:154
-msgid "Settings saved!"
-msgstr ""
-
-#: src/inc/Admin/SettingsTab.php:202
-msgid "General Settings"
-msgstr ""
-
-#: src/inc/Admin/SettingsTab.php:203
-msgid "Change your WP Mail Logging settings."
-msgstr ""
-
-#: src/inc/Admin/SettingsTab.php:209
-msgid "Select the WordPress user capability required to view submission data."
-msgstr ""
-
-#: src/inc/Admin/SettingsTab.php:211
-msgid "Can See Submission data"
-msgstr ""
-
-#. translators: %s: Date time in WP format.
-#: src/inc/Admin/SettingsTab.php:220
-msgid "Use format from WordPress settings (%s)"
-msgstr ""
-
-#: src/inc/Admin/SettingsTab.php:229
-msgid "WP Date Time Format"
-msgstr ""
-
-#: src/inc/Admin/SettingsTab.php:238
-msgid "Select your preferred display format."
-msgstr ""
-
-#: src/inc/Admin/SettingsTab.php:240
-msgid "Default Format for Message"
-msgstr ""
-
-#: src/inc/Admin/SettingsTab.php:254
-msgid "Display the IP of the host WordPress is running on. This is useful when running WP Mail Logging on multiple servers at the same time."
-msgstr ""
-
-#: src/inc/Admin/SettingsTab.php:256
-msgid "Display Host"
-msgstr ""
-
-#: src/inc/Admin/SettingsTab.php:265
-msgid "Display the attachments in Email Logs table."
-msgstr ""
-
-#: src/inc/Admin/SettingsTab.php:267
-msgid "Display Attachments"
-msgstr ""
-
-#: src/inc/Admin/SettingsTab.php:276
-msgid "Disabling this will condense navigation and move WP Mail Log under the WordPress Tools menu."
-msgstr ""
-
-#: src/inc/Admin/SettingsTab.php:278
-msgid "Top Level Menu"
-msgstr ""
-
-#: src/inc/Admin/SettingsTab.php:287
-msgid "Delete all WP Mail Logging data on deactivation."
-msgstr ""
-
-#: src/inc/Admin/SettingsTab.php:289
-msgid "Cleanup"
-msgstr ""
-
-#: src/inc/Admin/SettingsTab.php:297
-msgid "Log Retention"
-msgstr ""
-
-#: src/inc/Admin/SettingsTab.php:298
-msgid "Save space by deleting logs regularly."
-msgstr ""
-
-#: src/inc/Admin/SettingsTab.php:303
-msgid "Set up an automated cleanup routine that is triggered when a certain amount of logs have been saved."
-msgstr ""
-
-#: src/inc/Admin/SettingsTab.php:305
-msgid "Cleanup by Amount"
-msgstr ""
-
-#: src/inc/Admin/SettingsTab.php:314
-msgid "Delete email logs after this amount has been reached."
-msgstr ""
-
-#: src/inc/Admin/SettingsTab.php:324
-msgid "Set up an automated cleanup routine that is triggered after a certain amount of time has passed."
-msgstr ""
-
-#: src/inc/Admin/SettingsTab.php:326
-msgid "Cleanup by Time"
-msgstr ""
-
-#: src/inc/Admin/SettingsTab.php:335
-msgid "Delete email logs after this many days."
-msgstr ""
-
-#: src/inc/Admin/SettingsTab.php:346
-msgid "Save Settings"
-msgstr ""
-
-#: src/inc/Admin/SettingsTab.php:349
-msgid "Reset to Default"
-msgstr ""
-
-#: src/inc/Admin/SettingsTab.php:434
-msgid "On"
-msgstr ""
-
-#: src/inc/Admin/SettingsTab.php:435
-msgid "Off"
-msgstr ""
-
+#: src/inc/Admin/ActiveLayerTab.php:105
+#: src/inc/Admin/ActiveLayerTab.php:200
 #: src/inc/Admin/SMTPTab.php:102
 #: src/inc/Admin/SMTPTab.php:201
 msgid "There was an error while performing your request."
 msgstr ""
 
+#: src/inc/Admin/ActiveLayerTab.php:111
 #: src/inc/Admin/SMTPTab.php:108
 msgid "Could not install the plugin. Please download and install it manually."
 msgstr ""
 
+#: src/inc/Admin/ActiveLayerTab.php:164
 #: src/inc/Admin/SMTPTab.php:163
 msgid "Plugin installed."
 msgstr ""
 
+#: src/inc/Admin/ActiveLayerTab.php:175
 #: src/inc/Admin/SMTPTab.php:176
 msgid "Plugin installed & activated."
 msgstr ""
 
+#: src/inc/Admin/ActiveLayerTab.php:196
 #: src/inc/Admin/SMTPTab.php:197
 msgid "Plugin activation is disabled for you on this site."
 msgstr ""
 
+#: src/inc/Admin/ActiveLayerTab.php:206
 #: src/inc/Admin/SMTPTab.php:209
 msgid "Plugin activated."
 msgstr ""
 
+#: src/inc/Admin/ActiveLayerTab.php:209
 #: src/inc/Admin/SMTPTab.php:212
 msgid "Could not activate the plugin. Please activate it on the Plugins page."
+msgstr ""
+
+#. translators: %s - ActiveLayer plugin download URL.
+#. translators: %s - Lite plugin download URL.
+#: src/inc/Admin/ActiveLayerTab.php:263
+#: src/inc/Admin/SMTPTab.php:307
+#, php-format
+msgid "Could not install the plugin automatically. Please <a href=\"%s\">download</a> it and install it manually."
+msgstr ""
+
+#. translators: %s - Plugins page URL.
+#. translators: %s - Lite plugin download URL.
+#: src/inc/Admin/ActiveLayerTab.php:275
+#: src/inc/Admin/SMTPTab.php:319
+#, php-format
+msgid "Could not activate the plugin. Please activate it on the <a href=\"%s\">Plugins page</a>."
+msgstr ""
+
+#: src/inc/Admin/ActiveLayerTab.php:291
+#: src/inc/Admin/SMTPTab.php:335
+msgid "Activating..."
+msgstr ""
+
+#: src/inc/Admin/ActiveLayerTab.php:292
+#: src/inc/Admin/SMTPTab.php:336
+msgid "Installing..."
+msgstr ""
+
+#: src/inc/Admin/ActiveLayerTab.php:293
+#: src/inc/Admin/ActiveLayerTab.php:503
+msgid "ActiveLayer Installed & Activated"
+msgstr ""
+
+#: src/inc/Admin/ActiveLayerTab.php:294
+#: src/inc/Admin/SMTPTab.php:338
+msgid "Download Now"
+msgstr ""
+
+#: src/inc/Admin/ActiveLayerTab.php:295
+#: src/inc/Admin/SMTPTab.php:339
+msgid "Go to Plugins page"
+msgstr ""
+
+#: src/inc/Admin/ActiveLayerTab.php:300
+#: src/inc/Admin/ActiveLayerTab.php:595
+msgid "Go to ActiveLayer Settings"
+msgstr ""
+
+#: src/inc/Admin/ActiveLayerTab.php:331
+#: src/inc/Admin/ActiveLayerTab.php:361
+#: src/inc/Admin/ActiveLayerTab.php:492
+msgid "ActiveLayer"
+msgstr ""
+
+#: src/inc/Admin/ActiveLayerTab.php:362
+msgid "Block Form & Comment Spam Without CAPTCHAs"
+msgstr ""
+
+#: src/inc/Admin/ActiveLayerTab.php:363
+msgid "AI-powered spam protection. No friction for real visitors, higher form conversions. Free tier available, no credit-card required. 1,000 checks free."
+msgstr ""
+
+#: src/inc/Admin/ActiveLayerTab.php:394
+msgid "ActiveLayer screenshot"
+msgstr ""
+
+#: src/inc/Admin/ActiveLayerTab.php:396
+msgid "Blocks form, comment and registration spam without CAPTCHAs or puzzles."
+msgstr ""
+
+#: src/inc/Admin/ActiveLayerTab.php:397
+msgid "Asynchronous checks keep your forms instant, with zero added latency."
+msgstr ""
+
+#: src/inc/Admin/ActiveLayerTab.php:398
+msgid "Protects WPForms, Contact Form 7, Gravity Forms, Elementor & Fluent Forms."
+msgstr ""
+
+#: src/inc/Admin/ActiveLayerTab.php:399
+msgid "Also guards WordPress comments, WooCommerce reviews & registration."
+msgstr ""
+
+#: src/inc/Admin/ActiveLayerTab.php:460
+#: src/inc/Admin/SMTPTab.php:504
+msgid "Step 1"
+msgstr ""
+
+#: src/inc/Admin/ActiveLayerTab.php:477
+msgid "Install and Activate ActiveLayer"
+msgstr ""
+
+#: src/inc/Admin/ActiveLayerTab.php:478
+msgid "Install ActiveLayer from the WordPress.org plugin repository."
+msgstr ""
+
+#: src/inc/Admin/ActiveLayerTab.php:486
+msgid "Install ActiveLayer"
+msgstr ""
+
+#: src/inc/Admin/ActiveLayerTab.php:494
+msgid "ActiveLayer on WordPress.org"
+msgstr ""
+
+#: src/inc/Admin/ActiveLayerTab.php:503
+msgid "Activate ActiveLayer"
+msgstr ""
+
+#: src/inc/Admin/ActiveLayerTab.php:570
+#: src/inc/Admin/SMTPTab.php:695
+msgid "Step 2"
+msgstr ""
+
+#: src/inc/Admin/ActiveLayerTab.php:571
+msgid "Connect Your ActiveLayer Account"
+msgstr ""
+
+#: src/inc/Admin/ActiveLayerTab.php:572
+msgid "Create a free account and verify your API key to start blocking spam."
+msgstr ""
+
+#: src/inc/Admin/ActiveLayerTab.php:599
+msgid "Connect Your Account"
+msgstr ""
+
+#: src/inc/Admin/EmailLogsTab.php:467
+msgid "To solve email delivery issues, install WP Mail SMTP (free) - trusted by over 3,000,00 sites!"
+msgstr ""
+
+#: src/inc/Admin/EmailLogsTab.php:468
+msgid "Use the one-click install and setup wizard to fix your emails in minutes."
+msgstr ""
+
+#: src/inc/Admin/EmailLogsTab.php:473
+msgid "Heads up! WP Mail Logging has detected a problem sending emails."
+msgstr ""
+
+#: src/inc/Admin/EmailLogsTab.php:477
+#: src/inc/Admin/SMTPTab.php:532
+msgid "Install WP Mail SMTP"
+msgstr ""
+
+#: src/inc/Admin/EmailLogsTab.php:530
+#: src/inc/Admin/EmailLogsTab.php:630
+msgid "Email Logs"
+msgstr ""
+
+#: src/inc/Admin/EmailLogsTab.php:532
+msgid "See delivery status"
+msgstr ""
+
+#: src/inc/Admin/EmailLogsTab.php:533
+msgid "Resend emails"
+msgstr ""
+
+#: src/inc/Admin/EmailLogsTab.php:534
+msgid "View original email content"
+msgstr ""
+
+#: src/inc/Admin/EmailLogsTab.php:539
+msgid "Individual Log"
+msgstr ""
+
+#: src/inc/Admin/EmailLogsTab.php:541
+msgid "Review technical details"
+msgstr ""
+
+#: src/inc/Admin/EmailLogsTab.php:542
+msgid "Track open and click data"
+msgstr ""
+
+#: src/inc/Admin/EmailLogsTab.php:543
+msgid "Download sent attachments"
+msgstr ""
+
+#: src/inc/Admin/EmailLogsTab.php:548
+msgid "Email Reports"
+msgstr ""
+
+#: src/inc/Admin/EmailLogsTab.php:550
+msgid "Generate deliverability charts"
+msgstr ""
+
+#: src/inc/Admin/EmailLogsTab.php:551
+msgid "Review open & click statistics"
+msgstr ""
+
+#: src/inc/Admin/EmailLogsTab.php:552
+msgid "Get weekly email summary"
+msgstr ""
+
+#. translators: 1: URL to WP Mail SMTP pricing page 2: URL to WP Forms pricing page
+#: src/inc/Admin/EmailLogsTab.php:564
+#, php-format
+msgid "Want more from your email logs? <strong><a target=\"_blank\" href=\"%1$s\">WP Mail SMTP Pro</a></strong> offers advanced email logging, failed email alerts, backup connections, email reports, email tracking, and much more!"
+msgstr ""
+
+#: src/inc/Admin/EmailLogsTab.php:578
+msgid "We know you'll love the powerful features in WP Mail SMTP. It's used by over 3,000,000 websites."
+msgstr ""
+
+#: src/inc/Admin/EmailLogsTab.php:610
+msgid "Take Your Email Logs to the Next level"
+msgstr ""
+
+#: src/inc/Admin/EmailLogsTab.php:614
+msgid "Get WP Mail SMTP Pro"
+msgstr ""
+
+#: src/inc/Admin/EmailLogsTab.php:678
+#: src/Renderer/Format/BaseRenderer.php:59
+#: src/WPML_Email_Log_List.php:520
+msgid "Message"
+msgstr ""
+
+#: src/inc/Admin/EmailLogsTab.php:723
+msgid "Search"
+msgstr ""
+
+#: src/inc/Admin/EmailLogsTab.php:757
+msgid "Are you sure you want to delete this log?"
+msgstr ""
+
+#: src/inc/Admin/SettingsTab.php:138
+#: src/inc/Admin/SettingsTab.php:155
+msgid "Settings saved!"
+msgstr ""
+
+#: src/inc/Admin/SettingsTab.php:203
+msgid "General Settings"
+msgstr ""
+
+#: src/inc/Admin/SettingsTab.php:204
+msgid "Change your WP Mail Logging settings."
+msgstr ""
+
+#: src/inc/Admin/SettingsTab.php:210
+msgid "Select the WordPress user capability required to view submission data."
+msgstr ""
+
+#: src/inc/Admin/SettingsTab.php:212
+msgid "Can See Submission data"
+msgstr ""
+
+#. translators: %s: Date time in WP format.
+#: src/inc/Admin/SettingsTab.php:221
+#, php-format
+msgid "Use format from WordPress settings (%s)"
+msgstr ""
+
+#: src/inc/Admin/SettingsTab.php:230
+msgid "WP Date Time Format"
+msgstr ""
+
+#: src/inc/Admin/SettingsTab.php:239
+msgid "Select your preferred display format."
+msgstr ""
+
+#: src/inc/Admin/SettingsTab.php:241
+msgid "Default Format for Message"
+msgstr ""
+
+#: src/inc/Admin/SettingsTab.php:255
+msgid "Display the IP of the host WordPress is running on. This is useful when running WP Mail Logging on multiple servers at the same time."
+msgstr ""
+
+#: src/inc/Admin/SettingsTab.php:257
+msgid "Display Host"
+msgstr ""
+
+#: src/inc/Admin/SettingsTab.php:266
+msgid "Display the attachments in Email Logs table."
+msgstr ""
+
+#: src/inc/Admin/SettingsTab.php:268
+msgid "Display Attachments"
+msgstr ""
+
+#: src/inc/Admin/SettingsTab.php:277
+msgid "Load images and fonts hosted on other servers when previewing an email. Leaving this off means senders cannot tell when you open a log entry. You can still load them for a single entry from the preview."
+msgstr ""
+
+#: src/inc/Admin/SettingsTab.php:279
+msgid "Always Load Remote Images"
+msgstr ""
+
+#: src/inc/Admin/SettingsTab.php:288
+msgid "Disabling this will condense navigation and move WP Mail Log under the WordPress Tools menu."
+msgstr ""
+
+#: src/inc/Admin/SettingsTab.php:290
+msgid "Top Level Menu"
+msgstr ""
+
+#: src/inc/Admin/SettingsTab.php:299
+msgid "Delete all WP Mail Logging data on deactivation."
+msgstr ""
+
+#: src/inc/Admin/SettingsTab.php:301
+msgid "Cleanup"
+msgstr ""
+
+#: src/inc/Admin/SettingsTab.php:309
+msgid "Log Retention"
+msgstr ""
+
+#: src/inc/Admin/SettingsTab.php:310
+msgid "Save space by deleting logs regularly."
+msgstr ""
+
+#: src/inc/Admin/SettingsTab.php:315
+msgid "Set up an automated cleanup routine that is triggered when a certain amount of logs have been saved."
+msgstr ""
+
+#: src/inc/Admin/SettingsTab.php:317
+msgid "Cleanup by Amount"
+msgstr ""
+
+#: src/inc/Admin/SettingsTab.php:326
+msgid "Delete email logs after this amount has been reached."
+msgstr ""
+
+#: src/inc/Admin/SettingsTab.php:336
+msgid "Set up an automated cleanup routine that is triggered after a certain amount of time has passed."
+msgstr ""
+
+#: src/inc/Admin/SettingsTab.php:338
+msgid "Cleanup by Time"
+msgstr ""
+
+#: src/inc/Admin/SettingsTab.php:347
+msgid "Delete email logs after this many days."
+msgstr ""
+
+#: src/inc/Admin/SettingsTab.php:358
+msgid "Save Settings"
+msgstr ""
+
+#: src/inc/Admin/SettingsTab.php:361
+msgid "Reset to Default"
+msgstr ""
+
+#: src/inc/Admin/SettingsTab.php:446
+msgid "On"
+msgstr ""
+
+#: src/inc/Admin/SettingsTab.php:447
+msgid "Off"
 msgstr ""
 
 #: src/inc/Admin/SMTPTab.php:230
@@ -289,35 +434,9 @@ msgstr ""
 msgid "Plugin unavailable."
 msgstr ""
 
-#. translators: %s - Lite plugin download URL.
-#: src/inc/Admin/SMTPTab.php:307
-msgid "Could not install the plugin automatically. Please <a href=\"%s\">download</a> it and install it manually."
-msgstr ""
-
-#. translators: %s - Lite plugin download URL.
-#: src/inc/Admin/SMTPTab.php:319
-msgid "Could not activate the plugin. Please activate it on the <a href=\"%s\">Plugins page</a>."
-msgstr ""
-
-#: src/inc/Admin/SMTPTab.php:335
-msgid "Activating..."
-msgstr ""
-
-#: src/inc/Admin/SMTPTab.php:336
-msgid "Installing..."
-msgstr ""
-
 #: src/inc/Admin/SMTPTab.php:337
 #: src/inc/Admin/SMTPTab.php:550
 msgid "WP Mail SMTP Installed & Activated"
-msgstr ""
-
-#: src/inc/Admin/SMTPTab.php:338
-msgid "Download Now"
-msgstr ""
-
-#: src/inc/Admin/SMTPTab.php:339
-msgid "Go to Plugins page"
 msgstr ""
 
 #: src/inc/Admin/SMTPTab.php:345
@@ -364,10 +483,6 @@ msgstr ""
 msgid "Pro mailers: Amazon SES, Microsoft 365 / Outlook.com, Zoho Mail."
 msgstr ""
 
-#: src/inc/Admin/SMTPTab.php:504
-msgid "Step 1"
-msgstr ""
-
 #: src/inc/Admin/SMTPTab.php:521
 msgid "Install and Activate WP Mail SMTP"
 msgstr ""
@@ -382,10 +497,6 @@ msgstr ""
 
 #: src/inc/Admin/SMTPTab.php:550
 msgid "Activate WP Mail SMTP"
-msgstr ""
-
-#: src/inc/Admin/SMTPTab.php:695
-msgid "Step 2"
 msgstr ""
 
 #: src/inc/Admin/SMTPTab.php:696
@@ -409,6 +520,7 @@ msgid "Excerpt View"
 msgstr ""
 
 #: src/inc/class-wp-list-table.php:465
+#, php-format
 msgid "%s pending"
 msgstr ""
 
@@ -436,6 +548,7 @@ msgid "Go to the last page"
 msgstr ""
 
 #: src/inc/Migration/Migration.php:327
+#, php-format
 msgid "An optional database optimization upgrade is available. Click <a href=\"%s\">here</a> to learn more."
 msgstr ""
 
@@ -452,6 +565,7 @@ msgid "This upgrade will include the following:"
 msgstr ""
 
 #: src/inc/Migration/Migration.php:406
+#, php-format
 msgid "Support for non-UTF8 characters like emojis (%s)."
 msgstr ""
 
@@ -480,8 +594,8 @@ msgid "Upgrade"
 msgstr ""
 
 #: src/inc/Migration/Migration.php:458
-#: src/Renderer/Format/BaseRenderer.php:208
-#: src/WPML_Email_Log_List.php:863
+#: src/Renderer/Format/BaseRenderer.php:245
+#: src/WPML_Email_Log_List.php:879
 msgid "Dismiss this notice."
 msgstr ""
 
@@ -504,139 +618,155 @@ msgstr ""
 #. translators: %s filename of the attachment that doesn't exist.
 #: src/Renderer/Column/AttachmentsColumn.php:50
 #: src/Renderer/Column/AttachmentsColumn.php:81
+#, php-format
 msgid "Attachment %s is not present"
 msgstr ""
 
-#: src/Renderer/Format/BaseRenderer.php:41
-#: src/Renderer/WPML_ColumnManager.php:44
+#: src/Renderer/Format/BaseRenderer.php:54
+#: src/Renderer/WPML_ColumnManager.php:45
 msgid "Time"
 msgstr ""
 
-#: src/Renderer/Format/BaseRenderer.php:42
-#: src/Renderer/WPML_ColumnManager.php:46
+#: src/Renderer/Format/BaseRenderer.php:55
+#: src/Renderer/WPML_ColumnManager.php:47
 msgid "Receiver"
 msgstr ""
 
-#: src/Renderer/Format/BaseRenderer.php:43
-#: src/Renderer/WPML_ColumnManager.php:47
+#: src/Renderer/Format/BaseRenderer.php:56
+#: src/Renderer/WPML_ColumnManager.php:48
 msgid "Subject"
 msgstr ""
 
-#: src/Renderer/Format/BaseRenderer.php:44
-#: src/Renderer/WPML_ColumnManager.php:49
+#: src/Renderer/Format/BaseRenderer.php:57
+#: src/Renderer/WPML_ColumnManager.php:50
 msgid "Error"
 msgstr ""
 
-#: src/Renderer/Format/BaseRenderer.php:45
+#: src/Renderer/Format/BaseRenderer.php:58
 msgid "Headers"
 msgstr ""
 
-#: src/Renderer/Format/BaseRenderer.php:47
-#: src/Renderer/WPML_ColumnManager.php:48
+#: src/Renderer/Format/BaseRenderer.php:60
+#: src/Renderer/WPML_ColumnManager.php:49
 msgid "Attachments"
 msgstr ""
 
-#: src/Renderer/Format/BaseRenderer.php:53
-#: src/Renderer/WPML_ColumnManager.php:45
+#: src/Renderer/Format/BaseRenderer.php:66
+#: src/Renderer/WPML_ColumnManager.php:46
 msgid "Host"
 msgstr ""
 
 #. translators: %d - Email Log ID.
-#: src/Renderer/Format/BaseRenderer.php:131
+#: src/Renderer/Format/BaseRenderer.php:144
+#, php-format
 msgid "Email Log ID Content: %d"
 msgstr ""
 
+#: src/Renderer/Format/BaseRenderer.php:155
+msgid "Images are blocked."
+msgstr ""
+
+#: src/Renderer/Format/BaseRenderer.php:157
+msgid "Load images"
+msgstr ""
+
 #. translators: %s - Link to the SMTP page.
-#: src/Renderer/Format/BaseRenderer.php:196
+#: src/Renderer/Format/BaseRenderer.php:233
+#, php-format
 msgid "<strong>This email failed to send.</strong> <a href=\"%s\">Install WP Mail SMTP</a> to solve your deliverability issues."
 msgstr ""
 
-#: src/Renderer/WPML_ColumnManager.php:43
+#: src/Renderer/WPML_ColumnManager.php:44
 msgid "ID"
 msgstr ""
 
 #: src/Renderer/WPML_MailRenderer_AJAX_Handler.php:96
-#: src/WPML_Email_Log_List.php:600
+#: src/WPML_Email_Log_List.php:610
 msgid "Invalid request!"
 msgstr ""
 
-#: src/WPML_Email_Log_List.php:206
+#: src/WPML_Email_Log_List.php:216
 msgid "Unable to delete email log."
 msgid_plural "Unable to delete email logs."
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/WPML_Email_Log_List.php:216
+#: src/WPML_Email_Log_List.php:226
 msgid "Email log was successfully deleted."
 msgstr ""
 
 #. translators: %d: Number of email logs that was successfully deleted.
-#: src/WPML_Email_Log_List.php:220
+#: src/WPML_Email_Log_List.php:230
+#, php-format
 msgid "%d email log was successfully deleted."
 msgid_plural "%d email logs were successfully deleted!"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/WPML_Email_Log_List.php:239
+#: src/WPML_Email_Log_List.php:249
 msgid "One of the emails failed to be deleted."
 msgid_plural "Some emails failed to be deleted."
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/WPML_Email_Log_List.php:250
+#: src/WPML_Email_Log_List.php:260
 msgid "Unable to add email to the sending queue."
 msgid_plural "Unable to add emails to the sending queue."
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/WPML_Email_Log_List.php:260
+#: src/WPML_Email_Log_List.php:270
 msgid "Email was added to the sending queue."
 msgstr ""
 
 #. translators: %d: Number of email logs that was added to the sending queue.
-#: src/WPML_Email_Log_List.php:264
+#: src/WPML_Email_Log_List.php:274
+#, php-format
 msgid "%d email was added to the sending queue."
 msgid_plural "%d emails were added to the sending queue."
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/WPML_Email_Log_List.php:277
+#: src/WPML_Email_Log_List.php:287
 msgid "One email failed to be added to the sending queue."
 msgid_plural "Some emails failed to be added to the sending queue."
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/WPML_Email_Log_List.php:329
+#: src/WPML_Email_Log_List.php:339
 msgid "No email found."
 msgstr ""
 
 #. translators: %d: Email Log ID to view.
-#: src/WPML_Email_Log_List.php:758
+#: src/WPML_Email_Log_List.php:774
+#, php-format
 msgid "View log #%d"
 msgstr ""
 
 #. translators: %d: Email Log ID to resend.
-#: src/WPML_Email_Log_List.php:765
+#: src/WPML_Email_Log_List.php:781
+#, php-format
 msgid "Resend log #%d"
 msgstr ""
 
 #. translators: %d: Email Log ID to delete.
-#: src/WPML_Email_Log_List.php:772
+#: src/WPML_Email_Log_List.php:788
+#, php-format
 msgid "Delete log #%d"
 msgstr ""
 
-#: src/WPML_Email_Log_List.php:803
+#: src/WPML_Email_Log_List.php:819
 msgid "Delete"
 msgstr ""
 
-#: src/WPML_Email_Log_List.php:804
+#: src/WPML_Email_Log_List.php:820
 msgid "Resend"
 msgstr ""
 
 #: src/WPML_LifeCycle.php:215
 #: src/WPML_OptionsManager.php:420
 #: src/WPML_OptionsManager.php:421
-#: src/WPML_Plugin.php:302
+#: src/WPML_Plugin.php:304
 msgid "Settings"
 msgstr ""
 
@@ -650,76 +780,83 @@ msgstr ""
 
 #: src/WPML_OptionsManager.php:409
 #: src/WPML_OptionsManager.php:410
-#: src/WPML_Plugin.php:292
+#: src/WPML_Plugin.php:294
 msgid "Email Log"
 msgstr ""
 
 #: src/WPML_OptionsManager.php:428
 #: src/WPML_OptionsManager.php:429
-#: src/WPML_Plugin.php:306
+#: src/WPML_Plugin.php:308
 msgid "SMTP"
 msgstr ""
 
-#: src/WPML_OptionsManager.php:520
-#: src/WPML_OptionsManager.php:558
+#: src/WPML_OptionsManager.php:436
+#: src/WPML_OptionsManager.php:437
+#: src/WPML_Plugin.php:312
+msgid "Spam Protection"
+msgstr ""
+
+#: src/WPML_OptionsManager.php:528
+#: src/WPML_OptionsManager.php:566
 msgid "You do not have sufficient permissions to access this page."
 msgstr ""
 
-#: src/WPML_OptionsManager.php:598
+#: src/WPML_OptionsManager.php:606
 msgid "true"
 msgstr ""
 
-#: src/WPML_OptionsManager.php:600
+#: src/WPML_OptionsManager.php:608
 msgid "false"
 msgstr ""
 
-#: src/WPML_OptionsManager.php:603
+#: src/WPML_OptionsManager.php:611
 msgid "Administrator"
 msgstr ""
 
-#: src/WPML_OptionsManager.php:605
+#: src/WPML_OptionsManager.php:613
 msgid "Editor"
 msgstr ""
 
-#: src/WPML_OptionsManager.php:607
+#: src/WPML_OptionsManager.php:615
 msgid "Author"
 msgstr ""
 
-#: src/WPML_OptionsManager.php:609
+#: src/WPML_OptionsManager.php:617
 msgid "Contributor"
 msgstr ""
 
-#: src/WPML_OptionsManager.php:611
+#: src/WPML_OptionsManager.php:619
 msgid "Subscriber"
 msgstr ""
 
-#: src/WPML_OptionsManager.php:613
+#: src/WPML_OptionsManager.php:621
 msgid "Anyone"
 msgstr ""
 
-#: src/WPML_Plugin.php:278
+#: src/WPML_Plugin.php:280
 msgid "WP Mail Logging logo"
 msgstr ""
 
-#: src/WPML_Plugin.php:421
+#: src/WPML_Plugin.php:428
 msgid "Heads up!"
 msgstr ""
 
-#: src/WPML_Plugin.php:422
+#: src/WPML_Plugin.php:429
 #: src/WPML_UserFeedback.php:116
 msgid "Yes"
 msgstr ""
 
-#: src/WPML_Plugin.php:423
+#: src/WPML_Plugin.php:430
 msgid "Cancel"
 msgstr ""
 
-#: src/WPML_Plugin.php:425
+#: src/WPML_Plugin.php:432
 msgid "Warning!"
 msgstr ""
 
 #. translators: $1$s - WP Mail Logging plugin name; $2$s - WP.org review link; $3$s - WP.org review link.
-#: src/WPML_Plugin.php:628
+#: src/WPML_Plugin.php:635
+#, php-format
 msgid "Please rate %1$s <a href=\"%2$s\" target=\"_blank\" rel=\"noopener noreferrer\">&#9733;&#9733;&#9733;&#9733;&#9733;</a> on <a href=\"%3$s\" target=\"_blank\" rel=\"noopener\">WordPress.org</a> to help us spread the word."
 msgstr ""
 
@@ -733,6 +870,7 @@ msgstr ""
 
 #. translators: %d Mail Log ID that was not removed.
 #: src/WPML_PrivacyController.php:138
+#, php-format
 msgid "A mail with the id %d was unable to be removed at this time."
 msgstr ""
 

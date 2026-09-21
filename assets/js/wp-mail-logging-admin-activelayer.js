@@ -10,7 +10,7 @@ WPMailLogging.Admin.ActiveLayer = WPMailLogging.Admin.ActiveLayer || ( function(
     /**
      * Elements.
      *
-     * @since {VERSION}
+     * @since 1.17.0
      *
      * @type {object}
      */
@@ -19,7 +19,7 @@ WPMailLogging.Admin.ActiveLayer = WPMailLogging.Admin.ActiveLayer || ( function(
     /**
      * Public functions and properties.
      *
-     * @since {VERSION}
+     * @since 1.17.0
      *
      * @type {object}
      */
@@ -28,7 +28,7 @@ WPMailLogging.Admin.ActiveLayer = WPMailLogging.Admin.ActiveLayer || ( function(
         /**
          * Start the engine. DOM is not ready yet, use only to init something.
          *
-         * @since {VERSION}
+         * @since 1.17.0
          */
         init: function() {
 
@@ -38,7 +38,7 @@ WPMailLogging.Admin.ActiveLayer = WPMailLogging.Admin.ActiveLayer || ( function(
         /**
          * DOM is fully loaded.
          *
-         * @since {VERSION}
+         * @since 1.17.0
          */
         ready: function() {
 
@@ -49,7 +49,7 @@ WPMailLogging.Admin.ActiveLayer = WPMailLogging.Admin.ActiveLayer || ( function(
         /**
          * Init variables.
          *
-         * @since {VERSION}
+         * @since 1.17.0
          */
         initVars: function() {
 
@@ -64,7 +64,7 @@ WPMailLogging.Admin.ActiveLayer = WPMailLogging.Admin.ActiveLayer || ( function(
         /**
          * Bind all actions/events.
          *
-         * @since {VERSION}
+         * @since 1.17.0
          */
         bindActions: function() {
 
@@ -78,7 +78,7 @@ WPMailLogging.Admin.ActiveLayer = WPMailLogging.Admin.ActiveLayer || ( function(
         /**
          * Step 'Install' button click.
          *
-         * @since {VERSION}
+         * @since 1.17.0
          */
         stepInstallClick: function() {
 
@@ -132,7 +132,7 @@ WPMailLogging.Admin.ActiveLayer = WPMailLogging.Admin.ActiveLayer || ( function(
         /**
          * Display spinner.
          *
-         * @since {VERSION}
+         * @since 1.17.0
          *
          * @param {jQuery} $el Section number image jQuery object.
          */
@@ -144,7 +144,7 @@ WPMailLogging.Admin.ActiveLayer = WPMailLogging.Admin.ActiveLayer || ( function(
         /**
          * Done part of the 'Install' step.
          *
-         * @since {VERSION}
+         * @since 1.17.0
          *
          * @param {object} res    Result of $.post() query.
          * @param {jQuery} $btn   Button.
@@ -177,7 +177,7 @@ WPMailLogging.Admin.ActiveLayer = WPMailLogging.Admin.ActiveLayer || ( function(
          * The setup button already carries its target URL (the ActiveLayer
          * settings page) from the server, so we only need to enable it.
          *
-         * @since {VERSION}
+         * @since 1.17.0
          */
         enableStepSetup: function() {
 
@@ -192,7 +192,7 @@ WPMailLogging.Admin.ActiveLayer = WPMailLogging.Admin.ActiveLayer || ( function(
         /**
          * Hide spinner.
          *
-         * @since {VERSION}
+         * @since 1.17.0
          *
          * @param {jQuery} $el Section number image jQuery object.
          */
@@ -204,7 +204,7 @@ WPMailLogging.Admin.ActiveLayer = WPMailLogging.Admin.ActiveLayer || ( function(
         /**
          * Go to URL by click on the button.
          *
-         * @since {VERSION}
+         * @since 1.17.0
          */
         gotoURL: function() {
 

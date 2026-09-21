@@ -8,14 +8,14 @@ namespace No3x\WPML\Renderer;
  * Images and fonts allow only `data:` until opt-in adds `https:`. Relative URLs
  * also require opt-in. Ambiguous URLs count as blocked to keep "Load images" available.
  *
- * @since {VERSION}
+ * @since 1.17.0
  */
 class RemoteContentDetector {
 
     /**
      * Check for blocked image or CSS URLs.
      *
-     * @since {VERSION}
+     * @since 1.17.0
      * @access public
      *
      * @param string $message Raw email body.
@@ -38,7 +38,7 @@ class RemoteContentDetector {
      *
      * Uses the same URL checks as `has_blocked_content()` to match the opt-in notice.
      *
-     * @since {VERSION}
+     * @since 1.17.0
      * @access public
      *
      * @param string $message Preview markup after `EmailLogsTab::get_html_preview_message()`.
@@ -59,7 +59,7 @@ class RemoteContentDetector {
      *
      * Keep image elements to preserve layout.
      *
-     * @since {VERSION}
+     * @since 1.17.0
      * @access private
      *
      * @param string $message Filtered preview markup.
@@ -104,7 +104,7 @@ class RemoteContentDetector {
      *
      * The empty data URI preserves CSS syntax without fetching a resource.
      *
-     * @since {VERSION}
+     * @since 1.17.0
      * @access private
      *
      * @param string $message Filtered preview markup.
@@ -139,7 +139,7 @@ class RemoteContentDetector {
     /**
      * Replace blocked CSS `url()` values with an empty data URI.
      *
-     * @since {VERSION}
+     * @since 1.17.0
      * @access private
      *
      * @param string $css CSS text.
@@ -165,7 +165,7 @@ class RemoteContentDetector {
     /**
      * Remove a tag attribute.
      *
-     * @since {VERSION}
+     * @since 1.17.0
      * @access private
      *
      * @param string $tag       Tag including angle brackets.
@@ -187,7 +187,7 @@ class RemoteContentDetector {
      *
      * Mirrors `EmailLogsTab::get_html_preview_message()` and `wp_kses()` comment removal.
      *
-     * @since {VERSION}
+     * @since 1.17.0
      * @access private
      *
      * @param string $message Raw email body.
@@ -216,7 +216,7 @@ class RemoteContentDetector {
     /**
      * Check images for blocked URLs.
      *
-     * @since {VERSION}
+     * @since 1.17.0
      * @access private
      *
      * @param string $message Email body without hidden markup.
@@ -248,7 +248,7 @@ class RemoteContentDetector {
      *
      * Split on whitespace to preserve commas inside data URIs.
      *
-     * @since {VERSION}
+     * @since 1.17.0
      * @access private
      *
      * @param string $srcset Image source candidates.
@@ -279,7 +279,7 @@ class RemoteContentDetector {
      *
      * Search only style blocks and attributes to avoid matching email text.
      *
-     * @since {VERSION}
+     * @since 1.17.0
      * @access private
      *
      * @param string $message Email body without hidden markup.
@@ -307,7 +307,7 @@ class RemoteContentDetector {
     /**
      * Collect CSS from style blocks and attributes.
      *
-     * @since {VERSION}
+     * @since 1.17.0
      * @access private
      *
      * @param string $message Email body without hidden markup.
@@ -335,7 +335,7 @@ class RemoteContentDetector {
     /**
      * Read a tag attribute.
      *
-     * @since {VERSION}
+     * @since 1.17.0
      * @access private
      *
      * @param string $tag       Tag including angle brackets.
@@ -357,7 +357,7 @@ class RemoteContentDetector {
     /**
      * Check whether a URL requires remote-content opt-in.
      *
-     * @since {VERSION}
+     * @since 1.17.0
      * @access private
      *
      * @param string $url URL from the markup.

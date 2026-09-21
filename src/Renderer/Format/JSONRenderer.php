@@ -27,7 +27,7 @@ class JSONRenderer extends BaseRenderer {
     /**
      * @inheritdoc
      *
-     * @since {VERSION} Cast the message to string so a null message does not raise a PHP 8.1+ deprecation.
+     * @since 1.17.0 Cast the message to string so a null message does not raise a PHP 8.1+ deprecation.
      */
     public function renderModal( $item ) {
 

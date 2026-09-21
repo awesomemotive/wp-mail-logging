@@ -70,7 +70,7 @@ class WPML_MailRenderer_Test extends \PHPUnit_Framework_TestCase {
      * The preview shows an empty string either way, so asserting only the output would pass
      * with or without the fix; this captures deprecations so removing the cast fails it.
      *
-     * @since {VERSION}
+     * @since 1.17.0
      */
     public function test_print_mail_json_null_message_raises_no_deprecation() {
 

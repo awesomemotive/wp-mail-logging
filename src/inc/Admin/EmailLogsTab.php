@@ -263,7 +263,7 @@ class EmailLogsTab {
      * The iframe supplies sandboxing. If earlier output opens `<body>`, the
      * policy is ignored; `strip_remote_content()` provides the fallback.
      *
-     * @since {VERSION}
+     * @since 1.17.0
      * @access private
      *
      * @param bool $remote_allowed Allow remote images and fonts.
@@ -283,7 +283,7 @@ class EmailLogsTab {
     /**
      * Join CSP directives into a policy string.
      *
-     * @since {VERSION}
+     * @since 1.17.0
      * @access private
      *
      * @param array $directives Directive names and values.
@@ -304,7 +304,7 @@ class EmailLogsTab {
     /**
      * Build the preview's CSP directives.
      *
-     * @since {VERSION}
+     * @since 1.17.0
      * @access private
      *
      * @param bool $remote_allowed Allow remote images and fonts.
