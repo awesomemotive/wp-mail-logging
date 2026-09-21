@@ -61,15 +61,10 @@ jQuery(function ($) {
             $('#wp-mail-logging-modal-content-body-content').html( $value );
         },
         show: function () {
-            // Work around to fix the education banner not fading immediately due to position being relative.
-            $( '#wp-mail-logging-product-education-email-logs-bottom' ).css( 'z-index', -1 );
-
             $('#wp-mail-logging-modal-wrap').fadeIn();
         },
         hide: function () {
-            $('#wp-mail-logging-modal-wrap').fadeOut( 400, function() {
-                $( '#wp-mail-logging-product-education-email-logs-bottom' ).css( 'z-index', '' );
-            } );
+            $('#wp-mail-logging-modal-wrap').fadeOut();
         },
         setSelectedFormat: function( newFormat ) {
             wpml.modal.selectedFormat = newFormat;
@@ -212,6 +207,46 @@ jQuery(function ($) {
         e.preventDefault();
         wpml.modal.hide();
     });
+
+    /**
+     * Close the modal when the user clicks the dim area outside the content box.
+     *
+     * The transparent content wrap covers the viewport above the backdrop, so we test
+     * against the content box rather than the backdrop element. The press must also
+     * start outside the box, so a text selection that ends outside does not close it.
+     *
+     * @since {VERSION}
+     */
+    var isOutsideModalContent = function ( target ) {
+        return $( target ).closest( '#wp-mail-logging-modal-content' ).length === 0;
+    };
+
+    var pressedOutsideModalContent = false;
+
+    $( '#wp-mail-logging-modal-wrap' ).on( 'mousedown', function ( e ) {
+        pressedOutsideModalContent = isOutsideModalContent( e.target );
+    });
+
+    $( '#wp-mail-logging-modal-wrap' ).on( 'click', function ( e ) {
+        if ( pressedOutsideModalContent && isOutsideModalContent( e.target ) ) {
+            wpml.modal.hide();
+        }
+    });
+
+    $( document ).on( 'click', '.wp-mail-logging-load-remote', function ( e ) {
+        e.preventDefault();
+
+        var $notice = $( this ).closest( '.wp-mail-logging-remote-content-notice' ),
+            $iframe = $notice.siblings( 'iframe' ).first();
+
+        if ( $iframe.length <= 0 ) {
+            return;
+        }
+
+        $iframe.attr( 'src', utils.updateQueryString( 'load_remote', '1', $iframe.attr( 'src' ) ) );
+        $notice.remove();
+    });
+
     $(document).keyup(function(e) {
         if (e.keyCode === 27) wpml.modal.hide();
     });

@@ -3,6 +3,7 @@
 namespace No3x\WPML\Admin;
 
 use No3x\WPML\Model\WPML_Mail as Mail;
+use No3x\WPML\Renderer\RemoteContentDetector;
 use No3x\WPML\WPML_Email_Log_List;
 use No3x\WPML\WPML_Init;
 use No3x\WPML\WPML_ProductEducation;
@@ -36,6 +37,18 @@ class EmailLogsTab {
      * @var string
      */
     const SINGLE_EMAIL_CONTENT_PREVIEW_MODE_NONCE = 'wp-mail-logging-single-email-preview';
+
+    /**
+     * Sandbox tokens shared by the preview iframe and CSP.
+     *
+     * Allow unsandboxed popups; block scripts, forms, same-origin access and
+     * top-level navigation. Keep filtered CSP sandbox tokens in sync.
+     *
+     * @since 1.17.0
+     *
+     * @var string
+     */
+    const PREVIEW_SANDBOX_TOKENS = 'allow-popups allow-popups-to-escape-sandbox';
 
     /**
      * Only instance of this object.
@@ -132,7 +145,39 @@ class EmailLogsTab {
             return;
         }
 
-        echo $this->get_html_preview_message( $mail->get_message() );
+        $mail_id = absint( $_GET['email_log_id'] );
+
+        // Settings do not merge defaults; missing keys on upgrades must stay disabled.
+        $settings       = SettingsTab::get_settings( SettingsTab::DEFAULT_SETTINGS );
+        $remote_allowed = ! empty( $settings['load-remote-images'] ) || ! empty( $_GET['load_remote'] );
+
+        $headers_sent = headers_sent();
+
+        if ( ! $headers_sent ) {
+            header( 'Content-Type: text/html; charset=' . get_bloginfo( 'charset' ) );
+            header( 'X-Content-Type-Options: nosniff' );
+            header( 'Referrer-Policy: no-referrer' );
+            header( 'Content-Security-Policy: ' . $this->get_csp_header_value( $remote_allowed, $mail_id ) );
+        }
+
+        // Preserve email body styles and open untargeted links in a new tab.
+        echo '<meta name="referrer" content="no-referrer">' . "\n";
+        echo '<base target="_blank">' . "\n";
+
+        // Always add a meta policy in case a server or CDN replaces the CSP header.
+        printf(
+            '<meta http-equiv="Content-Security-Policy" content="%s">' . "\n",
+            esc_attr( $this->get_csp_meta_value( $remote_allowed, $mail_id ) )
+        );
+
+        $preview = $this->get_html_preview_message( $mail->get_message() );
+
+        // Earlier markup can invalidate the meta policy; strip remote sources as a fallback.
+        if ( $headers_sent && ! $remote_allowed ) {
+            $preview = RemoteContentDetector::strip_remote_content( $preview );
+        }
+
+        echo $preview;
         exit;
     }
 
@@ -141,6 +186,7 @@ class EmailLogsTab {
      *
      * @since 1.11.1
      * @since 1.15.0 Added filterable `$allowed_html` and `$allowed_protocols` to `wp_kses()`.
+     * @since 1.17.0 Removes `target` and `rel` from links and areas before filtering allowed HTML.
      *
      * @param string $message Email log message.
      *
@@ -154,6 +200,15 @@ class EmailLogsTab {
 
         $allowed_html              = wp_kses_allowed_html( 'post' );
         $allowed_html['style'][''] = true;
+
+        // Strip navigation attributes from links and image-map areas. If filters
+        // restore them, the iframe sandbox still blocks top-level navigation.
+        unset(
+            $allowed_html['a']['target'],
+            $allowed_html['a']['rel'],
+            $allowed_html['area']['target'],
+            $allowed_html['area']['rel']
+        );
 
          /**
          * Filters the allowed HTML in the email HTML preview.
@@ -184,6 +239,121 @@ class EmailLogsTab {
         );
 
         return wp_kses( $message, $allowed_html, $allowed_protocols );
+    }
+
+    /**
+     * Build the preview's Content Security Policy header.
+     *
+     * @since 1.17.0
+     *
+     * @param bool $remote_allowed Allow remote images and fonts.
+     * @param int  $mail_id        Email log ID.
+     *
+     * @return string
+     */
+    private function get_csp_header_value( $remote_allowed, $mail_id ) {
+
+        return self::join_csp_directives( $this->get_csp_directives( $remote_allowed, $mail_id ) );
+    }
+
+    /**
+     * Build the preview's CSP meta policy.
+     *
+     * Omit `sandbox` and `frame-ancestors`, which meta policies ignore.
+     * The iframe supplies sandboxing. If earlier output opens `<body>`, the
+     * policy is ignored; `strip_remote_content()` provides the fallback.
+     *
+     * @since {VERSION}
+     * @access private
+     *
+     * @param bool $remote_allowed Allow remote images and fonts.
+     * @param int  $mail_id        Email log ID.
+     *
+     * @return string
+     */
+    private function get_csp_meta_value( $remote_allowed, $mail_id ) {
+
+        $directives = $this->get_csp_directives( $remote_allowed, $mail_id );
+
+        unset( $directives['sandbox'], $directives['frame-ancestors'] );
+
+        return self::join_csp_directives( $directives );
+    }
+
+    /**
+     * Join CSP directives into a policy string.
+     *
+     * @since {VERSION}
+     * @access private
+     *
+     * @param array $directives Directive names and values.
+     *
+     * @return string
+     */
+    private static function join_csp_directives( $directives ) {
+
+        $parts = [];
+
+        foreach ( $directives as $directive => $value ) {
+            $parts[] = $value === '' ? $directive : $directive . ' ' . $value;
+        }
+
+        return implode( '; ', $parts );
+    }
+
+    /**
+     * Build the preview's CSP directives.
+     *
+     * @since {VERSION}
+     * @access private
+     *
+     * @param bool $remote_allowed Allow remote images and fonts.
+     * @param int  $mail_id        Email log ID.
+     *
+     * @return array Directive names and values.
+     */
+    private function get_csp_directives( $remote_allowed, $mail_id ) {
+
+        $resource = $remote_allowed ? 'https: data:' : 'data:';
+
+        $directives = [
+            'default-src'     => "'none'",
+            'img-src'         => $resource,
+            'font-src'        => $resource,
+            'style-src'       => "'unsafe-inline'",
+            'base-uri'        => "'none'",
+            'form-action'     => "'none'",
+            'frame-ancestors' => "'self'",
+            'sandbox'         => self::PREVIEW_SANDBOX_TOKENS,
+        ];
+
+        /**
+         * Filters the email preview's Content Security Policy directives.
+         *
+         * Keep `sandbox` tokens in sync with `PREVIEW_SANDBOX_TOKENS`.
+         * Browsers allow only permissions shared by the CSP and iframe sandbox.
+         *
+         * @since 1.17.0
+         *
+         * @param array $directives     Directive names and values.
+         * @param bool  $remote_allowed Allow remote images and fonts.
+         * @param int   $mail_id        Email log ID.
+         *
+         * @return array Non-empty directives; otherwise defaults apply.
+         */
+        $filtered_directives = apply_filters(
+            'wp_mail_logging_csp_email_html_preview',
+            $directives,
+            $remote_allowed,
+            $mail_id
+        );
+
+        // Fall back to defaults so an invalid filter result cannot disable the policy.
+        if ( ! is_array( $filtered_directives ) || empty( $filtered_directives ) ) {
+            $filtered_directives = $directives;
+        }
+
+        return $filtered_directives;
     }
 
     /**

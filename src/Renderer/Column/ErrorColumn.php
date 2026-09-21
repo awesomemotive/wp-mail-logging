@@ -48,7 +48,8 @@ class ErrorColumn extends GenericColumn {
             return $item['error'];
         }
 
-        echo substr( $item['error'], 0, self::MAX_ERROR_CHAR_LENGTH ) . '...';
+        // Preserve UTF-8 characters when truncating; esc_html() blanks invalid UTF-8.
+        return mb_strcut( $item['error'], 0, self::MAX_ERROR_CHAR_LENGTH ) . '...';
     }
 
 }

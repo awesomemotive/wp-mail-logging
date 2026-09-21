@@ -6,7 +6,6 @@ use No3x\WPML\Admin\SettingsTab;
 use No3x\WPML\Model\Email_Log_Collection;
 use No3x\WPML\Model\WPML_Mail as Mail;
 use No3x\WPML\Renderer\Column\ColumnFormat;
-use No3x\WPML\Renderer\Column\SanitizedColumnDecorator;
 use No3x\WPML\Renderer\WPML_ColumnManager;
 
 // Exit if accessed directly.
@@ -31,6 +30,17 @@ class WPML_Email_Log_List extends \WP_List_Table implements IHooks {
     private $emailResender;
     /** @var WPML_ColumnManager $columnManager */
     private $columnManager;
+
+    /**
+     * Columns rendered as markup; all others are escaped.
+     *
+     * Their renderers must escape interpolated values.
+     *
+     * @since 1.17.0
+     *
+     * @var string[]
+     */
+    const MARKUP_COLUMNS = [ WPML_ColumnManager::COLUMN_ATTACHMENTS ];
 
     /**
      * Allowed actions.
@@ -734,9 +744,15 @@ class WPML_Email_Log_List extends \WP_List_Table implements IHooks {
             return $this->display_actions_icons( $item['mail_id'] );
         }
 
-        return ( new SanitizedColumnDecorator(
-            $this->columnManager->getColumnRenderer( $column_name )
-        ) )->render( $item, ColumnFormat::FULL );
+        $value = $this->columnManager
+            ->getColumnRenderer( $column_name )
+            ->render( $item, ColumnFormat::FULL );
+
+        if ( in_array( $column_name, self::MARKUP_COLUMNS, true ) ) {
+            return wp_kses_post( $value );
+        }
+
+        return esc_html( $value );
     }
 
     /**

@@ -15,7 +15,16 @@ $medium-weight: 600;
 #wp-mail-logging-modal {
 
     &-wrap {
+        // Own the stacking context while jQuery fades the wrap's opacity, so the backdrop
+        // covers positioned admin elements (checkboxes, search box, screen options, admin
+        // bar) from the first frame instead of only after the fade completes.
         display: none;
+        position: fixed;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 159900;
     }
 
     &-backdrop {
@@ -140,6 +149,19 @@ $medium-weight: 600;
     .wp-mail-logging-modal-row .wp-mail-logging-modal-row-html-container--raw {
         overflow: auto;
     }
+}
+
+.wp-mail-logging-remote-content-notice {
+    align-items: center;
+    background: #F6F7F7;
+    border: 1px solid #DCDCDE;
+    border-bottom: none;
+    display: flex;
+    gap: 10px;
+    justify-content: space-between;
+    padding: 8px 12px;
+    width: 598px;
+    box-sizing: border-box;
 }
 
 .wp-mail-logging-modal {

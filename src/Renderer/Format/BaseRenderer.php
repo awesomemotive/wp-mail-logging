@@ -10,11 +10,23 @@ use No3x\WPML\Renderer\Column\AttachmentsColumn;
 use No3x\WPML\Renderer\Column\ColumnFormat;
 use No3x\WPML\Renderer\Column\ReceiverColumn;
 use No3x\WPML\Renderer\Column\SubjectColumn;
+use No3x\WPML\Renderer\RemoteContentDetector;
 use No3x\WPML\Renderer\WPML_ColumnManager;
 use No3x\WPML\Renderer\WPML_MailRenderer;
 use No3x\WPML\WPML_Utils;
 
 abstract class BaseRenderer implements IMailRenderer {
+
+    /**
+     * Columns rendered as markup; all others are escaped.
+     *
+     * Mirrors `WPML_Email_Log_List::MARKUP_COLUMNS`.
+     *
+     * @since {VERSION}
+     *
+     * @var string[]
+     */
+    const MARKUP_COLUMNS = [ WPML_ColumnManager::COLUMN_ATTACHMENTS ];
 
     /** @var WPML_ColumnManager */
     protected $columnManager;
@@ -133,10 +145,26 @@ abstract class BaseRenderer implements IMailRenderer {
                     absint( $mail['mail_id'] )
                 )
                 ?>
-                <iframe id="SingleEmailLogContent>"
+                <?php
+                $settings = SettingsTab::get_settings( SettingsTab::DEFAULT_SETTINGS );
+
+                // Show the opt-in only for blocked content.
+                if ( empty( $settings['load-remote-images'] ) && RemoteContentDetector::has_blocked_content( $mail['message'] ) ) {
+                    ?>
+                    <div class="wp-mail-logging-remote-content-notice">
+                        <span><?php esc_html_e( 'Images are blocked.', 'wp-mail-logging' ); ?></span>
+                        <button type="button" class="button wp-mail-logging-load-remote">
+                            <?php esc_html_e( 'Load images', 'wp-mail-logging' ); ?>
+                        </button>
+                    </div>
+                    <?php
+                }
+                ?>
+                <iframe id="SingleEmailLogContent"
                     title="<?php echo esc_attr( $iframe_title ); ?>"
                     height="320"
                     width="598"
+                    sandbox="<?php echo esc_attr( EmailLogsTab::PREVIEW_SANDBOX_TOKENS ); ?>"
                     src="<?php echo esc_url( $iframe_src ); ?>">
                 </iframe>
             <?php
@@ -152,6 +180,7 @@ abstract class BaseRenderer implements IMailRenderer {
      * @since 1.11.0
      * @since 1.12.0
      * @since 1.15.0 Used `esc_html()` on Subject, Receiver, and Headers columns.
+     * @since {VERSION} Escapes columns outside `MARKUP_COLUMNS`.
      *
      * @param string $key   Key of the value to render.
      * @param string $value Value to be rendered.
@@ -179,16 +208,19 @@ abstract class BaseRenderer implements IMailRenderer {
                 $value = ReceiverColumn::normalize( $value );
             }
 
-            $values_to_escape = [
-                WPML_ColumnManager::COLUMN_SUBJECT,
-                WPML_ColumnManager::COLUMN_RECEIVER,
-                WPML_ColumnManager::COLUMN_HEADERS,
-            ];
-
-            if ( in_array( $key, $values_to_escape, true ) ) {
-                echo esc_html( $value );
-            } else {
+            // These values, including untrusted SMTP errors, render outside the sandbox.
+            if ( in_array( $key, self::MARKUP_COLUMNS, true ) ) {
                 echo wp_kses_post( $value );
+            } elseif ( $key === WPML_ColumnManager::COLUMN_HEADERS ) {
+                // Normalize legacy separators for display without changing stored headers.
+                $value = str_replace(
+                    [ ',\r\n', ',\n', '\r\n', '\n', "\r\n" ],
+                    "\n",
+                    $value
+                );
+                echo nl2br( esc_html( $value ) );
+            } else {
+                echo esc_html( $value );
             }
 
             if ( $key === 'error' ) {

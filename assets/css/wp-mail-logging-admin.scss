@@ -813,6 +813,14 @@
 
             select {
                 vertical-align: unset;
+
+                // WP 7.1 forms.css shrinks the search input and button inside p.search-box
+                // to 32px but leaves <select> at the global 40px. Match the input beside it.
+                @include media(">tablet") {
+                    min-height: 32px;
+                    padding: 0 24px 0 8px;
+                    line-height: 2.14285714; // 30px for 32px height with 14px font
+                }
             }
         }
     }

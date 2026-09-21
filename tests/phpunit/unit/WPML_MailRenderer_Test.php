@@ -127,6 +127,85 @@ class WPML_MailRenderer_Test extends \PHPUnit_Framework_TestCase {
         $this->mailServiceMock->mockery_verify();
     }
 
+	/**
+	 * Verify header formatting in both popup views.
+	 *
+	 * @access public
+	 * @dataProvider popup_headers_provider
+	 * @param string|null $headers Stored headers.
+	 * @param string|null $expected Expected visible header text, or no row.
+	 * @return void
+	 */
+	public function test_popup_headers_display( $headers, $expected ) {
+
+		$previous_post = $_POST;
+
+		try {
+			foreach ( [ 'html', 'raw' ] as $format ) {
+				$_POST['format'] = $format;
+				$renderer = \No3x\WPML\Renderer\Format\MailRendererFactory::factory( $format );
+				$html = $renderer->renderModal( [ 'headers' => $headers, 'message' => '' ] );
+				$document = new \DOMDocument();
+				$document->loadHTML( $html );
+				$xpath = new \DOMXPath( $document );
+				$values = $xpath->query( '//div[contains(concat(" ", normalize-space(@class), " "), " wp-mail-logging-modal-row-value-headers ")]' );
+
+				if ( $expected === null ) {
+					$this->assertSame( 0, $values->length, $format );
+					continue;
+				}
+
+				$this->assertSame( 1, $values->length, $format );
+				$value = $values->item( 0 );
+				$this->assertSame( $expected, trim( $value->textContent ), $format );
+				$this->assertSame( substr_count( $expected, "\n" ), $value->getElementsByTagName( 'br' )->length, $format );
+				$this->assertSame( 0, $xpath->query( './/*[not(self::br)]', $value )->length, $format );
+				$this->assertSame( 0, $xpath->query( '//script | //img' )->length, $format );
+			}
+		} finally {
+			$_POST = $previous_post;
+		}
+	}
+
+	/**
+	 * Supply stored header formats and expected popup text.
+	 *
+	 * @access public
+	 * @return array
+	 */
+	public function popup_headers_provider() {
+
+		$first = 'Content-Type: text/html';
+		$second = 'Reply-to: theevoeon.com <donmhico@gmail.com>';
+		$expected = $first . "\n" . $second;
+		$long = 'X-Long: ' . str_repeat( 'a', 400 );
+
+		return [
+			'legacy LF' => [ $first . ',\n' . $second, $expected ],
+			'legacy CRLF' => [ $first . ',\r\n' . $second, $expected ],
+			'literal LF' => [ $first . '\n' . $second, $expected ],
+			'literal CRLF' => [ $first . '\r\n' . $second, $expected ],
+			'actual LF' => [ $expected, $expected ],
+			'actual CRLF' => [ $first . "\r\n" . $second, $expected ],
+			'single header' => [ $first, $first ],
+			'empty' => [ '', null ],
+			'null' => [ null, null ],
+			'long header' => [ $long, $long ],
+			'values and escapes' => [
+				'Cc: "Doe, Jane" <jane@example.com>, bob@example.com,\nX-Notes: Q&A C:\\Temp\\Report',
+				"Cc: \"Doe, Jane\" <jane@example.com>, bob@example.com\nX-Notes: Q&A C:\\Temp\\Report",
+			],
+			'continuation and value comma' => [
+				"Cc: jane@example.com,\r\n bob@example.com",
+				"Cc: jane@example.com,\n bob@example.com",
+			],
+			'header markup' => [
+				'X-Test: <script>alert(1)</script>,\nX-Image: <img src=x onerror=alert(1)>',
+				"X-Test: <script>alert(1)</script>\nX-Image: <img src=x onerror=alert(1)>",
+			],
+		];
+	}
+
     public function test_supported_formats() {
         $this->assertEquals(['raw', 'html', 'json'], $this->mailRenderer->getSupportedFormats());
     }
