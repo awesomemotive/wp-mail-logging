@@ -1,5 +1,5 @@
 === WP Mail Logging ===
-Contributors: jaredatch, smub, capuderg
+Contributors: smub, capuderg
 Tags: email, email log, smtp, spam, deliverability
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
