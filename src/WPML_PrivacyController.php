@@ -66,14 +66,32 @@ class WPML_PrivacyController implements IHooks {
     }
 
     /**
-     * @param $email_address
-     * @param $current_page
+     * Find the logged mails that belong to the given email address.
+     *
+     * The address is matched against the `receiver` field as a literal string.
+     * `$wpdb->esc_like()` escapes the SQL `LIKE` wildcards (`_` and `%`) so a
+     * privacy request for one address cannot match, export, or erase the logged
+     * mail of a different user whose address happens to fit the wildcard. Only
+     * the recipient field is searched, so an export no longer returns unrelated
+     * mails that merely mention the address in their subject or body.
+     *
+     * @since {VERSION}
+     *
+     * @access private
+     *
+     * @param string $email_address The confirmed email address from the request.
+     * @param int    $current_page  The page of results to fetch (1-based).
+     *
      * @return array|WPML_Mail[]
      */
     private function queryMails($email_address, $current_page) {
-        $offset = ( $current_page - 1 ) * self::PER_PAGE;
+        global $wpdb;
+
+        $offset        = ( $current_page - 1 ) * self::PER_PAGE;
+        $receiver_like = '%' . $wpdb->esc_like( $email_address ) . '%';
+
         return WPML_Mail::query()
-            ->search( $email_address )
+            ->where_like( 'receiver', $receiver_like )
             ->limit( self::PER_PAGE )
             ->offset( $offset )
             ->find();
