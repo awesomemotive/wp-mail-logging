@@ -68,15 +68,6 @@ class WPML_PrivacyController implements IHooks {
     /**
      * Find the logged mails that belong to the given email address.
      *
-     * The address is matched against the `receiver` field as a literal string.
-     * `$wpdb->esc_like()` escapes the SQL `LIKE` wildcards (`_` and `%`) so a
-     * privacy request for one address cannot match, export, or erase the logged
-     * mail of a different user whose address happens to fit the wildcard. Only
-     * the recipient field is searched, so an export no longer returns unrelated
-     * mails that merely mention the address in their subject or body.
-     *
-     * @since {VERSION}
-     *
      * @access private
      *
      * @param string $email_address The confirmed email address from the request.
