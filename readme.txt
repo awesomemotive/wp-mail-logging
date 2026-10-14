@@ -108,7 +108,7 @@ Yes, you can contribute on <a href="https://github.com/awesomemotive/wp-mail-log
 3. The Settings - part 2
 
 == Changelog ==
-= 1.17.1 - 2026-09-14 =
+= 1.17.1 - 2026-10-14 =
 Fixed: PHP warning when settings page is first loaded.
 Fixed: Security updates.
 
