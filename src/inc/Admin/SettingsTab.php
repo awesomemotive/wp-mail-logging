@@ -387,19 +387,24 @@ class SettingsTab {
     }
 
     /**
-     * Display the Settings form.
-     *
      * Get the saved settings.
      *
-     * @since 1.11.0
+     * Keys missing from the saved option are filled in from `$default`. An option saved
+     * before a setting existed lacks that key, and callers that pass the defaults read
+     * every key directly.
      *
-     * @param array $default Default to return if option is not found.
+     * @since 1.11.0
+     * @since {VERSION} Fill in keys missing from the saved option from `$default`.
+     *
+     * @access public
+     *
+     * @param array $default Defaults for keys the saved option does not have.
      *
      * @return array
      */
     public static function get_settings( $default = [] ) {
 
-        return get_option( self::OPTIONS_NAME, $default );
+        return wp_parse_args( get_option( self::OPTIONS_NAME, [] ), $default );
     }
 
     /**
