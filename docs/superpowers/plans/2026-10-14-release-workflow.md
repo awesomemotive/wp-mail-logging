@@ -31,13 +31,14 @@ The spec allows these choices or implies them:
 3. **The version regex rejects leading zeros (semver).** Otherwise `npm version` would reject them after validation had already passed.
 4. **Surrounding whitespace in the version input is trimmed** (typing artifact in the Actions form).
 5. **The artifact is named after the file (`wp-mail-logging-X.Y.Z.zip`).** `archive: false` ignores `name`, which the spec allowed.
+6. **A build that changes no files fails the run.** The spec says to skip the commit and push `HEAD` anyway, but on our single-branch flow `HEAD` is `master`, so `gh pr create` would fail with "No commits between". In practice the `.pot` rewrite makes every build produce changes. The commit is also made before any existing release PR is closed, so a failed build leaves the old PR alone.
 
 ## Review Focus
 
 1. **Someone types `v1.18.0` or ` 1.18.0 ` into the Actions form.** Spaces are trimmed. `v1.18.0` is rejected with a message showing `Expected X.Y.Z`, before any install or build. Owned by Task 1 (unit and CLI tests) and Task 4 (Step 6).
 2. **Multi-digit parts: 1.9.0 → 1.10.0.** The comparison must be numeric. A text comparison would reject a valid bump and accept a downgrade. Owned by Task 1.
 3. **No changelog entry for the version, or a version that is a prefix of another (`1.1` vs `= 1.10.5`).** The PR changelog should be empty, never the wrong section, and extraction stops at the next `=` line. Owned by Task 4 (Step 7).
-4. **The version is already tagged, including old tags without the `v` prefix (`1.13.1`).** The run must fail before building or pushing. Owned by Task 4 (Step 7).
+4. **The version is already tagged, in any of the repo's three tag styles (`v1.16.0`, `1.13.1`, `release/1.9.9`).** The run must fail before building or pushing. Owned by Task 4 (Step 7).
 5. **A release run changes only what it should.** The Stable tag edit touches exactly one line of `readme.txt`, no images are re-compressed, and nothing under `vendor/`, `build/` or `node_modules/` gets staged. Owned by Task 2 (Step 4) and Task 4 (Step 6).
 
 ---
@@ -438,12 +439,12 @@ Run:
 
 ```bash
 npm run gulp replace_ver
-git diff --stat
+git diff --stat -- . ':!gulpfile.js' ':!.gitignore'
 grep -n '^ \* Version:\|^Stable tag:' wp-mail-logging.php readme.txt
 ```
 
 Expected:
-- `git diff --stat` lists only `package.json`, `package-lock.json`, `readme.txt` and `wp-mail-logging.php`, and `readme.txt` shows `1 +-`.
+- `git diff --stat` lists only `package.json`, `package-lock.json`, `readme.txt` and `wp-mail-logging.php`, and `readme.txt` shows `1 +-`. The pathspec leaves out this task's own uncommitted `gulpfile.js` and the pre-existing `.gitignore` edits.
 - The grep shows `Version: 1.17.9` and `Stable tag: 1.17.9`.
 
 - [ ] **Step 5: Restore the temporary version**
@@ -661,7 +662,8 @@ jobs:
         env:
           VERSION: ${{ steps.version.outputs.version }}
         run: |
-          if git ls-remote --exit-code --tags origin "refs/tags/v$VERSION" "refs/tags/$VERSION" >/dev/null; then
+          # Tags have used three styles over the years: v1.16.0, 1.13.1 and release/1.9.9.
+          if git ls-remote --exit-code --tags origin "refs/tags/v$VERSION" "refs/tags/$VERSION" "refs/tags/release/$VERSION" >/dev/null; then
             echo "::error::$VERSION is already tagged. Choose a new version."
             exit 1
           fi
@@ -684,6 +686,24 @@ jobs:
           VERSION: ${{ steps.version.outputs.version }}
         run: npm run release -- "$VERSION"
 
+      # Commit locally before touching any existing release PR, so a bad build fails
+      # without closing the PR it would have replaced.
+      - name: Commit release build
+        if: ${{ !inputs.dry_run }}
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A
+          # A PR needs at least one commit over master. Every build rewrites the .pot
+          # (POT-Creation-Date), so an empty diff means the build did not do its job.
+          if git diff --cached --quiet; then
+            echo "::error::The build changed no files, so there is nothing to put in a release PR."
+            exit 1
+          fi
+          git commit -m "Build v$VERSION" --no-verify
+
       - name: Close existing release PR
         if: ${{ !inputs.dry_run }}
         env:
@@ -700,20 +720,11 @@ jobs:
             fi
           fi
 
-      - name: Commit and push release branch
+      - name: Push release branch
         if: ${{ !inputs.dry_run }}
         env:
           VERSION: ${{ steps.version.outputs.version }}
-        run: |
-          git config user.name 'github-actions[bot]'
-          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add -A
-          if git diff --cached --quiet; then
-            echo "Nothing to commit; pushing HEAD as release/v$VERSION."
-          else
-            git commit -m "Build v$VERSION" --no-verify
-          fi
-          git push origin "HEAD:refs/heads/release/v$VERSION" --no-verify
+        run: git push origin "HEAD:refs/heads/release/v$VERSION" --no-verify
 
       - name: Extract changelog
         if: ${{ !inputs.dry_run }}
@@ -854,8 +865,8 @@ Run these commands from the repo root, not the clone. Step 6 left the shell insi
 
 ```bash
 cd path/to/wp-mail-logging   # the repo checkout, not the clone
-for VERSION in 1.16.0 1.13.1 1.17.1; do
-  if git ls-remote --exit-code --tags origin "refs/tags/v$VERSION" "refs/tags/$VERSION" >/dev/null; then
+for VERSION in 1.16.0 1.13.1 1.9.9 1.17.1; do
+  if git ls-remote --exit-code --tags origin "refs/tags/v$VERSION" "refs/tags/$VERSION" "refs/tags/release/$VERSION" >/dev/null; then
     echo "$VERSION: REFUSED (tagged)"
   else
     echo "$VERSION: allowed"
@@ -872,7 +883,7 @@ done
 ```
 
 Expected:
-- Tag guard: `1.16.0: REFUSED (tagged)`, `1.13.1: REFUSED (tagged)` (an old tag without `v`), `1.17.1: allowed`.
+- Tag guard: `1.16.0: REFUSED (tagged)`, `1.13.1: REFUSED (tagged)` (an old tag without `v`), `1.9.9: REFUSED (tagged)` (a `release/1.9.9` tag), `1.17.1: allowed`.
 - Changelog for `1.17.0`: the `= 1.17.0 - 2026-09-14 =` line, its five entries, then a blank line. Nothing from 1.16.0.
 - Changelog for `1.17.1` and `1.1`: nothing.
 
@@ -1002,13 +1013,20 @@ GitHub only lets you trigger `workflow_dispatch` workflows that exist on the def
   Expected:
   - The run succeeds.
   - The summary shows `PR: none (dry run)`.
-  - The artifact `wp-mail-logging-1.17.1.zip` downloads as the plugin zip itself, not a zip inside a zip. Check with `gh run download <run-id>` and `unzip -l`.
+  - The artifact `wp-mail-logging-1.17.1.zip` downloads as the plugin zip itself, not a zip inside a zip. Don't use `gh run download` for this check: it always extracts artifacts, which hides the difference. Instead, download it from the run page's Artifacts list in the browser, or fetch the raw download and list it:
+
+    ```bash
+    ID=$(gh api repos/awesomemotive/wp-mail-logging/actions/runs/<run-id>/artifacts --jq '.artifacts[0].id')
+    gh api "repos/awesomemotive/wp-mail-logging/actions/artifacts/$ID/zip" > dl.zip && unzip -l dl.zip | head
+    ```
+
+    The entries should start with `wp-mail-logging/`, with no nested `.zip`.
   - `git ls-remote --heads origin 'release/*'` lists no new branch.
 
 - [ ] **Step 3: Version typo fails fast.** Run `gh workflow run create_release.yml --ref master -f dry_run=true -f version=v1.18.0`.
   Expected: the run fails at **Resolve version** in under a minute, and the log shows `Invalid version "v1.18.0". Expected X.Y.Z`.
 
-- [ ] **Step 4: Non-master guard.** Run `gh workflow run create_release.yml --ref <any-other-branch>`. Leave `dry_run` false.
+- [ ] **Step 4: Non-master guard.** Run `gh workflow run create_release.yml --ref <branch>` with `dry_run` left false. Use a branch cut from `master` after the merge. GitHub runs the workflow file from that ref, so on an older branch without `create_release.yml` it rejects the dispatch (HTTP 422) and the guard never runs.
   Expected: the run fails at **Require master for real releases**.
 
 - [ ] **Step 5: First real release.** At the next real release, add the changelog entry to `readme.txt` on `master`, then run the workflow with the version.
