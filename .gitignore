@@ -3,3 +3,6 @@
 /node_modules
 /build
 lib/vendor/redux-framework
+.tmp
+.playwright-mcp
+/docs/
