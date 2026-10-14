@@ -394,7 +394,7 @@ class SettingsTab {
      * every key directly.
      *
      * @since 1.11.0
-     * @since {VERSION} Fill in keys missing from the saved option from `$default`.
+     * @since 1.17.1 Fill in keys missing from the saved option from `$default`.
      *
      * @access public
      *
