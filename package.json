@@ -37,7 +37,9 @@
   },
   "scripts": {
     "gulp": "cross-env node ./node_modules/.bin/gulp",
-    "build": "npm run gulp build"
+    "build": "npm run gulp build",
+    "release": "node bin/release.js",
+    "test:js": "node --test \"tests/js/*.test.js\""
   },
   "overrides": {
     "braces": "^3.0.3",
