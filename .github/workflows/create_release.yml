@@ -1,0 +1,209 @@
+# Create Release: build the plugin zip on a clean runner, commit the build output to
+# release/vX.Y.Z, open a PR to master, and upload the zip.
+#
+# Notes:
+# - The version comes from the `version` input (blank = bump patch) and is applied by
+#   `npm run release` (bin/release.js), which also runs the gulp build.
+# - The changelog is read from readme.txt (`= X.Y.Z - YYYY-MM-DD =` sections).
+# - `dry_run` builds and uploads the zip without pushing a branch or opening a PR.
+#
+# Requires: Settings > Actions > General > "Allow GitHub Actions to create and approve pull requests".
+
+name: Create Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Release version (e.g. 1.18.0). Blank = bump patch.'
+        required: false
+        type: string
+        default: ''
+      dry_run:
+        description: 'Build and upload the zip only; no branch or PR.'
+        required: false
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: create-release
+  cancel-in-progress: false
+
+jobs:
+  create-release:
+    name: Create Release
+    runs-on: ubuntu-24.04
+    env:
+      SLACK_RELEASE_WEBHOOK_URL: ${{ secrets.SLACK_RELEASE_WEBHOOK_URL }}
+
+    steps:
+      - name: Require master for real releases
+        if: ${{ !inputs.dry_run && github.ref != 'refs/heads/master' }}
+        run: |
+          echo "::error::Run Create Release from master, or enable dry_run. Current ref: $GITHUB_REF"
+          exit 1
+
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Setup Node
+        uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      # Resolve and check the version before installing anything, so a typo or an
+      # already-released version fails in seconds.
+      - name: Resolve version
+        id: version
+        env:
+          VERSION_INPUT: ${{ inputs.version }}
+        run: |
+          VERSION=$(node -e 'console.log(require("./bin/release.js").resolveVersion(require("./package.json").version, process.argv[1]))' -- "$VERSION_INPUT")
+          echo "Release version: $VERSION"
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+
+      - name: Refuse an already-tagged version
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          # Tags have used three styles over the years: v1.16.0, 1.13.1 and release/1.9.9.
+          if git ls-remote --exit-code --tags origin "refs/tags/v$VERSION" "refs/tags/$VERSION" "refs/tags/release/$VERSION" >/dev/null; then
+            echo "::error::$VERSION is already tagged. Choose a new version."
+            exit 1
+          fi
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '7.4'
+          extensions: mbstring, zip
+          tools: composer:v2, wp-cli
+          coverage: none
+
+      # --ignore-scripts: no release build step (css, js, pot, composer, zip) needs install
+      # scripts. Only the imagemin packages ship postinstall binaries, and build no longer runs img.
+      - name: Install Node dependencies
+        run: npm ci --ignore-scripts
+
+      - name: Set version and build
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+        run: npm run release -- "$VERSION"
+
+      # Commit locally before touching any existing release PR, so a bad build fails
+      # without closing the PR it would have replaced.
+      - name: Commit release build
+        if: ${{ !inputs.dry_run }}
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A
+          # A PR needs at least one commit over master. Every build rewrites the .pot
+          # (POT-Creation-Date), so an empty diff means the build did not do its job.
+          if git diff --cached --quiet; then
+            echo "::error::The build changed no files, so there is nothing to put in a release PR."
+            exit 1
+          fi
+          git commit -m "Build v$VERSION" --no-verify
+
+      - name: Close existing release PR
+        if: ${{ !inputs.dry_run }}
+        env:
+          BRANCH: release/v${{ steps.version.outputs.version }}
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if git ls-remote --exit-code --heads origin "$BRANCH" >/dev/null; then
+            pr_url=$(gh pr list --head "$BRANCH" --state open --json url --jq '.[0].url // empty')
+            if [ -n "$pr_url" ]; then
+              echo "Closing existing PR: $pr_url"
+              gh pr close "$pr_url" --delete-branch
+            else
+              git push origin --delete "$BRANCH"
+            fi
+          fi
+
+      - name: Push release branch
+        if: ${{ !inputs.dry_run }}
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+        run: git push origin "HEAD:refs/heads/release/v$VERSION" --no-verify
+
+      - name: Extract changelog
+        if: ${{ !inputs.dry_run }}
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          awk -v v="$VERSION" '
+            index($0, "= " v " ") == 1 { found = 1; print; next }
+            found && /^=/ { exit }
+            found { print }
+          ' readme.txt > "$RUNNER_TEMP/changelog.txt"
+          echo "Changelog lines for $VERSION: $(wc -l < "$RUNNER_TEMP/changelog.txt")"
+
+      - name: Create pull request
+        id: pr
+        if: ${{ !inputs.dry_run }}
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+          GH_TOKEN: ${{ github.token }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          {
+            echo "## Release WP Mail Logging v$VERSION"
+            echo
+            echo "### Checklist"
+            echo "- [ ] \`readme.txt\` has a \`= $VERSION - YYYY-MM-DD =\` changelog entry with the release date."
+            echo "- [ ] \`readme.txt\` \"Tested up to\" is current."
+            echo "- [ ] Diff reviewed: version bumps, \`.pot\`, minified assets, docblock version replacements."
+            echo "- [ ] Zip from the [workflow run]($RUN_URL) installed and smoke-tested on a test site."
+            echo
+            echo "### Changelog"
+            echo '```'
+            cat "$RUNNER_TEMP/changelog.txt"
+            echo '```'
+          } > "$RUNNER_TEMP/pr-body.md"
+          pr_url=$(gh pr create --base master --head "release/v$VERSION" \
+            --title "Release WP Mail Logging v$VERSION" \
+            --body-file "$RUNNER_TEMP/pr-body.md")
+          echo "url=$pr_url" >> "$GITHUB_OUTPUT"
+
+      # archive: false uploads the plugin zip as-is, so the download is the zip itself
+      # (the artifact takes the file's name).
+      - name: Upload zip
+        uses: actions/upload-artifact@v7
+        with:
+          path: build/wp-mail-logging-${{ steps.version.outputs.version }}.zip
+          archive: false
+          retention-days: 21
+          if-no-files-found: error
+
+      - name: Summary
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+          PR_URL: ${{ steps.pr.outputs.url }}
+        run: |
+          {
+            echo "### WP Mail Logging v$VERSION"
+            echo "- **Zip:** \`wp-mail-logging-$VERSION.zip\` (see Artifacts below)"
+            if [ -n "$PR_URL" ]; then
+              echo "- **PR:** $PR_URL"
+            else
+              echo "- **PR:** none (dry run)"
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Notify Slack
+        if: ${{ !inputs.dry_run && env.SLACK_RELEASE_WEBHOOK_URL != '' }}
+        uses: slackapi/slack-github-action@v4
+        with:
+          webhook: ${{ env.SLACK_RELEASE_WEBHOOK_URL }}
+          webhook-type: incoming-webhook
+          payload: |
+            text: "WP Mail Logging v${{ steps.version.outputs.version }} is ready: <${{ steps.pr.outputs.url }}|Release PR> | <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|Download zip>"
