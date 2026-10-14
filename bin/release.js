@@ -85,6 +85,11 @@ function resolveVersion(current, input) {
 function npm(args) {
     const result = spawnSync('npm', args, { stdio: 'inherit' });
 
+    if (result.error) {
+        console.error('release: could not run npm: ' + result.error.message);
+        return 1;
+    }
+
     return result.status === null ? 1 : result.status;
 }
 
