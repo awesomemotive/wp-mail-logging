@@ -1,19 +1,19 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: WP Mail Logging 1.17.0\n"
+"Project-Id-Version: WP Mail Logging 1.17.1\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wp-mail-logging\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-09-21T11:47:55+00:00\n"
+"POT-Creation-Date: 2026-10-14T09:47:38+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"X-Generator: WP-CLI 3.0.0-alpha-e14916e\n"
+"X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: wp-mail-logging\n"
 
 #. Plugin Name of the plugin
-#: wp-mail-logging.php:3
+#: wp-mail-logging.php
 #: src/WPML_OptionsManager.php:363
 #: src/WPML_OptionsManager.php:400
 #: src/WPML_OptionsManager.php:401
@@ -23,22 +23,22 @@ msgid "WP Mail Logging"
 msgstr ""
 
 #. Plugin URI of the plugin
-#: wp-mail-logging.php:4
+#: wp-mail-logging.php
 msgid "https://wordpress.org/plugins/wp-mail-logging/"
 msgstr ""
 
 #. Description of the plugin
-#: wp-mail-logging.php:11
+#: wp-mail-logging.php
 msgid "Logs each email sent by WordPress."
 msgstr ""
 
 #. Author of the plugin
-#: wp-mail-logging.php:8
+#: wp-mail-logging.php
 msgid "WP Mail Logging Team"
 msgstr ""
 
 #. Author URI of the plugin
-#: wp-mail-logging.php:9
+#: wp-mail-logging.php
 msgid "https://github.com/awesomemotive/wp-mail-logging"
 msgstr ""
 
@@ -418,11 +418,11 @@ msgstr ""
 msgid "Reset to Default"
 msgstr ""
 
-#: src/inc/Admin/SettingsTab.php:446
+#: src/inc/Admin/SettingsTab.php:451
 msgid "On"
 msgstr ""
 
-#: src/inc/Admin/SettingsTab.php:447
+#: src/inc/Admin/SettingsTab.php:452
 msgid "Off"
 msgstr ""
 
@@ -864,12 +864,12 @@ msgstr ""
 msgid "When you use this site several actions (e.g. commenting) trigger the dispatch of emails. They contain information about you associated with your email address. Which data are part of these emails depends on the action performed. These emails are stored and accessible to the site management as log."
 msgstr ""
 
-#: src/WPML_PrivacyController.php:101
+#: src/WPML_PrivacyController.php:110
 msgid "Mails"
 msgstr ""
 
 #. translators: %d Mail Log ID that was not removed.
-#: src/WPML_PrivacyController.php:138
+#: src/WPML_PrivacyController.php:147
 #, php-format
 msgid "A mail with the id %d was unable to be removed at this time."
 msgstr ""
