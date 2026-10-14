@@ -6,6 +6,33 @@ wp-mail-logging is a WordPress plugin that logs each mail sent by WordPress.
 
 Install the plugin from the official [Wordpress Plugin Repository](https://wordpress.org/plugins/wp-mail-logging/).
 
+## Releasing ##
+
+Cut a release from GitHub: **Actions → Create Release → Run workflow** on `master`.
+
+- **version**: e.g. `1.18.0`. Leave blank to bump the patch version.
+- **dry_run**: build and upload the zip only, without a branch or PR.
+
+The workflow:
+
+1. Sets the version in `package.json`, `package-lock.json`, the plugin header, the `readme.txt` Stable tag and the docblock version placeholders.
+2. Builds the zip.
+3. Commits the result as `Build vX.Y.Z` to `release/vX.Y.Z`.
+4. Opens a PR to `master` with that version's `readme.txt` changelog.
+5. Attaches `wp-mail-logging-X.Y.Z.zip` to the run.
+
+Add the `= X.Y.Z - YYYY-MM-DD =` changelog entry to `readme.txt` on `master` before running it.
+
+The workflow needs **Settings → Actions → General → Allow GitHub Actions to create and approve pull requests** turned on.
+
+To build locally instead:
+
+```
+npm run release -- 1.18.0   # or `npm run release` to bump the patch
+```
+
+The zip lands in `build/`. Requires Node (see `.nvmrc`), Composer and WP-CLI.
+
 ## Bugs ##
 If you find an issue, let us know in the [Tracker](https://github.com/kgjerstad/wp-mail-logging/issues?state=open)!
 
