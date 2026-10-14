@@ -37,8 +37,6 @@ jobs:
   create-release:
     name: Create Release
     runs-on: ubuntu-24.04
-    env:
-      SLACK_RELEASE_WEBHOOK_URL: ${{ secrets.SLACK_RELEASE_WEBHOOK_URL }}
 
     steps:
       - name: Require master for real releases
@@ -198,12 +196,3 @@ jobs:
               echo "- **PR:** none (dry run)"
             fi
           } >> "$GITHUB_STEP_SUMMARY"
-
-      - name: Notify Slack
-        if: ${{ !inputs.dry_run && env.SLACK_RELEASE_WEBHOOK_URL != '' }}
-        uses: slackapi/slack-github-action@v4
-        with:
-          webhook: ${{ env.SLACK_RELEASE_WEBHOOK_URL }}
-          webhook-type: incoming-webhook
-          payload: |
-            text: "WP Mail Logging v${{ steps.version.outputs.version }} is ready: <${{ steps.pr.outputs.url }}|Release PR> | <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|Download zip>"
