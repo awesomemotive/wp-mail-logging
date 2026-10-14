@@ -46,8 +46,8 @@ function readJSON(dir, file) {
     return JSON.parse(fs.readFileSync(path.join(dir, file), 'utf8'));
 }
 
-function runRelease(dir, args) {
-    return spawnSync(process.execPath, [SCRIPT, ...args], { cwd: dir, encoding: 'utf8' });
+function runRelease(dir, args, env = process.env) {
+    return spawnSync(process.execPath, [SCRIPT, ...args], { cwd: dir, encoding: 'utf8', env });
 }
 
 test('resolveVersion bumps the patch when no version is given', () => {
@@ -126,6 +126,17 @@ test('CLI rejects a lower version without touching files or building', (t) => {
     assert.match(result.stderr, /lower than the current version/);
     assert.equal(fs.readFileSync(path.join(dir, 'package.json'), 'utf8'), before);
     assert.equal(fs.existsSync(path.join(dir, 'built.txt')), false);
+});
+
+test('CLI says why when npm cannot be started', (t) => {
+    const dir = makeFixture(t);
+    const before = fs.readFileSync(path.join(dir, 'package.json'), 'utf8');
+    // An empty PATH means `npm` cannot be found, the same failure Windows hits without npm.cmd.
+    const result = runRelease(dir, ['1.18.0'], { ...process.env, PATH: '' });
+
+    assert.equal(result.status, 1);
+    assert.match(result.stderr, /release: could not run npm: .*ENOENT/);
+    assert.equal(fs.readFileSync(path.join(dir, 'package.json'), 'utf8'), before);
 });
 
 test('CLI exits with the build exit code when the build fails', (t) => {
