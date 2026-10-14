@@ -20,11 +20,15 @@
     "minimum-stability": "dev",
     "autoload": {
         "psr-4": {
-            "No3x\\WPML\\Tests\\": "tests/phpunit/tests",
-            "No3x\\WPML\\Tests\\Helper\\": "tests/helper",
             "No3x\\WPML\\Admin\\": "src/inc/Admin",
             "No3x\\WPML\\Helpers\\": "src/inc/Helpers",
             "No3x\\WPML\\Migration\\": "src/inc/Migration"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "No3x\\WPML\\Tests\\": "tests/phpunit/tests",
+            "No3x\\WPML\\Tests\\Helper\\": "tests/helper"
         }
     },
     "scripts": {
