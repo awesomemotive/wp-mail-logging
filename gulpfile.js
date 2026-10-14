@@ -181,7 +181,22 @@ gulp.task('replace_since_ver', function () {
         .pipe(gulp.dest('./'));
 });
 
-gulp.task('replace_ver', gulp.series('replace_plugin_file_ver', 'replace_since_ver'));
+/**
+ * Replace the Stable tag in readme.txt with the version from package.json.
+ */
+gulp.task('replace_readme_ver', function () {
+    return gulp.src(['readme.txt'])
+        .pipe(
+            // Header line only (no g flag); [ \t]* keeps the original spacing and never crosses a newline.
+            replace(
+                /^(Stable tag:[ \t]*).*$/m,
+                '$1' + packageJSON.version
+            )
+        )
+        .pipe(gulp.dest('./'));
+});
+
+gulp.task('replace_ver', gulp.series('replace_plugin_file_ver', 'replace_readme_ver', 'replace_since_ver'));
 
 /**
  * Install composer dependencies.
