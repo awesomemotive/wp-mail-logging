@@ -66,14 +66,23 @@ class WPML_PrivacyController implements IHooks {
     }
 
     /**
-     * @param $email_address
-     * @param $current_page
+     * Find the logged mails that belong to the given email address.
+     *
+     * @access private
+     *
+     * @param string $email_address The confirmed email address from the request.
+     * @param int    $current_page  The page of results to fetch (1-based).
+     *
      * @return array|WPML_Mail[]
      */
     private function queryMails($email_address, $current_page) {
-        $offset = ( $current_page - 1 ) * self::PER_PAGE;
+        global $wpdb;
+
+        $offset        = ( $current_page - 1 ) * self::PER_PAGE;
+        $receiver_like = '%' . $wpdb->esc_like( $email_address ) . '%';
+
         return WPML_Mail::query()
-            ->search( $email_address )
+            ->where_like( 'receiver', $receiver_like )
             ->limit( self::PER_PAGE )
             ->offset( $offset )
             ->find();
