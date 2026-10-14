@@ -108,6 +108,10 @@ Yes, you can contribute on <a href="https://github.com/awesomemotive/wp-mail-log
 3. The Settings - part 2
 
 == Changelog ==
+= 1.17.1 - 2026-09-14 =
+Fixed: PHP warning when settings page is first loaded.
+Fixed: Security updates.
+
 = 1.17.0 - 2026-09-14 =
 Fixed: Security updates.
 Added: Remote images blocked by default; use "Load images" per entry or enable "Always Load Remote Images".
