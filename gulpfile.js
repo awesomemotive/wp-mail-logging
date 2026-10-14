@@ -17,24 +17,21 @@ var gulp = require('gulp'),
 var plugin = {
     name: 'WP Mail Logging',
     slug: 'wp-mail-logging',
+    // What ships in the zip: an allowlist of paths, then dev-only file types dropped from inside them.
     files: [
-        '**',
+        'assets/**',
+        'lib/**',
+        'src/**',
+        'vendor/**',
         'autoload.php',
         'readme.txt',
-        // Exclude all the files/dirs below. Note the double negate (when ! is used inside the exclusion) - we may actually need some things.
-        '!**/*.map',
+        'wp-mail-logging.php',
         '!assets/**/*.scss',
-        'assets/**/*.css',
-        'assets/**/*.min.css',
         '!assets/wporg',
         '!assets/wporg/**',
-        '!bin/**',
-        '!**/node_modules/**',
-        '!**/node_modules',
         '!**/tests',
         '!**/tests/**',
-        '!**/build/**',
-        '!**/build',
+        '!**/*.map',
         '!**/*.md',
         '!**/*.sh',
         '!**/*.rst',
@@ -43,7 +40,6 @@ var plugin = {
         '!**/*.dist',
         '!**/*.json',
         '!**/*.lock',
-        '!**/gulpfile.js',
         '!**/AUTHORS'
     ],
     scss: [
@@ -228,4 +224,5 @@ gulp.task('zip', function () {
         .pipe(debug({title: '[zip]'}));
 });
 
-gulp.task('build', gulp.series(gulp.parallel('css', 'js', 'img'), 'replace_ver', 'pot', 'composer', 'zip'));
+// img is not part of build: it re-compresses committed images (lossy) on every run. Run it by hand: npm run gulp img.
+gulp.task('build', gulp.series(gulp.parallel('css', 'js'), 'replace_ver', 'pot', 'composer', 'zip'));
